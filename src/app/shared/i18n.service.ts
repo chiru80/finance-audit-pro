@@ -65,6 +65,7 @@ const englishTranslations: Translations = {
   'login.sign_in': 'Sign In',
   'login.sign_up': 'Sign Up',
   'login.create_account': "Don't have an account? Create one",
+  'logout': 'Sign Out',
 
   // Forms
   'form.customer_name': 'Customer Name',
@@ -167,6 +168,7 @@ const teluguTranslations: Translations = {
   'login.sign_in': 'సైన్ ఇన్',
   'login.sign_up': 'సైన్ అప్',
   'login.create_account': 'ఖాతేదారు లేకపోతే, ఒకటి సృష్టించండి',
+  'logout': 'లాగ్ అవుట్',
 
   // Forms
   'form.customer_name': 'కస్టమర్ పేరు',

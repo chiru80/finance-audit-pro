@@ -74,7 +74,7 @@ export class CollectionEntryComponent implements OnInit {
       const customerId = this.selectedCustomer();
       const amountPaise = Math.round(this.amountInRupees() * 100);
 
-      const { error } = await this._supabaseService.client.rpc('record_weekly_payment', {
+      const { data, error } = await this._supabaseService.client.rpc('record_weekly_payment', {
         p_customer_id: customerId,
         p_amount_paise: amountPaise,
         p_method: this.selectedMethod(),
@@ -83,6 +83,11 @@ export class CollectionEntryComponent implements OnInit {
       });
 
       if (error) throw error;
+
+      const result = Array.isArray(data) ? data[0] : data;
+      if (result && result.success === false) {
+        throw new Error(result.error_message || 'Payment recording failed');
+      }
 
       this.amountInRupees.set(0);
       this.reference.set('');

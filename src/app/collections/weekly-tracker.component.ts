@@ -41,14 +41,21 @@ export class WeeklyTrackerComponent {
 
   async collectForWeek(scheduleId: string) {
     try {
-      const { error } = await this._supabaseService.client.rpc('record_weekly_payment', {
+      const schedule = this.schedules().find((s) => s.id === scheduleId);
+      const amountPaise = schedule?.due_amount ?? 50000;
+
+      const { data, error } = await this._supabaseService.client.rpc('record_weekly_payment', {
         p_customer_id: this.customerId(),
-        p_amount_paise: 50000,
+        p_amount_paise: amountPaise,
         p_method: 'cash',
         p_reference: null,
-        p_notes: null,
+        p_notes: `Payment for schedule ${scheduleId}`,
       });
       if (error) throw error;
+      const res = Array.isArray(data) ? data[0] : data;
+      if (res && res.success === false) {
+        throw new Error(res.error_message || 'Payment recording failed');
+      }
       if (this.customerId()) {
         await this.loadSchedules(this.customerId()!);
       }
