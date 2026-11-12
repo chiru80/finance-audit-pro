@@ -1,18 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { Customer } from './customer.types';
+import { formatPaiseToINR } from '../utils/currency.utils';
 
 @Component({
   selector: 'app-customer-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.css'],
 })
-export class CustomerListComponent {
+export class CustomerListComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
   readonly _router = inject(Router);
 
@@ -25,8 +26,9 @@ export class CustomerListComponent {
     this.loadCustomers();
   }
 
-  private async loadCustomers() {
+  async loadCustomers() {
     this.loading.set(true);
+    this.error.set(null);
     try {
       const { data, error } = await this._supabaseService.client
         .from('customers')
@@ -78,5 +80,9 @@ export class CustomerListComponent {
       (c.phone || '').toLowerCase().includes(query) ||
       (c.email || '').toLowerCase().includes(query)
     );
+  }
+
+  formatCurrency(amount: number | bigint): string {
+    return formatPaiseToINR(amount || 0);
   }
 }

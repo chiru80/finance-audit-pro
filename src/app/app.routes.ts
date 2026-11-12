@@ -6,9 +6,13 @@ import { SupabaseService } from './supabase.service';
 const canAuthenticate = async () => {
   const supabase = inject(SupabaseService);
   const router = inject(Router);
-  const session = await supabase.getSession();
-  if (session?.data?.session?.user) {
-    return true;
+  try {
+    const session = await supabase.getSession();
+    if (session?.data?.session?.user) {
+      return true;
+    }
+  } catch (err) {
+    console.warn('Session check failed or Supabase unreachable:', err);
   }
   return router.createUrlTree(['/login']);
 };

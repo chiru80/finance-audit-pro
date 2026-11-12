@@ -26,7 +26,7 @@ interface NavItem {
                 [routerLink]="[item.routerLink]"
                 class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-background-secondary text-text-secondary hover:text-text-primary"
                 routerLinkActive="bg-primary-50 text-primary-600 font-semibold"
-                [routerLinkActiveOptions]="{ exact: true }"
+                [routerLinkActiveOptions]="{ exact: item.routerLink === '/dashboard' }"
               >
                 <span [innerHTML]="getIconHtml(item.icon)" class="w-5 h-5 flex-shrink-0"></span>
                 <span>{{ item.labelKey | i18n }}</span>

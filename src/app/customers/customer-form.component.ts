@@ -1,11 +1,18 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { CustomerService } from './customer.service';
 import { Customer } from './customer.types';
+import { validatePhoneNumber } from '../utils/form-validation.utils';
+
+function indianPhoneValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value || control.value.trim() === '') return null;
+  const errors = validatePhoneNumber(control.value);
+  return errors.length > 0 ? { invalidPhone: errors[0] } : null;
+}
 
 @Component({
   selector: 'app-customer-form',
@@ -32,7 +39,7 @@ export class CustomerFormComponent implements OnInit {
 
   form: FormGroup = this._fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
-    phone: [''],
+    phone: ['', [indianPhoneValidator]],
     email: ['', [Validators.email]],
     weekly_due_amount: [500, [Validators.required, Validators.min(1), Validators.max(10000)]],
   });

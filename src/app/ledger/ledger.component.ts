@@ -1,9 +1,11 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { Customer } from '../customers/customer.types';
 import { CollectionService } from '../collection.service';
+import { formatPaiseToINR } from '../utils/currency.utils';
 
 export interface LedgerPayment {
   id: string;
@@ -21,7 +23,7 @@ export interface LedgerPayment {
 @Component({
   selector: 'app-ledger',
   standalone: true,
-  imports: [DatePipe],
+  imports: [CommonModule, FormsModule, DatePipe],
   templateUrl: './ledger.component.html',
   styleUrl: './ledger.component.css',
 })
@@ -114,13 +116,8 @@ export class LedgerComponent implements OnInit {
     }
   }
 
-  formatCurrency(amount: number) {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format((amount || 0) / 100);
+  formatCurrency(amount: number | bigint): string {
+    return formatPaiseToINR(amount || 0);
   }
 
   getAllocationCount(payment: LedgerPayment): number {

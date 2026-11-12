@@ -1,98 +1,103 @@
-<div class="customer-form">
-  <h2>{{ isNew ? 'Create Customer' : 'Edit Customer' }}</h2>
+<div class="max-w-2xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ isNew ? 'Create New Customer' : 'Edit Customer' }}</h1>
+    <p class="text-sm text-gray-500 mt-1">
+      {{ isNew ? 'Onboard a new borrower with an initial weekly dues schedule.' : 'Update customer contact info and assigned weekly due target.' }}
+    </p>
+  </div>
 
   @if (error()) {
-    <div class="error-banner" role="alert">
-      <span class="error-icon">!</span>
+    <div class="rounded-lg bg-red-50 p-4 border border-red-200 text-sm text-red-700 flex items-center gap-2">
+      <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+      </svg>
       <span>{{ error() }}</span>
     </div>
   }
 
-  <form id="form" [formGroup]="form" (ngSubmit)="onSubmit()" class="customer-form__inner">
-    @if (isNew) {
-      <p class="form-hint">Customer will be created with profile in Supabase</p>
-    } @else {
-      <p class="form-hint">Edit customer details</p>
-    }
-
-    <div class="form-group">
-      <label for="name" class="form-label">Full Name <span class="required">*</span></label>
+  <form id="customerForm" [formGroup]="form" (ngSubmit)="onSubmit()" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-5">
+    <div>
+      <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Full Name <span class="text-red-500">*</span></label>
       <input
         type="text"
         id="name"
-        class="form-input"
-        placeholder="John Doe"
+        class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+        placeholder="Ravi Kumar"
         formControlName="name"
       />
       @if (form.get('name')?.invalid && form.get('name')?.touched) {
-        <span class="form-error">Name is required (min 2 characters)</span>
+        <span class="text-xs text-red-600 mt-1 block">Full name is required (min 2 characters)</span>
       }
     </div>
 
-    <div class="form-group">
-      <label for="phone" class="form-label">Phone</label>
+    <div>
+      <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
       <input
         type="tel"
         id="phone"
-        class="form-input"
-        placeholder="+91 98765 43210"
+        class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+        placeholder="+91 98765 43210 or 10 digits"
         formControlName="phone"
       />
       @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
-        <span class="form-error">Please enter a valid phone number</span>
+        <span class="text-xs text-red-600 mt-1 block">
+          {{ form.get('phone')?.errors?.['invalidPhone'] || 'Please enter a valid 10-digit Indian mobile number' }}
+        </span>
       }
     </div>
 
-    <div class="form-group">
-      <label for="email" class="form-label">Email</label>
+    <div>
+      <label for="email" class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
       <input
         type="email"
         id="email"
-        class="form-input"
-        placeholder="john@example.com"
+        class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+        placeholder="ravi@example.com"
         formControlName="email"
       />
       @if (form.get('email')?.invalid && form.get('email')?.touched) {
-        <span class="form-error">Please enter a valid email</span>
+        <span class="text-xs text-red-600 mt-1 block">Please enter a valid email address</span>
       }
     </div>
 
-    <div class="form-group">
-      <label for="weekly_due_amount" class="form-label">Weekly Due Amount (INR)</label>
-      <div class="input-wrapper">
+    <div>
+      <label for="weekly_due_amount" class="block text-sm font-semibold text-gray-700 mb-1">Weekly Due Target (₹)</label>
+      <div class="relative rounded-lg shadow-sm">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <span class="text-gray-500 text-sm">₹</span>
+        </div>
         <input
           type="number"
           id="weekly_due_amount"
-          class="form-input"
+          class="block w-full rounded-lg border border-gray-300 pl-7 pr-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
           formControlName="weekly_due_amount"
           min="1"
           max="10000"
           step="50"
         />
-        <span class="currency-symbol">₹</span>
       </div>
-      <p class="form-hint">Default is 500.00 INR (50000 paise)</p>
+      <p class="text-xs text-gray-500 mt-1">Stored internally as exact integer paise. Enter Rupees (₹1 to ₹10,000).</p>
       @if (form.get('weekly_due_amount')?.invalid && form.get('weekly_due_amount')?.touched) {
-        <span class="form-error">Amount must be between 1.00 and 10000.00 INR</span>
+        <span class="text-xs text-red-600 mt-1 block">Weekly due must be between ₹1 and ₹10,000</span>
       }
     </div>
-  </form>
 
-  <div class="form-actions">
-    <button
-      type="submit"
-      form="form"
-      class="btn-primary"
-      [disabled]="loading()"
-    >
-      {{ isNew ? 'Create' : 'Update' }}
-    </button>
-    <button
-      type="button"
-      class="btn-secondary"
-      (click)="cancel()"
-    >
-      Cancel
-    </button>
-  </div>
+    <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+      <button
+        type="button"
+        (click)="cancel()"
+        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition cursor-pointer"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition cursor-pointer"
+        [disabled]="loading()"
+      >
+        {{ isNew ? 'Create Customer' : 'Save Changes' }}
+      </button>
+    </div>
+  </form>
 </div>
