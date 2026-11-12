@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
   allocatePaymentFIFO,
   calculateBalance,
@@ -15,17 +15,16 @@ import {
 
 describe('Allocation Utilities', () => {
   describe('allocatePaymentFIFO', () => {
+    let scheduleCounter = 1;
+    beforeEach(() => {
+      scheduleCounter = 1;
+    });
+
     // Helper to create a weekly schedule with default values
     const createSchedule = (
-      overrides: Partial<{
-        dueAmount: number;
-        paid: boolean;
-        dueDate: Date;
-        absenceRecorded: boolean;
-        absenceApproved: boolean | null;
-      }> = {},
+      overrides: Partial<WeeklySchedule> = {},
     ): WeeklySchedule => ({
-      id: `schedule-${Math.random()}`,
+      id: overrides.id ?? `schedule-${scheduleCounter++}`,
       weekStartDate: new Date('2024-01-01'),
       weekEndDate: new Date('2024-01-07'),
       dueDate: new Date('2024-01-01'),

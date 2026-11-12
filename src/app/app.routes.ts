@@ -1,11 +1,16 @@
-import { Routes } from '@angular/router';
+import { Routes, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 
 // Guard for authentication
-const canAuthenticate = () => {
+const canAuthenticate = async () => {
   const supabase = inject(SupabaseService);
-  return supabase.getSession().then(session => !!session?.data.session?.user);
+  const router = inject(Router);
+  const session = await supabase.getSession();
+  if (session?.data?.session?.user) {
+    return true;
+  }
+  return router.createUrlTree(['/login']);
 };
 
 export const routes: Routes = [

@@ -114,7 +114,7 @@ describe('Language Utilities', () => {
 
     it('should translate to Telugu', () => {
       const translateFn = createTranslateFn('te');
-      expect(translateFn('dashboard')).toBe('డ آش보니');
+      expect(translateFn('dashboard')).toBe('డాషబోర్డ్');
     });
   });
 });

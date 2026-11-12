@@ -206,7 +206,7 @@ describe('Form Validation Utilities', () => {
     it('should validate valid absence', () => {
       const result = validateAbsenceForm({
         customerId: 'c1',
-        weekStartDate: '2024-01-15', // Wednesday - will fail day check
+        weekStartDate: '2024-01-17', // Wednesday - will fail day check
       });
       // Will fail on day check, but let's check other validations
     });
@@ -232,7 +232,7 @@ describe('Form Validation Utilities', () => {
     it('should error on non-Monday date', () => {
       const result = validateAbsenceForm({
         customerId: 'c1',
-        weekStartDate: '2024-01-15', // Wednesday
+        weekStartDate: '2024-01-17', // Wednesday
       });
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Week start date must be a Monday');

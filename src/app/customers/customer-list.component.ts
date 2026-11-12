@@ -10,6 +10,7 @@ import { Customer } from './customer.types';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './customer-list.component.html',
+  styleUrls: ['./customer-list.component.css'],
 })
 export class CustomerListComponent {
   private readonly _supabaseService = inject(SupabaseService);
@@ -47,6 +48,10 @@ export class CustomerListComponent {
 
   editCustomer(id: string) {
     this._router.navigate(['/customers', id, 'edit']);
+  }
+
+  viewCustomer(customer: Customer) {
+    this._router.navigate(['/customers', customer.id], { state: { id: customer.id } });
   }
 
   async deleteCustomer(id: string) {

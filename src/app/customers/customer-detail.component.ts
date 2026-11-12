@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { Customer } from './customer.types';
@@ -17,6 +17,7 @@ export class CustomerDetailComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _authService = inject(AuthService);
   private readonly _router = inject(Router);
+  private readonly _route = inject(ActivatedRoute);
   private readonly _collectionService = inject(CollectionService);
 
   loading = signal(true);
@@ -37,7 +38,10 @@ export class CustomerDetailComponent implements OnInit {
   });
 
   ngOnInit() {
-    const id = this._router.getCurrentNavigation()?.extras?.state?.['id'];
+    const routeId = this._route.snapshot.paramMap.get('id');
+    const stateId = (this._router.getCurrentNavigation()?.extras?.state as Record<string, unknown> | undefined)?.['id'] as string | undefined;
+    const id = routeId || stateId;
+
     if (id) {
       this.loadCustomer(id);
     } else {

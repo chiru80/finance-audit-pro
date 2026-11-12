@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { TestBed } from '@angular/core/testing';
-import { Router, UrlTree, type CanActivateFn, type CanMatchFn, type Route, type UrlSegment, type ActivatedRouteSnapshot, type RouterStateSnapshot } from '@angular/router';
+import { Injector, runInInjectionContext } from '@angular/core';
+import { Router, UrlTree, type ActivatedRouteSnapshot, type RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
 import { canAuthenticate, adminGuard, guestGuard } from './auth.guard';
 
@@ -8,36 +8,31 @@ import { canAuthenticate, adminGuard, guestGuard } from './auth.guard';
 const mockNavigate = vi.fn(() => Promise.resolve(true));
 const mockRouter: Partial<Router> = {
   navigate: mockNavigate,
-  createUrlTree: vi.fn(() => {
-    const tree = {} as UrlTree;
-    return tree;
-  }),
+  createUrlTree: vi.fn(() => ({} as UrlTree)),
 };
+
+const dummyRoute = {} as ActivatedRouteSnapshot;
+const dummyState = {} as RouterStateSnapshot;
 
 describe('Auth Guards', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    TestBed.resetTestingModule();
   });
 
   describe('canAuthenticate', () => {
     it('should allow access when user is authenticated', async () => {
-      // Create mock auth service that returns true for isAuthenticated
       const mockAuthService = {
         isAuthenticated: () => true,
       };
 
-      TestBed.configureTestingModule({
+      const injector = Injector.create({
         providers: [
           { provide: Router, useValue: mockRouter },
           { provide: AuthService, useValue: mockAuthService },
         ],
       });
 
-      // Get the guard function
-      const guardFn = canAuthenticate as () => boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree>;
-      const result = guardFn();
-
+      const result = runInInjectionContext(injector, () => canAuthenticate(dummyRoute, dummyState));
       expect(result).toBe(true);
     });
 
@@ -46,16 +41,14 @@ describe('Auth Guards', () => {
         isAuthenticated: () => false,
       };
 
-      TestBed.configureTestingModule({
+      const injector = Injector.create({
         providers: [
           { provide: Router, useValue: mockRouter },
           { provide: AuthService, useValue: mockAuthService },
         ],
       });
 
-      const guardFn = canAuthenticate as () => boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree>;
-      const result = guardFn();
-
+      const result = runInInjectionContext(injector, () => canAuthenticate(dummyRoute, dummyState));
       expect(result).toBe(false);
       expect(mockNavigate).toHaveBeenCalledWith(['/login']);
     });
@@ -67,16 +60,14 @@ describe('Auth Guards', () => {
         isAuthenticated: () => true,
       };
 
-      TestBed.configureTestingModule({
+      const injector = Injector.create({
         providers: [
           { provide: Router, useValue: mockRouter },
           { provide: AuthService, useValue: mockAuthService },
         ],
       });
 
-      const guardFn = adminGuard as () => boolean | UrlTree;
-      const result = guardFn();
-
+      const result = runInInjectionContext(injector, () => adminGuard(dummyRoute, dummyState));
       expect(result).toBe(true);
     });
 
@@ -85,16 +76,14 @@ describe('Auth Guards', () => {
         isAuthenticated: () => false,
       };
 
-      TestBed.configureTestingModule({
+      const injector = Injector.create({
         providers: [
           { provide: Router, useValue: mockRouter },
           { provide: AuthService, useValue: mockAuthService },
         ],
       });
 
-      const guardFn = adminGuard as () => boolean | UrlTree;
-      const result = guardFn();
-
+      const result = runInInjectionContext(injector, () => adminGuard(dummyRoute, dummyState));
       expect(result).toBe(false);
       expect(mockNavigate).toHaveBeenCalled();
     });
@@ -106,15 +95,13 @@ describe('Auth Guards', () => {
         isAuthenticated: () => false,
       };
 
-      TestBed.configureTestingModule({
+      const injector = Injector.create({
         providers: [
           { provide: AuthService, useValue: mockAuthService },
         ],
       });
 
-      const guardFn = guestGuard as () => boolean | UrlTree;
-      const result = guardFn();
-
+      const result = runInInjectionContext(injector, () => guestGuard(dummyRoute, dummyState));
       expect(result).toBe(true);
     });
 
@@ -123,21 +110,16 @@ describe('Auth Guards', () => {
         isAuthenticated: () => true,
       };
 
-      TestBed.configureTestingModule({
+      const injector = Injector.create({
         providers: [
           { provide: Router, useValue: mockRouter },
           { provide: AuthService, useValue: mockAuthService },
         ],
       });
 
-      const guardFn = guestGuard as () => boolean | UrlTree;
-      const result = guardFn();
-
+      const result = runInInjectionContext(injector, () => guestGuard(dummyRoute, dummyState));
       expect(result).toBe(false);
       expect(mockNavigate).toHaveBeenCalled();
     });
   });
 });
-
-// Import Observable for the type signature
-import { Observable } from 'rxjs';

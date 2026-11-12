@@ -35,7 +35,7 @@ import { SidebarService } from './sidebar.service';
       </div>
 
       <div class="header-right flex items-center gap-4">
-        <LanguageSwitcherComponent />
+        <app-language-switcher></app-language-switcher>
 
         <button
           (click)="toggleTheme()"

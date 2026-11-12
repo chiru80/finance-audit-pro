@@ -8,7 +8,7 @@
     </div>
   }
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="customer-form__inner">
+  <form id="form" [formGroup]="form" (ngSubmit)="onSubmit()" class="customer-form__inner">
     @if (isNew) {
       <p class="form-hint">Customer will be created with profile in Supabase</p>
     } @else {
@@ -65,9 +65,9 @@
           id="weekly_due_amount"
           class="form-input"
           formControlName="weekly_due_amount"
-          min="100"
-          max="1000000"
-          step="100"
+          min="1"
+          max="10000"
+          step="50"
         />
         <span class="currency-symbol">₹</span>
       </div>

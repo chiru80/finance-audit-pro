@@ -1,0 +1,7 @@
+@reference "../styles.css";
+
+/* Finance Audit Pro - Application Styles */
+/* Global resets and utilities */
+html, body, #root {
+  height: 100%;
+}

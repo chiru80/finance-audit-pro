@@ -1,24 +1,20 @@
-import { TestBed } from '@angular/core/testing';
+import { describe, it, expect, vi } from 'vitest';
+import { Injector, runInInjectionContext } from '@angular/core';
 import { App } from './app';
+import { I18nService } from './shared/i18n.service';
 
 describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [App],
-    })
-      .compileComponents();
-  });
+  it('should instantiate App component and initialize i18n', () => {
+    const mockI18n = {
+      initialize: vi.fn(),
+    };
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
+    const injector = Injector.create({
+      providers: [{ provide: I18nService, useValue: mockI18n }],
+    });
+
+    const app = runInInjectionContext(injector, () => new App());
     expect(app).toBeTruthy();
-  });
-
-  it('should render title', async () => {
-    const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, financeauditpro');
+    expect(mockI18n.initialize).toHaveBeenCalled();
   });
 });

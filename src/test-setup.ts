@@ -1,3 +1,5 @@
+import '@angular/compiler';
+
 // Test setup file for Vitest
 // jsdom polyfill is not needed in Vitest 5 with jsdom environment
 

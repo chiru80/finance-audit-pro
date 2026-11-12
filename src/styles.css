@@ -1,3 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f0f4ff;
+  --color-primary-100: #e2ebff;
+  --color-primary-200: #c9dbff;
+  --color-primary-300: #a3c4ff;
+  --color-primary-400: #74a9ff;
+  --color-primary-500: #4d8bff;
+  --color-primary-600: #3370ff;
+  --color-primary-700: #265ae9;
+  --color-primary-800: #1d4bd9;
+  --color-primary-900: #163ec2;
+
+  --color-accent-50: #f0f9ff;
+  --color-accent-100: #cff4ff;
+  --color-accent-200: #a3daff;
+  --color-accent-300: #70bdff;
+  --color-accent-400: #3f99ff;
+  --color-accent-500: #1e7aff;
+  --color-accent-600: #005acc;
+  --color-accent-700: #004a99;
+  --color-accent-800: #003b7a;
+  --color-accent-900: #002e5e;
+
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-300: #86efac;
+  --color-success-400: #22c55e;
+  --color-success-500: #16a34a;
+  --color-success-600: #15803d;
+  --color-success-700: #166534;
+  --color-success-800: #14532d;
+  --color-success-900: #166534;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fed7aa;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #f59e0b;
+  --color-warning-500: #d97706;
+  --color-warning-600: #b45309;
+  --color-warning-700: #92400e;
+  --color-warning-800: #78350f;
+  --color-warning-900: #78350f;
+
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-200: #fecaca;
+  --color-error-300: #fca5a5;
+  --color-error-400: #f87171;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+  --color-error-800: #991b1b;
+  --color-error-900: #7f1d1d;
+}
+
 /* Finance Audit Pro Design System */
 /* Premium financial SaaS palette with muted blues, slate grays, warm neutrals */
 
@@ -202,7 +261,3 @@
   --border-light-color: var(--color-border-light);
 }
 
-/* Tailwind integration */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;

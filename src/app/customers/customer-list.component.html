@@ -93,7 +93,18 @@
                 <button
                   type="button"
                   class="text-blue-600 hover:text-blue-900 mr-2"
+                  (click)="viewCustomer(customer)"
+                  title="View Details"
+                >
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="text-blue-600 hover:text-blue-900 mr-2"
                   (click)="editCustomer(customer.id)"
+                  title="Edit"
                 >
                   <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5m-5 9V5m-4 4h5l5 5H6" />
@@ -103,6 +114,7 @@
                   type="button"
                   class="text-red-600 hover:text-red-900"
                   (click)="deleteCustomer(customer.id)"
+                  title="Delete"
                 >
                   <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

@@ -1,4 +1,14 @@
 <div class="max-w-4xl mx-auto">
+  <div class="mb-4 flex justify-between items-center">
+    <a routerLink="/customers" class="text-sm font-medium text-blue-600 hover:text-blue-800 inline-flex items-center gap-1">
+      &larr; Back to Customers
+    </a>
+    @if (customer()) {
+      <a [routerLink]="['/customers', customer()!.id, 'edit']" class="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700">
+        Edit Customer
+      </a>
+    }
+  </div>
   <h1 class="mb-6 text-3xl font-bold text-gray-900">{{ customer()?.name || 'Customer' }}</h1>
 
   @if (loading()) {
@@ -33,7 +43,13 @@
           </div>
           <div class="py-3">
             <dt class="text-sm font-medium text-gray-500">Enrollment Date</dt>
-            <dd class="mt-1 text-sm text-gray-900">{{ customer()?.enrollment_date ? (customer()?.enrollment_date | date:'shortDate') : 'N/A' }}</dd>
+            <dd class="mt-1 text-sm text-gray-900">
+              @if (customer()?.enrollment_date) {
+                {{ customer()!.enrollment_date | date:'shortDate' }}
+              } @else {
+                N/A
+              }
+            </dd>
           </div>
         </dl>
       </div>

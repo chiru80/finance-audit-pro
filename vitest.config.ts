@@ -8,8 +8,7 @@ export default defineConfig({
     setupFiles: ['./src/test-setup.ts'],
     include: ['src/**/*.spec.ts'],
     exclude: ['node_modules', 'dist'],
-    pool: 'threads',
-    threads: false,
+    pool: 'forks',
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
