@@ -5,6 +5,7 @@ import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { Customer } from './customer.types';
 import { CollectionService } from '../collection.service';
+import { formatPaiseToINR } from '../utils/currency.utils';
 
 @Component({
   selector: 'app-customer-detail',
@@ -25,6 +26,8 @@ export class CustomerDetailComponent implements OnInit {
   customer = signal<Customer | null>(null);
   paymentHistory = signal<any[]>([]);
   schedules = signal<any[]>([]);
+  absences = signal<any[]>([]);
+  activeTab = signal<'schedules' | 'payments' | 'absences'>('schedules');
 
   summary = computed(() => {
     const c = this.customer();
@@ -50,6 +53,10 @@ export class CustomerDetailComponent implements OnInit {
     }
   }
 
+  setActiveTab(tab: 'schedules' | 'payments' | 'absences') {
+    this.activeTab.set(tab);
+  }
+
   private async loadCustomer(id: string) {
     this.loading.set(true);
     try {
@@ -62,8 +69,11 @@ export class CustomerDetailComponent implements OnInit {
       if (error) throw error;
       if (data) {
         this.customer.set(data as Customer);
-        await this.loadPaymentHistory(id);
-        await this.loadSchedules(id);
+        await Promise.all([
+          this.loadPaymentHistory(id),
+          this.loadSchedules(id),
+          this.loadAbsences(id),
+        ]);
       }
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to load customer');
@@ -83,29 +93,28 @@ export class CustomerDetailComponent implements OnInit {
 
   private async loadSchedules(customerId: string) {
     try {
-      const { data, error } = await this._supabaseService.client
-        .from('weekly_schedules')
-        .select('*')
-        .eq('customer_id', customerId)
-        .order('due_date', { ascending: true });
-
-      if (error) throw error;
+      const data = await this._collectionService.getWeeklySchedules(customerId);
       this.schedules.set(data || []);
     } catch (err) {
       console.error('Failed to load schedules:', err);
     }
   }
 
-  formatCurrency(amount: number) {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format((amount || 0) / 100);
+  private async loadAbsences(customerId: string) {
+    try {
+      const data = await this._collectionService.getCustomerAbsences(customerId);
+      this.absences.set(data || []);
+    } catch (err) {
+      console.error('Failed to load absences:', err);
+    }
+  }
+
+  formatCurrency(amount: number | bigint) {
+    return formatPaiseToINR(amount || 0);
   }
 
   goBack() {
     this._router.navigate(['/customers']);
   }
 }
+

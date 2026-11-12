@@ -1,12 +1,14 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
+import { formatPaiseToINR } from '../utils/currency.utils';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.css',
 })
@@ -16,6 +18,9 @@ export class ReportsComponent implements OnInit {
 
   loading = signal(true);
   error = signal<string | null>(null);
+
+  startDate = signal<string>('');
+  endDate = signal<string>('');
 
   summary = signal<{
     totalCustomers: number;
@@ -29,6 +34,14 @@ export class ReportsComponent implements OnInit {
   customerBalances = signal<any[]>([]);
 
   ngOnInit() {
+    // Default to last 30 days
+    const end = new Date();
+    const start = new Date();
+    start.setDate(end.getDate() - 30);
+
+    this.startDate.set(start.toISOString().split('T')[0]);
+    this.endDate.set(end.toISOString().split('T')[0]);
+
     this.loadReports();
   }
 
@@ -39,7 +52,7 @@ export class ReportsComponent implements OnInit {
     try {
       const { data: customers, error: customersError } = await this._supabaseService.client
         .from('customers')
-        .select('outstanding_balance, total_due, total_paid');
+        .select('id, name, outstanding_balance, total_due, total_paid, status');
 
       if (customersError) throw customersError;
 
@@ -65,20 +78,28 @@ export class ReportsComponent implements OnInit {
 
       this.summary.set(summaryData);
 
-      const { data: payments, error: paymentsError } = await this._supabaseService.client
+      let paymentsQuery = this._supabaseService.client
         .from('payment_history')
         .select('*, customers(name)')
-        .order('payment_date', { ascending: false })
-        .limit(50);
+        .order('payment_date', { ascending: false });
+
+      if (this.startDate()) {
+        paymentsQuery = paymentsQuery.gte('payment_date', this.startDate());
+      }
+      if (this.endDate()) {
+        paymentsQuery = paymentsQuery.lte('payment_date', this.endDate());
+      }
+
+      const { data: payments, error: paymentsError } = await paymentsQuery.limit(100);
 
       if (paymentsError) throw paymentsError;
       this.recentPayments.set(payments as any[]);
 
       const { data: balances, error: balancesError } = await this._supabaseService.client
         .from('customers')
-        .select('name, outstanding_balance, status')
+        .select('id, name, phone, outstanding_balance, total_paid, status')
         .order('outstanding_balance', { ascending: false })
-        .limit(20);
+        .limit(50);
 
       if (balancesError) throw balancesError;
       this.customerBalances.set(balances as any[]);
@@ -89,13 +110,52 @@ export class ReportsComponent implements OnInit {
     }
   }
 
-  formatCurrency(amount: number) {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(amount / 100);
+  exportPaymentsCSV() {
+    const payments = this.recentPayments();
+    if (!payments.length) return;
+
+    const headers = ['Payment ID', 'Date', 'Customer', 'Amount (INR)', 'Method', 'Reference'];
+    const rows = payments.map((p) => [
+      p.id,
+      p.payment_date,
+      `"${p.customers?.name || 'N/A'}"`,
+      ((p.amount || 0) / 100).toFixed(2),
+      p.payment_method,
+      `"${p.reference || ''}"`,
+    ]);
+
+    this.downloadCSV('payments_report.csv', [headers, ...rows]);
+  }
+
+  exportBalancesCSV() {
+    const balances = this.customerBalances();
+    if (!balances.length) return;
+
+    const headers = ['Customer Name', 'Phone', 'Outstanding Balance (INR)', 'Total Paid (INR)', 'Status'];
+    const rows = balances.map((c) => [
+      `"${c.name}"`,
+      `"${c.phone || ''}"`,
+      ((c.outstanding_balance || 0) / 100).toFixed(2),
+      ((c.total_paid || 0) / 100).toFixed(2),
+      c.status,
+    ]);
+
+    this.downloadCSV('customer_balances_report.csv', [headers, ...rows]);
+  }
+
+  private downloadCSV(filename: string, rows: (string | number)[][]) {
+    const csvContent = 'data:text/csv;charset=utf-8,' + rows.map((e) => e.join(',')).join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  formatCurrency(amount: number | bigint) {
+    return formatPaiseToINR(amount || 0);
   }
 
   formatDate(date: string) {
@@ -107,3 +167,4 @@ export class ReportsComponent implements OnInit {
     });
   }
 }
+

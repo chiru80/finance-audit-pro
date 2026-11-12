@@ -108,6 +108,13 @@ const englishTranslations: Translations = {
   'dashboard.status_label': 'Status',
   'dashboard.no_transactions': 'No transactions recorded yet',
   'dashboard.view_reports': 'View Reports',
+
+  // Collections & Absences
+  'collections.tracker': 'Weekly Tracker',
+  'collections.absences': 'Absence Log',
+  'collections.carried_forward': 'Carried Forward',
+  'collections.mark_absent': 'Mark Absent',
+  'collections.collect': 'Collect Due',
 };
 
 const teluguTranslations: Translations = {
@@ -120,54 +127,54 @@ const teluguTranslations: Translations = {
   'nav.settings': 'సెట్టింగ్స్',
 
   // Dashboard cards
-  'dashboard.total_customers': 'మొత్త కస్టమర్లు',
-  'dashboard.todays_collection': 'ఈరోజి సంచయం',
-  'dashboard.weekly_collection': 'వారాధిక సంచయం',
-  'dashboard.monthly_collection': 'నెలాధిక సంచయం',
-  'dashboard.total_outstanding': 'మొత్త లేక్కలు',
-  'dashboard.pending_payments': 'పంక్తి చెల్లింపులు',
+  'dashboard.total_customers': 'మొత్తం కస్టమర్లు',
+  'dashboard.todays_collection': 'ఈరోజు వసూలు',
+  'dashboard.weekly_collection': 'వారపు వసూలు',
+  'dashboard.monthly_collection': 'నెలవారీ వసూలు',
+  'dashboard.total_outstanding': 'మొత్తం బాకీ',
+  'dashboard.pending_payments': 'పెండింగ్ చెల్లింపులు',
 
   // Dashboard actions
   'dashboard.quick_actions': 'వేగవంత చర్యలు',
-  'dashboard.view_all': 'అన్ని వర్క్‌బుక్ చూడండి',
-  'dashboard.add_customer': 'కస్టమర్ జోడించండి',
-  'dashboard.add_collection': 'సంచయం జోడించండి',
+  'dashboard.view_all': 'అన్నీ చూడండి',
+  'dashboard.add_customer': 'కస్టమర్‌ను జోడించండి',
+  'dashboard.add_collection': 'కలెక్షన్ నమోదు చేయండి',
 
   // General
-  'loading': 'లోడ్ అవుత్తోంది...',
-  'error': 'తప్పు',
+  'loading': 'లోడ్ అవుతోంది...',
+  'error': 'లోపం',
   'retry': 'మళ్లీ ప్రయత్నించండి',
   'cancel': 'రద్దు చేయండి',
-  'confirm': 'నిశ్చయించండి',
+  'confirm': 'నిర్ధారించండి',
   'save': 'సేవ్ చేయండి',
   'edit': 'సవరించండి',
   'delete': 'తొలగించండి',
   'actions': 'చర్యలు',
 
   // Common UI
-  'search': 'సర్చ్ చేయండి',
-  'filter': 'ఫిల్టర్ చేయండి',
-  'sort': 'సార్టు చేయండి',
-  'refresh': 'రిఫ్రెష్ చేయండి',
-  'export': 'ఎక్స్‌పోర్ట్ చేయండి',
-  'import': 'ఇంపోర్ట్ చేయండి',
+  'search': 'వెతకండి',
+  'filter': 'ఫిల్టర్',
+  'sort': 'క్రమబద్ధీకరించు',
+  'refresh': 'తాజాకరించు',
+  'export': 'ఎగుమతి చేయండి',
+  'import': 'దిగుమతి చేయండి',
 
   // Status
   'status.paid': 'చెల్లించబడింది',
-  'status.pending': 'ఖాతేదారు',
-  'status.overdue': 'తగ్గిపోయింది',
-  'status.active': 'సక్రియ',
-  'status.inactive': 'అసక్రియ',
+  'status.pending': 'పెండింగ్',
+  'status.overdue': 'గడువు ముగిసింది',
+  'status.active': 'క్రియాశీలం',
+  'status.inactive': 'నిష్క్రియం',
 
   // Authentication
-  'login.title': 'స్వాగతం',
-  'login.subtitle': 'మీ ఖాతేదార్లో సైన్ ఇన్ చేయండి',
+  'login.title': 'తిరిగి స్వాగతం',
+  'login.subtitle': 'మీ ఖాతాలోకి ప్రవేశించండి',
   'login.email': 'ఇమెయిల్',
   'login.password': 'పాస్‌వర్డ్',
-  'login.forgot_password': 'పాస్‌వర్డ్ గుర్తుంచుకోవడం జరిగిందా?',
+  'login.forgot_password': 'పాస్‌వర్డ్ మర్చిపోయారా?',
   'login.sign_in': 'సైన్ ఇన్',
-  'login.sign_up': 'సైన్ అప్',
-  'login.create_account': 'ఖాతేదారు లేకపోతే, ఒకటి సృష్టించండి',
+  'login.sign_up': 'ఖాతా తెరవండి',
+  'login.create_account': 'ఖాతా లేదా? ఇప్పుడే ప్రారంభించండి',
   'logout': 'లాగ్ అవుట్',
 
   // Forms
@@ -183,9 +190,9 @@ const teluguTranslations: Translations = {
   'form.cancel': 'రద్దు చేయండి',
 
   // Empty states
-  'empty.nodata': 'డేటా అందుబాటులో లేదు',
-  'empty.nocustomers': 'కస్టమర్లు కనిపించలేదు',
-  'empty.nocollections': 'ఇప్పటికి సంచయాలు నమోదు చేయబడలేదు',
+  'empty.nodata': 'సమాచారం అందుబాటులో లేదు',
+  'empty.nocustomers': 'కస్టమర్లు కనుగొనబడలేదు',
+  'empty.nocollections': 'ఎటువంటి కలెక్షన్లు లేవు',
 
   // Theme
   'theme.light': 'లైట్ మోడ్',
@@ -197,20 +204,27 @@ const teluguTranslations: Translations = {
 
   // Date formats
   'date.today': 'ఈరోజు',
-  'date.yesterday': 'వెలుతురు',
+  'date.yesterday': 'నిన్న',
   'date.this_week': 'ఈ వారం',
   'date.this_month': 'ఈ నెల',
   'date.this_year': 'ఈ సంవత్సరం',
 
   // Dashboard additional
   'dashboard.title': 'డాష్‌బోర్డ్',
-  'dashboard.recent_transactions': 'కనీస కలెక్షన్లు',
+  'dashboard.recent_transactions': 'ఇటీవలి లావాదేవీలు',
   'dashboard.date': 'తేదీ',
   'dashboard.customer': 'కస్టమర్',
   'dashboard.amount': 'మొత్తం',
-  'status_label': 'స్థితి',
-  'dashboard.no_transactions': 'ఇప్పటికి కలెక్షన్లు నమోదు చేయబడలేదు',
-  'dashboard.view_reports': 'రిపోర్ట్స్ వీక్షించండి',
+  'dashboard.status_label': 'స్థితి',
+  'dashboard.no_transactions': 'ఇప్పటివరకు ఎటువంటి లావాదేవీలు లేవు',
+  'dashboard.view_reports': 'నివేదికలు చూడండి',
+
+  // Collections & Absences
+  'collections.tracker': 'వారాధిక ట్రాకర్',
+  'collections.absences': 'గైర్హాజరు లాగ్',
+  'collections.carried_forward': 'ముందుకు తీసుకెళ్లబడింది',
+  'collections.mark_absent': 'గైర్హాజరుగా గుర్తించండి',
+  'collections.collect': 'సంచయం స్వీకరించండి',
 };
 
 @Injectable({

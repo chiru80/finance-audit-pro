@@ -9,6 +9,9 @@ export default defineConfig({
     include: ['src/**/*.spec.ts'],
     exclude: ['node_modules', 'dist'],
     pool: 'forks',
+    forks: {
+      singleFork: true,
+    },
     isolate: false,
     coverage: {
       provider: 'v8',

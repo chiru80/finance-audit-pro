@@ -1,116 +1,190 @@
-<div class="reports">
-  <h2>Financial Reports</h2>
+<div class="max-w-6xl mx-auto space-y-6">
+  <!-- Header & Export Actions -->
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Financial Reports & Audit</h1>
+      <p class="text-sm text-gray-500 mt-1">Review aggregated financial balances, weekly collectibles, and export transaction logs.</p>
+    </div>
 
-  <div class="reports-content">
-    @if (loading()) {
-      <div class="loading-spinner"></div>
-    } @else if (error()) {
-      <div class="error-state" role="alert">
-        <span class="error-icon">!</span>
-        <span>{{ error() }}</span>
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        (click)="exportPaymentsCSV()"
+        class="inline-flex items-center gap-1.5 rounded-lg bg-white border border-gray-300 px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition cursor-pointer">
+        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Export Payments CSV
+      </button>
+
+      <button
+        type="button"
+        (click)="exportBalancesCSV()"
+        class="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-xs sm:text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Export Balances CSV
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center py-12">
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="rounded-lg bg-red-50 p-4 border border-red-200 text-sm text-red-700 flex items-center gap-2">
+      <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+      </svg>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  <!-- Financial Summary Metrics -->
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      <span class="text-xs uppercase font-semibold text-gray-500">Total Customers</span>
+      <p class="text-2xl font-bold text-gray-900 mt-1">{{ summary()?.totalCustomers || 0 }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      <span class="text-xs uppercase font-semibold text-gray-500">Total Outstanding</span>
+      <p class="text-2xl font-bold text-red-600 mt-1">{{ formatCurrency(summary()?.totalOutstanding ?? 0) }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      <span class="text-xs uppercase font-semibold text-gray-500">Total Due</span>
+      <p class="text-2xl font-bold text-gray-900 mt-1">{{ formatCurrency(summary()?.totalDue ?? 0) }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      <span class="text-xs uppercase font-semibold text-gray-500">Total Paid</span>
+      <p class="text-2xl font-bold text-green-700 mt-1">{{ formatCurrency(summary()?.totalPaid ?? 0) }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 col-span-2 md:col-span-1">
+      <span class="text-xs uppercase font-semibold text-gray-500">This Week Due</span>
+      <p class="text-2xl font-bold text-blue-700 mt-1">{{ formatCurrency(summary()?.thisWeekCollectible ?? 0) }}</p>
+    </div>
+  </div>
+
+  <!-- Filter & Payment Transactions -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <h2 class="text-lg font-bold text-gray-900">Payment Collection Log</h2>
+        <p class="text-xs text-gray-500">Filter payments by date range.</p>
       </div>
+
+      <div class="flex items-center gap-2 flex-wrap">
+        <div>
+          <label class="sr-only">From</label>
+          <input
+            type="date"
+            [ngModel]="startDate()"
+            (ngModelChange)="startDate.set($event)"
+            class="text-xs rounded-md border border-gray-300 px-2.5 py-1.5 focus:border-blue-500 focus:outline-none"
+          />
+        </div>
+        <span class="text-xs text-gray-400">to</span>
+        <div>
+          <label class="sr-only">To</label>
+          <input
+            type="date"
+            [ngModel]="endDate()"
+            (ngModelChange)="endDate.set($event)"
+            class="text-xs rounded-md border border-gray-300 px-2.5 py-1.5 focus:border-blue-500 focus:outline-none"
+          />
+        </div>
+        <button
+          type="button"
+          (click)="loadReports()"
+          class="rounded-md bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1.5 text-xs font-medium cursor-pointer transition">
+          Apply Filter
+        </button>
+      </div>
+    </div>
+
+    @if (recentPayments().length === 0) {
+      <p class="text-sm text-gray-500 py-6 text-center">No payment transactions found in selected date range.</p>
     } @else {
-      <div class="summary-cards">
-        <div class="card summary-card primary">
-          <div class="card-header">
-            <span class="card-title">Total Customers</span>
-            <svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="8" cy="9" r="4"/>
-              <path d="M20 9v4a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2v-4"/>
-            </svg>
-          </div>
-          <div class="card-value">{{ summary()?.totalCustomers || 0 }}</div>
-        </div>
-
-        <div class="card summary-card">
-          <div class="card-header">
-            <span class="card-title">Total Outstanding</span>
-          </div>
-          <div class="card-value">{{ formatCurrency(summary()?.totalOutstanding ?? 0) }}</div>
-        </div>
-
-        <div class="card summary-card">
-          <div class="card-header">
-            <span class="card-title">Total Due</span>
-          </div>
-          <div class="card-value">{{ formatCurrency(summary()?.totalDue ?? 0) }}</div>
-        </div>
-
-        <div class="card summary-card">
-          <div class="card-header">
-            <span class="card-title">Total Paid</span>
-          </div>
-          <div class="card-value">{{ formatCurrency(summary()?.totalPaid ?? 0) }}</div>
-        </div>
-      </div>
-
-      <div class="reports-grid">
-        <section class="report-section">
-          <h3>This Week Collectible</h3>
-          <div class="collectible-badge">
-            {{ formatCurrency(summary()?.thisWeekCollectible ?? 0) }}
-          </div>
-        </section>
-
-        <section class="report-section">
-          <h3>Recent Payments</h3>
-          @if (recentPayments().length === 0) {
-            <p class="empty-message">No recent payments</p>
-          } @else {
-            <table class="report-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Customer</th>
-                  <th>Method</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (payment of recentPayments(); track payment.id) {
-                  <tr>
-                    <td class="date">{{ formatDate(payment.payment_date) }}</td>
-                    <td class="customer">{{ payment.customers?.name || 'N/A' }}</td>
-                    <td class="method">{{ payment.payment_method }}</td>
-                    <td class="amount">{{ formatCurrency(payment.amount) }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          }
-        </section>
-      </div>
-
-      <section class="report-section">
-        <h3>Top Balance Holders</h3>
-        @if (customerBalances().length === 0) {
-          <p class="empty-message">No customer balances</p>
-        } @else {
-          <table class="report-table">
-            <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Outstanding</th>
-                <th>Status</th>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 text-sm">
+          <thead>
+            <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              <th class="py-3 px-4">Date</th>
+              <th class="py-3 px-4">Customer</th>
+              <th class="py-3 px-4">Method</th>
+              <th class="py-3 px-4">Reference</th>
+              <th class="py-3 px-4 text-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            @for (payment of recentPayments(); track payment.id) {
+              <tr class="hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-900 font-medium whitespace-nowrap">{{ formatDate(payment.payment_date) }}</td>
+                <td class="py-3 px-4 text-gray-900 font-semibold">{{ payment.customers?.name || 'N/A' }}</td>
+                <td class="py-3 px-4 whitespace-nowrap">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs capitalize bg-gray-100 font-medium">
+                    {{ payment.payment_method }}
+                  </span>
+                </td>
+                <td class="py-3 px-4 text-gray-500 text-xs">{{ payment.reference || '—' }}</td>
+                <td class="py-3 px-4 text-right font-bold text-green-700 whitespace-nowrap">{{ formatCurrency(payment.amount) }}</td>
               </tr>
-            </thead>
-            <tbody>
-              @for (customer of customerBalances(); track customer.id) {
-                <tr>
-                  <td class="customer">{{ customer.name }}</td>
-                  <td class="amount">{{ formatCurrency(customer.outstanding_balance) }}</td>
-                  <td>
-                    <span class="status-badge {{ customer.status }}">
-                      {{ customer.status }}
-                    </span>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        }
-      </section>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  <!-- Top Customer Balances / Defaulters -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="text-lg font-bold text-gray-900">Highest Outstanding Balances</h2>
+        <p class="text-xs text-gray-500">Customers with the highest unpaid dues requiring immediate attention.</p>
+      </div>
+    </div>
+
+    @if (customerBalances().length === 0) {
+      <p class="text-sm text-gray-500 py-6 text-center">No customer balance records found.</p>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 text-sm">
+          <thead>
+            <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              <th class="py-3 px-4">Customer</th>
+              <th class="py-3 px-4">Phone</th>
+              <th class="py-3 px-4">Total Paid</th>
+              <th class="py-3 px-4">Status</th>
+              <th class="py-3 px-4 text-right">Outstanding Balance</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            @for (c of customerBalances(); track c.id) {
+              <tr class="hover:bg-gray-50">
+                <td class="py-3 px-4 font-semibold text-gray-900">{{ c.name }}</td>
+                <td class="py-3 px-4 text-gray-600">{{ c.phone || '—' }}</td>
+                <td class="py-3 px-4 text-gray-700">{{ formatCurrency(c.total_paid) }}</td>
+                <td class="py-3 px-4 whitespace-nowrap">
+                  <span [class]="c.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+                        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold uppercase">
+                    {{ c.status }}
+                  </span>
+                </td>
+                <td class="py-3 px-4 text-right font-bold text-red-600 whitespace-nowrap">{{ formatCurrency(c.outstanding_balance) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     }
   </div>
 </div>
+

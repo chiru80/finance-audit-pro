@@ -1,98 +1,153 @@
-<div class="settings">
-  <h2>Settings</h2>
+<div class="max-w-4xl mx-auto space-y-6">
+  <div>
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Application Settings</h1>
+    <p class="text-sm text-gray-500 mt-1">Configure business rules, payment schedules, and default financial policies.</p>
+  </div>
 
-  <div class="settings-content">
-    @if (loading()) {
-      <div class="loading-spinner"></div>
-    } @else if (error()) {
-      <div class="error-state" role="alert">
-        <span class="error-icon">!</span>
-        <span>{{ error() }}</span>
-      </div>
-    } @else {
-      <div class="settings-section">
-        <h3>Weekly Payments</h3>
-        <div class="setting-item">
-          <label>
-            <input
-              type="checkbox"
-              [checked]="settings().weekly_payments_start"
-              (change)="onCheckboxChange('weekly_payments_start', $event)"
-            />
-            <span>Enable weekly payments</span>
-          </label>
-        </div>
+  @if (loading()) {
+    <div class="flex justify-center py-12">
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
+    </div>
+  }
 
-        <div class="setting-item">
-          <label>Default weekly due amount</label>
-          <div class="input-row">
-            <input
-              type="number"
-              [value]="settings().weekly_due_amount"
-              (input)="onWeeklyDueAmountInput($event)"
-              class="input-number"
-            />
-            <span class="currency-symbol">₹</span>
+  @if (error()) {
+    <div class="rounded-lg bg-red-50 p-4 border border-red-200 text-sm text-red-700 flex items-center gap-2">
+      <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+      </svg>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  @if (success()) {
+    <div class="rounded-lg bg-green-50 p-4 border border-green-200 text-sm text-green-700 flex items-center gap-2">
+      <svg class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM16.707 7.707a1 1 0 00-1.414-1.414L9 12.586 6.707 10.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7z" clip-rule="evenodd" />
+      </svg>
+      <span>{{ success() }}</span>
+    </div>
+  }
+
+  @if (!loading()) {
+    <div class="space-y-6">
+      <!-- Section 1: Weekly Cycles & Defaults -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
+        <h2 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3">Weekly Schedule & Dues</h2>
+
+        <div class="flex items-start gap-3">
+          <input
+            id="weekly-payments"
+            type="checkbox"
+            [checked]="settings().weekly_payments_start"
+            (change)="updateCheckbox('weekly_payments_start', $any($event.target).checked)"
+            class="h-4 w-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+          <div>
+            <label for="weekly-payments" class="text-sm font-semibold text-gray-900 cursor-pointer">Enable Weekly Payments</label>
+            <p class="text-xs text-gray-500">Automatically generate recurring weekly dues schedules for active customers.</p>
           </div>
-          <p class="setting-hint">Default amount for new customers (in INR)</p>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <h3>Collections</h3>
-        <div class="setting-item">
-          <label>
-            <input
-              type="checkbox"
-              [checked]="settings().allow_partial_payments"
-              (change)="onCheckboxChange('allow_partial_payments', $event)"
-            />
-            <span>Allow partial payments</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <h3>Absence Management</h3>
-        <div class="setting-item">
-          <label>
-            <input
-              type="checkbox"
-              [checked]="settings().absence_requires_approval"
-              (change)="onCheckboxChange('absence_requires_approval', $event)"
-            />
-            <span>Absences require owner approval</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <h3>Payment Processing</h3>
-        <div class="setting-item">
-          <label for="allocation-direction">Payment allocation direction</label>
-          <select
-            id="allocation-direction"
-            [value]="settings().payment_allocation_direction"
-            (change)="onSelectChange('payment_allocation_direction', $event)"
-          >
-            <option value="fifo">FIFO (Oldest first)</option>
-            <option value="lifo">LIFO (Newest first)</option>
-          </select>
         </div>
 
-        <div class="setting-item">
-          <label for="due-day">Default payment due day (1=Monday...)</label>
+        <div class="pt-2">
+          <label class="block text-sm font-semibold text-gray-900 mb-1">Default Weekly Due Amount (₹)</label>
+          <div class="flex items-center gap-3 max-w-sm">
+            <div class="relative rounded-md shadow-sm flex-1">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <span class="text-gray-500 sm:text-sm">₹</span>
+              </div>
+              <input
+                type="number"
+                [ngModel]="weeklyDueRupees()"
+                (ngModelChange)="weeklyDueRupees.set($event)"
+                min="1"
+                class="block w-full rounded-md border border-gray-300 pl-7 pr-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+            <button
+              type="button"
+              (click)="onRupeeAmountSave()"
+              class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition cursor-pointer">
+              Update
+            </button>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">Default applied when onboarding a new customer (Current stored: {{ formatCurrency(settings().weekly_due_amount) }}).</p>
+        </div>
+
+        <div class="pt-2">
+          <label for="due-day" class="block text-sm font-semibold text-gray-900 mb-1">Default Due Day of Week</label>
           <select
             id="due-day"
             [value]="settings().default_weekly_due_day"
             (change)="onSelectChange('default_weekly_due_day', $event)"
+            class="block w-full max-w-sm rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
           >
-            @for (day of [1,2,3,4,5,6,7]; track day) {
-              <option [value]="day">{{ day === 1 ? 'Monday' : day === 2 ? 'Tuesday' : day === 3 ? 'Wednesday' : day === 4 ? 'Thursday' : day === 5 ? 'Friday' : day === 6 ? 'Saturday' : 'Sunday' }}</option>
-            }
+            <option [value]="1">Monday</option>
+            <option [value]="2">Tuesday</option>
+            <option [value]="3">Wednesday</option>
+            <option [value]="4">Thursday</option>
+            <option [value]="5">Friday</option>
+            <option [value]="6">Saturday</option>
+            <option [value]="7">Sunday</option>
           </select>
         </div>
       </div>
-    }
-  </div>
+
+      <!-- Section 2: Payments & Allocation Policy -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
+        <h2 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3">Payments & Allocation Rules</h2>
+
+        <div class="flex items-start gap-3">
+          <input
+            id="partial-payments"
+            type="checkbox"
+            [checked]="settings().allow_partial_payments"
+            (change)="updateCheckbox('allow_partial_payments', $any($event.target).checked)"
+            class="h-4 w-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+          <div>
+            <label for="partial-payments" class="text-sm font-semibold text-gray-900 cursor-pointer">Allow Partial Payments</label>
+            <p class="text-xs text-gray-500">Allow customers to pay amounts lower than full weekly due, partially fulfilling schedules.</p>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <label for="allocation-direction" class="block text-sm font-semibold text-gray-900 mb-1">Payment Allocation Strategy</label>
+          <select
+            id="allocation-direction"
+            [value]="settings().payment_allocation_direction"
+            (change)="onSelectChange('payment_allocation_direction', $event)"
+            class="block w-full max-w-sm rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+          >
+            <option value="fifo">FIFO — Oldest Unpaid Dues First (Approved Rule)</option>
+            <option value="lifo">LIFO — Newest Dues First</option>
+          </select>
+          <p class="text-xs text-gray-500 mt-1">Per approved business rule Decision 2: Payments allocate to the oldest overdue weeks first.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Absence & Debt Policy -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
+        <h2 class="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3">Absence Management & Debt Policy</h2>
+
+        <div class="flex items-start gap-3">
+          <input
+            id="absence-approval"
+            type="checkbox"
+            [checked]="settings().absence_requires_approval"
+            (change)="updateCheckbox('absence_requires_approval', $any($event.target).checked)"
+            class="h-4 w-4 mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+          <div>
+            <label for="absence-approval" class="text-sm font-semibold text-gray-900 cursor-pointer">Absences Require Owner Approval</label>
+            <p class="text-xs text-gray-500">Collector-recorded customer absences must be approved by the owner before finalization.</p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-lg bg-blue-50 border border-blue-200 text-xs text-blue-900 leading-relaxed">
+          <strong>Approved Policy (Decision 1 - Option A):</strong> When an absence is recorded and approved, the weekly due remains charged and carries forward as customer debt.
+        </div>
+      </div>
+    </div>
+  }
 </div>
+

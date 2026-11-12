@@ -90,4 +90,77 @@ export class CollectionService {
       return [];
     }
   }
+
+  async recordAbsence(customerId: string, weekStartDate: string, reason: string) {
+    try {
+      const { data, error } = await this._supabaseService.client.rpc('record_absence', {
+        p_customer_id: customerId,
+        p_week_start: weekStartDate,
+        p_reason: reason,
+      });
+
+      if (error) throw error;
+      const res = Array.isArray(data) ? data[0] : data;
+      if (res && res.success === false) {
+        throw new Error(res.error_message || 'Failed to record absence');
+      }
+
+      this.showSuccess('Absence recorded');
+      return { success: true, data: res };
+    } catch (err) {
+      return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+    }
+  }
+
+  async approveAbsence(absenceId: string, approve: boolean = true) {
+    try {
+      const { data, error } = await this._supabaseService.client.rpc('approve_absence', {
+        p_absence_id: absenceId,
+        p_approve: approve,
+      });
+
+      if (error) throw error;
+      const res = Array.isArray(data) ? data[0] : data;
+      if (res && res.success === false) {
+        throw new Error(res.error_message || 'Failed to update absence approval');
+      }
+
+      this.showSuccess(approve ? 'Absence approved' : 'Absence rejected');
+      return { success: true, data: res };
+    } catch (err) {
+      return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+    }
+  }
+
+  async getCustomerAbsences(customerId: string) {
+    try {
+      const { data, error } = await this._supabaseService.client
+        .from('absences')
+        .select('*')
+        .eq('customer_id', customerId)
+        .order('week_start_date', { ascending: false });
+
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.error('Failed to get absences:', err);
+      return [];
+    }
+  }
+
+  async getWeeklySchedules(customerId: string) {
+    try {
+      const { data, error } = await this._supabaseService.client
+        .from('weekly_schedules')
+        .select('*')
+        .eq('customer_id', customerId)
+        .order('due_date', { ascending: true });
+
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.error('Failed to get schedules:', err);
+      return [];
+    }
+  }
 }
