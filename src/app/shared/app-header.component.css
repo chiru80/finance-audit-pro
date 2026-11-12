@@ -1,1 +1,4 @@
-/* App Header Component Styles */
+:host {
+  display: block;
+  width: 100%;
+}

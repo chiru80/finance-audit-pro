@@ -9,15 +9,15 @@ import { AuthService } from '../auth/auth.service';
   standalone: true,
   imports: [CommonModule, AppHeaderComponent, AppSidebarComponent],
   template: `
-    <div class="app-shell flex h-screen w-full overflow-hidden bg-background-primary">
+    <div class="app-shell flex flex-row h-screen w-full overflow-hidden bg-slate-50">
       @if (authService.isAuthenticated()) {
         <app-sidebar />
       }
-      <div class="flex-1 flex flex-col overflow-hidden">
+      <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         @if (authService.isAuthenticated()) {
           <app-header />
         }
-        <main [class]="authService.isAuthenticated() ? 'flex-1 overflow-auto p-4 md:p-6 bg-background-secondary' : 'flex-1 overflow-auto bg-background-primary'">
+        <main [class]="authService.isAuthenticated() ? 'flex-1 overflow-y-auto p-6 md:p-8 bg-slate-50' : 'flex-1 overflow-y-auto bg-white'">
           <ng-content></ng-content>
         </main>
       </div>

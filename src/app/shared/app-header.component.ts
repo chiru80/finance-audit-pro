@@ -8,11 +8,11 @@ import { SidebarService } from './sidebar.service';
   standalone: true,
   imports: [LanguageSwitcherComponent],
   template: `
-    <header class="header flex items-center justify-between px-4 py-3 bg-background-primary border-b border-border-light shadow-sm">
+    <header class="header h-16 flex items-center justify-between px-6 bg-white border-b border-slate-200/80 shadow-xs flex-shrink-0">
       <div class="header-left flex items-center gap-3">
         <button
           (click)="sidebarService.toggle()"
-          class="p-2 rounded-lg hover:bg-background-secondary focus:outline-none focus:ring-2 focus:ring-primary-500"
+          class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer"
           aria-label="Toggle navigation"
           type="button"
         >
@@ -31,15 +31,19 @@ import { SidebarService } from './sidebar.service';
             />
           </svg>
         </button>
-        <h1 class="text-lg font-semibold text-text-primary">Finance Audit Pro</h1>
+        <div class="hidden sm:flex items-center gap-2 text-xs text-slate-400 font-medium">
+          <span>Weekly Collections</span>
+          <span>/</span>
+          <span class="text-slate-700 font-semibold">Active Session</span>
+        </div>
       </div>
 
-      <div class="header-right flex items-center gap-4">
+      <div class="header-right flex items-center gap-3">
         <app-language-switcher></app-language-switcher>
 
         <button
           (click)="toggleTheme()"
-          class="p-2 rounded-lg hover:bg-background-secondary focus:outline-none focus:ring-2 focus:ring-primary-500"
+          class="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer"
           [attr.aria-label]="themeService.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
           type="button"
         >

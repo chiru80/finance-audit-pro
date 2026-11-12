@@ -118,10 +118,10 @@ export class ReportsComponent implements OnInit {
     const rows = payments.map((p) => [
       p.id,
       p.payment_date,
-      `"${p.customers?.name || 'N/A'}"`,
+      p.customers?.name || 'N/A',
       ((p.amount || 0) / 100).toFixed(2),
       p.payment_method,
-      `"${p.reference || ''}"`,
+      p.reference || '',
     ]);
 
     this.downloadCSV('payments_report.csv', [headers, ...rows]);
@@ -133,10 +133,10 @@ export class ReportsComponent implements OnInit {
 
     const headers = ['Customer Name', 'Phone', 'Outstanding Balance (INR)', 'Total Paid (INR)', 'Status'];
     const rows = balances.map((c) => [
-      `"${c.name}"`,
-      `"${c.phone || ''}"`,
-      ((c.outstanding_balance || 0) / 100).toFixed(2),
-      ((c.total_paid || 0) / 100).toFixed(2),
+      c.name,
+      c.phone || '',
+      (c.outstanding_balance || 0) / 100,
+      (c.total_paid || 0) / 100,
       c.status,
     ]);
 
@@ -144,14 +144,26 @@ export class ReportsComponent implements OnInit {
   }
 
   private downloadCSV(filename: string, rows: (string | number)[][]) {
-    const csvContent = 'data:text/csv;charset=utf-8,' + rows.map((e) => e.join(',')).join('\n');
-    const encodedUri = encodeURI(csvContent);
+    const csvContent = 'data:text/csv;charset=utf-8,' + rows.map((row) => this.escapeCsvRow(row)).join('\n');
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
+    link.setAttribute('href', encodeURI(csvContent));
     link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  private escapeCsvRow(row: (string | number)[]): string {
+    return row
+      .map((cell) => {
+        const value = String(cell ?? '');
+        // Quote any field containing comma, quote, newline, or leading/trailing whitespace
+        if (/[",\n\r]/.test(value) || value !== value.trim()) {
+          return `"${value.replace(/"/g, '""')}"`;
+        }
+        return value;
+      })
+      .join(',');
   }
 
   formatCurrency(amount: number | bigint) {
