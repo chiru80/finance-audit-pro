@@ -240,25 +240,31 @@ export function processPartialPayment(
 /**
  * Carry forward absence for balance calculation
  *
- * Business Rules:
- * - Weekly due amount is charged regardless of absence
- * - Absence requires owner approval to waive
- * - If absence is approved, the week's due is not charged
+ * Business Rules (Option A - APPROVED by Owner 2026-11-12):
+ * - Weekly due amount is charged REGARDLESS of absence
+ * - Absence documents WHY collection did not happen, but does NOT forgive the debt
+ * - The unpaid weekly due amount carries forward as debt in outstanding_balance
  *
  * @param isAbsenceApproved - Whether the absence was approved
  * @param weeklyDue - The weekly due amount in paise
- * @returns Amount that should be charged (0 if absence approved, otherwise full amount)
+ * @returns Amount that should be charged (always full amount under Option A)
  */
 export function calculateAbsenceImpact(
   isAbsenceApproved: boolean,
   weeklyDue: number,
 ): number {
-  // If absence is approved, no charge for that week
-  return isAbsenceApproved ? 0 : weeklyDue;
+  // Under Option A, the weekly due is ALWAYS charged and carried forward.
+  // Absence approval documents the missed collection visit but does NOT waive the debt.
+  return weeklyDue;
 }
 
 /**
  * Calculate customer balance considering approved absences
+ *
+ * Business Rules (Option A - APPROVED by Owner 2026-11-12):
+ * - Weekly due amount is charged REGARDLESS of absence
+ * - Absence is documented but does NOT waive the debt
+ * - Approved absences still count toward outstanding balance
  *
  * @param dueSchedules - Array of weekly schedules (may have absence flags)
  * @returns Net balance in paise after accounting for absences
@@ -273,13 +279,9 @@ export function calculateBalanceWithAbsences(
       continue;
     }
 
-    // Check if this week should be charged
-    // If absence recorded and approved, no charge
-    const shouldCharge = !(
-      schedule.absenceRecorded && schedule.absenceApproved === true
-    );
-
-    if (shouldCharge && schedule.dueAmount > 0) {
+    // Under Option A, ALL unpaid schedules contribute to balance
+    // Absence (approved or not) does NOT skip the due amount
+    if (schedule.dueAmount > 0) {
       totalDue += schedule.dueAmount;
     }
   }

@@ -286,8 +286,8 @@ describe('Allocation Utilities', () => {
   });
 
   describe('calculateAbsenceImpact', () => {
-    it('should return zero when absence is approved', () => {
-      expect(calculateAbsenceImpact(true, 50000)).toBe(0);
+    it('should return full due amount when absence is approved under Option A (debt carries forward)', () => {
+      expect(calculateAbsenceImpact(true, 50000)).toBe(50000);
     });
 
     it('should return full due when absence is not approved', () => {
@@ -316,7 +316,8 @@ describe('Allocation Utilities', () => {
       ...overrides,
     });
 
-    it('should not count approved absences toward balance', () => {
+    it('should count approved absences toward balance (Option A: due is still charged)', () => {
+      // Under Option A, approved absences still contribute to outstanding balance
       const schedules = [
         createSchedule({
           dueAmount: 50000,
@@ -325,7 +326,7 @@ describe('Allocation Utilities', () => {
         }),
       ];
 
-      expect(calculateBalanceWithAbsences(schedules)).toBe(0);
+      expect(calculateBalanceWithAbsences(schedules)).toBe(50000);
     });
 
     it('should count unapproved/pending absences toward balance', () => {
@@ -340,7 +341,7 @@ describe('Allocation Utilities', () => {
       expect(calculateBalanceWithAbsences(schedules)).toBe(50000);
     });
 
-    it('should exclude already paid schedules', () => {
+    it('should only exclude already paid schedules', () => {
       const schedules = [
         createSchedule({ dueAmount: 50000, paid: true }),
         createSchedule({
@@ -350,7 +351,20 @@ describe('Allocation Utilities', () => {
         }),
       ];
 
-      expect(calculateBalanceWithAbsences(schedules)).toBe(0);
+      // First schedule is paid (excluded), second has approved absence but still counts
+      expect(calculateBalanceWithAbsences(schedules)).toBe(50000);
+    });
+
+    it('should count rejected absences toward balance', () => {
+      const schedules = [
+        createSchedule({
+          dueAmount: 50000,
+          absenceRecorded: true,
+          absenceApproved: false, // rejected
+        }),
+      ];
+
+      expect(calculateBalanceWithAbsences(schedules)).toBe(50000);
     });
   });
 
