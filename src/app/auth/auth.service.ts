@@ -26,28 +26,38 @@ export class AuthService {
   }
 
   private async initializeAuth() {
-    const { data: { session }, error: sessionError } = await this._supabaseService.getSession();
+    try {
+      const { data: { session }, error: sessionError } = await this._supabaseService.getSession();
 
-    if (sessionError) {
-      this._error.set(sessionError.message);
-    } else {
-      this._session.set(session);
-      this._user.set(session?.user ?? null);
+      if (sessionError) {
+        this._error.set(sessionError.message);
+      } else {
+        this._session.set(session);
+        this._user.set(session?.user ?? null);
+      }
+    } catch (err) {
+      console.warn('Auth initialization session fetch failed:', err);
+      this._user.set(null);
+      this._session.set(null);
+    } finally {
+      this._loading.set(false);
     }
 
-    this._loading.set(false);
+    // Subscribe to auth state changes safely
+    try {
+      this._supabaseService.client.auth.onAuthStateChange((event, newSession) => {
+        this._session.set(newSession);
+        this._user.set(newSession?.user ?? null);
+        this._loading.set(false);
 
-    // Subscribe to auth state changes
-    this._supabaseService.client.auth.onAuthStateChange((event, newSession) => {
-      this._session.set(newSession);
-      this._user.set(newSession?.user ?? null);
-      this._loading.set(false);
-
-      // Auto-create profile for new signups (including OAuth)
-      if (event === 'SIGNED_IN' && newSession?.user) {
-        this.ensureProfileExists(newSession.user);
-      }
-    });
+        // Auto-create profile for new signups (including OAuth)
+        if (event === 'SIGNED_IN' && newSession?.user) {
+          this.ensureProfileExists(newSession.user);
+        }
+      });
+    } catch (err) {
+      console.warn('Auth state subscription failed:', err);
+    }
   }
 
   /**
