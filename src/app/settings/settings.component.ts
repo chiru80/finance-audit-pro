@@ -58,8 +58,8 @@ export class SettingsComponent implements OnInit {
 
       // Also fetch profile defaults
       const user = this._authService.user();
-      let profileDueAmount = 50000;
-      let profileDueDay = 1;
+      let profileDueAmount: number | null = null;
+      let profileDueDay: number | null = null;
 
       if (user?.id) {
         const { data: profile } = await this._supabaseService.client
@@ -69,18 +69,22 @@ export class SettingsComponent implements OnInit {
           .single();
 
         if (profile) {
-          profileDueAmount = profile.weekly_due_amount || 50000;
-          profileDueDay = profile.weekly_due_day || 1;
+          profileDueAmount = profile.weekly_due_amount;
+          profileDueDay = profile.weekly_due_day;
         }
       }
 
-      const dueAmount = settingsMap.get('default_weekly_due_amount')
+      // Priority: settings > profile > undefined (will use UI default)
+      const dueAmountFromSettings = settingsMap.get('default_weekly_due_amount')
         ? parseInt(settingsMap.get('default_weekly_due_amount'), 10)
-        : profileDueAmount;
+        : null;
 
-      const dueDay = settingsMap.get('default_weekly_due_day')
+      const dueDayFromSettings = settingsMap.get('default_weekly_due_day')
         ? parseInt(settingsMap.get('default_weekly_due_day'), 10)
-        : profileDueDay;
+        : null;
+
+      const dueAmount = dueAmountFromSettings ?? profileDueAmount ?? 50000; // Ultimate fallback to ₹500
+      const dueDay = dueDayFromSettings ?? profileDueDay ?? 1;
 
       this.settings.set({
         weekly_payments_start: settingsMap.get('weekly_payments_start') !== 'false',

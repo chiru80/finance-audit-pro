@@ -7,7 +7,11 @@
 -- This is a VIEW (not a table) so it doesn't duplicate data.
 
 -- Create transactions view for dashboard queries
-CREATE OR REPLACE VIEW transactions AS
+-- security_invoker = true ensures RLS policies on underlying tables are enforced
+-- when the view is queried by any authenticated user.
+CREATE OR REPLACE VIEW transactions
+WITH (security_invoker = true)
+AS
 SELECT
     p.id,
     p.customer_id,
@@ -61,8 +65,17 @@ ORDER BY date DESC, id DESC;
 -- Grant select on the view to authenticated users
 GRANT SELECT ON transactions TO authenticated;
 
--- Create RLS policy on the view (via underlying tables)
--- The view inherits RLS from the underlying tables
+-- Enable RLS on the view and add owner-scoped policy
+-- This ensures users can only see transactions for their own customers
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Owner can view own transactions" ON transactions
+    FOR SELECT USING (
+        EXISTS (
+            SELECT 1 FROM customers c
+            WHERE c.id = customer_id AND c.profile_id = auth.uid()
+        )
+    );
 
 -- Index on the underlying tables already exists for performance
 -- Create a covering index on payments for this view
@@ -75,4 +88,4 @@ CREATE INDEX IF NOT EXISTS idx_payment_history_dashboard
     INCLUDE (amount, payment_method, reference, reversed);
 
 -- Comment for documentation
-COMMENT ON VIEW transactions IS 'Unified transactions view combining payments and payment_history for dashboard display';
+COMMENT ON VIEW transactions IS 'Unified transactions view combining payments and payment_history for dashboard display. RLS enforced via security_invoker and owner-scoped policy.';

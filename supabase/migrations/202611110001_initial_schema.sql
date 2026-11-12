@@ -747,7 +747,8 @@ INSERT INTO settings (key, value, description) VALUES
     ('absence_requires_approval', 'true', 'Whether absences require owner approval'),
     ('allow_partial_payments', 'true', 'Whether partial payments are allowed'),
     ('payment_allocation_direction', 'fifo', 'Direction for payment allocation (fifo = oldest first)'),
-    ('default_weekly_due_day', '1', 'Default day of week for payments (1=Monday, 7=Sunday)')
+    ('default_weekly_due_day', '1', 'Default day of week for payments (1=Monday, 7=Sunday)'),
+    ('default_weekly_due_amount', '50000', 'Default weekly due amount in paise (50000 = ₹500.00)')
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, description = EXCLUDED.description;
 
 -- ============================================================================

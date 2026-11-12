@@ -100,7 +100,13 @@ export class WeeklyTrackerComponent implements OnInit {
 
     try {
       const schedule = this.schedules().find((s) => s.id === scheduleId);
-      const amountPaise = schedule?.due_amount ?? 50000;
+
+      // The schedule.due_amount should always be set - it comes from customer's weekly_due_amount
+      // or was generated with the proper amount. Throw an error if it's missing.
+      if (schedule?.due_amount === undefined || schedule?.due_amount === null) {
+        throw new Error('Schedule due amount is not set - please generate schedules first');
+      }
+      const amountPaise = schedule.due_amount;
 
       const { data, error } = await this._supabaseService.client.rpc('record_weekly_payment', {
         p_customer_id: cid,

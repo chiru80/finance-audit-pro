@@ -126,6 +126,17 @@ export class AuthService {
     this._creatingProfile.set(true);
 
     try {
+      // Fetch default weekly due from settings table
+      const { data: settingsData } = await this._supabaseService.client
+        .from('settings')
+        .select('value')
+        .eq('key', 'default_weekly_due_amount')
+        .single();
+
+      const defaultWeeklyDueAmount = settingsData?.value
+        ? parseInt(settingsData.value, 10)
+        : 50000; // Ultimate fallback if settings unavailable
+
       const { error } = await this._supabaseService.client.from('profiles').insert({
         id: user.id,
         email: user.email,
@@ -133,7 +144,7 @@ export class AuthService {
         language: 'en',
         theme_mode: 'light',
         weekly_due_day: 1,
-        weekly_due_amount: 50000, // Default 500.00 INR in paise
+        weekly_due_amount: defaultWeeklyDueAmount,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }).single();
