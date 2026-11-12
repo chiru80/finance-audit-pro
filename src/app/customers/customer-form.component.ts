@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { COMMON_PIPES } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
@@ -7,7 +7,7 @@ import { AuthService } from '../auth/auth.service';
 @Component({
   selector: 'app-customer-form',
   standalone: true,
-  imports: [COMMON_PIPES, RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './customer-form.component.html',
   styleUrl: './customer-form.component.css',
 })

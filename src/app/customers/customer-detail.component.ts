@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { COMMON_PIPES } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
@@ -9,9 +9,9 @@ import { CollectionService } from '../collection.service';
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
-  imports: [COMMON_PIPES, RouterLink],
+  imports: [CommonModule, RouterLink, DatePipe],
   templateUrl: './customer-detail.component.html',
-  styleUrl: './customer-detail.component.css',
+  styleUrls: ['./customer-detail.component.css'],
 })
 export class CustomerDetailComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
