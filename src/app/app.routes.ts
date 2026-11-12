@@ -32,6 +32,10 @@ export const routes: Routes = [
     loadComponent: () => import('./auth/signup.component').then((m) => m.SignupComponent),
   },
   {
+    path: 'auth/callback',
+    loadComponent: () => import('./auth/oauth-callback.component').then((m) => m.OauthCallbackComponent),
+  },
+  {
     path: 'dashboard',
     canActivate: [() => canAuthenticate()],
     loadComponent: () => import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),

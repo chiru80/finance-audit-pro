@@ -63,19 +63,8 @@ WHERE ph.reversed = FALSE
 ORDER BY date DESC, id DESC;
 
 -- Grant select on the view to authenticated users
+-- RLS is automatically enforced on the underlying tables via WITH (security_invoker = true)
 GRANT SELECT ON transactions TO authenticated;
-
--- Enable RLS on the view and add owner-scoped policy
--- This ensures users can only see transactions for their own customers
-ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Owner can view own transactions" ON transactions
-    FOR SELECT USING (
-        EXISTS (
-            SELECT 1 FROM customers c
-            WHERE c.id = customer_id AND c.profile_id = auth.uid()
-        )
-    );
 
 -- Index on the underlying tables already exists for performance
 -- Create a covering index on payments for this view

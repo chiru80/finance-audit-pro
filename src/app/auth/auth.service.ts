@@ -114,6 +114,19 @@ export class AuthService {
   }
 
   /**
+   * Sign in with Google OAuth
+   * Initiates the OAuth flow which redirects to Google and back to the callback URL
+   */
+  async signInWithGoogle(): Promise<void> {
+    const { error } = await this._supabaseService.signInWithGoogle();
+    if (error) {
+      this._error.set(error.message);
+      throw new Error(error.message);
+    }
+    // The redirect happens automatically - user will be redirected to Google OAuth
+  }
+
+  /**
    * Create a profile for the newly signed up user
    * This is required because the profiles table uses id = auth.uid()
    * and must be created after the user is created in auth.users

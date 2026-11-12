@@ -1,6 +1,6 @@
 -- Finance Aduit Pro - Hardened RLS and Additional Functions
 -- Migration: 202611110002_hardened_rls_functions.sql
-Date: 2026-11-11
+-- Date: 2026-11-11
 
 -- This migration applies on top of 202611110001_initial_schema.sql
 -- Fixes and enhancements:
@@ -23,7 +23,7 @@ RETURNS TABLE(allocation_count INTEGER)
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
-AS $$$$
+AS $$
 DECLARE
     remaining_amount BIGINT := p_amount;
     schedule_rec RECORD;
@@ -70,7 +70,7 @@ BEGIN
 
     RETURN QUERY SELECT (p_amount - remaining_amount)::INTEGER;
 END;
-$$$$ LANGUAGE plpgsql;
+$$;
 
 
 -- Fix: Settings RLS - Owner-bound policies (single-owner model:
@@ -137,7 +137,7 @@ BEGIN
 
     RETURN QUERY SELECT TRUE, NULL;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 -- Enhancement: Weekly Rate History Trigger for profiles
@@ -188,7 +188,7 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 DROP TRIGGER IF EXISTS trigger_rate_change ON profiles;
 CREATE TRIGGER trigger_rate_change
@@ -284,7 +284,7 @@ BEGIN
 
     RETURN QUERY SELECT TRUE, v_payment_id, NULL, v_allocated;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 -- RPC: Record Absence
@@ -341,7 +341,7 @@ BEGIN
         status,
         created_at
     ) VALUES (
-        uuid_generate_v4(),
+        gen_random_uuid(),
         p_customer_id,
         p_week_start,
         p_week_start + INTERVAL '6 days',
@@ -366,7 +366,7 @@ BEGIN
 
     RETURN QUERY SELECT TRUE, v_absence_id, NULL;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 -- RPC: Approve Absence
@@ -444,7 +444,7 @@ BEGIN
         RETURN;
     END IF;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 -- Function: Generate Weekly Schedules for Customer
@@ -527,7 +527,7 @@ BEGIN
                 created_at,
                 updated_at
             ) VALUES (
-                uuid_generate_v4(),
+                gen_random_uuid(),
                 p_customer_id,
                 v_week_start,
                 v_week_end,
@@ -564,7 +564,7 @@ BEGIN
 
     RETURN QUERY SELECT TRUE, v_created_count, NULL;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 -- RPC: Get Customer Payment Summary
@@ -612,7 +612,7 @@ BEGIN
         (SELECT due_amount FROM weekly_schedules WHERE customer_id = p_customer_id AND paid = FALSE AND due_amount > 0 ORDER BY due_date ASC LIMIT 1),
         NULL::TEXT;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 -- Update the payment_allocation_direction setting to FIFO
@@ -626,5 +626,5 @@ COMMENT ON FUNCTION record_weekly_payment(UUID, BIGINT, TEXT, TEXT, TEXT) IS 'At
 COMMENT ON FUNCTION record_absence(UUID, DATE, TEXT) IS 'Record a customer absence for a specific week (status: pending)';
 COMMENT ON FUNCTION approve_absence(UUID, BOOLEAN) IS 'Approve or reject an absence record';
 COMMENT ON FUNCTION generate_weekly_schedules(UUID, INTEGER) IS 'Generate weekly schedules for a customer for the next N weeks';
-COMMENT ON FUNCTION update_online_payment_status(UUID, TEXT, TIMESTAMP) IS 'Update online payment status (replaces direct UPDATE)';
+COMMENT ON FUNCTION update_online_payment_status(UUID, TEXT, TIMESTAMP WITH TIME ZONE) IS 'Update online payment status (replaces direct UPDATE)';
 COMMENT ON FUNCTION get_customer_payment_summary(UUID) IS 'Get customer payment summary with next due information';

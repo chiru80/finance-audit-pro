@@ -49,7 +49,7 @@ CREATE TABLE profiles (
 
 -- Customers table
 CREATE TABLE customers (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profile_id UUID NOT NULL,
     name TEXT NOT NULL,
     phone TEXT,
@@ -73,7 +73,7 @@ CREATE INDEX idx_customers_status ON customers(status);
 
 -- Weekly payment schedules (recurring due amounts per customer)
 CREATE TABLE weekly_schedules (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_id UUID NOT NULL,
     week_start_date DATE NOT NULL, -- Monday of the week
     week_end_date DATE NOT NULL,   -- Sunday of the week
@@ -86,7 +86,6 @@ CREATE TABLE weekly_schedules (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_weekly_schedule_customer FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE,
-    CONSTRAINT fk_weekly_schedule_payment FOREIGN KEY (payment_id) REFERENCES payments(id) ON DELETE SET NULL,
     CONSTRAINT unique_customer_week UNIQUE (customer_id, week_start_date),
     CHECK (week_start_date <= week_end_date),
     CHECK (due_amount >= 0)
@@ -100,7 +99,7 @@ CREATE INDEX idx_weekly_schedules_due_date ON weekly_schedules(due_date);
 
 -- Absence records for tracking missed weeks
 CREATE TABLE absences (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_id UUID NOT NULL,
     week_start_date DATE NOT NULL,
     week_end_date DATE NOT NULL,
@@ -120,7 +119,7 @@ CREATE INDEX idx_absences_status ON absences(status);
 
 -- Payments/Collections
 CREATE TABLE payments (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_id UUID NOT NULL,
     profile_id UUID NOT NULL,
     amount BIGINT NOT NULL, -- Amount in paise
@@ -135,6 +134,11 @@ CREATE TABLE payments (
     CHECK (amount > 0)
 );
 
+-- Foreign key linking weekly_schedules to payments
+ALTER TABLE weekly_schedules
+    ADD CONSTRAINT fk_weekly_schedule_payment
+    FOREIGN KEY (payment_id) REFERENCES payments(id) ON DELETE SET NULL;
+
 -- Create indexes for payments
 CREATE INDEX idx_payments_customer_id ON payments(customer_id);
 CREATE INDEX idx_payments_payment_date ON payments(payment_date);
@@ -145,7 +149,7 @@ CREATE UNIQUE INDEX idx_payments_idempotency ON payments(profile_id, idempotency
 
 -- Payment allocations (tracks which weeks each payment covers)
 CREATE TABLE payment_allocations (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     payment_id UUID NOT NULL,
     schedule_id UUID NOT NULL,
     amount BIGINT NOT NULL, -- Amount allocated to this week in paise
@@ -162,7 +166,7 @@ CREATE INDEX idx_allocations_schedule_id ON payment_allocations(schedule_id);
 
 -- Online payment records/reconciliation
 CREATE TABLE online_payments (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     customer_id UUID NOT NULL,
     payment_id UUID, -- Reference to payments table if reconciled
     gateway TEXT NOT NULL CHECK (gateway IN ('razorpay', 'paytm', 'cashfree', 'other')),
@@ -194,7 +198,7 @@ CREATE TABLE settings (
 
 -- Audit logs for tracking important changes (append-only, no direct inserts)
 CREATE TABLE audit_logs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profile_id UUID NOT NULL,
     action TEXT NOT NULL, -- e.g., 'customer_created', 'payment_made', 'absence_approved'
     table_name TEXT NOT NULL,
@@ -220,7 +224,7 @@ CREATE INDEX idx_audit_logs_profile_id ON audit_logs(profile_id);
 
 -- Historical weekly rate changes
 CREATE TABLE weekly_rate_history (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profile_id UUID NOT NULL,
     rate BIGINT NOT NULL, -- Rate in paise
     effective_from DATE NOT NULL,
@@ -237,7 +241,7 @@ CREATE INDEX idx_weekly_rate_history_effective_from ON weekly_rate_history(effec
 -- Historical payment records (immutable history - no direct INSERT allowed)
 -- Records are only created via trigger from payments table
 CREATE TABLE payment_history (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     original_payment_id UUID NOT NULL,
     customer_id UUID NOT NULL,
     profile_id UUID NOT NULL, -- Required for RLS
@@ -270,13 +274,13 @@ CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 SECURITY DEFINER
-SEARCHPATH = public
+SET search_path = public
 AS $$
 BEGIN
     NEW.updated_at = NOW();
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 -- Function to calculate and update customer outstanding balance
 -- Trigger runs with table-owner privileges, bypassing RLS
@@ -285,7 +289,7 @@ CREATE OR REPLACE FUNCTION update_customer_balance()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 SECURITY DEFINER
-SEARCHPATH = public
+SET search_path = public
 AS $$
 DECLARE
     customer_id UUID;
@@ -319,7 +323,7 @@ BEGIN
 
     RETURN NULL;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 -- Function to allocate payment to outstanding schedules (FIFO - oldest first)
 -- Payments are allocated to the OLDEST unpaid schedule first (due_date ASC)
@@ -333,7 +337,7 @@ CREATE OR REPLACE FUNCTION allocate_payment_to_schedules(
 RETURNS TABLE(allocation_count INTEGER, total_allocated BIGINT, credit_amount BIGINT)
 LANGUAGE plpgsql
 SECURITY DEFINER
-SEARCHPATH = public
+SET search_path = public
 AS $$
 DECLARE
     remaining_amount BIGINT := p_amount;
@@ -393,7 +397,7 @@ BEGIN
         total_allocated_so_far,
         remaining_amount;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 -- Function to generate audit log entry
 CREATE OR REPLACE FUNCTION log_audit_entry(
@@ -407,7 +411,7 @@ CREATE OR REPLACE FUNCTION log_audit_entry(
 RETURNS VOID
 LANGUAGE plpgsql
 SECURITY DEFINER
-SEARCHPATH = public
+SET search_path = public
 AS $$
 BEGIN
     INSERT INTO audit_logs (
@@ -417,14 +421,14 @@ BEGIN
         p_profile_id, p_action, p_table_name, p_record_id, p_old_values, p_new_values, NOW()
     );
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 -- Function to create payment_history record from payment (called by trigger)
 CREATE OR REPLACE FUNCTION create_payment_history_record()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 SECURITY DEFINER
-SEARCHPATH = public
+SET search_path = public
 AS $$
 BEGIN
     INSERT INTO payment_history (
@@ -450,7 +454,7 @@ BEGIN
     );
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 -- ============================================================================
 -- Triggers
@@ -491,7 +495,6 @@ CREATE TRIGGER update_absences_updated_at BEFORE UPDATE ON absences
 CREATE TRIGGER create_payment_history_on_insert
     AFTER INSERT ON payments
     FOR EACH ROW
-    SECURITY DEFINER
     EXECUTE FUNCTION create_payment_history_record();
 
 -- NOTE: online_payments has no updated_at column - no BEFORE INSERT trigger here.
