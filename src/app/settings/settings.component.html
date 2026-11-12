@@ -1,0 +1,98 @@
+<div class="settings">
+  <h2>Settings</h2>
+
+  <div class="settings-content">
+    @if (loading()) {
+      <div class="loading-spinner"></div>
+    } @else if (error()) {
+      <div class="error-state" role="alert">
+        <span class="error-icon">!</span>
+        <span>{{ error() }}</span>
+      </div>
+    } @else {
+      <div class="settings-section">
+        <h3>Weekly Payments</h3>
+        <div class="setting-item">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="settings().weekly_payments_start"
+              (change)="onCheckboxChange('weekly_payments_start', $event)"
+            />
+            <span>Enable weekly payments</span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <label>Default weekly due amount</label>
+          <div class="input-row">
+            <input
+              type="number"
+              [value]="settings().weekly_due_amount"
+              (input)="onWeeklyDueAmountInput($event)"
+              class="input-number"
+            />
+            <span class="currency-symbol">₹</span>
+          </div>
+          <p class="setting-hint">Default amount for new customers (in INR)</p>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Collections</h3>
+        <div class="setting-item">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="settings().allow_partial_payments"
+              (change)="onCheckboxChange('allow_partial_payments', $event)"
+            />
+            <span>Allow partial payments</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Absence Management</h3>
+        <div class="setting-item">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="settings().absence_requires_approval"
+              (change)="onCheckboxChange('absence_requires_approval', $event)"
+            />
+            <span>Absences require owner approval</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Payment Processing</h3>
+        <div class="setting-item">
+          <label for="allocation-direction">Payment allocation direction</label>
+          <select
+            id="allocation-direction"
+            [value]="settings().payment_allocation_direction"
+            (change)="onSelectChange('payment_allocation_direction', $event)"
+          >
+            <option value="fifo">FIFO (Oldest first)</option>
+            <option value="lifo">LIFO (Newest first)</option>
+          </select>
+        </div>
+
+        <div class="setting-item">
+          <label for="due-day">Default payment due day (1=Monday...)</label>
+          <select
+            id="due-day"
+            [value]="settings().default_weekly_due_day"
+            (change)="onSelectChange('default_weekly_due_day', $event)"
+          >
+            @for (day of [1,2,3,4,5,6,7]; track day) {
+              <option [value]="day">{{ day === 1 ? 'Monday' : day === 2 ? 'Tuesday' : day === 3 ? 'Wednesday' : day === 4 ? 'Thursday' : day === 5 ? 'Friday' : day === 6 ? 'Saturday' : 'Sunday' }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    }
+  </div>
+</div>

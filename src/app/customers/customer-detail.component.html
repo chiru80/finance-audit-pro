@@ -1,0 +1,64 @@
+<div class="max-w-4xl mx-auto">
+  <h1 class="mb-6 text-3xl font-bold text-gray-900">{{ customer()?.name || 'Customer' }}</h1>
+
+  @if (loading()) {
+    <div class="flex justify-center py-8">
+      <div class="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="mb-4 flex items-center rounded-md bg-red-50 p-3 text-sm text-red-700">
+      <span>!</span>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  @if (customer()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Customer Information</h2>
+        <dl class="divide-y divide-gray-200">
+          <div class="py-3">
+            <dt class="text-sm font-medium text-gray-500">Name</dt>
+            <dd class="mt-1 text-sm text-gray-900">{{ customer()?.name }}</dd>
+          </div>
+          <div class="py-3">
+            <dt class="text-sm font-medium text-gray-500">Phone</dt>
+            <dd class="mt-1 text-sm text-gray-900">{{ customer()?.phone || 'Not provided' }}</dd>
+          </div>
+          <div class="py-3">
+            <dt class="text-sm font-medium text-gray-500">Email</dt>
+            <dd class="mt-1 text-sm text-gray-900">{{ customer()?.email || 'Not provided' }}</dd>
+          </div>
+          <div class="py-3">
+            <dt class="text-sm font-medium text-gray-500">Enrollment Date</dt>
+            <dd class="mt-1 text-sm text-gray-900">{{ customer()?.enrollment_date ? (customer()?.enrollment_date | date:'shortDate') : 'N/A' }}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Financial Summary</h2>
+        <dl class="divide-y divide-gray-200">
+          <div class="py-3">
+            <dt class="text-sm font-medium text-gray-500">Weekly Due Amount</dt>
+            <dd class="mt-1 text-sm text-gray-900">₹{{ ((customer()?.weekly_due_amount || 0) / 100 || 0).toFixed(2) }}</dd>
+          </div>
+          <div class="py-3">
+            <dt class="text-sm font-medium text-gray-500">Total Due</dt>
+            <dd class="mt-1 text-sm text-gray-900">₹{{ ((customer()?.total_due || 0) / 100 || 0).toFixed(2) }}</dd>
+          </div>
+          <div class="py-3">
+            <dt class="text-sm font-medium text-gray-500">Total Paid</dt>
+            <dd class="mt-1 text-sm text-gray-900">₹{{ ((customer()?.total_paid || 0) / 100 || 0).toFixed(2) }}</dd>
+          </div>
+          <div class="py-3">
+            <dt class="text-sm font-medium text-gray-500">Outstanding Balance</dt>
+            <dd class="mt-1 text-sm text-gray-900">₹{{ ((customer()?.outstanding_balance || 0) / 100 || 0).toFixed(2) }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  }
+</div>

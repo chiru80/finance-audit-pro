@@ -1,0 +1,116 @@
+<div class="reports">
+  <h2>Financial Reports</h2>
+
+  <div class="reports-content">
+    @if (loading()) {
+      <div class="loading-spinner"></div>
+    } @else if (error()) {
+      <div class="error-state" role="alert">
+        <span class="error-icon">!</span>
+        <span>{{ error() }}</span>
+      </div>
+    } @else {
+      <div class="summary-cards">
+        <div class="card summary-card primary">
+          <div class="card-header">
+            <span class="card-title">Total Customers</span>
+            <svg class="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="8" cy="9" r="4"/>
+              <path d="M20 9v4a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2v-4"/>
+            </svg>
+          </div>
+          <div class="card-value">{{ summary()?.totalCustomers || 0 }}</div>
+        </div>
+
+        <div class="card summary-card">
+          <div class="card-header">
+            <span class="card-title">Total Outstanding</span>
+          </div>
+          <div class="card-value">{{ formatCurrency(summary()?.totalOutstanding ?? 0) }}</div>
+        </div>
+
+        <div class="card summary-card">
+          <div class="card-header">
+            <span class="card-title">Total Due</span>
+          </div>
+          <div class="card-value">{{ formatCurrency(summary()?.totalDue ?? 0) }}</div>
+        </div>
+
+        <div class="card summary-card">
+          <div class="card-header">
+            <span class="card-title">Total Paid</span>
+          </div>
+          <div class="card-value">{{ formatCurrency(summary()?.totalPaid ?? 0) }}</div>
+        </div>
+      </div>
+
+      <div class="reports-grid">
+        <section class="report-section">
+          <h3>This Week Collectible</h3>
+          <div class="collectible-badge">
+            {{ formatCurrency(summary()?.thisWeekCollectible ?? 0) }}
+          </div>
+        </section>
+
+        <section class="report-section">
+          <h3>Recent Payments</h3>
+          @if (recentPayments().length === 0) {
+            <p class="empty-message">No recent payments</p>
+          } @else {
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Customer</th>
+                  <th>Method</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (payment of recentPayments(); track payment.id) {
+                  <tr>
+                    <td class="date">{{ formatDate(payment.payment_date) }}</td>
+                    <td class="customer">{{ payment.customers?.name || 'N/A' }}</td>
+                    <td class="method">{{ payment.payment_method }}</td>
+                    <td class="amount">{{ formatCurrency(payment.amount) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </section>
+      </div>
+
+      <section class="report-section">
+        <h3>Top Balance Holders</h3>
+        @if (customerBalances().length === 0) {
+          <p class="empty-message">No customer balances</p>
+        } @else {
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Outstanding</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (customer of customerBalances(); track customer.id) {
+                <tr>
+                  <td class="customer">{{ customer.name }}</td>
+                  <td class="amount">{{ formatCurrency(customer.outstanding_balance) }}</td>
+                  <td>
+                    <span class="status-badge {{ customer.status }}">
+                      {{ customer.status }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+    }
+  </div>
+</div>

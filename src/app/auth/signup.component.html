@@ -1,0 +1,61 @@
+<div class="signup-container">
+  <div class="signup-card">
+    <h2>Create Account</h2>
+    <p>Sign up to start managing your finances</p>
+
+    @if (error) {
+      <div class="error-banner" role="alert">
+        <span class="error-icon">!</span>
+        <span>{{ error }}</span>
+      </div>
+    }
+
+    <form (ngSubmit)="onSubmit()" class="signup-form">
+      <div class="form-group">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          type="email"
+          id="email"
+          class="form-input"
+          placeholder="you@example.com"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          id="password"
+          class="form-input"
+          placeholder="••••••••"
+          [(ngModel)]="password"
+          name="password"
+          minlength="6"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="fullName" class="form-label">Full name</label>
+        <input
+          type="text"
+          id="fullName"
+          class="form-input"
+          placeholder="John Doe"
+          [(ngModel)]="fullName"
+          name="fullName"
+        />
+      </div>
+
+      <button type="submit" class="btn-primary">Create Account</button>
+    </form>
+
+    <div class="signup-links">
+      <p>Already have an account?</p>
+      <a routerLink="/login">Sign in</a>
+    </div>
+  </div>
+</div>

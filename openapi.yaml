@@ -1,0 +1,2307 @@
+openapi: 3.0.3
+info:
+  title: Finance Audit Pro API
+  description: REST API for Finance Audit Management Platform
+  version: 1.0.0
+  contact:
+    name: Finance Audit Pro Team
+    email: api@financeauditpro.com
+servers:
+  - url: https://api.financeauditpro.com/v1
+    description: Production server
+  - url: https://staging-api.financeauditpro.com/v1
+    description: Staging server
+  - url: http://localhost:3000/api/v1
+    description: Development server
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Clients
+    description: Client management operations
+  - name: Audits
+    description: Audit plan and execution management
+  - name: Workpapers
+    description: Audit workpaper management
+  - name: Findings
+    description: Audit finding management
+  - name: Tasks
+    description: Task and workflow management
+  - name: Compliance
+    description: Compliance standards and control testing
+  - name: Documents
+    description: Document upload and management
+  - name: Sampling
+    description: Audit sampling operations
+  - name: Reports
+    description: Report generation and exports
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    page:
+      name: page
+      in: query
+      description: Page number (1-indexed)
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    limit:
+      name: limit
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    sortBy:
+      name: sortBy
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+    sortOrder:
+      name: sortOrder
+      in: query
+      description: Sort order
+      schema:
+        type: string
+        enum: [asc, desc]
+        default: desc
+
+  responses:
+    UnauthorizedError:
+      description: Authentication required or token invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ForbiddenError:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ValidationError:
+      description: Validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorResponse'
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimitError:
+      description: Rate limit exceeded
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Request limit
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: Unix timestamp when limit resets
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    # Base schemas
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+    ValidationErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: VALIDATION_ERROR
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string
+    PaginatedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            type: object
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+            limit:
+              type: integer
+            total:
+              type: integer
+            totalPages:
+              type: integer
+
+    # Auth schemas
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        rememberMe:
+          type: boolean
+          default: false
+
+    RegisterRequest:
+      type: object
+      required: [email, password, firstName, lastName]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 8
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        role:
+          type: string
+          enum: [AUDITOR, REVIEWER, MANAGER]
+          default: AUDITOR
+
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+            accessToken:
+              type: string
+            refreshToken:
+              type: string
+            expiresIn:
+              type: integer
+
+    RefreshTokenRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+
+    # User schemas
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        employeeId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        role:
+          type: string
+          enum: [ADMIN, AUDITOR, REVIEWER, MANAGER, CLIENT]
+        isActive:
+          type: boolean
+        lastLoginAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    # Client schemas
+    Client:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        legalName:
+          type: string
+        ein:
+          type: string
+        industry:
+          type: string
+        revenueRange:
+          type: string
+        employeeCount:
+          type: integer
+        fiscalYearEnd:
+          type: string
+          format: date
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipCode:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        website:
+          type: string
+        notes:
+          type: string
+        isActive:
+          type: boolean
+        riskRating:
+          type: number
+          format: float
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ClientCreateRequest:
+      type: object
+      required: [name, email]
+      properties:
+        name:
+          type: string
+        legalName:
+          type: string
+        ein:
+          type: string
+        industry:
+          type: string
+        revenueRange:
+          type: string
+        employeeCount:
+          type: integer
+        fiscalYearEnd:
+          type: string
+          format: date
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipCode:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        website:
+          type: string
+        notes:
+          type: string
+
+    ClientContact:
+      type: object
+      properties:
+        id:
+          type: string
+        clientId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        title:
+          type: string
+        department:
+          type: string
+        isPrimary:
+          type: boolean
+        isPreferred:
+          type: boolean
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipCode:
+          type: string
+        notes:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ClientContactCreateRequest:
+      type: object
+      required: [firstName, lastName, email]
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        title:
+          type: string
+        department:
+          type: string
+        isPrimary:
+          type: boolean
+          default: false
+        isPreferred:
+          type: boolean
+          default: false
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipCode:
+          type: string
+        notes:
+          type: string
+
+    # Audit schemas
+    AuditPlan:
+      type: object
+      properties:
+        id:
+          type: string
+        clientId:
+          type: string
+        planNumber:
+          type: string
+        fiscalYear:
+          type: integer
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        auditor:
+          type: string
+        status:
+          type: string
+          enum: [PLANNING, IN_PROGRESS, FIELDWORK_COMPLETE, REVIEW, FINAL_REVIEW, REPORTING, COMPLETED, CANCELLED, ON_HOLD]
+        riskAssessment:
+          type: object
+        objectives:
+          type: object
+        scope:
+          type: string
+        budget:
+          type: number
+          format: float
+        billingRate:
+          type: number
+          format: float
+        notes:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    AuditPlanCreateRequest:
+      type: object
+      required: [clientId, planNumber, fiscalYear, startDate, endDate, auditor]
+      properties:
+        clientId:
+          type: string
+        planNumber:
+          type: string
+        fiscalYear:
+          type: integer
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        auditor:
+          type: string
+        riskAssessment:
+          type: object
+        objectives:
+          type: object
+        scope:
+          type: string
+        budget:
+          type: number
+          format: float
+        billingRate:
+          type: number
+          format: float
+        notes:
+          type: string
+
+    AuditStatusUpdateRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [PLANNING, IN_PROGRESS, FIELDWORK_COMPLETE, REVIEW, FINAL_REVIEW, REPORTING, COMPLETED, CANCELLED, ON_HOLD]
+        notes:
+          type: string
+
+    # Workpaper schemas
+    Workpaper:
+      type: object
+      properties:
+        id:
+          type: string
+        planId:
+          type: string
+        documentId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        workpaperNumber:
+          type: string
+        procedure:
+          type: string
+        fieldworkDate:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        reviewedBy:
+          type: string
+        reviewerNotes:
+          type: string
+        status:
+          type: string
+          enum: [PLANNING, IN_PROGRESS, FIELDWORK_COMPLETE, REVIEW, FINAL_REVIEW, REPORTING, COMPLETED, CANCELLED, ON_HOLD]
+        riskScore:
+          type: number
+          format: float
+        difficultyScore:
+          type: number
+          format: float
+        timeSpentMinutes:
+          type: integer
+        actualHours:
+          type: number
+          format: float
+        estimatedHours:
+          type: number
+          format: float
+        evidenceCount:
+          type: integer
+        findingsCount:
+          type: integer
+        fileUri:
+          type: string
+        hash:
+          type: string
+        version:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    WorkpaperCreateRequest:
+      type: object
+      required: [planId, title]
+      properties:
+        planId:
+          type: string
+        documentId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        workpaperNumber:
+          type: string
+        procedure:
+          type: string
+        fieldworkDate:
+          type: string
+          format: date-time
+        riskScore:
+          type: number
+          format: float
+        difficultyScore:
+          type: number
+          format: float
+        estimatedHours:
+          type: number
+          format: float
+        fileUri:
+          type: string
+
+    # Finding schemas
+    Finding:
+      type: object
+      properties:
+        id:
+          type: string
+        planId:
+          type: string
+        workpaperId:
+          type: string
+        findingNumber:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+        status:
+          type: string
+          enum: [IDENTIFIED, ASSIGNED, IN_PROGRESS, RESOLVED, VERIFIED, REJECTED, CLOSED]
+        rootCause:
+          type: string
+        impact:
+          type: string
+        recommendation:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        assignedTo:
+          type: string
+        estimatedCost:
+          type: number
+          format: float
+        actualCost:
+          type: number
+          format: float
+        resolvedAt:
+          type: string
+          format: date-time
+        verifiedAt:
+          type: string
+          format: date-time
+        verifiedBy:
+          type: string
+        evidenceCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    FindingCreateRequest:
+      type: object
+      required: [planId, title, description]
+      properties:
+        planId:
+          type: string
+        workpaperId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+          default: MEDIUM
+        rootCause:
+          type: string
+        impact:
+          type: string
+        recommendation:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        assignedTo:
+          type: string
+        estimatedCost:
+          type: number
+          format: float
+
+    # Task schemas
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+        planId:
+          type: string
+        workpaperId:
+          type: string
+        taskId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [PENDING, IN_PROGRESS, BLOCKED, COMPLETED, CANCELLED]
+        priority:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, URGENT]
+        assigneeId:
+          type: string
+        createdBy:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        blockedBy:
+          type: string
+        blockingReason:
+          type: string
+        timeSpentMinutes:
+          type: integer
+        estimatedMinutes:
+          type: integer
+        dependencies:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    TaskCreateRequest:
+      type: object
+      required: [planId, title]
+      properties:
+        planId:
+          type: string
+        workpaperId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        priority:
+          type: string
+          enum: [LOW, MEDIUM, HIGH, URGENT]
+          default: MEDIUM
+        assigneeId:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        estimatedMinutes:
+          type: integer
+        dependencies:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+
+    TaskStatusUpdateRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [PENDING, IN_PROGRESS, BLOCKED, COMPLETED, CANCELLED]
+        blockedBy:
+          type: string
+        blockingReason:
+          type: string
+
+    TaskComment:
+      type: object
+      properties:
+        id:
+          type: string
+        taskId:
+          type: string
+        userId:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    TaskCommentCreateRequest:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+
+    # Compliance schemas
+    ComplianceStandard:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+        isActive:
+          type: boolean
+        requirementsCount:
+          type: integer
+
+    Control:
+      type: object
+      properties:
+        id:
+          type: string
+        controlId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        owner:
+          type: string
+        frequency:
+          type: string
+        criticality:
+          type: string
+        isActive:
+          type: boolean
+        standardId:
+          type: string
+        requirements:
+          type: object
+
+    ControlTest:
+      type: object
+      properties:
+        id:
+          type: string
+        controlId:
+          type: string
+        planId:
+          type: string
+        workpaperId:
+          type: string
+        testNumber:
+          type: string
+        testDate:
+          type: string
+          format: date-time
+        tester:
+          type: string
+        status:
+          type: string
+          enum: [NOT_TESTED, IN_PROGRESS, PASSED, FAILED, EXCEPTION, NOT_APPLICABLE]
+        testResults:
+          type: object
+        findings:
+          type: string
+        exceptionReason:
+          type: string
+        notes:
+          type: string
+        nextTestDate:
+          type: string
+          format: date-time
+        evidenceCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ControlTestCreateRequest:
+      type: object
+      required: [controlId, planId, testDate, tester]
+      properties:
+        controlId:
+          type: string
+        planId:
+          type: string
+        workpaperId:
+          type: string
+        testNumber:
+          type: string
+        testDate:
+          type: string
+          format: date-time
+        tester:
+          type: string
+        testResults:
+          type: object
+        notes:
+          type: string
+
+    # Document schemas
+    ClientDocument:
+      type: object
+      properties:
+        id:
+          type: string
+        clientId:
+          type: string
+        name:
+          type: string
+        fileType:
+          type: string
+        fileSize:
+          type: integer
+        mimeType:
+          type: string
+        uri:
+          type: string
+        hash:
+          type: string
+        uploadedAt:
+          type: string
+          format: date-time
+        uploadedBy:
+          type: string
+        isConfidential:
+          type: boolean
+        documentType:
+          type: string
+        description:
+          type: string
+        metadata:
+          type: object
+        status:
+          type: string
+          enum: [DRAFT, SUBMITTED, APPROVED, REJECTED, archived, pending_review]
+
+    DocumentUploadRequest:
+      type: object
+      required: [name, fileType, fileSize, mimeType, uri, hash]
+      properties:
+        name:
+          type: string
+        fileType:
+          type: string
+        fileSize:
+          type: integer
+        mimeType:
+          type: string
+        uri:
+          type: string
+        hash:
+          type: string
+        isConfidential:
+          type: boolean
+          default: true
+        documentType:
+          type: string
+        description:
+          type: string
+        metadata:
+          type: object
+
+    # Sampling schemas
+    Sampling:
+      type: object
+      properties:
+        id:
+          type: string
+        planId:
+          type: string
+        workpaperId:
+          type: string
+        sampleId:
+          type: string
+        populationSize:
+          type: integer
+        sampleSize:
+          type: integer
+        samplingMethod:
+          type: string
+          enum: [STATISTICAL, MONETARY_UNIT, BLOCK, JURISDICTIONAL, RANDOMLY_SELECTED, RISK_BASED]
+        selectionCriteria:
+          type: string
+        sampleElements:
+          type: object
+        confidenceLevel:
+          type: number
+          format: float
+        errorRate:
+          type: number
+          format: float
+        selectedAt:
+          type: string
+          format: date-time
+        selectedBy:
+          type: string
+        results:
+          type: object
+        evaluatedAt:
+          type: string
+          format: date-time
+        evaluatedBy:
+          type: string
+        conclusions:
+          type: string
+
+    SamplingCreateRequest:
+      type: object
+      required: [planId, workpaperId, populationSize, sampleSize, samplingMethod]
+      properties:
+        planId:
+          type: string
+        workpaperId:
+          type: string
+        populationSize:
+          type: integer
+        sampleSize:
+          type: integer
+        samplingMethod:
+          type: string
+          enum: [STATISTICAL, MONETARY_UNIT, BLOCK, JURISDICTIONAL, RANDOMLY_SELECTED, RISK_BASED]
+        selectionCriteria:
+          type: string
+        confidenceLevel:
+          type: number
+          format: float
+          default: 95
+        selectedBy:
+          type: string
+
+    # Report schemas
+    ReportGenerateRequest:
+      type: object
+      required: [planId, reportType]
+      properties:
+        planId:
+          type: string
+        reportType:
+          type: string
+          enum: [EXECUTIVE_SUMMARY, DETAILED_FINDINGS, COMPLIANCE_MAPPING, WORKPAPER_INDEX, EVIDENCE_LOG]
+        format:
+          type: string
+          enum: [PDF, EXCEL, WORD, JSON]
+          default: PDF
+        options:
+          type: object
+          properties:
+            includeWorkpapers:
+              type: boolean
+              default: true
+            includeFindings:
+              type: boolean
+              default: true
+            includeEvidence:
+              type: boolean
+              default: false
+            dateRange:
+              type: object
+              properties:
+                startDate:
+                  type: string
+                  format: date-time
+                endDate:
+                  type: string
+                  format: date-time
+
+    ReportResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            reportId:
+              type: string
+            status:
+              type: string
+              enum: [GENERATING, COMPLETED, FAILED]
+            downloadUrl:
+              type: string
+            expiresAt:
+              type: string
+              format: date-time
+
+paths:
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: User login
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: User logout
+      operationId: logout
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      operationId: refreshToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: New access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /auth/register:
+    post:
+      tags: [Authentication]
+      summary: Register new user
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /clients:
+    get:
+      tags: [Clients]
+      summary: List clients
+      operationId: listClients
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/sortBy'
+        - $ref: '#/components/parameters/sortOrder'
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search by name or email
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+          description: Filter by active status
+        - name: riskRating
+          in: query
+          schema:
+            type: number
+            format: float
+          description: Minimum risk rating
+      responses:
+        '200':
+          description: List of clients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+    post:
+      tags: [Clients]
+      summary: Create client
+      operationId: createClient
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCreateRequest'
+      responses:
+        '201':
+          description: Client created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Client'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '409':
+          description: Client with EIN or email already exists
+
+  /clients/{id}:
+    get:
+      tags: [Clients]
+      summary: Get client by ID
+      operationId: getClient
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Client details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Client'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    put:
+      tags: [Clients]
+      summary: Update client
+      operationId: updateClient
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCreateRequest'
+      responses:
+        '200':
+          description: Client updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Client'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    delete:
+      tags: [Clients]
+      summary: Delete client
+      operationId: deleteClient
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Client deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /clients/{id}/contacts:
+    get:
+      tags: [Clients]
+      summary: List client contacts
+      operationId: listClientContacts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: List of contacts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    post:
+      tags: [Clients]
+      summary: Add client contact
+      operationId: createClientContact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientContactCreateRequest'
+      responses:
+        '201':
+          description: Contact created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/ClientContact'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /clients/{id}/documents:
+    get:
+      tags: [Clients, Documents]
+      summary: List client documents
+      operationId: listClientDocuments
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - name: documentType
+          in: query
+          schema:
+            type: string
+          description: Filter by document type
+        - name: status
+          in: query
+          schema:
+            type: string
+          description: Filter by document status
+      responses:
+        '200':
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    post:
+      tags: [Clients, Documents]
+      summary: Upload client document
+      operationId: uploadClientDocument
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+      responses:
+        '201':
+          description: Document uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/ClientDocument'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /audits:
+    get:
+      tags: [Audits]
+      summary: List audit plans
+      operationId: listAudits
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/sortBy'
+        - $ref: '#/components/parameters/sortOrder'
+        - name: clientId
+          in: query
+          schema:
+            type: string
+          description: Filter by client
+        - name: fiscalYear
+          in: query
+          schema:
+            type: integer
+          description: Filter by fiscal year
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [PLANNING, IN_PROGRESS, FIELDWORK_COMPLETE, REVIEW, FINAL_REVIEW, REPORTING, COMPLETED, CANCELLED, ON_HOLD]
+          description: Filter by status
+      responses:
+        '200':
+          description: List of audit plans
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+    post:
+      tags: [Audits]
+      summary: Create audit plan
+      operationId: createAudit
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditPlanCreateRequest'
+      responses:
+        '201':
+          description: Audit plan created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/AuditPlan'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '409':
+          description: Plan number already exists
+
+  /audits/{id}:
+    get:
+      tags: [Audits]
+      summary: Get audit plan by ID
+      operationId: getAudit
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Audit plan details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/AuditPlan'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    put:
+      tags: [Audits]
+      summary: Update audit plan
+      operationId: updateAudit
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditPlanCreateRequest'
+      responses:
+        '200':
+          description: Audit plan updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/AuditPlan'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    patch:
+      tags: [Audits]
+      summary: Update audit status
+      operationId: updateAuditStatus
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditStatusUpdateRequest'
+      responses:
+        '200':
+          description: Audit status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/AuditPlan'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /audits/{id}/workpapers:
+    get:
+      tags: [Audits, Workpapers]
+      summary: List audit workpapers
+      operationId: listAuditWorkpapers
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [PLANNING, IN_PROGRESS, FIELDWORK_COMPLETE, REVIEW, FINAL_REVIEW, REPORTING, COMPLETED, CANCELLED, ON_HOLD]
+          description: Filter by status
+      responses:
+        '200':
+          description: List of workpapers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    post:
+      tags: [Audits, Workpapers]
+      summary: Create workpaper
+      operationId: createWorkpaper
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkpaperCreateRequest'
+      responses:
+        '201':
+          description: Workpaper created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Workpaper'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /audits/{id}/findings:
+    get:
+      tags: [Audits, Findings]
+      summary: List audit findings
+      operationId: listAuditFindings
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - name: severity
+          in: query
+          schema:
+            type: string
+            enum: [LOW, MEDIUM, HIGH, CRITICAL]
+          description: Filter by severity
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [IDENTIFIED, ASSIGNED, IN_PROGRESS, RESOLVED, VERIFIED, REJECTED, CLOSED]
+          description: Filter by status
+      responses:
+        '200':
+          description: List of findings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    post:
+      tags: [Audits, Findings]
+      summary: Create finding
+      operationId: createFinding
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindingCreateRequest'
+      responses:
+        '201':
+          description: Finding created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Finding'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /tasks:
+    get:
+      tags: [Tasks]
+      summary: List tasks
+      operationId: listTasks
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/sortBy'
+        - $ref: '#/components/parameters/sortOrder'
+        - name: planId
+          in: query
+          schema:
+            type: string
+          description: Filter by audit plan
+        - name: assigneeId
+          in: query
+          schema:
+            type: string
+          description: Filter by assignee
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [PENDING, IN_PROGRESS, BLOCKED, COMPLETED, CANCELLED]
+          description: Filter by status
+        - name: priority
+          in: query
+          schema:
+            type: string
+            enum: [LOW, MEDIUM, HIGH, URGENT]
+          description: Filter by priority
+      responses:
+        '200':
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /tasks/{id}:
+    get:
+      tags: [Tasks]
+      summary: Get task by ID
+      operationId: getTask
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Task'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    put:
+      tags: [Tasks]
+      summary: Update task
+      operationId: updateTask
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreateRequest'
+      responses:
+        '200':
+          description: Task updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    patch:
+      tags: [Tasks]
+      summary: Update task status
+      operationId: updateTaskStatus
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskStatusUpdateRequest'
+      responses:
+        '200':
+          description: Task status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /tasks/{id}/comments:
+    get:
+      tags: [Tasks]
+      summary: List task comments
+      operationId: listTaskComments
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+    post:
+      tags: [Tasks]
+      summary: Add task comment
+      operationId: createTaskComment
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCommentCreateRequest'
+      responses:
+        '201':
+          description: Comment added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/TaskComment'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /standards:
+    get:
+      tags: [Compliance]
+      summary: List compliance standards
+      operationId: listStandards
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+          description: Filter by active status
+      responses:
+        '200':
+          description: List of standards
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /controls:
+    get:
+      tags: [Compliance]
+      summary: List controls
+      operationId: listControls
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - name: standardId
+          in: query
+          schema:
+            type: string
+          description: Filter by standard
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+          description: Filter by active status
+        - name: criticality
+          in: query
+          schema:
+            type: string
+          description: Filter by criticality
+      responses:
+        '200':
+          description: List of controls
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /controls/{id}/tests:
+    post:
+      tags: [Compliance]
+      summary: Create control test
+      operationId: createControlTest
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ControlTestCreateRequest'
+      responses:
+        '201':
+          description: Control test created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/ControlTest'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /audits/{id}/tests:
+    get:
+      tags: [Compliance]
+      summary: List control tests for audit
+      operationId: listAuditControlTests
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [NOT_TESTED, IN_PROGRESS, PASSED, FAILED, EXCEPTION, NOT_APPLICABLE]
+          description: Filter by test status
+      responses:
+        '200':
+          description: List of control tests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /sampling:
+    post:
+      tags: [Sampling]
+      summary: Create audit sample
+      operationId: createSampling
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SamplingCreateRequest'
+      responses:
+        '201':
+          description: Sample created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Sampling'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /reports:
+    post:
+      tags: [Reports]
+      summary: Generate report
+      operationId: generateReport
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateRequest'
+      responses:
+        '202':
+          description: Report generation started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'

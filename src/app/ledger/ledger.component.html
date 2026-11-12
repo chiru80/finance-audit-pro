@@ -1,0 +1,121 @@
+<div class="ledger">
+  <h2>Payment Ledger</h2>
+
+  <div class="ledger-controls">
+    <div class="search-box">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        placeholder="Search payments, customer, or method..."
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+        class="search-input"
+      />
+    </div>
+
+    <button
+      class="btn-secondary"
+      (click)="loadCustomers()"
+      [disabled]="loading()"
+    >
+      Refresh
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-spinner">Loading...</div>
+  } @else if (error()) {
+    <div class="error-state" role="alert">
+      <span class="error-icon">!</span>
+      <span>{{ error() }}</span>
+    </div>
+  } @else {
+    <div class="ledger-content">
+      <div class="customer-sidebar">
+        <h3>Customers</h3>
+        <div class="customer-list">
+          @for (customer of customers(); track customer.id) {
+            <button
+              class="customer-item {{ selectedCustomer()?.id === customer.id ? 'active' : '' }}"
+              (click)="selectCustomer(customer)"
+            >
+              <span class="customer-name">{{ customer.name }}</span>
+              <span class="customer-balance">
+                {{ formatCurrency(customer.outstanding_balance) }}
+              </span>
+            </button>
+          }
+        </div>
+
+        @if (customers().length === 0) {
+          <p class="empty-message">No customers found</p>
+        }
+      </div>
+
+      <div class="payments-view">
+        @if (selectedCustomer()) {
+          <div class="payments-header">
+            <h3>{{ selectedCustomer()!.name }}'s Payment History</h3>
+            <button class="btn-icon" (click)="clearSelection()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+
+          @if (filteredPayments().length === 0) {
+            <div class="empty-state">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="2" x2="22" y2="22"/>
+              </svg>
+              <p>No payment history found</p>
+            </div>
+          } @else {
+            <table class="payments-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Method</th>
+                  <th>Amount</th>
+                  <th>Allocated To</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (payment of filteredPayments(); track payment.id) {
+                  <tr>
+                    <td class="date">{{ payment.payment_date | date:'shortDate' }}</td>
+                    <td class="method">{{ payment.payment_method }}</td>
+                    <td class="amount">{{ formatCurrency(payment.amount) }}</td>
+                    <td>
+                      @if (getAllocationCount(payment) > 0) {
+                        <span class="allocations-count">{{ getAllocationCount(payment) }} week(s)</span>
+                      } @else {
+                        <span class="no-allocations">No allocations</span>
+                      }
+                    </td>
+                    <td class="status-badge paid">Recorded</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        } @else {
+          <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="2" x2="22" y2="22"/>
+            </svg>
+            <h3>Select a customer to view payment history</h3>
+            <p>Click on a customer from the list to see their payments</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

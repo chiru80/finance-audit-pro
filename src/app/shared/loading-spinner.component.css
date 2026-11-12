@@ -1,0 +1,6 @@
+/* Loading Spinner Component Styles */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
