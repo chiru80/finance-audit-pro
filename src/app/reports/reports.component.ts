@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
+import { StatCardComponent } from '../shared/stat-card.component';
 import { formatPaiseToINR } from '../utils/currency.utils';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, StatCardComponent],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.css',
 })

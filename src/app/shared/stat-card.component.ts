@@ -17,31 +17,31 @@ export interface StatCardData {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="stat-card bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-200">
+    <div class="stat-card bg-background-primary border border-border-light-color rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
       <div class="flex items-center justify-between gap-4">
         <div class="stat-card-content flex-1 min-w-0">
-          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1 truncate">
+          <p class="text-xs font-medium text-text-secondary-color uppercase tracking-wider mb-1 truncate">
             {{ label }}
           </p>
-          <h3 class="text-2xl font-bold text-slate-900 tracking-tight" [innerHTML]="formattedValue"></h3>
+          <h3 class="text-2xl font-bold text-text-primary-color" [innerHTML]="formattedValue"></h3>
           @if (trend !== undefined) {
             <div class="mt-2 flex items-center gap-1.5 text-xs font-medium">
               @if (trend >= 0) {
-                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200/60">
-                  <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-success-50 text-success-600 font-semibold border border-success-200/60">
+                  <svg class="w-3 h-3 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
                   </svg>
                   +{{ trend }}%
                 </span>
               } @else {
-                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-semibold border border-rose-200/60">
-                  <svg class="w-3 h-3 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-error-50 text-error-600 font-semibold border border-error-200/60">
+                  <svg class="w-3 h-3 text-error-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                   </svg>
                   {{ trend }}%
                 </span>
               }
-              <span class="text-slate-400 font-normal">vs last week</span>
+              <span class="text-text-secondary-color font-normal">vs last week</span>
             </div>
           }
         </div>
@@ -75,14 +75,14 @@ export class StatCardComponent {
   get iconColorClasses(): string {
     switch (this.color) {
       case 'primary':
-        return 'bg-blue-50 text-blue-600 border border-blue-100/80';
+        return 'bg-primary-50 text-primary-600 border border-primary-100/80';
       case 'success':
-        return 'bg-emerald-50 text-emerald-600 border border-emerald-100/80';
+        return 'bg-success-50 text-success-600 border border-success-200/80';
       case 'warning':
-        return 'bg-amber-50 text-amber-600 border border-amber-100/80';
+        return 'bg-warning-50 text-warning-600 border border-warning-200/80';
       case 'neutral':
       default:
-        return 'bg-slate-50 text-slate-600 border border-slate-200/80';
+        return 'bg-neutral-50 text-neutral-600 border border-neutral-200/80';
     }
   }
 
@@ -100,12 +100,8 @@ export class StatCardComponent {
     const suffix = this.suffix || '';
 
     if (typeof this.value === 'number') {
-      if (this.value >= 1000000) {
-        return `${prefix}${(this.value / 1000000).toFixed(1)}M${suffix}`;
-      } else if (this.value >= 1000) {
-        return `${prefix}${(this.value / 1000).toFixed(1)}K${suffix}`;
-      }
-      return `${prefix}${this.value}${suffix}`;
+      // Do not abbreviate financial data - exact values are required for audit trails
+      return `${prefix}${this.value.toLocaleString('en-IN', { maximumFractionDigits: 2 })}${suffix}`;
     }
     return `${prefix}${this.value}${suffix}`;
   }
