@@ -118,3 +118,4 @@ describe('CustomerService', () => {
     expect(mockSupabaseService.client.from).toHaveBeenCalledWith('customers');
   });
 });
+

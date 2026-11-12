@@ -1,66 +1,171 @@
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { CollectionService } from '../collection.service';
+import { Customer } from '../customers/customer.types';
+import { formatPaiseToINR } from '../utils/currency.utils';
 
 @Component({
   selector: 'app-weekly-tracker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, DatePipe],
   templateUrl: './weekly-tracker.component.html',
-  styleUrl: './weekly-tracker.component.css',
+  styleUrls: ['./weekly-tracker.component.css'],
 })
-export class WeeklyTrackerComponent {
+export class WeeklyTrackerComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _authService = inject(AuthService);
   private readonly _collectionService = inject(CollectionService);
 
-  loading = signal(true);
+  loading = signal(false);
   error = signal<string | null>(null);
+  success = signal<string | null>(null);
+  customers = signal<Customer[]>([]);
   customerId = signal<string | null>(null);
   schedules = signal<any[]>([]);
   selectedCustomerName = signal<string>('');
 
+  ngOnInit() {
+    this.loadCustomers();
+  }
+
+  async loadCustomers() {
+    try {
+      const { data, error } = await this._supabaseService.client
+        .from('customers')
+        .select('*')
+        .eq('status', 'active')
+        .order('name', { ascending: true });
+
+      if (error) throw error;
+      this.customers.set(data as Customer[]);
+    } catch (err) {
+      this.error.set(err instanceof Error ? err.message : 'Failed to load customers');
+    }
+  }
+
+  onCustomerChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const id = target.value;
+    if (id) {
+      this.customerId.set(id);
+      this.loadSchedules(id);
+    } else {
+      this.customerId.set(null);
+      this.schedules.set([]);
+      this.selectedCustomerName.set('');
+    }
+  }
+
   async generateSchedules() {
-    if (!this.customerId()) {
+    const cid = this.customerId();
+    if (!cid) {
       this.error.set('Please select a customer first');
       return;
     }
+
+    this.loading.set(true);
+    this.error.set(null);
+
     try {
-      const { error } = await this._supabaseService.client.rpc('generate_weekly_schedules', {
-        p_customer_id: this.customerId(),
+      const { data, error } = await this._supabaseService.client.rpc('generate_weekly_schedules', {
+        p_customer_id: cid,
         p_weeks_count: 4,
       });
+
       if (error) throw error;
-      await this.loadSchedules(this.customerId()!);
+      const res = Array.isArray(data) ? data[0] : data;
+      if (res && res.success === false) {
+        throw new Error(res.error_message || 'Failed to generate schedules');
+      }
+
+      this.success.set('Generated weekly schedules for the next 4 weeks.');
+      setTimeout(() => this.success.set(null), 3000);
+      await this.loadSchedules(cid);
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to generate schedules');
+    } finally {
+      this.loading.set(false);
     }
   }
 
   async collectForWeek(scheduleId: string) {
+    const cid = this.customerId();
+    if (!cid) return;
+
+    this.loading.set(true);
+    this.error.set(null);
+
     try {
       const schedule = this.schedules().find((s) => s.id === scheduleId);
       const amountPaise = schedule?.due_amount ?? 50000;
 
       const { data, error } = await this._supabaseService.client.rpc('record_weekly_payment', {
-        p_customer_id: this.customerId(),
+        p_customer_id: cid,
         p_amount_paise: amountPaise,
         p_method: 'cash',
         p_reference: null,
         p_notes: `Payment for schedule ${scheduleId}`,
       });
+
       if (error) throw error;
       const res = Array.isArray(data) ? data[0] : data;
       if (res && res.success === false) {
         throw new Error(res.error_message || 'Payment recording failed');
       }
-      if (this.customerId()) {
-        await this.loadSchedules(this.customerId()!);
-      }
+
+      this.success.set('Collection recorded successfully');
+      setTimeout(() => this.success.set(null), 3000);
+      await this.loadSchedules(cid);
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to collect payment');
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  async markAbsent(schedule: any) {
+    const cid = this.customerId();
+    if (!cid) return;
+
+    const reason = window.prompt('Enter reason for customer absence:', 'Customer was unavailable') ?? '';
+    if (!reason) return;
+
+    this.loading.set(true);
+    this.error.set(null);
+
+    try {
+      const { data, error } = await this._supabaseService.client.rpc('record_absence', {
+        p_customer_id: cid,
+        p_week_start: schedule.week_start_date,
+        p_reason: reason,
+      });
+
+      if (error) throw error;
+      const res = Array.isArray(data) ? data[0] : data;
+      if (res && res.success === false) {
+        throw new Error(res.error_message || 'Failed to record absence');
+      }
+
+      // Auto-approve the absence (as Owner) to finalize documentation
+      // Under Option A, due remains charged and carries forward
+      const absenceId = res.absence_id;
+      if (absenceId) {
+        await this._supabaseService.client.rpc('approve_absence', {
+          p_absence_id: absenceId,
+          p_approve: true,
+        });
+      }
+
+      this.success.set('Absence recorded and approved. Due is carried forward as debt.');
+      setTimeout(() => this.success.set(null), 3000);
+      await this.loadSchedules(cid);
+    } catch (err) {
+      this.error.set(err instanceof Error ? err.message : 'Failed to mark absence');
+    } finally {
+      this.loading.set(false);
     }
   }
 
@@ -81,7 +186,8 @@ export class WeeklyTrackerComponent {
 
       if (error) throw error;
       this.schedules.set(data as any[]);
-      this.selectedCustomerName.set((data[0]?.customers as any)?.name || '');
+      const customer = this.customers().find((c) => c.id === customerId);
+      this.selectedCustomerName.set(customer?.name || (data[0]?.customers as any)?.name || '');
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to load schedules');
     } finally {
@@ -89,11 +195,7 @@ export class WeeklyTrackerComponent {
     }
   }
 
-  getStatusColor(status: boolean): string {
-    return status ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
-  }
-
-  getStatusLabel(status: boolean): string {
-    return status ? 'Paid' : 'Unpaid';
+  formatPaise(paise: number): string {
+    return formatPaiseToINR(paise);
   }
 }

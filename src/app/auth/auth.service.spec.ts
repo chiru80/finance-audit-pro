@@ -114,3 +114,4 @@ describe('AuthService', () => {
     expect(result.error).toBe('No user provided');
   });
 });
+

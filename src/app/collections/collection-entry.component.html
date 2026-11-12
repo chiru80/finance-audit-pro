@@ -1,123 +1,161 @@
-<div class="max-w-2xl mx-auto p-6">
-  <h2 class="mb-6 text-2xl font-bold text-gray-900">Record Collection</h2>
-
-  @if (loading()) {
-    <div class="flex justify-center py-8">
-      <div class="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
+<div class="max-w-4xl mx-auto p-4 sm:p-6">
+  <!-- Page Header & Tab Navigation -->
+  <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200 pb-4">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900">Collections & Weekly Dues</h2>
+      <p class="text-sm text-gray-500 mt-1">Record customer collections and manage weekly schedules & absences</p>
     </div>
-  }
 
-  @if (error()) {
-    <div class="mb-4 flex items-center rounded-md bg-red-50 p-3 text-sm text-red-700">
-      <span class="font-bold mr-2">!</span>
-      <span>{{ error() }}</span>
+    <div class="flex items-center rounded-lg bg-gray-100 p-1">
+      <button
+        type="button"
+        (click)="activeTab.set('record')"
+        [class.bg-white]="activeTab() === 'record'"
+        [class.shadow-sm]="activeTab() === 'record'"
+        [class.text-blue-600]="activeTab() === 'record'"
+        [class.font-semibold]="activeTab() === 'record'"
+        class="px-4 py-2 rounded-md text-sm text-gray-600 hover:text-gray-900 transition-all"
+      >
+        Record Collection
+      </button>
+      <button
+        type="button"
+        (click)="activeTab.set('tracker')"
+        [class.bg-white]="activeTab() === 'tracker'"
+        [class.shadow-sm]="activeTab() === 'tracker'"
+        [class.text-blue-600]="activeTab() === 'tracker'"
+        [class.font-semibold]="activeTab() === 'tracker'"
+        class="px-4 py-2 rounded-md text-sm text-gray-600 hover:text-gray-900 transition-all"
+      >
+        Weekly Tracker & Absences
+      </button>
     </div>
-  }
+  </div>
 
-  @if (success()) {
-    <div class="mb-4 flex items-center rounded-md bg-green-50 p-3 text-sm text-green-700">
-      <span class="font-bold mr-2">✓</span>
-      <span>{{ success() }}</span>
-    </div>
-  }
-
-  @if (!loading() && customersLoaded()) {
-    <form (ngSubmit)="collectPayment()" class="space-y-6">
-      <div class="grid grid-cols-1 gap-6">
-        <div>
-          <h3 class="mb-4 text-lg font-medium text-gray-900">Customer Details</h3>
-
-          <div>
-            <label for="customer" class="block text-sm font-medium text-gray-700">Customer</label>
-            <select
-              id="customer"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              [value]="selectedCustomer()"
-              (change)="onCustomerSelect($event)"
-            >
-              <option value="">Select a customer</option>
-              @for (customer of customers(); track customer.id) {
-                <option [value]="customer.id">{{ customer.name }} (Weekly: ₹{{ (customer.weekly_due_amount / 100).toFixed(2) }})</option>
-              }
-            </select>
-          </div>
+  @if (activeTab() === 'tracker') {
+    <app-weekly-tracker />
+  } @else {
+    <div class="max-w-2xl bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+      @if (loading()) {
+        <div class="flex justify-center py-8">
+          <div class="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
         </div>
+      }
 
-        <div>
-          <h3 class="mb-4 text-lg font-medium text-gray-900">Payment Details</h3>
+      @if (error()) {
+        <div class="mb-4 flex items-center rounded-md bg-red-50 p-3 text-sm text-red-700">
+          <span class="font-bold mr-2">!</span>
+          <span>{{ error() }}</span>
+        </div>
+      }
 
-          <div class="mb-4">
-            <label for="amount" class="block text-sm font-medium text-gray-700">Amount (₹)</label>
-            <div class="mt-1 flex rounded-md shadow-sm">
-              <span class="inline-flex items-center rounded-l-md border border-gray-300 bg-gray-50 px-3 text-gray-500">₹</span>
-              <input
-                type="number"
-                id="amount"
-                class="block flex-1 rounded-r-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                placeholder="0"
-                [value]="amountInRupees()"
-                (input)="amountInRupees.set(+$any($event.target).value)"
-                min="1"
-                step="1"
-              />
+      @if (success()) {
+        <div class="mb-4 flex items-center rounded-md bg-green-50 p-3 text-sm text-green-700">
+          <span class="font-bold mr-2">✓</span>
+          <span>{{ success() }}</span>
+        </div>
+      }
+
+      @if (!loading() && customersLoaded()) {
+        <form (ngSubmit)="collectPayment()" class="space-y-6">
+          <div class="grid grid-cols-1 gap-6">
+            <div>
+              <label for="customer" class="block text-sm font-medium text-gray-700">Customer <span class="text-red-500">*</span></label>
+              <select
+                id="customer"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                [value]="selectedCustomer()"
+                (change)="onCustomerSelect($event)"
+                required
+              >
+                <option value="">Select a customer</option>
+                @for (customer of customers(); track customer.id) {
+                  <option [value]="customer.id">{{ customer.name }} (Weekly: ₹{{ (customer.weekly_due_amount / 100).toFixed(2) }})</option>
+                }
+              </select>
             </div>
-          </div>
 
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
-            <div class="space-y-2">
-              @for (method of paymentMethods; track method) {
-                <label class="flex items-center cursor-pointer">
-                  <input
-                    type="radio"
-                    name="method"
-                    [value]="method"
-                    [checked]="selectedMethod() === method"
-                    (change)="selectedMethod.set(method)"
-                    class="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span class="ml-3 text-sm text-gray-700 capitalize">{{ method }}</span>
+            <div>
+              <label for="amount" class="block text-sm font-medium text-gray-700">Collection Amount (₹) <span class="text-red-500">*</span></label>
+              <div class="mt-1 flex rounded-md shadow-sm">
+                <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500">₹</span>
+                <input
+                  type="number"
+                  id="amount"
+                  class="block flex-1 rounded-r-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="500"
+                  [value]="amountInRupees()"
+                  (input)="amountInRupees.set(+$any($event.target).value)"
+                  min="1"
+                  step="1"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                @for (method of paymentMethods; track method) {
+                  <label
+                    [class.border-blue-500]="selectedMethod() === method"
+                    [class.bg-blue-50]="selectedMethod() === method"
+                    class="flex items-center justify-center p-3 border rounded-lg cursor-pointer text-sm font-medium capitalize text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      [value]="method"
+                      [checked]="selectedMethod() === method"
+                      (change)="selectedMethod.set(method)"
+                      class="sr-only"
+                    />
+                    {{ method }}
+                  </label>
+                }
+              </div>
+            </div>
+
+            @if (selectedMethod() === 'online' || selectedMethod() === 'cheque') {
+              <div>
+                <label for="reference" class="block text-sm font-medium text-gray-700">
+                  {{ selectedMethod() === 'online' ? 'UPI / Transaction Ref ID' : 'Cheque Number' }}
                 </label>
-              }
+                <input
+                  type="text"
+                  id="reference"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="e.g. UPI/1234567890"
+                  [value]="reference()"
+                  (input)="reference.set($any($event.target).value)"
+                />
+              </div>
+            }
+
+            <div>
+              <label for="notes" class="block text-sm font-medium text-gray-700">Notes (Optional)</label>
+              <textarea
+                id="notes"
+                rows="2"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                placeholder="Optional notes or remarks"
+                [value]="notes()"
+                (input)="notes.set($any($event.target).value)"
+              ></textarea>
             </div>
           </div>
 
-          <div class="mb-4">
-            <label for="reference" class="block text-sm font-medium text-gray-700">Reference</label>
-            <input
-              type="text"
-              id="reference"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              placeholder="Collector ID, Tx ID, etc."
-              [value]="reference()"
-              (input)="reference.set($any($event.target).value)"
-            />
+          <div class="pt-4 border-t border-gray-200">
+            <button
+              type="submit"
+              class="w-full justify-center rounded-md bg-blue-600 py-2.5 px-4 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50"
+              [disabled]="loading()"
+            >
+              Confirm & Record Collection
+            </button>
           </div>
-
-          <div class="mb-4">
-            <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
-            <textarea
-              id="notes"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              placeholder="Additional notes..."
-              [value]="notes()"
-              (input)="notes.set($any($event.target).value)"
-              rows="3"
-            ></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex justify-end space-x-3">
-        <button
-          type="button"
-          class="w-full justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-          (click)="collectPayment()"
-          [disabled]="loading() || !selectedCustomer() || amountInRupees() <= 0"
-        >
-          {{ loading() ? 'Processing...' : 'Record Payment' }}
-        </button>
-      </div>
-    </form>
+        </form>
+      }
+    </div>
   }
 </div>

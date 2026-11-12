@@ -4,18 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { Customer } from '../customers/customer.types';
+import { WeeklyTrackerComponent } from './weekly-tracker.component';
 
 @Component({
   selector: 'app-collection-entry',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, WeeklyTrackerComponent],
   templateUrl: './collection-entry.component.html',
-  styleUrl: './collection-entry.component.css',
+  styleUrls: ['./collection-entry.component.css'],
 })
 export class CollectionEntryComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _authService = inject(AuthService);
 
+  activeTab = signal<'record' | 'tracker'>('record');
   loading = signal(true);
   error = signal<string | null>(null);
   customers = signal<Customer[]>([]);
@@ -33,7 +35,7 @@ export class CollectionEntryComponent implements OnInit {
     this.loadCustomers();
   }
 
-  private async loadCustomers() {
+  async loadCustomers() {
     try {
       const { data, error } = await this._supabaseService.client
         .from('customers')
