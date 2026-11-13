@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "./app/design-system/styles/glass-tokens.css";
 
+@variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
 @theme {
   --color-primary-50: #f0f4ff;
   --color-primary-100: #e2ebff;

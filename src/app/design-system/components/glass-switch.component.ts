@@ -106,3 +106,4 @@ export class GlassSwitchComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 }
+

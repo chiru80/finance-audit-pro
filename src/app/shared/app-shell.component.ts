@@ -17,7 +17,7 @@ import { AuthService } from '../auth/auth.service';
         @if (authService.isAuthenticated()) {
           <app-header />
         }
-        <main [class]="authService.isAuthenticated() ? 'flex-1 overflow-y-auto p-6 md:p-8 bg-slate-50' : 'flex-1 overflow-y-auto bg-white'">
+        <main [class]="authService.isAuthenticated() ? 'flex-1 overflow-y-auto p-6 md:p-8' : 'flex-1 overflow-y-auto bg-white'">
           <ng-content></ng-content>
         </main>
       </div>

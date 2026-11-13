@@ -117,3 +117,4 @@ export class GlassCardComponent {
     return this.interactive ? 'glass-card-interactive cursor-pointer' : '';
   }
 }
+

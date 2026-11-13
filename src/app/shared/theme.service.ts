@@ -64,9 +64,11 @@ export class ThemeService {
 
     if (theme === 'dark') {
       htmlElement.dataset['theme'] = 'dark';
+      htmlElement.classList.add('dark');
       localStorage.setItem(this.THEME_KEY, 'dark');
     } else {
       delete htmlElement.dataset['theme'];
+      htmlElement.classList.remove('dark');
       localStorage.setItem(this.THEME_KEY, 'light');
     }
   }
