@@ -2,7 +2,7 @@
   <!-- Header & Export Actions -->
   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
     <div>
-      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Financial Reports & Audit</h1>
+      <h1 class="text-2xl sm:text-3xl font-bold text-brand-900">Financial Reports & Audit</h1>
       <p class="text-sm text-slate-500 mt-1">Review aggregated financial balances, weekly collectibles, and export transaction logs.</p>
     </div>
 
@@ -10,7 +10,7 @@
       <button
         type="button"
         (click)="exportPaymentsCSV()"
-        class="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-200 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 shadow-xs hover:bg-slate-50 transition-colors cursor-pointer"
+        class="inline-flex items-center gap-1.5 rounded-lg bg-background-primary border border-slate-200 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 shadow-xs hover:bg-slate-50 transition-colors cursor-pointer"
       >
         <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z" />
@@ -21,7 +21,7 @@
       <button
         type="button"
         (click)="exportBalancesCSV()"
-        class="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-xs sm:text-sm font-medium text-white shadow-xs hover:bg-blue-700 transition-colors cursor-pointer"
+        class="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-xs sm:text-sm font-medium text-white shadow-xs hover:bg-accent-600 transition-colors cursor-pointer"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z" />
@@ -33,13 +33,13 @@
 
   @if (loading()) {
     <div class="flex justify-center py-12">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-accent-600"></div>
     </div>
   }
 
   @if (error()) {
-    <div class="rounded-lg bg-red-50 p-4 border border-red-200 text-sm text-red-700 flex items-center gap-2">
-      <svg class="h-5 w-5 text-red-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+    <div class="rounded-lg bg-error-50 p-4 border border-error-200 text-sm text-error-700 flex items-center gap-2">
+      <svg class="h-5 w-5 text-error-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
       </svg>
       <span>{{ error() }}</span>
@@ -80,11 +80,11 @@
   </div>
 
   <!-- Payment Transactions Table -->
-  <div class="bg-white border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden">
-    <div class="px-6 py-4 border-b border-slate-100 bg-white">
+  <div class="bg-background-primary border border-slate-200/90 rounded-xl shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-slate-100 bg-background-primary">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 class="text-base font-semibold text-slate-900">Payment Collection Log</h2>
+          <h2 class="text-base font-semibold text-brand-900">Payment Collection Log</h2>
           <p class="text-xs text-slate-500">Filter payments by date range.</p>
         </div>
 
@@ -95,7 +95,7 @@
               type="date"
               [ngModel]="startDate()"
               (ngModelChange)="startDate.set($event)"
-              class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs focus:border-blue-500 focus:outline-none bg-white text-slate-900"
+              class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs focus:border-accent-500 focus:outline-none bg-background-primary text-brand-900"
             />
           </div>
           <span class="text-xs text-slate-400">to</span>
@@ -105,7 +105,7 @@
               type="date"
               [ngModel]="endDate()"
               (ngModelChange)="endDate.set($event)"
-              class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs focus:border-blue-500 focus:outline-none bg-white text-slate-900"
+              class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs focus:border-accent-500 focus:outline-none bg-background-primary text-brand-900"
             />
           </div>
           <button
@@ -143,16 +143,16 @@
           <tbody class="divide-y divide-slate-100">
             @for (payment of recentPayments(); track payment.id) {
               <tr class="hover:bg-slate-50/70 transition-colors">
-                <td class="px-6 py-3.5 text-sm text-slate-900 font-mono font-medium">#</td>
+                <td class="px-6 py-3.5 text-sm text-brand-900 font-mono font-medium">#</td>
                 <td class="px-6 py-3.5 text-sm text-slate-600">{{ formatDate(payment.payment_date) }}</td>
-                <td class="px-6 py-3.5 text-sm text-slate-900 font-semibold">{{ payment.customers?.name || 'N/A' }}</td>
+                <td class="px-6 py-3.5 text-sm text-brand-900 font-semibold">{{ payment.customers?.name || 'N/A' }}</td>
                 <td class="px-6 py-3.5 whitespace-nowrap">
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
                     {{ payment.payment_method }}
                   </span>
                 </td>
                 <td class="px-6 py-3.5 text-sm text-slate-500">{{ payment.reference || '-' }}</td>
-                <td class="px-6 py-3.5 text-right font-semibold text-emerald-600 font-mono whitespace-nowrap">{{ formatCurrency(payment.amount) }}</td>
+                <td class="px-6 py-3.5 text-right font-semibold text-success-600 font-mono whitespace-nowrap">{{ formatCurrency(payment.amount) }}</td>
               </tr>
             }
           </tbody>
@@ -162,9 +162,9 @@
   </div>
 
   <!-- Customer Balances / Defaulters Table -->
-  <div class="bg-white border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden">
-    <div class="px-6 py-4 border-b border-slate-100 bg-white">
-      <h2 class="text-base font-semibold text-slate-900">Highest Outstanding Balances</h2>
+  <div class="bg-background-primary border border-slate-200/90 rounded-xl shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-slate-100 bg-background-primary">
+      <h2 class="text-base font-semibold text-brand-900">Highest Outstanding Balances</h2>
       <p class="text-xs text-slate-500">Customers with the highest unpaid dues requiring immediate attention.</p>
     </div>
 
@@ -191,16 +191,16 @@
           <tbody class="divide-y divide-slate-100">
             @for (c of customerBalances(); track c.id) {
               <tr class="hover:bg-slate-50/70 transition-colors">
-                <td class="px-6 py-3.5 font-semibold text-slate-900">{{ c.name }}</td>
+                <td class="px-6 py-3.5 font-semibold text-brand-900">{{ c.name }}</td>
                 <td class="px-6 py-3.5 text-sm text-slate-600">{{ c.phone || '-' }}</td>
                 <td class="px-6 py-3.5 text-sm text-slate-600 font-mono">{{ formatCurrency(c.total_paid) }}</td>
                 <td class="px-6 py-3.5 whitespace-nowrap">
-                  <span [class]="c.status === 'active' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-50 text-slate-600 border border-slate-200'"
+                  <span [class]="c.status === 'active' ? 'bg-success-50 text-success-700 border border-success-200' : 'bg-slate-50 text-slate-600 border border-slate-200'"
                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider">
                     {{ c.status }}
                   </span>
                 </td>
-                <td class="px-6 py-3.5 text-right font-bold text-amber-600 font-mono whitespace-nowrap">{{ formatCurrency(c.outstanding_balance) }}</td>
+                <td class="px-6 py-3.5 text-right font-bold text-warning-600 font-mono whitespace-nowrap">{{ formatCurrency(c.outstanding_balance) }}</td>
               </tr>
             }
           </tbody>

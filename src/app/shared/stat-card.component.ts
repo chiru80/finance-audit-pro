@@ -17,13 +17,13 @@ export interface StatCardData {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="stat-card bg-background-primary border border-border-light-color rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div class="stat-card bg-background-primary border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
       <div class="flex items-center justify-between gap-4">
         <div class="stat-card-content flex-1 min-w-0">
-          <p class="text-xs font-medium text-text-secondary-color uppercase tracking-wider mb-1 truncate">
+          <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1 truncate">
             {{ label }}
           </p>
-          <h3 class="text-2xl font-bold text-text-primary-color" [innerHTML]="formattedValue"></h3>
+          <h3 class="text-2xl font-bold text-brand-900" [innerHTML]="formattedValue"></h3>
           @if (trend !== undefined) {
             <div class="mt-2 flex items-center gap-1.5 text-xs font-medium">
               @if (trend >= 0) {
@@ -41,7 +41,7 @@ export interface StatCardData {
                   {{ trend }}%
                 </span>
               }
-              <span class="text-text-secondary-color font-normal">vs last week</span>
+              <span class="text-slate-500 font-normal">vs last week</span>
             </div>
           }
         </div>
@@ -75,14 +75,14 @@ export class StatCardComponent {
   get iconColorClasses(): string {
     switch (this.color) {
       case 'primary':
-        return 'bg-primary-50 text-primary-600 border border-primary-100/80';
+        return 'bg-accent-50 text-accent-600 border border-accent-200/80';
       case 'success':
         return 'bg-success-50 text-success-600 border border-success-200/80';
       case 'warning':
         return 'bg-warning-50 text-warning-600 border border-warning-200/80';
       case 'neutral':
       default:
-        return 'bg-neutral-50 text-neutral-600 border border-neutral-200/80';
+        return 'bg-slate-50 text-slate-600 border border-slate-200/80';
     }
   }
 

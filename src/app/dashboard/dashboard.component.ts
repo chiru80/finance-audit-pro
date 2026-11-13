@@ -15,7 +15,7 @@ import { I18nPipe } from '../shared/i18n.pipe';
       <!-- Header Banner / Title -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
         <div>
-          <h1 class="text-2xl font-bold tracking-tight text-slate-900">{{ 'dashboard.title' | i18n }}</h1>
+          <h1 class="text-2xl font-bold tracking-tight text-brand-900">{{ 'dashboard.title' | i18n }}</h1>
           <p class="text-sm text-slate-500 mt-1">Real-time collections, dues, and audit performance overview.</p>
         </div>
 
@@ -23,7 +23,7 @@ import { I18nPipe } from '../shared/i18n.pipe';
         <div class="flex items-center gap-2.5">
           <a
             [routerLink]="['/collections']"
-            class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 shadow-xs hover:shadow transition-all"
+            class="inline-flex items-center gap-2 px-4 py-2.5 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-600 shadow-xs hover:shadow transition-all cursor-pointer"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
@@ -32,7 +32,7 @@ import { I18nPipe } from '../shared/i18n.pipe';
           </a>
           <a
             [routerLink]="['/customers']"
-            class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50 hover:border-slate-300 shadow-xs transition-all"
+            class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50 hover:border-slate-300 shadow-xs transition-all cursor-pointer"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
@@ -41,7 +41,7 @@ import { I18nPipe } from '../shared/i18n.pipe';
           </a>
           <a
             [routerLink]="['/reports']"
-            class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50 hover:border-slate-300 shadow-xs transition-all"
+            class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50 hover:border-slate-300 shadow-xs transition-all cursor-pointer"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -98,15 +98,15 @@ import { I18nPipe } from '../shared/i18n.pipe';
       </div>
 
       <!-- Recent Transactions -->
-      <div class="bg-white border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+      <div class="bg-background-primary border border-slate-200/90 rounded-xl shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-background-primary">
           <div class="flex items-center gap-2.5">
-            <div class="w-2.5 h-2.5 rounded-full bg-blue-600"></div>
-            <h2 class="text-base font-semibold text-slate-900">{{ 'dashboard.recent_transactions' | i18n }}</h2>
+            <div class="w-2.5 h-2.5 rounded-full bg-accent-600"></div>
+            <h2 class="text-base font-semibold text-brand-900">{{ 'dashboard.recent_transactions' | i18n }}</h2>
           </div>
           <a
             [routerLink]="['/ledger']"
-            class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+            class="inline-flex items-center gap-1 text-xs font-semibold text-accent-600 hover:text-accent-700 transition-colors"
           >
             <span>View Full Ledger</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,13 +136,13 @@ import { I18nPipe } from '../shared/i18n.pipe';
                   <td class="px-6 py-4 text-center">
                     <span
                       class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"
-                      [class.bg-emerald-50]="transaction.status === 'paid'"
-                      [class.text-emerald-700]="transaction.status === 'paid'"
+                      [class.bg-success-50]="transaction.status === 'paid'"
+                      [class.text-success-700]="transaction.status === 'paid'"
                       [class.border]="transaction.status === 'paid'"
-                      [class.border-emerald-200]="transaction.status === 'paid'"
-                      [class.bg-amber-50]="transaction.status === 'pending'"
-                      [class.text-amber-700]="transaction.status === 'pending'"
-                      [class.border-amber-200]="transaction.status === 'pending'"
+                      [class.border-success-200]="transaction.status === 'paid'"
+                      [class.bg-warning-50]="transaction.status === 'pending'"
+                      [class.text-warning-700]="transaction.status === 'pending'"
+                      [class.border-warning-200]="transaction.status === 'pending'"
                     >
                       {{ transaction.status === 'paid' ? ('status.paid' | i18n) : ('status.pending' | i18n) }}
                     </span>
@@ -150,7 +150,7 @@ import { I18nPipe } from '../shared/i18n.pipe';
                   <td class="px-6 py-4 text-right">
                     <a
                       [routerLink]="['/ledger']"
-                      class="text-slate-400 hover:text-blue-600 transition-colors inline-flex items-center justify-center p-1.5 rounded-lg hover:bg-slate-100"
+                      class="text-slate-400 hover:text-accent-600 transition-colors inline-flex items-center justify-center p-1.5 rounded-lg hover:bg-slate-100"
                       title="View in ledger"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
