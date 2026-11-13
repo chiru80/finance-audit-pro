@@ -18,36 +18,36 @@ export interface StatCardData {
   imports: [CommonModule],
   template: `
     <div
-      class="stat-glass-card rounded-2xl p-6 relative overflow-hidden transition-all duration-300 select-none border border-slate-200/90 shadow-sm"
+      class="stat-dark-card rounded-2xl p-6 relative overflow-hidden transition-all duration-300 select-none bg-[#151F32] border border-[#263449] shadow-lg hover:shadow-xl"
       [ngClass]="cardGlowClass"
     >
       <!-- Specular Refraction Highlight Line -->
-      <div class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/90 dark:via-white/20 to-transparent"></div>
+      <div class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
       <div class="flex items-start justify-between gap-4 relative z-10">
         <div class="stat-card-content flex-1 min-w-0">
-          <p class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2 truncate">
+          <p class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider mb-2 truncate">
             {{ label }}
           </p>
-          <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight" [innerHTML]="formattedValue"></h3>
+          <h3 class="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight" [innerHTML]="formattedValue"></h3>
           @if (trend !== undefined) {
             <div class="mt-3 flex items-center gap-1.5 text-xs font-medium">
               @if (trend >= 0) {
-                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-500/30">
-                  <svg class="w-3 h-3 text-emerald-700 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-emerald-500/15 text-[#34D399] font-bold border border-emerald-500/30">
+                  <svg class="w-3 h-3 text-[#34D399]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
                   </svg>
                   +{{ trend }}%
                 </span>
               } @else {
-                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-rose-50 text-rose-800 dark:bg-rose-500/20 dark:text-rose-300 font-bold border border-rose-200 dark:border-rose-500/30">
-                  <svg class="w-3 h-3 text-rose-700 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-rose-500/15 text-[#F87171] font-bold border border-rose-500/30">
+                  <svg class="w-3 h-3 text-[#F87171]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                   </svg>
                   {{ trend }}%
                 </span>
               }
-              <span class="text-slate-500 dark:text-slate-400 font-medium">vs last week</span>
+              <span class="text-[#64748B] font-medium">vs last week</span>
             </div>
           }
         </div>
@@ -67,21 +67,15 @@ export interface StatCardData {
       display: block;
     }
 
-    .stat-glass-card {
-      background: var(--glass-surface-base, rgba(255, 255, 255, 0.78));
-      backdrop-filter: blur(var(--glass-blur-md, 20px)) saturate(var(--glass-saturate, 185%));
-      -webkit-backdrop-filter: blur(var(--glass-blur-md, 20px)) saturate(var(--glass-saturate, 185%));
-      border: 1px solid var(--glass-border-subtle, rgba(226, 232, 240, 0.75));
-      box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
-      transition-timing-function: var(--glass-spring-easing, cubic-bezier(0.16, 1, 0.3, 1));
+    .stat-dark-card {
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .stat-glass-card:hover {
-      transform: translateY(-2px) var(--glass-scale-hover, scale(1.012));
-      box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
+    .stat-dark-card:hover {
+      transform: translateY(-2px);
     }
 
-    .stat-glass-card:hover .stat-card-icon {
+    .stat-dark-card:hover .stat-card-icon {
       transform: scale(1.06);
     }
   `],
@@ -100,28 +94,28 @@ export class StatCardComponent {
   get cardGlowClass(): string {
     switch (this.color) {
       case 'primary':
-        return 'hover:border-blue-300/80 dark:hover:border-blue-600/60';
+        return 'hover:border-[#3B82F6]/60 hover:shadow-blue-900/20';
       case 'success':
-        return 'hover:border-emerald-300/80 dark:hover:border-emerald-600/60';
+        return 'hover:border-[#10B981]/60 hover:shadow-emerald-900/20';
       case 'warning':
-        return 'hover:border-amber-300/80 dark:hover:border-amber-600/60';
+        return 'hover:border-[#F59E0B]/60 hover:shadow-amber-900/20';
       case 'neutral':
       default:
-        return 'hover:border-slate-300 dark:hover:border-slate-600';
+        return 'hover:border-[#33435C]';
     }
   }
 
   get iconColorClasses(): string {
     switch (this.color) {
       case 'primary':
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-700/50';
+        return 'bg-blue-500/15 text-[#38BDF8] border border-blue-500/30';
       case 'success':
-        return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/50';
+        return 'bg-emerald-500/15 text-[#34D399] border border-emerald-500/30';
       case 'warning':
-        return 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-700/50';
+        return 'bg-amber-500/15 text-[#FBBF24] border border-amber-500/30';
       case 'neutral':
       default:
-        return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700';
+        return 'bg-[#18243A] text-[#94A3B8] border border-[#263449]';
     }
   }
 

@@ -47,19 +47,17 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
 
     .glass-switch-track {
-      background: var(--glass-surface-muted, rgba(203, 213, 225, 0.6));
-      backdrop-filter: blur(var(--glass-blur-sm, 12px)) saturate(var(--glass-saturate, 185%));
-      -webkit-backdrop-filter: blur(var(--glass-blur-sm, 12px)) saturate(var(--glass-saturate, 185%));
-      border: 1px solid var(--glass-border-subtle, rgba(226, 232, 240, 0.8));
-      box-shadow: inset 0 2px 4px 0 rgba(15, 23, 42, 0.08), var(--glass-specular-top);
-      transition-timing-function: var(--glass-spring-easing, cubic-bezier(0.16, 1, 0.3, 1));
+      background: #0F172A;
+      border: 1px solid #263449;
+      box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
       padding-top: 3px;
     }
 
     .glass-switch-track.checked {
-      background: linear-gradient(180deg, #16a34a 0%, #15803d 100%);
-      border-color: rgba(22, 163, 74, 0.4);
-      box-shadow: 0 0 14px 0 rgba(22, 163, 74, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+      background: #2563EB;
+      border-color: #3B82F6;
+      box-shadow: 0 0 12px 0 rgba(37, 99, 235, 0.4);
     }
 
     .glass-switch-thumb {

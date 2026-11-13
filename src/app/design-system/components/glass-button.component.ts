@@ -13,11 +13,11 @@ export type GlassButtonSize = 'sm' | 'md' | 'lg';
       [type]="type"
       [disabled]="disabled || loading"
       (click)="handleClick($event)"
-      class="glass-btn-root inline-flex items-center justify-center font-semibold select-none relative overflow-hidden transition-all duration-200 outline-none focus:ring-2 focus:ring-blue-500/40 focus:ring-offset-1"
+      class="glass-btn-root inline-flex items-center justify-center font-semibold select-none relative overflow-hidden transition-all duration-150 outline-none focus:ring-2 focus:ring-[#2563EB]/40 focus:ring-offset-1 focus:ring-offset-[#0B1120] cursor-pointer"
       [ngClass]="[variantClasses, sizeClasses, disabledClasses, customClass]"
     >
       <!-- Specular Refraction Highlight Line -->
-      <span class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/70 dark:via-white/20 to-transparent"></span>
+      <span class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></span>
 
       <!-- Loading Spinner -->
       @if (loading) {
@@ -39,8 +39,7 @@ export type GlassButtonSize = 'sm' | 'md' | 'lg';
     }
 
     .glass-btn-root {
-      transition-timing-function: var(--glass-spring-easing, cubic-bezier(0.16, 1, 0.3, 1));
-      border-radius: var(--radius-xl, 1rem);
+      border-radius: 12px;
     }
 
     .glass-btn-root:hover:not(:disabled) {
@@ -48,84 +47,96 @@ export type GlassButtonSize = 'sm' | 'md' | 'lg';
     }
 
     .glass-btn-root:active:not(:disabled) {
-      transform: var(--glass-scale-active, scale(0.985));
+      transform: scale(0.985);
     }
 
     /* Variant: Filled (Vibrant Primary) */
     .variant-filled {
-      background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+      background: #2563EB;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.35);
     }
+
     .variant-filled:hover:not(:disabled) {
-      background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 100%);
-      box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.45);
+      background: #3B82F6;
+      box-shadow: 0 6px 18px 0 rgba(37, 99, 235, 0.45);
     }
 
-    /* Variant: Glass (Liquid Frosted) */
+    .variant-filled:active:not(:disabled) {
+      background: #1D4ED8;
+    }
+
+    /* Variant: Glass / Secondary (Dark Elevated Button) */
     .variant-glass {
-      background: var(--glass-surface-base, rgba(255, 255, 255, 0.72));
-      backdrop-filter: blur(var(--glass-blur-md, 20px)) saturate(var(--glass-saturate, 185%));
-      -webkit-backdrop-filter: blur(var(--glass-blur-md, 20px)) saturate(var(--glass-saturate, 185%));
-      color: var(--color-text-primary, #0f172a);
-      border: 1px solid var(--glass-border-subtle, rgba(226, 232, 240, 0.75));
-      box-shadow: var(--glass-shadow-sm), var(--glass-specular-rim);
+      background: #18243A;
+      color: #F8FAFC;
+      border: 1px solid #263449;
+      box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
     }
+
     .variant-glass:hover:not(:disabled) {
-      background: var(--glass-surface-elevated, rgba(255, 255, 255, 0.90));
-      border-color: var(--glass-border-crisp, rgba(255, 255, 255, 0.90));
-      box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+      background: #1E2D47;
+      border-color: #334460;
+      color: #FFFFFF;
     }
 
-    /* Variant: Tinted (Soft Accent Glass) */
+    .variant-glass:active:not(:disabled) {
+      background: #151F32;
+    }
+
+    /* Variant: Tinted (Subtle Blue / Info) */
     .variant-tinted {
-      background: rgba(37, 99, 235, 0.08);
-      backdrop-filter: blur(var(--glass-blur-sm, 12px)) saturate(var(--glass-saturate, 185%));
-      -webkit-backdrop-filter: blur(var(--glass-blur-sm, 12px)) saturate(var(--glass-saturate, 185%));
-      color: #2563eb;
-      border: 1px solid rgba(37, 99, 235, 0.20);
-      box-shadow: var(--glass-shadow-sm), var(--glass-specular-top);
-    }
-    .variant-tinted:hover:not(:disabled) {
-      background: rgba(37, 99, 235, 0.14);
-      border-color: rgba(37, 99, 235, 0.35);
+      background: rgba(37, 99, 235, 0.15);
+      color: #60A5FA;
+      border: 1px solid rgba(37, 99, 235, 0.30);
     }
 
-    /* Variant: Danger (Crimson Glass) */
-    .variant-danger {
-      background: rgba(239, 68, 68, 0.10);
-      backdrop-filter: blur(var(--glass-blur-sm, 12px)) saturate(var(--glass-saturate, 185%));
-      -webkit-backdrop-filter: blur(var(--glass-blur-sm, 12px)) saturate(var(--glass-saturate, 185%));
-      color: #dc2626;
-      border: 1px solid rgba(239, 68, 68, 0.25);
-      box-shadow: var(--glass-shadow-sm);
+    .variant-tinted:hover:not(:disabled) {
+      background: rgba(37, 99, 235, 0.25);
+      color: #93C5FD;
+      border-color: rgba(37, 99, 235, 0.45);
     }
+
+    /* Variant: Danger */
+    .variant-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #F87171;
+      border: 1px solid rgba(239, 68, 68, 0.30);
+    }
+
     .variant-danger:hover:not(:disabled) {
-      background: rgba(239, 68, 68, 0.18);
-      border-color: rgba(239, 68, 68, 0.40);
+      background: #EF4444;
+      color: #FFFFFF;
+      border-color: #EF4444;
+      box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.4);
     }
 
     /* Sizes */
     .size-sm {
       padding: 0.375rem 0.75rem;
-      font-size: 0.75rem;
-      border-radius: 0.625rem;
+      font-size: 0.8125rem;
+      height: 34px;
+      border-radius: 10px;
     }
+
     .size-md {
-      padding: 0.55rem 1.15rem;
+      padding: 0.5rem 1.125rem;
       font-size: 0.875rem;
-      border-radius: 0.75rem;
+      height: 42px;
+      border-radius: 12px;
     }
+
     .size-lg {
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 0.875rem;
+      padding: 0.625rem 1.375rem;
+      font-size: 0.9375rem;
+      height: 46px;
+      border-radius: 12px;
     }
 
     .btn-disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
+      opacity: 0.5;
+      cursor: not-allowed !important;
       pointer-events: none;
     }
   `],
@@ -159,4 +170,3 @@ export class GlassButtonComponent {
     }
   }
 }
-

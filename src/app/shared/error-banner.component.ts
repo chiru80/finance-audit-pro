@@ -7,24 +7,24 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     @if (shown) {
-      <div class="error-banner bg-error-50 border border-error-200 rounded-lg p-4 mb-4" role="alert">
+      <div class="error-banner bg-red-500/15 border border-red-500/30 rounded-xl p-4 mb-4 backdrop-blur-sm" role="alert">
         <div class="flex items-start">
           <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-error-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
           <div class="ml-3 flex-1">
-            <h4 class="text-sm font-medium text-error-800">{{ title }}</h4>
+            <h4 class="text-sm font-semibold text-red-400">{{ title }}</h4>
             @if (message) {
-              <p class="mt-1 text-sm text-error-700">{{ message }}</p>
+              <p class="mt-1 text-sm text-red-300/90">{{ message }}</p>
             }
           </div>
           @if (showDismiss) {
             <div class="ml-auto pl-3">
               <button
                 (click)="dismissError()"
-                class="inline-flex items-center p-1 rounded-md text-error-400 hover:text-error-600 hover:bg-error-100 focus:outline-none focus:ring-2 focus:ring-error-500"
+                class="inline-flex items-center p-1 rounded-md text-red-400 hover:text-red-200 hover:bg-red-500/20 focus:outline-none focus:ring-2 focus:ring-red-500/40 cursor-pointer"
                 aria-label="Dismiss"
               >
                 <span class="sr-only">Dismiss</span>

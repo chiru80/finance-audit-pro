@@ -1,15 +1,34 @@
 /**
- * Finance Audit Pro — Liquid Glass Design Tokens
- * Adapted from Glisse (0kzh/glisse) optical physics principles
+ * Finance Audit Pro - Liquid Glass & FinTech Dark Design Tokens
+ * Master Dark Color System
  */
 
 :root {
-  /* Surfaces & Translucency - Crisp white glass with strong contrast against slate background */
-  --glass-surface-base: rgba(255, 255, 255, 0.90);
-  --glass-surface-muted: rgba(255, 255, 255, 0.75);
-  --glass-surface-elevated: rgba(255, 255, 255, 0.96);
-  --glass-surface-active: rgba(255, 255, 255, 0.98);
-  --glass-surface-dock: rgba(255, 255, 255, 0.92);
+  /* Core FinTech Dark Theme Tokens */
+  --bg-primary: #0B1120;
+  --bg-secondary: #111827;
+  --bg-sidebar: #0F172A;
+  --bg-topbar: #111827;
+  --bg-card: #151F32;
+  --bg-card-elevated: #18243A;
+  --bg-input: #0F172A;
+  --border-color: #263449;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --primary-accent: #2563EB;
+  --primary-hover: #3B82F6;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-info: #38BDF8;
+
+  /* Surfaces & Translucency - Default Dark SaaS */
+  --glass-surface-base: #151F32;
+  --glass-surface-muted: #111827;
+  --glass-surface-elevated: #18243A;
+  --glass-surface-active: #1D2B42;
+  --glass-surface-dock: #0F172A;
 
   /* Optical Refraction & Frosted Blur */
   --glass-blur-xs: 6px;
@@ -19,19 +38,19 @@
   --glass-saturate: 185%;
 
   /* Micro-Borders & Specular Rim Lighting */
-  --glass-border-subtle: rgba(203, 213, 225, 0.90);
-  --glass-border-crisp: rgba(226, 232, 240, 0.95);
-  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
-  --glass-specular-rim: inset 0 1px 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 1px 0 rgba(15, 23, 42, 0.05);
-  --glass-specular-recessed: inset 0 2px 4px 0 rgba(15, 23, 42, 0.06);
+  --glass-border-subtle: #263449;
+  --glass-border-crisp: #33435C;
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  --glass-specular-rim: inset 0 1px 1px 0 rgba(255, 255, 255, 0.10), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.40);
+  --glass-specular-recessed: inset 0 2px 4px 0 rgba(0, 0, 0, 0.45);
 
-  /* Shadows (Ambient + Elevation) */
-  --glass-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
-  --glass-shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-  --glass-shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.10), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
-  --glass-shadow-glow-accent: 0 0 24px 0 rgba(37, 99, 235, 0.20);
-  --glass-shadow-glow-success: 0 0 24px 0 rgba(22, 163, 74, 0.20);
-  --glass-shadow-glow-warning: 0 0 24px 0 rgba(217, 119, 6, 0.20);
+  /* Shadows (FinTech Depth & Elevation) */
+  --glass-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.35);
+  --glass-shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.50);
+  --glass-shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.65);
+  --glass-shadow-glow-accent: 0 0 24px 0 rgba(37, 99, 235, 0.25);
+  --glass-shadow-glow-success: 0 0 24px 0 rgba(16, 185, 129, 0.25);
+  --glass-shadow-glow-warning: 0 0 24px 0 rgba(245, 158, 11, 0.25);
 
   /* Interaction & Spring Physics */
   --glass-spring-easing: cubic-bezier(0.16, 1, 0.3, 1);
@@ -40,27 +59,24 @@
   --glass-transition-slow: 380ms var(--glass-spring-easing);
 
   /* Hover & Active Scale */
-  --glass-scale-hover: scale(1.012);
-  --glass-scale-active: scale(0.985);
+  --glass-scale-hover: scale(1.008);
+  --glass-scale-active: scale(0.988);
+
+  /* Fallback colors */
+  --glass-fallback-bg: #151F32;
+  --glass-fallback-border: #263449;
+  --glass-fallback-bg-dark: #151F32;
+  --glass-fallback-border-dark: #263449;
 }
 
-/* Dark Mode Tokens */
 [data-theme="dark"] {
-  --glass-surface-base: rgba(15, 23, 42, 0.72);
-  --glass-surface-muted: rgba(30, 41, 59, 0.55);
-  --glass-surface-elevated: rgba(30, 41, 59, 0.88);
-  --glass-surface-active: rgba(51, 65, 85, 0.90);
-  --glass-surface-dock: rgba(15, 23, 42, 0.85);
-
-  --glass-border-subtle: rgba(51, 65, 85, 0.65);
-  --glass-border-crisp: rgba(255, 255, 255, 0.15);
-  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
-  --glass-specular-rim: inset 0 1px 1px 0 rgba(255, 255, 255, 0.20), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.25);
-  --glass-specular-recessed: inset 0 2px 4px 0 rgba(0, 0, 0, 0.35);
-
-  --glass-shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.25);
-  --glass-shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.40);
-  --glass-shadow-lg: 0 20px 38px -8px rgba(0, 0, 0, 0.55);
+  --glass-surface-base: #151F32;
+  --glass-surface-muted: #111827;
+  --glass-surface-elevated: #18243A;
+  --glass-surface-active: #1D2B42;
+  --glass-surface-dock: #0F172A;
+  --glass-border-subtle: #263449;
+  --glass-border-crisp: #33435C;
 }
 
 /* Utility Glass Classes */
@@ -87,20 +103,3 @@
   border: 1px solid var(--glass-border-subtle);
   box-shadow: var(--glass-shadow-sm), var(--glass-specular-top);
 }
-
-/* Fallback for environments lacking backdrop-filter support */
-@supports not (backdrop-filter: blur(10px)) {
-  .glass-surface,
-  .glass-surface-elevated,
-  .glass-surface-subtle {
-    background: #ffffff;
-    border-color: #e2e8f0;
-  }
-  [data-theme="dark"] .glass-surface,
-  [data-theme="dark"] .glass-surface-elevated,
-  [data-theme="dark"] .glass-surface-subtle {
-    background: #1e293b;
-    border-color: #334155;
-  }
-}
-

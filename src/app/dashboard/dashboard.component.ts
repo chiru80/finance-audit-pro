@@ -26,17 +26,17 @@ import { GlassBadgeComponent } from '../design-system/components/glass-badge.com
   template: `
     <div class="dashboard max-w-7xl mx-auto space-y-8">
       <!-- Header Banner / Title & Actions -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-slate-800">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#263449]">
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">Overview</span>
-            <span class="text-slate-300 dark:text-slate-700">•</span>
-            <span class="text-xs text-slate-500 dark:text-slate-400">{{ todayFormatted }}</span>
+            <span class="text-xs font-bold text-[#38BDF8] uppercase tracking-widest">Overview</span>
+            <span class="text-[#64748B]">•</span>
+            <span class="text-xs text-[#94A3B8]">{{ todayFormatted }}</span>
           </div>
-          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mt-1">
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F8FAFC] mt-1">
             {{ greeting() }}, {{ userName() }}
           </h1>
-          <p class="text-sm font-medium text-slate-600 dark:text-slate-400 mt-1">Here's your real-time financial collection & audit overview.</p>
+          <p class="text-sm font-medium text-[#94A3B8] mt-1">Here's your real-time financial collection & audit overview.</p>
         </div>
 
         <!-- Header Quick Action buttons -->
@@ -60,7 +60,7 @@ import { GlassBadgeComponent } from '../design-system/components/glass-badge.com
           <a [routerLink]="['/reports']">
             <glass-button variant="glass" size="md">
               <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
               {{ 'dashboard.view_reports' | i18n }}
             </glass-button>
@@ -121,16 +121,16 @@ import { GlassBadgeComponent } from '../design-system/components/glass-badge.com
       <!-- Interactive Analytics Row -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Collection Velocity & Area Chart Card -->
-        <glass-card variant="elevated" customClass="lg:col-span-2 p-6 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        <glass-card variant="elevated" customClass="lg:col-span-2 p-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl flex flex-col justify-between">
           <div>
-            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-4">
+            <div class="flex items-center justify-between border-b border-[#263449] pb-4 mb-4">
               <div>
-                <h3 class="text-base font-bold text-slate-900 dark:text-white">Collection Velocity & Trend</h3>
-                <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Recorded dues collected vs targets over weekly cycles.</p>
+                <h3 class="text-base font-bold text-[#F8FAFC]">Collection Velocity & Trend</h3>
+                <p class="text-xs font-medium text-[#94A3B8] mt-0.5">Recorded dues collected vs targets over weekly cycles.</p>
               </div>
               <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 border border-blue-200/80">
-                  <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-500/15 text-[#38BDF8] border border-blue-500/30">
+                  <span class="w-2 h-2 rounded-full bg-[#2563EB]"></span>
                   Weekly Cycles
                 </span>
               </div>
@@ -141,61 +141,61 @@ import { GlassBadgeComponent } from '../design-system/components/glass-badge.com
               <svg class="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="velocityGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#2563eb" stop-opacity="0.30"/>
+                    <stop offset="0%" stop-color="#2563eb" stop-opacity="0.35"/>
                     <stop offset="100%" stop-color="#2563eb" stop-opacity="0.00"/>
                   </linearGradient>
                 </defs>
                 <!-- Subtle grid lines -->
-                <line x1="0" y1="30" x2="500" y2="30" stroke="currentColor" class="text-slate-200/60 dark:text-slate-800" stroke-dasharray="4"/>
-                <line x1="0" y1="70" x2="500" y2="70" stroke="currentColor" class="text-slate-200/60 dark:text-slate-800" stroke-dasharray="4"/>
-                <line x1="0" y1="110" x2="500" y2="110" stroke="currentColor" class="text-slate-200/60 dark:text-slate-800"/>
+                <line x1="0" y1="30" x2="500" y2="30" stroke="#263449" stroke-dasharray="4"/>
+                <line x1="0" y1="70" x2="500" y2="70" stroke="#263449" stroke-dasharray="4"/>
+                <line x1="0" y1="110" x2="500" y2="110" stroke="#263449"/>
 
                 <!-- Area fill -->
                 <path d="M 0 110 L 0 85 Q 80 50 160 65 T 320 35 T 450 20 L 500 15 L 500 110 Z" fill="url(#velocityGradient)"/>
                 <!-- Line curve -->
-                <path d="M 0 85 Q 80 50 160 65 T 320 35 T 450 20 L 500 15" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 0 85 Q 80 50 160 65 T 320 35 T 450 20 L 500 15" fill="none" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
 
                 <!-- Data point pins -->
-                <circle cx="160" cy="65" r="4.5" fill="#2563eb" class="stroke-white stroke-2 shadow-sm"/>
-                <circle cx="320" cy="35" r="4.5" fill="#2563eb" class="stroke-white stroke-2 shadow-sm"/>
-                <circle cx="500" cy="15" r="5" fill="#1d4ed8" class="stroke-white stroke-2 shadow-md animate-pulse"/>
+                <circle cx="160" cy="65" r="4.5" fill="#3B82F6" class="stroke-[#0B1120] stroke-2 shadow-sm"/>
+                <circle cx="320" cy="35" r="4.5" fill="#3B82F6" class="stroke-[#0B1120] stroke-2 shadow-sm"/>
+                <circle cx="500" cy="15" r="5" fill="#60A5FA" class="stroke-[#0B1120] stroke-2 shadow-md animate-pulse"/>
               </svg>
             </div>
           </div>
 
           <!-- Bottom Metric Highlights -->
-          <div class="grid grid-cols-3 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 text-center">
+          <div class="grid grid-cols-3 gap-4 pt-4 border-t border-[#263449] mt-4 text-center">
             <div>
-              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Current Target</span>
-              <span class="text-base font-extrabold text-slate-900 dark:text-white font-mono mt-0.5 block">₹50,000</span>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#64748B] block">Current Target</span>
+              <span class="text-base font-extrabold text-[#F8FAFC] font-mono mt-0.5 block">₹50,000</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Weekly Completion</span>
-              <span class="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5 block">84.2%</span>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#64748B] block">Weekly Completion</span>
+              <span class="text-base font-extrabold text-[#34D399] font-mono mt-0.5 block">84.2%</span>
             </div>
             <div>
-              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Audit Clearance</span>
-              <span class="text-base font-extrabold text-blue-600 dark:text-blue-400 font-mono mt-0.5 block">Verified</span>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-[#64748B] block">Audit Clearance</span>
+              <span class="text-base font-extrabold text-[#38BDF8] font-mono mt-0.5 block">Verified</span>
             </div>
           </div>
         </glass-card>
 
         <!-- Payment Allocation & Status Donut Card -->
-        <glass-card variant="elevated" customClass="p-6 border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        <glass-card variant="elevated" customClass="p-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl flex flex-col justify-between">
           <div>
-            <div class="border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
-              <h3 class="text-base font-bold text-slate-900 dark:text-white">Dues Status Breakdown</h3>
-              <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Distribution across portfolio obligations.</p>
+            <div class="border-b border-[#263449] pb-3 mb-4">
+              <h3 class="text-base font-bold text-[#F8FAFC]">Dues Status Breakdown</h3>
+              <p class="text-xs font-medium text-[#94A3B8] mt-0.5">Distribution across portfolio obligations.</p>
             </div>
 
             <!-- Circular Status Graphic -->
             <div class="flex items-center justify-center py-2 relative">
               <svg class="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
                 <!-- Track -->
-                <path class="text-slate-100 dark:text-slate-800" stroke-width="3.5" stroke="currentColor" fill="none"
+                <path stroke="#18243A" stroke-width="3.5" fill="none"
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                 <!-- Paid Segment (65%) -->
-                <path class="text-emerald-600" stroke-dasharray="65, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none"
+                <path class="text-emerald-500" stroke-dasharray="65, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none"
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                 <!-- Outstanding Segment (25%) -->
                 <path class="text-amber-500" stroke-dasharray="25, 100" stroke-dashoffset="-65" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none"
@@ -205,49 +205,49 @@ import { GlassBadgeComponent } from '../design-system/components/glass-badge.com
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span class="text-xs font-bold text-slate-400 uppercase">Health</span>
-                <span class="text-xl font-extrabold text-slate-900 dark:text-white">92%</span>
+                <span class="text-xs font-bold text-[#64748B] uppercase">Health</span>
+                <span class="text-xl font-extrabold text-[#F8FAFC]">92%</span>
               </div>
             </div>
           </div>
 
           <!-- Donut Legend -->
-          <div class="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+          <div class="space-y-2 pt-3 border-t border-[#263449] text-xs">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-                <span class="font-medium text-slate-700 dark:text-slate-300">Collected Dues</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <span class="font-medium text-[#94A3B8]">Collected Dues</span>
               </div>
-              <span class="font-bold text-slate-900 dark:text-white font-mono">65%</span>
+              <span class="font-bold text-[#F8FAFC] font-mono">65%</span>
             </div>
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                <span class="font-medium text-slate-700 dark:text-slate-300">Outstanding</span>
+                <span class="font-medium text-[#94A3B8]">Outstanding</span>
               </div>
-              <span class="font-bold text-slate-900 dark:text-white font-mono">25%</span>
+              <span class="font-bold text-[#F8FAFC] font-mono">25%</span>
             </div>
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                <span class="font-medium text-slate-700 dark:text-slate-300">Pending Review</span>
+                <span class="font-medium text-[#94A3B8]">Pending Review</span>
               </div>
-              <span class="font-bold text-slate-900 dark:text-white font-mono">10%</span>
+              <span class="font-bold text-[#F8FAFC] font-mono">10%</span>
             </div>
           </div>
         </glass-card>
       </div>
 
-      <!-- Recent Transactions Liquid Glass Card -->
-      <glass-card variant="elevated" customClass="border border-slate-200/90 shadow-sm">
-        <div class="px-6 py-4.5 border-b border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between bg-slate-50/60 dark:bg-slate-900/40">
+      <!-- Recent Transactions Card -->
+      <glass-card variant="elevated" customClass="bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl overflow-hidden">
+        <div class="px-6 py-4.5 border-b border-[#263449] flex items-center justify-between bg-[#111827]">
           <div class="flex items-center gap-2.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-blue-600 shadow-xs shadow-blue-500/50"></span>
-            <h2 class="text-base font-bold text-slate-900 dark:text-white tracking-tight">{{ 'dashboard.recent_transactions' | i18n }}</h2>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#2563EB] shadow-xs shadow-blue-500/50"></span>
+            <h2 class="text-base font-bold text-[#F8FAFC] tracking-tight">{{ 'dashboard.recent_transactions' | i18n }}</h2>
           </div>
           <a
             [routerLink]="['/ledger']"
-            class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 transition-colors"
+            class="inline-flex items-center gap-1.5 text-xs font-bold text-[#38BDF8] hover:text-[#60A5FA] transition-colors"
           >
             <span>View Full Ledger</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,20 +259,20 @@ import { GlassBadgeComponent } from '../design-system/components/glass-badge.com
         <div class="overflow-x-auto">
           <table class="w-full text-left">
             <thead>
-              <tr class="bg-slate-100/80 dark:bg-slate-800/70 border-b border-slate-200 dark:border-slate-700/80">
-                <th class="px-6 py-3.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{{ 'dashboard.date' | i18n }}</th>
-                <th class="px-6 py-3.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{{ 'dashboard.customer' | i18n }}</th>
-                <th class="px-6 py-3.5 text-right text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{{ 'dashboard.amount' | i18n }}</th>
-                <th class="px-6 py-3.5 text-center text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{{ 'dashboard.status_label' | i18n }}</th>
+              <tr class="bg-[#0F172A] border-b border-[#263449]">
+                <th class="px-6 py-3.5 text-xs font-bold text-[#94A3B8] uppercase tracking-wider">{{ 'dashboard.date' | i18n }}</th>
+                <th class="px-6 py-3.5 text-xs font-bold text-[#94A3B8] uppercase tracking-wider">{{ 'dashboard.customer' | i18n }}</th>
+                <th class="px-6 py-3.5 text-right text-xs font-bold text-[#94A3B8] uppercase tracking-wider">{{ 'dashboard.amount' | i18n }}</th>
+                <th class="px-6 py-3.5 text-center text-xs font-bold text-[#94A3B8] uppercase tracking-wider">{{ 'dashboard.status_label' | i18n }}</th>
                 <th class="px-6 py-3.5 text-right w-16"></th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-200/70 dark:divide-slate-800/60">
+            <tbody class="divide-y divide-[#263449]">
               @for (transaction of transactions$ | async; track transaction.id) {
-                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                  <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-300 font-medium">{{ transaction.date }}</td>
-                  <td class="px-6 py-4 text-sm text-slate-900 dark:text-white font-bold">{{ transaction.customer_name }}</td>
-                  <td class="px-6 py-4 text-sm text-right text-slate-900 dark:text-white font-mono font-extrabold">
+                <tr class="hover:bg-[#18243A]/70 transition-colors">
+                  <td class="px-6 py-4 text-sm text-[#94A3B8] font-medium">{{ transaction.date }}</td>
+                  <td class="px-6 py-4 text-sm text-[#F8FAFC] font-bold">{{ transaction.customer_name }}</td>
+                  <td class="px-6 py-4 text-sm text-right text-[#34D399] font-mono font-extrabold">
                     {{ transaction.amount | money }}
                   </td>
                   <td class="px-6 py-4 text-center">
@@ -283,7 +283,7 @@ import { GlassBadgeComponent } from '../design-system/components/glass-badge.com
                   <td class="px-6 py-4 text-right">
                     <a
                       [routerLink]="['/ledger']"
-                      class="text-slate-400 hover:text-blue-600 transition-colors inline-flex items-center justify-center p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+                      class="text-[#64748B] hover:text-[#38BDF8] transition-colors inline-flex items-center justify-center p-1.5 rounded-lg hover:bg-[#18243A]"
                       title="View in ledger"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -296,16 +296,16 @@ import { GlassBadgeComponent } from '../design-system/components/glass-badge.com
               @if (!(transactions$ | async)?.length) {
                 <tr>
                   <td colspan="5" class="px-6 py-14 text-center">
-                    <div class="w-12 h-12 mx-auto rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center mb-3 shadow-xs">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-blue-500/15 text-[#38BDF8] border border-blue-500/30 flex items-center justify-center mb-3 shadow-xs">
                       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                       </svg>
                     </div>
-                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200">{{ 'dashboard.no_transactions' | i18n }}</p>
-                    <p class="text-xs font-semibold text-slate-600 dark:text-slate-400 mt-1">Recorded weekly collections will appear here in real time.</p>
+                    <p class="text-sm font-bold text-[#F8FAFC]">{{ 'dashboard.no_transactions' | i18n }}</p>
+                    <p class="text-xs font-semibold text-[#94A3B8] mt-1">Recorded weekly collections will appear here in real time.</p>
                     <div class="mt-4">
                       <a [routerLink]="['/collections']">
-                        <glass-button variant="tinted" size="sm">
+                        <glass-button variant="filled" size="sm">
                           Record First Collection
                         </glass-button>
                       </a>

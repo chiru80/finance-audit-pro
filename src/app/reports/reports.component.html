@@ -1,13 +1,13 @@
 <div class="max-w-7xl mx-auto space-y-6">
   <!-- Header & Export Actions -->
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[#263449]">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200/80">Intelligence</span>
-        <span class="text-xs text-slate-500 font-medium">Financial Audit & Insights</span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-500/15 text-[#38BDF8] border border-blue-500/30">Intelligence</span>
+        <span class="text-xs text-[#94A3B8] font-medium">Financial Audit & Insights</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Financial Reports & Audit</h1>
-      <p class="text-sm text-slate-500 mt-1">Review aggregated balances, monitor collection velocity, and export verified financial reports.</p>
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F8FAFC]">Financial Reports & Audit</h1>
+      <p class="text-sm text-[#94A3B8] mt-1">Review aggregated balances, monitor collection velocity, and export verified financial reports.</p>
     </div>
 
     <div class="flex items-center gap-2.5 flex-wrap">
@@ -16,7 +16,7 @@
         size="md"
         (onClick)="exportPaymentsCSV()"
       >
-        <svg class="w-4 h-4 mr-1 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 mr-1 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z" />
         </svg>
         Export Payments CSV
@@ -37,13 +37,13 @@
 
   @if (loading() && !summary()) {
     <div class="flex justify-center py-16">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#263449] border-t-[#2563EB]"></div>
     </div>
   }
 
   @if (error()) {
-    <div class="rounded-xl bg-red-500/10 p-4 border border-red-500/20 text-sm text-red-700 flex items-center gap-2 backdrop-blur-sm">
-      <svg class="h-5 w-5 text-red-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+    <div class="rounded-xl bg-red-500/15 p-4 border border-red-500/30 text-sm text-red-400 flex items-center gap-2 backdrop-blur-sm">
+      <svg class="h-5 w-5 text-red-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
       </svg>
       <span>{{ error() }}</span>
@@ -52,84 +52,84 @@
 
   <!-- Financial Summary Metrics (5 Tiles) -->
   <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
-      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Total Customers</span>
-      <span class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 block">{{ summary()?.totalCustomers || 0 }}</span>
-      <span class="text-xs font-semibold text-slate-400">active borrower accounts</span>
+    <div class="p-4 rounded-2xl bg-[#151F32] border border-[#263449] shadow-lg">
+      <span class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider block">Total Customers</span>
+      <span class="text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] mt-2 block">{{ summary()?.totalCustomers || 0 }}</span>
+      <span class="text-xs font-semibold text-[#64748B]">active borrower accounts</span>
     </div>
 
-    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
-      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Total Outstanding</span>
-      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-rose-600 mt-2 block">{{ formatCurrency(summary()?.totalOutstanding ?? 0) }}</span>
-      <span class="text-xs font-semibold text-rose-500">unrecovered dues</span>
+    <div class="p-4 rounded-2xl bg-[#151F32] border border-[#263449] shadow-lg">
+      <span class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider block">Total Outstanding</span>
+      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-[#F87171] mt-2 block">{{ formatCurrency(summary()?.totalOutstanding ?? 0) }}</span>
+      <span class="text-xs font-semibold text-[#EF4444]">unrecovered dues</span>
     </div>
 
-    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
-      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Total Lifetime Due</span>
-      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-slate-900 mt-2 block">{{ formatCurrency(summary()?.totalDue ?? 0) }}</span>
-      <span class="text-xs font-semibold text-slate-400">cumulative scheduled</span>
+    <div class="p-4 rounded-2xl bg-[#151F32] border border-[#263449] shadow-lg">
+      <span class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider block">Total Lifetime Due</span>
+      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-[#F8FAFC] mt-2 block">{{ formatCurrency(summary()?.totalDue ?? 0) }}</span>
+      <span class="text-xs font-semibold text-[#64748B]">cumulative scheduled</span>
     </div>
 
-    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
-      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Total Recovered</span>
-      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-700 mt-2 block">{{ formatCurrency(summary()?.totalPaid ?? 0) }}</span>
-      <span class="text-xs font-semibold text-emerald-600">collected in cash/UPI</span>
+    <div class="p-4 rounded-2xl bg-[#151F32] border border-[#263449] shadow-lg">
+      <span class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider block">Total Recovered</span>
+      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-[#34D399] mt-2 block">{{ formatCurrency(summary()?.totalPaid ?? 0) }}</span>
+      <span class="text-xs font-semibold text-[#10B981]">collected in cash/UPI</span>
     </div>
 
-    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
-      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">This Week Due</span>
-      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-blue-700 mt-2 block">{{ formatCurrency(summary()?.thisWeekCollectible ?? 0) }}</span>
-      <span class="text-xs font-semibold text-blue-600">due this active cycle</span>
+    <div class="p-4 rounded-2xl bg-[#151F32] border border-[#263449] shadow-lg">
+      <span class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider block">This Week Due</span>
+      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-[#38BDF8] mt-2 block">{{ formatCurrency(summary()?.thisWeekCollectible ?? 0) }}</span>
+      <span class="text-xs font-semibold text-[#38BDF8]">due this active cycle</span>
     </div>
   </div>
 
   <!-- Payment Collection Log Table -->
-  <glass-card variant="elevated" customClass="overflow-hidden p-0">
-    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/60">
+  <glass-card variant="elevated" customClass="overflow-hidden p-0 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+    <div class="px-6 py-4 border-b border-[#263449] bg-[#111827]">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 class="text-base font-bold text-slate-900">Payment Collection Log</h2>
-          <p class="text-xs text-slate-500">Filter transactions across customized audit periods.</p>
+          <h2 class="text-base font-bold text-[#F8FAFC]">Payment Collection Log</h2>
+          <p class="text-xs text-[#94A3B8]">Filter transactions across customized audit periods.</p>
         </div>
 
         <!-- Filter Controls -->
         <div class="flex items-center gap-2 flex-wrap">
-          <div class="flex items-center p-1 bg-slate-100 rounded-xl">
+          <div class="flex items-center p-1 bg-[#0F172A] border border-[#263449] rounded-xl">
             <button
               type="button"
               (click)="setDatePreset('7d')"
-              [class]="activePreset() === '7d' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+              [class]="activePreset() === '7d' ? 'bg-[#18243A] text-[#F8FAFC] border border-[#263449] shadow-xs font-bold' : 'text-[#94A3B8] hover:text-[#F8FAFC] font-medium'"
               class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
               7 Days
             </button>
             <button
               type="button"
               (click)="setDatePreset('30d')"
-              [class]="activePreset() === '30d' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+              [class]="activePreset() === '30d' ? 'bg-[#18243A] text-[#F8FAFC] border border-[#263449] shadow-xs font-bold' : 'text-[#94A3B8] hover:text-[#F8FAFC] font-medium'"
               class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
               30 Days
             </button>
             <button
               type="button"
               (click)="setDatePreset('this_month')"
-              [class]="activePreset() === 'this_month' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+              [class]="activePreset() === 'this_month' ? 'bg-[#18243A] text-[#F8FAFC] border border-[#263449] shadow-xs font-bold' : 'text-[#94A3B8] hover:text-[#F8FAFC] font-medium'"
               class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
               This Month
             </button>
             <button
               type="button"
               (click)="setDatePreset('all')"
-              [class]="activePreset() === 'all' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+              [class]="activePreset() === 'all' ? 'bg-[#18243A] text-[#F8FAFC] border border-[#263449] shadow-xs font-bold' : 'text-[#94A3B8] hover:text-[#F8FAFC] font-medium'"
               class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
               All Time
             </button>
           </div>
 
-          <div class="flex items-center gap-1.5 text-xs text-slate-500">
+          <div class="flex items-center gap-1.5 text-xs text-[#94A3B8]">
             <input
               glassInput
               type="date"
-              class="!py-1 !px-2 !text-xs !bg-white"
+              class="!py-1 !px-2 !text-xs"
               [ngModel]="startDate()"
               (ngModelChange)="startDate.set($event)"
             />
@@ -137,7 +137,7 @@
             <input
               glassInput
               type="date"
-              class="!py-1 !px-2 !text-xs !bg-white"
+              class="!py-1 !px-2 !text-xs"
               [ngModel]="endDate()"
               (ngModelChange)="endDate.set($event)"
             />
@@ -154,18 +154,18 @@
     </div>
 
     @if (recentPayments().length === 0) {
-      <div class="py-14 text-center text-slate-400">
-        <svg class="w-10 h-10 mx-auto text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="py-14 text-center text-[#64748B]">
+        <svg class="w-10 h-10 mx-auto text-[#64748B] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
-        <p class="text-sm font-bold text-slate-700">No payment transactions found</p>
-        <p class="text-xs text-slate-400 mt-1">No collections match the specified date range. Try switching to "All Time".</p>
+        <p class="text-sm font-bold text-[#F8FAFC]">No payment transactions found</p>
+        <p class="text-xs text-[#94A3B8] mt-1">No collections match the specified date range. Try switching to "All Time".</p>
       </div>
     } @else {
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <table class="min-w-full divide-y divide-[#263449] text-sm">
           <thead>
-            <tr class="bg-slate-100/90 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+            <tr class="bg-[#0F172A] text-left text-xs font-bold text-[#94A3B8] uppercase tracking-wider">
               <th class="px-6 py-3.5">Date</th>
               <th class="px-6 py-3.5">Borrower</th>
               <th class="px-6 py-3.5">Method</th>
@@ -173,18 +173,18 @@
               <th class="px-6 py-3.5 text-right">Amount Recovered</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 bg-white/70">
+          <tbody class="divide-y divide-[#263449] bg-[#151F32]">
             @for (payment of recentPayments(); track payment.id) {
-              <tr class="hover:bg-blue-50/40 transition-colors">
-                <td class="px-6 py-3.5 text-sm text-slate-800 font-semibold whitespace-nowrap">{{ formatDate(payment.payment_date) }}</td>
-                <td class="px-6 py-3.5 text-sm text-slate-900 font-bold whitespace-nowrap">{{ payment.customers?.name || 'N/A' }}</td>
+              <tr class="hover:bg-[#18243A]/70 transition-colors">
+                <td class="px-6 py-3.5 text-sm text-[#F8FAFC] font-semibold whitespace-nowrap">{{ formatDate(payment.payment_date) }}</td>
+                <td class="px-6 py-3.5 text-sm text-[#F8FAFC] font-bold whitespace-nowrap">{{ payment.customers?.name || 'N/A' }}</td>
                 <td class="px-6 py-3.5 whitespace-nowrap">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-[#18243A] text-[#94A3B8] border border-[#263449]">
                     {{ payment.payment_method }}
                   </span>
                 </td>
-                <td class="px-6 py-3.5 text-xs text-slate-500">{{ payment.reference || payment.notes || '—' }}</td>
-                <td class="px-6 py-3.5 text-right font-extrabold text-emerald-700 font-mono whitespace-nowrap text-base">{{ formatCurrency(payment.amount) }}</td>
+                <td class="px-6 py-3.5 text-xs text-[#94A3B8]">{{ payment.reference || payment.notes || '—' }}</td>
+                <td class="px-6 py-3.5 text-right font-extrabold text-[#34D399] font-mono whitespace-nowrap text-base">{{ formatCurrency(payment.amount) }}</td>
               </tr>
             }
           </tbody>
@@ -194,22 +194,22 @@
   </glass-card>
 
   <!-- Customer Balances / Defaulters Risk Audit Table -->
-  <glass-card variant="elevated" customClass="overflow-hidden p-0">
-    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/60">
-      <h2 class="text-base font-bold text-slate-900">Highest Outstanding Balances (Risk Audit)</h2>
-      <p class="text-xs text-slate-500">Borrowers ordered by total outstanding debt requiring immediate collection follow-up.</p>
+  <glass-card variant="elevated" customClass="overflow-hidden p-0 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+    <div class="px-6 py-4 border-b border-[#263449] bg-[#111827]">
+      <h2 class="text-base font-bold text-[#F8FAFC]">Highest Outstanding Balances (Risk Audit)</h2>
+      <p class="text-xs text-[#94A3B8]">Borrowers ordered by total outstanding debt requiring immediate collection follow-up.</p>
     </div>
 
     @if (customerBalances().length === 0) {
-      <div class="py-14 text-center text-slate-400">
-        <p class="text-sm font-bold text-slate-700">No customer balance records</p>
-        <p class="text-xs text-slate-400 mt-1">No customer balance records are currently available.</p>
+      <div class="py-14 text-center text-[#64748B]">
+        <p class="text-sm font-bold text-[#F8FAFC]">No customer balance records</p>
+        <p class="text-xs text-[#94A3B8] mt-1">No customer balance records are currently available.</p>
       </div>
     } @else {
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <table class="min-w-full divide-y divide-[#263449] text-sm">
           <thead>
-            <tr class="bg-slate-100/90 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+            <tr class="bg-[#0F172A] text-left text-xs font-bold text-[#94A3B8] uppercase tracking-wider">
               <th class="px-6 py-3.5">Borrower</th>
               <th class="px-6 py-3.5">Phone Number</th>
               <th class="px-6 py-3.5">Total Paid</th>
@@ -217,18 +217,18 @@
               <th class="px-6 py-3.5 text-right">Outstanding Debt</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 bg-white/70">
+          <tbody class="divide-y divide-[#263449] bg-[#151F32]">
             @for (c of customerBalances(); track c.id) {
-              <tr class="hover:bg-blue-50/40 transition-colors">
-                <td class="px-6 py-3.5 font-bold text-slate-900 whitespace-nowrap">{{ c.name }}</td>
-                <td class="px-6 py-3.5 text-xs text-slate-600 font-medium whitespace-nowrap">{{ c.phone || '—' }}</td>
-                <td class="px-6 py-3.5 text-sm text-emerald-700 font-mono font-bold whitespace-nowrap">{{ formatCurrency(c.total_paid) }}</td>
+              <tr class="hover:bg-[#18243A]/70 transition-colors">
+                <td class="px-6 py-3.5 font-bold text-[#F8FAFC] whitespace-nowrap">{{ c.name }}</td>
+                <td class="px-6 py-3.5 text-xs text-[#94A3B8] font-medium whitespace-nowrap">{{ c.phone || '—' }}</td>
+                <td class="px-6 py-3.5 text-sm text-[#34D399] font-mono font-bold whitespace-nowrap">{{ formatCurrency(c.total_paid) }}</td>
                 <td class="px-6 py-3.5 whitespace-nowrap">
                   <glass-badge [status]="c.status === 'active' ? 'active' : 'neutral'">
                     {{ c.status }}
                   </glass-badge>
                 </td>
-                <td class="px-6 py-3.5 text-right font-extrabold text-rose-600 font-mono whitespace-nowrap text-base">{{ formatCurrency(c.outstanding_balance) }}</td>
+                <td class="px-6 py-3.5 text-right font-extrabold text-[#F87171] font-mono whitespace-nowrap text-base">{{ formatCurrency(c.outstanding_balance) }}</td>
               </tr>
             }
           </tbody>

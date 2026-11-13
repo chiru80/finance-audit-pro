@@ -10,7 +10,7 @@ import { I18nService, Language } from './i18n.service';
     <div class="language-switcher relative inline-block text-left">
       <button
         (click)="toggleDropdown()"
-        class="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-text-secondary bg-background-secondary border border-border-light rounded-lg hover:bg-background-primary focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+        class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-[#94A3B8] hover:text-[#F8FAFC] bg-[#151F32] border border-[#263449] rounded-xl hover:bg-[#18243A] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/40 transition cursor-pointer"
         aria-haspopup="listbox"
         [attr.aria-expanded]="isOpen"
         type="button"
@@ -19,7 +19,7 @@ import { I18nService, Language } from './i18n.service';
         <span class="w-4 h-4" [innerHTML]="currentLanguageIcon"></span>
         <span>{{ currentLanguageName }}</span>
         <svg
-          class="h-4 w-4 text-slate-400 transition-transform"
+          class="h-4 w-4 text-[#64748B] transition-transform"
           [class.transform-180]="isOpen"
           fill="none"
           stroke="currentColor"
@@ -31,14 +31,14 @@ import { I18nService, Language } from './i18n.service';
 
       @if (isOpen) {
         <div
-          class="absolute right-0 mt-2 w-40 rounded-lg shadow-lg bg-background-primary border border-border-light ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+          class="absolute right-0 mt-2 w-40 rounded-xl shadow-2xl bg-[#151F32] border border-[#263449] overflow-hidden z-50 p-1"
           role="listbox"
         >
           @for (lang of availableLanguages; track lang.code) {
             <button
               type="button"
               (click)="selectLanguage(lang.code)"
-              class="flex items-center w-full px-3 py-2 text-sm text-left text-text-secondary hover:bg-background-secondary focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+              class="flex items-center w-full px-3 py-2 text-xs font-medium text-left text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#18243A] rounded-lg transition-colors cursor-pointer"
               [attr.aria-selected]="lang.code === currentLanguage"
               role="option"
             >

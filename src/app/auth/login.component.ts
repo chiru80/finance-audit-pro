@@ -12,26 +12,26 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
   standalone: true,
   imports: [FormsModule, RouterLink, GlassCardComponent, GlassButtonComponent, GlassInputDirective],
   template: `
-    <div class="flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-slate-50 dark:bg-slate-950">
+    <div class="flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-[#070D1A] text-[#F8FAFC]">
       <!-- Ambient Fluid Light Drops in Background -->
-      <div class="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-blue-500/15 blur-3xl"></div>
-      <div class="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-cyan-500/15 blur-3xl"></div>
-      <div class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-indigo-500/5 blur-3xl"></div>
+      <div class="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-blue-600/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-cyan-600/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-indigo-600/5 blur-3xl"></div>
 
-      <glass-card variant="elevated" customClass="w-full max-w-md p-8 sm:p-10 relative z-10">
+      <glass-card variant="elevated" customClass="w-full max-w-md p-8 sm:p-10 relative z-10 bg-[#151F32] border border-[#263449] shadow-2xl rounded-2xl">
         <!-- Logo & Header -->
         <div class="text-center mb-8">
-          <div class="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 items-center justify-center text-white shadow-lg shadow-blue-500/30 border border-white/40 mb-3">
+          <div class="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 items-center justify-center text-white shadow-lg shadow-blue-500/20 border border-blue-400/30 mb-3">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Welcome Back</h2>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Sign in to your Finance Audit Pro account</p>
+          <h2 class="text-2xl font-bold tracking-tight text-[#F8FAFC]">Welcome Back</h2>
+          <p class="mt-1 text-sm text-[#94A3B8]">Sign in to your Finance Audit Pro account</p>
         </div>
 
         @if (googleSignInError()) {
-          <div class="mb-4 flex items-center rounded-xl bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400 border border-red-500/20 backdrop-blur-sm">
+          <div class="mb-4 flex items-center rounded-xl bg-red-500/15 p-3 text-sm text-red-400 border border-red-500/30 backdrop-blur-sm">
             <span class="mr-2 font-bold flex-shrink-0">!</span>
             <span>{{ googleSignInError() }}</span>
           </div>
@@ -41,7 +41,7 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
           <button
             type="button"
             (click)="onGoogleSignIn()"
-            class="w-full flex items-center justify-center rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white/80 dark:bg-slate-800/80 py-2.5 px-4 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-xs hover:bg-white dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/40 backdrop-blur-md transition-all duration-200 cursor-pointer"
+            class="w-full flex items-center justify-center rounded-xl border border-[#263449] bg-[#0F172A] py-2.5 px-4 text-sm font-semibold text-[#F8FAFC] shadow-xs hover:bg-[#18243A] hover:border-[#33435C] focus:outline-none focus:ring-2 focus:ring-blue-500/40 backdrop-blur-md transition-all duration-200 cursor-pointer"
           >
             <svg class="w-4 h-4 mr-2.5" viewBox="0 0 24 24">
               <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/>
@@ -54,23 +54,23 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
 
           <div class="relative my-6">
             <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-slate-200/60 dark:border-slate-800"></div>
+              <div class="w-full border-t border-[#263449]"></div>
             </div>
             <div class="relative flex justify-center text-xs uppercase tracking-wider">
-              <span class="bg-white/80 dark:bg-slate-900/80 px-2 text-slate-400">Or continue with</span>
+              <span class="bg-[#151F32] px-2.5 text-[#64748B]">Or continue with</span>
             </div>
           </div>
         }
 
         @if (isPlaceholderEnv) {
-          <div class="mb-4 rounded-xl bg-amber-500/10 p-3.5 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-300 leading-relaxed backdrop-blur-sm">
+          <div class="mb-4 rounded-xl bg-amber-500/10 p-3.5 border border-amber-500/20 text-xs text-amber-300 leading-relaxed backdrop-blur-sm">
             <span class="font-semibold block mb-0.5">⚠️ Supabase Configuration Note</span>
-            Your app is currently using placeholder credentials. Update <code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">src/environments/environment.ts</code> with your Supabase URL and Anon Key.
+            Your app is currently using placeholder credentials. Update <code class="bg-[#0F172A] text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded">src/environments/environment.ts</code> with your Supabase URL and Anon Key.
           </div>
         }
 
         @if (error()) {
-          <div class="mb-4 flex items-center rounded-xl bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400 border border-red-500/20 backdrop-blur-sm">
+          <div class="mb-4 flex items-center rounded-xl bg-red-500/15 p-3 text-sm text-red-400 border border-red-500/30 backdrop-blur-sm">
             <span class="mr-2 font-bold flex-shrink-0">!</span>
             <span>{{ error() }}</span>
           </div>
@@ -78,7 +78,7 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
 
         <form (ngSubmit)="onSubmit()" class="space-y-4">
           <div>
-            <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">Email address</label>
+            <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-1.5">Email address</label>
             <input
               glassInput
               type="email"
@@ -91,7 +91,7 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
           </div>
 
           <div>
-            <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">Password</label>
+            <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-1.5">Password</label>
             <input
               glassInput
               type="password"
@@ -113,9 +113,9 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
           </glass-button>
         </form>
 
-        <div class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200/50 dark:border-slate-800 pt-4">
+        <div class="mt-6 text-center text-sm text-[#94A3B8] border-t border-[#263449] pt-4">
           <span>Don't have an account?</span>
-          <a routerLink="/signup" class="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 ml-1">Create account</a>
+          <a routerLink="/signup" class="font-semibold text-[#38BDF8] hover:text-[#60A5FA] ml-1">Create account</a>
         </div>
       </glass-card>
     </div>

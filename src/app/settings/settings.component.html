@@ -1,25 +1,25 @@
 <div class="max-w-4xl mx-auto space-y-6">
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[#263449]">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200/80">Administration</span>
-        <span class="text-xs text-slate-500 font-medium">System Configuration</span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-500/15 text-[#38BDF8] border border-blue-500/30">Administration</span>
+        <span class="text-xs text-[#94A3B8] font-medium">System Configuration</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Application Settings</h1>
-      <p class="text-sm text-slate-500 mt-1">Configure business rules, payment allocation algorithms, and weekly dues policies.</p>
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F8FAFC]">Application Settings</h1>
+      <p class="text-sm text-[#94A3B8] mt-1">Configure business rules, payment allocation algorithms, and weekly dues policies.</p>
     </div>
   </div>
 
   @if (loading()) {
     <div class="flex justify-center py-16">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#263449] border-t-[#2563EB]"></div>
     </div>
   }
 
   @if (error()) {
-    <div class="rounded-xl bg-red-500/10 p-4 border border-red-500/20 text-sm text-red-700 flex items-center gap-2 backdrop-blur-sm">
-      <svg class="h-5 w-5 text-red-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+    <div class="rounded-xl bg-red-500/15 p-4 border border-red-500/30 text-sm text-red-400 flex items-center gap-2 backdrop-blur-sm">
+      <svg class="h-5 w-5 text-red-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
       </svg>
       <span>{{ error() }}</span>
@@ -27,8 +27,8 @@
   }
 
   @if (success()) {
-    <div class="rounded-xl bg-emerald-500/10 p-4 border border-emerald-500/20 text-sm text-emerald-800 flex items-center gap-2 backdrop-blur-sm font-medium">
-      <svg class="h-5 w-5 text-emerald-600 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+    <div class="rounded-xl bg-emerald-500/15 p-4 border border-emerald-500/30 text-sm text-[#34D399] flex items-center gap-2 backdrop-blur-sm font-medium">
+      <svg class="h-5 w-5 text-[#34D399] flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l7-7z" clip-rule="evenodd" />
       </svg>
       <span>{{ success() }}</span>
@@ -39,23 +39,23 @@
     <div class="space-y-6">
 
       <!-- Section 1: Weekly Schedule & Default Target -->
-      <glass-card variant="elevated" customClass="p-6 space-y-6">
-        <div class="flex items-center gap-3 pb-3 border-b border-slate-200">
-          <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+        <div class="flex items-center gap-3 pb-3 border-b border-[#263449]">
+          <div class="w-8 h-8 rounded-lg bg-blue-500/15 text-[#38BDF8] border border-blue-500/30 flex items-center justify-center font-bold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
           <div>
-            <h2 class="text-base font-bold text-slate-900">Weekly Schedule & Cycle Defaults</h2>
-            <p class="text-xs text-slate-500">Configure default targets and recurring collection schedules.</p>
+            <h2 class="text-base font-bold text-[#F8FAFC]">Weekly Schedule & Cycle Defaults</h2>
+            <p class="text-xs text-[#94A3B8]">Configure default targets and recurring collection schedules.</p>
           </div>
         </div>
 
         <div class="flex items-center justify-between gap-4 py-2">
           <div>
-            <span class="text-sm font-bold text-slate-900 block">Enable Weekly Payments Engine</span>
-            <p class="text-xs text-slate-500 mt-0.5">Automatically manage and generate weekly payment schedules for active borrowers.</p>
+            <span class="text-sm font-bold text-[#F8FAFC] block">Enable Weekly Payments Engine</span>
+            <p class="text-xs text-[#94A3B8] mt-0.5">Automatically manage and generate weekly payment schedules for active borrowers.</p>
           </div>
           <glass-switch
             [checked]="settings().weekly_payments_start"
@@ -63,20 +63,20 @@
           />
         </div>
 
-        <div class="pt-4 border-t border-slate-100">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+        <div class="pt-4 border-t border-[#263449]">
+          <label class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">
             Default Weekly Due Amount (₹)
           </label>
           <div class="flex items-center gap-3 max-w-md">
             <div class="relative flex-1">
-              <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 font-bold text-sm">₹</span>
+              <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[#64748B] font-bold text-sm">₹</span>
               <input
                 glassInput
                 type="number"
                 [ngModel]="weeklyDueRupees()"
                 (ngModelChange)="weeklyDueRupees.set($event)"
                 min="1"
-                class="!pl-7 font-mono font-bold text-slate-900"
+                class="!pl-7 font-mono font-bold text-[#F8FAFC]"
               />
             </div>
             <glass-button
@@ -87,11 +87,11 @@
               Save Target
             </glass-button>
           </div>
-          <p class="text-xs text-slate-500 mt-1.5">Applied as default when onboarding new borrowers (Current stored: {{ formatCurrency(settings().weekly_due_amount) }}).</p>
+          <p class="text-xs text-[#64748B] mt-1.5">Applied as default when onboarding new borrowers (Current stored: {{ formatCurrency(settings().weekly_due_amount) }}).</p>
         </div>
 
-        <div class="pt-4 border-t border-slate-100">
-          <label for="due-day" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Default Collection Day of Week</label>
+        <div class="pt-4 border-t border-[#263449]">
+          <label for="due-day" class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Default Collection Day of Week</label>
           <select
             glassInput
             id="due-day"
@@ -111,23 +111,23 @@
       </glass-card>
 
       <!-- Section 2: Payments & Allocation Rules -->
-      <glass-card variant="elevated" customClass="p-6 space-y-6">
-        <div class="flex items-center gap-3 pb-3 border-b border-slate-200">
-          <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+        <div class="flex items-center gap-3 pb-3 border-b border-[#263449]">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-[#34D399] border border-emerald-500/30 flex items-center justify-center font-bold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <h2 class="text-base font-bold text-slate-900">Payments & Allocation Engine</h2>
-            <p class="text-xs text-slate-500">Define how multi-week payments are credited across pending schedules.</p>
+            <h2 class="text-base font-bold text-[#F8FAFC]">Payments & Allocation Engine</h2>
+            <p class="text-xs text-[#94A3B8]">Define how multi-week payments are credited across pending schedules.</p>
           </div>
         </div>
 
         <div class="flex items-center justify-between gap-4 py-2">
           <div>
-            <span class="text-sm font-bold text-slate-900 block">Allow Partial Payments</span>
-            <p class="text-xs text-slate-500 mt-0.5">Permit payments lower than full weekly installment amount, partially fulfilling schedules.</p>
+            <span class="text-sm font-bold text-[#F8FAFC] block">Allow Partial Payments</span>
+            <p class="text-xs text-[#94A3B8] mt-0.5">Permit payments lower than full weekly installment amount, partially fulfilling schedules.</p>
           </div>
           <glass-switch
             [checked]="settings().allow_partial_payments"
@@ -135,8 +135,8 @@
           />
         </div>
 
-        <div class="pt-4 border-t border-slate-100">
-          <label for="allocation-direction" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Payment Allocation Priority</label>
+        <div class="pt-4 border-t border-[#263449]">
+          <label for="allocation-direction" class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Payment Allocation Priority</label>
           <select
             glassInput
             id="allocation-direction"
@@ -147,28 +147,28 @@
             <option value="fifo">FIFO — Oldest Unpaid Dues First (Approved Policy)</option>
             <option value="lifo">LIFO — Newest Dues First</option>
           </select>
-          <p class="text-xs text-slate-500 mt-1.5">Complies with Decision 2: Payments systematically cover the oldest overdue installments first.</p>
+          <p class="text-xs text-[#64748B] mt-1.5">Complies with Decision 2: Payments systematically cover the oldest overdue installments first.</p>
         </div>
       </glass-card>
 
       <!-- Section 3: Absence & Debt Policy -->
-      <glass-card variant="elevated" customClass="p-6 space-y-6">
-        <div class="flex items-center gap-3 pb-3 border-b border-slate-200">
-          <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+        <div class="flex items-center gap-3 pb-3 border-b border-[#263449]">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/15 text-[#FBBF24] border border-amber-500/30 flex items-center justify-center font-bold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
           <div>
-            <h2 class="text-base font-bold text-slate-900">Absence Governance & Debt Policy</h2>
-            <p class="text-xs text-slate-500">Customer absence handling and carried-forward debt treatment.</p>
+            <h2 class="text-base font-bold text-[#F8FAFC]">Absence Governance & Debt Policy</h2>
+            <p class="text-xs text-[#94A3B8]">Customer absence handling and carried-forward debt treatment.</p>
           </div>
         </div>
 
         <div class="flex items-center justify-between gap-4 py-2">
           <div>
-            <span class="text-sm font-bold text-slate-900 block">Absences Require Owner Approval</span>
-            <p class="text-xs text-slate-500 mt-0.5">Absences marked during collections require confirmation by an owner before finalization.</p>
+            <span class="text-sm font-bold text-[#F8FAFC] block">Absences Require Owner Approval</span>
+            <p class="text-xs text-[#94A3B8] mt-0.5">Absences marked during collections require confirmation by an owner before finalization.</p>
           </div>
           <glass-switch
             [checked]="settings().absence_requires_approval"
@@ -176,7 +176,7 @@
           />
         </div>
 
-        <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 leading-relaxed">
+        <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs text-[#38BDF8] leading-relaxed">
           <strong class="font-bold">Active Debt Policy (Decision 1 - Option A):</strong> When an absence is recorded and approved, the installment is retained and carried forward into the customer's total outstanding balance. Dues are never forgiven upon absence.
         </div>
       </glass-card>

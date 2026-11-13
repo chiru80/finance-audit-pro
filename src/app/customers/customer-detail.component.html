@@ -4,7 +4,7 @@
     <button
       type="button"
       (click)="goBack()"
-      class="text-sm font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+      class="text-sm font-bold text-[#38BDF8] hover:text-[#60A5FA] inline-flex items-center gap-1.5 transition-colors cursor-pointer"
     >
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -16,7 +16,7 @@
       <div class="flex items-center gap-3">
         <a [routerLink]="['/customers', customer()!.id, 'edit']">
           <glass-button variant="glass" size="md">
-            <svg class="w-4 h-4 mr-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 mr-1 text-[#94A3B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
             Edit Profile
@@ -34,13 +34,13 @@
 
   @if (loading()) {
     <div class="flex justify-center py-16">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#263449] border-t-[#2563EB]"></div>
     </div>
   }
 
   @if (error()) {
-    <div class="rounded-2xl bg-red-500/10 p-4 border border-red-500/20 text-sm text-red-700 flex items-center gap-3 backdrop-blur-sm">
-      <svg class="h-5 w-5 text-red-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+    <div class="rounded-2xl bg-red-500/15 p-4 border border-red-500/30 text-sm text-red-400 flex items-center gap-3 backdrop-blur-sm">
+      <svg class="h-5 w-5 text-red-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
       </svg>
       <span>{{ error() }}</span>
@@ -49,26 +49,26 @@
 
   @if (customer()) {
     <!-- Profile Overview Card -->
-    <glass-card variant="elevated" customClass="p-6 sm:p-8">
-      <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-6 border-b border-slate-200/80 pb-6">
+    <glass-card variant="elevated" customClass="p-6 sm:p-8 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+      <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-6 border-b border-[#263449] pb-6">
         <div class="flex items-start sm:items-center gap-4">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-xl flex items-center justify-center shadow-md flex-shrink-0">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-xl flex items-center justify-center shadow-md flex-shrink-0 border border-blue-400/30">
             {{ getInitials(customer()?.name) }}
           </div>
           <div>
             <div class="flex items-center gap-3 flex-wrap">
-              <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">{{ customer()?.name }}</h1>
+              <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F8FAFC]">{{ customer()?.name }}</h1>
               <glass-badge [status]="customer()?.status === 'active' ? 'active' : 'neutral'">
                 {{ customer()?.status }}
               </glass-badge>
             </div>
-            <p class="text-xs text-slate-400 mt-1 font-mono">ID: {{ customer()?.id }}</p>
+            <p class="text-xs text-[#64748B] mt-1 font-mono">ID: {{ customer()?.id }}</p>
           </div>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 sm:text-right min-w-[220px]">
-          <span class="text-xs uppercase tracking-wider font-bold text-slate-500">Current Outstanding</span>
-          <p class="text-2xl sm:text-3xl font-black font-mono mt-0.5" [class]="(customer()?.outstanding_balance || 0) > 0 ? 'text-rose-600' : 'text-emerald-600'">
+        <div class="p-4 rounded-xl bg-[#18243A] border border-[#263449] sm:text-right min-w-[220px]">
+          <span class="text-xs uppercase tracking-wider font-bold text-[#94A3B8]">Current Outstanding</span>
+          <p class="text-2xl sm:text-3xl font-black font-mono mt-0.5" [class]="(customer()?.outstanding_balance || 0) > 0 ? 'text-[#F87171]' : 'text-[#34D399]'">
             {{ formatCurrency(customer()?.outstanding_balance || 0) }}
           </p>
         </div>
@@ -76,49 +76,49 @@
 
       <!-- Top Metric Tiles -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
-        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/80">
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Weekly Target</span>
-          <span class="text-xl font-extrabold text-slate-900 font-mono mt-1 block">{{ formatCurrency(customer()?.weekly_due_amount || 0) }}</span>
-          <span class="text-[11px] text-slate-400">per installment</span>
+        <div class="p-4 rounded-xl bg-[#18243A] border border-[#263449]">
+          <span class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider block">Weekly Target</span>
+          <span class="text-xl font-extrabold text-[#F8FAFC] font-mono mt-1 block">{{ formatCurrency(customer()?.weekly_due_amount || 0) }}</span>
+          <span class="text-[11px] text-[#64748B]">per installment</span>
         </div>
-        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/80">
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Cumulative Due</span>
-          <span class="text-xl font-extrabold text-slate-900 font-mono mt-1 block">{{ formatCurrency(customer()?.total_due || 0) }}</span>
-          <span class="text-[11px] text-slate-400">total scheduled</span>
+        <div class="p-4 rounded-xl bg-[#18243A] border border-[#263449]">
+          <span class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider block">Cumulative Due</span>
+          <span class="text-xl font-extrabold text-[#F8FAFC] font-mono mt-1 block">{{ formatCurrency(customer()?.total_due || 0) }}</span>
+          <span class="text-[11px] text-[#64748B]">total scheduled</span>
         </div>
-        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/80">
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Total Recovered</span>
-          <span class="text-xl font-extrabold text-emerald-700 font-mono mt-1 block">{{ formatCurrency(customer()?.total_paid || 0) }}</span>
-          <span class="text-[11px] text-emerald-600 font-medium">collected to date</span>
+        <div class="p-4 rounded-xl bg-[#18243A] border border-[#263449]">
+          <span class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider block">Total Recovered</span>
+          <span class="text-xl font-extrabold text-[#34D399] font-mono mt-1 block">{{ formatCurrency(customer()?.total_paid || 0) }}</span>
+          <span class="text-[11px] text-[#10B981] font-medium">collected to date</span>
         </div>
-        <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/80">
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Enrolled Date</span>
-          <span class="text-base font-bold text-slate-800 mt-1 block">{{ customer()?.enrollment_date | date:'mediumDate' }}</span>
-          <span class="text-[11px] text-slate-400">active member</span>
+        <div class="p-4 rounded-xl bg-[#18243A] border border-[#263449]">
+          <span class="text-xs font-bold text-[#94A3B8] uppercase tracking-wider block">Enrolled Date</span>
+          <span class="text-base font-bold text-[#F8FAFC] mt-1 block">{{ customer()?.enrollment_date | date:'mediumDate' }}</span>
+          <span class="text-[11px] text-[#64748B]">active member</span>
         </div>
       </div>
 
       <!-- Contact Info Bar -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 text-xs text-slate-600 border-t border-slate-200/70 mt-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 text-xs text-[#94A3B8] border-t border-[#263449] mt-6">
         <div class="flex items-center gap-2">
-          <span class="font-bold text-slate-700">Phone:</span>
+          <span class="font-bold text-[#F8FAFC]">Phone:</span>
           <span class="font-medium">{{ customer()?.phone || 'Not provided' }}</span>
         </div>
         <div class="flex items-center gap-2">
-          <span class="font-bold text-slate-700">Email:</span>
+          <span class="font-bold text-[#F8FAFC]">Email:</span>
           <span class="font-medium">{{ customer()?.email || 'Not provided' }}</span>
         </div>
         <div class="flex items-center gap-2">
-          <span class="font-bold text-slate-700">Cycle Start:</span>
+          <span class="font-bold text-[#F8FAFC]">Cycle Start:</span>
           <span class="font-medium">{{ customer()?.enrollment_week_start | date:'mediumDate' }}</span>
         </div>
       </div>
     </glass-card>
 
     <!-- Tabbed Ledger & History -->
-    <glass-card variant="elevated" customClass="overflow-hidden p-0">
+    <glass-card variant="elevated" customClass="overflow-hidden p-0 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
       <!-- Tabs Navigation Header -->
-      <div class="p-4 sm:p-5 border-b border-slate-200/80 bg-slate-50/50 flex items-center justify-between flex-wrap gap-3">
+      <div class="p-4 sm:p-5 border-b border-[#263449] bg-[#111827] flex items-center justify-between flex-wrap gap-3">
         <glass-tabs
           [tabs]="detailTabs"
           [activeTab]="activeTab()"
@@ -130,15 +130,15 @@
         <!-- Weekly Schedules Tab -->
         @if (activeTab() === 'schedules') {
           @if (schedules().length === 0) {
-            <div class="py-12 text-center text-slate-400">
-              <p class="text-sm font-semibold text-slate-600">No weekly schedules found</p>
-              <p class="text-xs text-slate-400 mt-1">Generate schedules in the Weekly Tracker to activate weekly collection dates.</p>
+            <div class="py-12 text-center text-[#64748B]">
+              <p class="text-sm font-semibold text-[#F8FAFC]">No weekly schedules found</p>
+              <p class="text-xs text-[#94A3B8] mt-1">Generate schedules in the Weekly Tracker to activate weekly collection dates.</p>
             </div>
           } @else {
             <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-slate-200 text-sm">
+              <table class="min-w-full divide-y divide-[#263449] text-sm">
                 <thead>
-                  <tr class="bg-slate-100/80 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <tr class="bg-[#0F172A] text-left text-xs font-bold text-[#94A3B8] uppercase tracking-wider">
                     <th class="py-3.5 px-4">Period</th>
                     <th class="py-3.5 px-4">Due Date</th>
                     <th class="py-3.5 px-4">Scheduled Amount</th>
@@ -146,16 +146,16 @@
                     <th class="py-3.5 px-4">Audit Note</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-[#263449] bg-[#151F32]">
                   @for (s of schedules(); track s.id) {
-                    <tr class="hover:bg-slate-50/70 transition-colors">
-                      <td class="py-3.5 px-4 font-bold text-slate-900 whitespace-nowrap">
+                    <tr class="hover:bg-[#18243A]/70 transition-colors">
+                      <td class="py-3.5 px-4 font-bold text-[#F8FAFC] whitespace-nowrap">
                         {{ s.week_start_date | date:'MMM d' }} – {{ s.week_end_date | date:'MMM d, y' }}
                       </td>
-                      <td class="py-3.5 px-4 text-slate-600 font-medium whitespace-nowrap">
+                      <td class="py-3.5 px-4 text-[#94A3B8] font-medium whitespace-nowrap">
                         {{ s.due_date | date:'mediumDate' }}
                       </td>
-                      <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">
+                      <td class="py-3.5 px-4 font-mono font-bold text-[#F8FAFC] whitespace-nowrap">
                         {{ formatCurrency(s.due_amount) }}
                       </td>
                       <td class="py-3.5 px-4 whitespace-nowrap">
@@ -169,13 +169,13 @@
                           <glass-badge status="overdue">Unpaid</glass-badge>
                         }
                       </td>
-                      <td class="py-3.5 px-4 text-xs text-slate-500">
+                      <td class="py-3.5 px-4 text-xs text-[#94A3B8]">
                         @if (s.absence_recorded) {
-                          <span class="text-amber-600 font-semibold">Absence Documented</span>
+                          <span class="text-[#FBBF24] font-semibold">Absence Documented</span>
                         } @else if (s.paid) {
-                          <span class="text-emerald-700 font-mono font-medium">Payment ID: {{ s.payment_id ? s.payment_id.slice(0, 8) + '...' : 'Settled' }}</span>
+                          <span class="text-[#34D399] font-mono font-medium">Payment ID: {{ s.payment_id ? s.payment_id.slice(0, 8) + '...' : 'Settled' }}</span>
                         } @else {
-                          <span class="text-slate-400">Regular Due</span>
+                          <span class="text-[#64748B]">Regular Due</span>
                         }
                       </td>
                     </tr>
@@ -189,15 +189,15 @@
         <!-- Payment History Tab -->
         @if (activeTab() === 'payments') {
           @if (paymentHistory().length === 0) {
-            <div class="py-12 text-center text-slate-400">
-              <p class="text-sm font-semibold text-slate-600">No payment transactions recorded yet</p>
-              <p class="text-xs text-slate-400 mt-1">Use the Record Collection button to record an incoming payment.</p>
+            <div class="py-12 text-center text-[#64748B]">
+              <p class="text-sm font-semibold text-[#F8FAFC]">No payment transactions recorded yet</p>
+              <p class="text-xs text-[#94A3B8] mt-1">Use the Record Collection button to record an incoming payment.</p>
             </div>
           } @else {
             <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-slate-200 text-sm">
+              <table class="min-w-full divide-y divide-[#263449] text-sm">
                 <thead>
-                  <tr class="bg-slate-100/80 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <tr class="bg-[#0F172A] text-left text-xs font-bold text-[#94A3B8] uppercase tracking-wider">
                     <th class="py-3.5 px-4">Date</th>
                     <th class="py-3.5 px-4">Amount Recovered</th>
                     <th class="py-3.5 px-4">Method</th>
@@ -205,24 +205,24 @@
                     <th class="py-3.5 px-4">Schedule Coverage</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-[#263449] bg-[#151F32]">
                   @for (p of paymentHistory(); track p.id) {
-                    <tr class="hover:bg-slate-50/70 transition-colors">
-                      <td class="py-3.5 px-4 text-slate-900 font-semibold whitespace-nowrap">
+                    <tr class="hover:bg-[#18243A]/70 transition-colors">
+                      <td class="py-3.5 px-4 text-[#F8FAFC] font-semibold whitespace-nowrap">
                         {{ p.payment_date | date:'mediumDate' }}
                       </td>
-                      <td class="py-3.5 px-4 font-mono font-extrabold text-emerald-700 whitespace-nowrap">
+                      <td class="py-3.5 px-4 font-mono font-extrabold text-[#34D399] whitespace-nowrap">
                         {{ formatCurrency(p.amount) }}
                       </td>
                       <td class="py-3.5 px-4 capitalize whitespace-nowrap">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-[#18243A] text-[#94A3B8] border border-[#263449]">
                           {{ p.payment_method }}
                         </span>
                       </td>
-                      <td class="py-3.5 px-4 text-slate-600 text-xs">
+                      <td class="py-3.5 px-4 text-[#94A3B8] text-xs">
                         {{ p.reference || p.notes || '—' }}
                       </td>
-                      <td class="py-3.5 px-4 text-xs text-slate-600">
+                      <td class="py-3.5 px-4 text-xs text-[#94A3B8]">
                         @if (p.payment_allocations && p.payment_allocations.length > 0) {
                           <div class="space-y-1">
                             @for (a of p.payment_allocations; track a.id) {
@@ -230,7 +230,7 @@
                             }
                           </div>
                         } @else {
-                          <span class="text-slate-400">Direct Payment</span>
+                          <span class="text-[#64748B]">Direct Payment</span>
                         }
                       </td>
                     </tr>
@@ -243,20 +243,20 @@
 
         <!-- Absences Tab -->
         @if (activeTab() === 'absences') {
-          <div class="mb-5 p-4 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 leading-relaxed">
+          <div class="mb-5 p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs text-[#38BDF8] leading-relaxed">
             <strong>Audit Policy Notice (Option A):</strong> Recorded absences document why a borrower was unreachable on their collection day. The installment remains active and is carried forward into the customer's total outstanding balance.
           </div>
 
           @if (absences().length === 0) {
-            <div class="py-12 text-center text-slate-400">
-              <p class="text-sm font-semibold text-slate-600">No absence records logged</p>
-              <p class="text-xs text-slate-400 mt-1">This borrower has maintained 100% attendance during collection cycles.</p>
+            <div class="py-12 text-center text-[#64748B]">
+              <p class="text-sm font-semibold text-[#F8FAFC]">No absence records logged</p>
+              <p class="text-xs text-[#94A3B8] mt-1">This borrower has maintained 100% attendance during collection cycles.</p>
             </div>
           } @else {
             <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-slate-200 text-sm">
+              <table class="min-w-full divide-y divide-[#263449] text-sm">
                 <thead>
-                  <tr class="bg-slate-100/80 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <tr class="bg-[#0F172A] text-left text-xs font-bold text-[#94A3B8] uppercase tracking-wider">
                     <th class="py-3.5 px-4">Missed Week</th>
                     <th class="py-3.5 px-4">Reason Recorded</th>
                     <th class="py-3.5 px-4">Approval Status</th>
@@ -264,13 +264,13 @@
                     <th class="py-3.5 px-4">Logged On</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-[#263449] bg-[#151F32]">
                   @for (ab of absences(); track ab.id) {
-                    <tr class="hover:bg-slate-50/70 transition-colors">
-                      <td class="py-3.5 px-4 font-bold text-slate-900 whitespace-nowrap">
+                    <tr class="hover:bg-[#18243A]/70 transition-colors">
+                      <td class="py-3.5 px-4 font-bold text-[#F8FAFC] whitespace-nowrap">
                         {{ ab.week_start_date | date:'MMM d' }} – {{ ab.week_end_date | date:'MMM d, y' }}
                       </td>
-                      <td class="py-3.5 px-4 text-slate-700 italic">
+                      <td class="py-3.5 px-4 text-[#94A3B8] italic">
                         "{{ ab.reason || 'No reason provided' }}"
                       </td>
                       <td class="py-3.5 px-4 whitespace-nowrap">
@@ -282,10 +282,10 @@
                           <glass-badge status="overdue">Rejected</glass-badge>
                         }
                       </td>
-                      <td class="py-3.5 px-4 text-xs font-bold text-rose-600 whitespace-nowrap">
+                      <td class="py-3.5 px-4 text-xs font-bold text-[#F87171] whitespace-nowrap">
                         Carried Forward
                       </td>
-                      <td class="py-3.5 px-4 text-xs text-slate-500 whitespace-nowrap">
+                      <td class="py-3.5 px-4 text-xs text-[#64748B] whitespace-nowrap">
                         {{ ab.created_at | date:'mediumDate' }}
                       </td>
                     </tr>

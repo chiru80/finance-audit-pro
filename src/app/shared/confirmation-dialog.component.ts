@@ -16,19 +16,19 @@ import { GlassButtonComponent } from '../design-system/components/glass-button.c
     >
       <div class="space-y-4">
         <div class="flex items-start gap-3">
-          <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-amber-600 dark:text-amber-400">
+          <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-[#FBBF24]">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
           <div class="flex-1">
-            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p class="text-sm text-[#94A3B8] leading-relaxed">
               {{ message }}
             </p>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800/60">
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-[#263449]">
           <glass-button
             variant="glass"
             size="md"

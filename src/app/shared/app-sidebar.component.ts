@@ -19,33 +19,30 @@ interface NavItem {
   imports: [CommonModule, RouterModule, I18nPipe],
   template: `
     @if (sidebarService.isOpen()) {
-      <aside class="sidebar w-64 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-r border-slate-200/90 dark:border-slate-800 flex flex-col flex-shrink-0 h-full select-none shadow-xs relative z-30 transition-all duration-300">
-        <!-- Top Specular Line -->
-        <div class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
-
+      <aside class="sidebar w-[260px] bg-[#0F172A] border-r border-[#263449] flex flex-col flex-shrink-0 h-full select-none shadow-xl relative z-30 transition-all duration-300">
         <!-- Brand Header -->
-        <div class="h-16 flex items-center gap-3 px-5 border-b border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 flex-shrink-0">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md shadow-blue-500/25 border border-white/30 flex-shrink-0">
+        <div class="h-16 flex items-center gap-3 px-5 border-b border-[#263449] bg-[#0F172A] flex-shrink-0">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-500/20 border border-blue-400/30 flex-shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div class="min-w-0">
-            <h1 class="text-sm font-extrabold text-slate-900 dark:text-white tracking-tight leading-none truncate">Finance Audit Pro</h1>
-            <span class="text-[9px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest block mt-1">AUDIT ENGINE</span>
+            <h1 class="text-sm font-bold text-[#F8FAFC] tracking-tight leading-none truncate">Finance Audit Pro</h1>
+            <span class="text-[9px] font-bold text-[#38BDF8] uppercase tracking-widest block mt-1">AUDIT ENGINE</span>
           </div>
         </div>
 
         <!-- Navigation Menu -->
-        <div class="sidebar-content p-3 flex-1 overflow-y-auto space-y-6">
+        <div class="sidebar-content p-3 flex-1 overflow-y-auto space-y-5">
           <!-- Main Section -->
           <div>
-            <p class="px-3 pb-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">Core Navigation</p>
+            <p class="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Core Navigation</p>
             <nav class="space-y-1">
               @for (item of mainNavItems; track item.routerLink) {
                 <a
                   [routerLink]="[item.routerLink]"
-                  class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+                  class="nav-link flex items-center gap-3 px-3.5 h-[44px] rounded-xl text-sm font-medium transition-all duration-150 text-[#94A3B8] hover:bg-white/[0.05] hover:text-[#F8FAFC]"
                   routerLinkActive="active-nav-link"
                   [routerLinkActiveOptions]="{ exact: item.routerLink === '/dashboard' }"
                 >
@@ -58,12 +55,12 @@ interface NavItem {
 
           <!-- Administration Section -->
           <div>
-            <p class="px-3 pb-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">Administration</p>
+            <p class="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">Administration</p>
             <nav class="space-y-1">
               @for (item of adminNavItems; track item.routerLink) {
                 <a
                   [routerLink]="[item.routerLink]"
-                  class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+                  class="nav-link flex items-center gap-3 px-3.5 h-[44px] rounded-xl text-sm font-medium transition-all duration-150 text-[#94A3B8] hover:bg-white/[0.05] hover:text-[#F8FAFC]"
                   routerLinkActive="active-nav-link"
                 >
                   <span [innerHTML]="getIconHtml(item.icon)" class="w-5 h-5 flex-shrink-0 flex items-center justify-center"></span>
@@ -76,22 +73,22 @@ interface NavItem {
 
         <!-- User Profile & Sign Out Footer -->
         @if (authService.isAuthenticated()) {
-          <div class="p-3 border-t border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 flex-shrink-0">
-            <div class="flex items-center gap-2.5 px-2.5 py-2 mb-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 shadow-xs">
-              <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center flex-shrink-0 uppercase shadow-xs">
+          <div class="p-3 border-t border-[#263449] bg-[#0F172A] flex-shrink-0 space-y-2">
+            <div class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-[#151F32] border border-[#263449]">
+              <div class="w-8 h-8 rounded-lg bg-[#2563EB] text-[#F8FAFC] font-bold text-xs flex items-center justify-center flex-shrink-0 uppercase shadow-xs">
                 {{ (authService.user()?.email || 'U')[0] }}
               </div>
               <div class="min-w-0 flex-1">
-                <p class="text-xs font-bold text-slate-900 dark:text-slate-100 truncate leading-tight">
-                  {{ authService.user()?.user_metadata?.['full_name'] || 'Owner' }}
+                <p class="text-xs font-semibold text-[#F8FAFC] truncate leading-tight">
+                  {{ authService.user()?.user_metadata?.['full_name'] || 'Partner' }}
                 </p>
-                <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate leading-tight">
+                <p class="text-[11px] font-medium text-[#94A3B8] truncate leading-tight">
                   {{ authService.user()?.email }}
                 </p>
               </div>
               <a
                 routerLink="/settings"
-                class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                class="p-1 rounded-lg text-[#64748B] hover:text-[#94A3B8] transition-colors"
                 title="Settings"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,9 +96,10 @@ interface NavItem {
                 </svg>
               </a>
             </div>
+
             <button
               (click)="signOut()"
-              class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors border border-rose-200 dark:border-rose-900/50 cursor-pointer"
+              class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-[#EF4444] rounded-xl hover:bg-[#EF4444]/10 transition-colors border border-[#EF4444]/20 cursor-pointer"
               type="button"
             >
               <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,23 +126,24 @@ interface NavItem {
     }
 
     .nav-link {
-      transition-timing-function: var(--glass-spring-easing, cubic-bezier(0.16, 1, 0.3, 1));
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .active-nav-link {
-      background: #eff6ff !important;
-      color: #1d4ed8 !important;
-      font-weight: 700 !important;
-      border: 1px solid #bfdbfe !important;
-      border-left: 3.5px solid #2563eb !important;
-      box-shadow: 0 1px 2px 0 rgba(37, 99, 235, 0.06) !important;
+      background: rgba(37, 99, 235, 0.15) !important;
+      color: #F8FAFC !important;
+      font-weight: 600 !important;
+      border: 1px solid rgba(37, 99, 235, 0.3) !important;
+      border-left: 3.5px solid #2563EB !important;
     }
 
-    [data-theme="dark"] .active-nav-link {
-      background: rgba(37, 99, 235, 0.20) !important;
-      color: #93c5fd !important;
-      border-color: rgba(37, 99, 235, 0.40) !important;
-      border-left-color: #60a5fa !important;
+    .active-nav-link svg,
+    .active-nav-link span {
+      color: #38BDF8 !important;
+    }
+
+    .active-nav-link span.truncate {
+      color: #F8FAFC !important;
     }
   `],
 })

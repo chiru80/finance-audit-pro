@@ -14,7 +14,9 @@ export type GlassBadgeSize = 'sm' | 'md';
       [ngClass]="[statusClasses, sizeClasses]"
     >
       <!-- Luminous Dot Indicator -->
-      <span class="w-1.5 h-1.5 rounded-full mr-1.5 flex-shrink-0" [ngClass]="dotClasses"></span>
+      @if (dot) {
+        <span class="w-1.5 h-1.5 rounded-full mr-1.5 flex-shrink-0" [ngClass]="dotClasses"></span>
+      }
       <ng-content></ng-content>
     </span>
   `,
@@ -24,63 +26,61 @@ export type GlassBadgeSize = 'sm' | 'md';
     }
 
     .glass-badge-root {
-      backdrop-filter: blur(var(--glass-blur-xs, 6px)) saturate(var(--glass-saturate, 185%));
-      -webkit-backdrop-filter: blur(var(--glass-blur-xs, 6px)) saturate(var(--glass-saturate, 185%));
-      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.40);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
     }
 
     /* Paid / Success */
     .status-paid {
-      background: rgba(22, 163, 74, 0.12);
-      color: #15803d;
-      border: 1px solid rgba(22, 163, 74, 0.25);
+      background: rgba(16, 185, 129, 0.15);
+      color: #34D399;
+      border: 1px solid rgba(16, 185, 129, 0.30);
     }
     .dot-paid {
-      background: #16a34a;
-      box-shadow: 0 0 6px rgba(22, 163, 74, 0.6);
+      background: #10B981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
     }
 
     /* Pending / Warning */
     .status-pending {
-      background: rgba(217, 119, 6, 0.12);
-      color: #b45309;
-      border: 1px solid rgba(217, 119, 6, 0.25);
+      background: rgba(245, 158, 11, 0.15);
+      color: #FBBF24;
+      border: 1px solid rgba(245, 158, 11, 0.30);
     }
     .dot-pending {
-      background: #d97706;
-      box-shadow: 0 0 6px rgba(217, 119, 6, 0.6);
+      background: #F59E0B;
+      box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
     }
 
     /* Overdue / Danger */
     .status-overdue {
-      background: rgba(220, 38, 38, 0.12);
-      color: #b91c1c;
-      border: 1px solid rgba(220, 38, 38, 0.25);
+      background: rgba(239, 68, 68, 0.15);
+      color: #F87171;
+      border: 1px solid rgba(239, 68, 68, 0.30);
     }
     .dot-overdue {
-      background: #dc2626;
-      box-shadow: 0 0 6px rgba(220, 38, 38, 0.6);
+      background: #EF4444;
+      box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
     }
 
     /* Active / Accent */
     .status-active, .status-accent {
-      background: rgba(37, 99, 235, 0.12);
-      color: #1d4ed8;
-      border: 1px solid rgba(37, 99, 235, 0.25);
+      background: rgba(37, 99, 235, 0.15);
+      color: #60A5FA;
+      border: 1px solid rgba(37, 99, 235, 0.30);
     }
     .dot-active, .dot-accent {
-      background: #2563eb;
-      box-shadow: 0 0 6px rgba(37, 99, 235, 0.6);
+      background: #38BDF8;
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
     }
 
     /* Neutral */
     .status-neutral {
-      background: rgba(100, 116, 139, 0.12);
-      color: #475569;
-      border: 1px solid rgba(100, 116, 139, 0.25);
+      background: rgba(100, 116, 139, 0.15);
+      color: #94A3B8;
+      border: 1px solid rgba(100, 116, 139, 0.30);
     }
     .dot-neutral {
-      background: #64748b;
+      background: #64748B;
     }
 
     /* Sizes */

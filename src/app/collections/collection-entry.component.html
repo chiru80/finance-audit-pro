@@ -1,13 +1,13 @@
 <div class="max-w-4xl mx-auto space-y-6">
   <!-- Page Header & Tab Navigation -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-[#263449]">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200/80">Cash Flow</span>
-        <span class="text-xs text-slate-500 font-medium">Collections & Schedules</span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-500/15 text-[#38BDF8] border border-blue-500/30">Cash Flow</span>
+        <span class="text-xs text-[#94A3B8] font-medium">Collections & Schedules</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Collections Operations</h1>
-      <p class="text-sm text-slate-500 mt-1">Record incoming weekly dues and manage borrower cycle attendance.</p>
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F8FAFC]">Collections Operations</h1>
+      <p class="text-sm text-[#94A3B8] mt-1">Record incoming weekly dues and manage borrower cycle attendance.</p>
     </div>
 
     <glass-tabs
@@ -23,16 +23,16 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
       <!-- Form Card (2 Columns) -->
-      <glass-card variant="elevated" customClass="lg:col-span-2 p-6 sm:p-8">
+      <glass-card variant="elevated" customClass="lg:col-span-2 p-6 sm:p-8 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
         @if (loading() && !customersLoaded()) {
           <div class="flex justify-center py-12">
-            <div class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+            <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#263449] border-t-[#2563EB]"></div>
           </div>
         }
 
         @if (error()) {
-          <div class="mb-5 flex items-center rounded-xl bg-red-500/10 p-3.5 text-sm text-red-700 border border-red-500/20 backdrop-blur-xs">
-            <svg class="h-5 w-5 text-red-500 mr-2.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+          <div class="mb-5 flex items-center rounded-xl bg-red-500/15 p-3.5 text-sm text-red-400 border border-red-500/30 backdrop-blur-xs">
+            <svg class="h-5 w-5 text-red-400 mr-2.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
             </svg>
             <span>{{ error() }}</span>
@@ -40,8 +40,8 @@
         }
 
         @if (success()) {
-          <div class="mb-5 flex items-center rounded-xl bg-emerald-500/10 p-3.5 text-sm text-emerald-800 border border-emerald-500/20 backdrop-blur-xs font-medium">
-            <svg class="h-5 w-5 text-emerald-600 mr-2.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+          <div class="mb-5 flex items-center rounded-xl bg-emerald-500/15 p-3.5 text-sm text-[#34D399] border border-emerald-500/30 backdrop-blur-xs font-medium">
+            <svg class="h-5 w-5 text-[#34D399] mr-2.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
             </svg>
             <span>{{ success() }}</span>
@@ -52,7 +52,7 @@
           <form (ngSubmit)="collectPayment()" class="space-y-5">
             <!-- Customer Selector -->
             <div>
-              <label for="customer" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label for="customer" class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">
                 Borrower / Account <span class="text-rose-500">*</span>
               </label>
               <select
@@ -73,18 +73,18 @@
 
             <!-- Collection Amount -->
             <div>
-              <label for="amount" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <label for="amount" class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">
                 Collection Amount (₹) <span class="text-rose-500">*</span>
               </label>
               <div class="relative rounded-xl shadow-xs">
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10">
-                  <span class="text-slate-500 text-sm font-bold">₹</span>
+                  <span class="text-[#64748B] text-sm font-bold">₹</span>
                 </div>
                 <input
                   glassInput
                   type="number"
                   id="amount"
-                  class="!pl-8 font-mono font-extrabold text-xl text-slate-900"
+                  class="!pl-8 font-mono font-extrabold text-xl text-[#F8FAFC]"
                   placeholder="0"
                   [value]="amountInRupees()"
                   (input)="amountInRupees.set(+$any($event.target).value)"
@@ -97,18 +97,18 @@
               <!-- Quick Amount Preset Chips -->
               @if (selectedCustomerObj()) {
                 <div class="mt-2.5 flex items-center gap-2 flex-wrap">
-                  <span class="text-xs font-medium text-slate-400">Quick Fill:</span>
+                  <span class="text-xs font-medium text-[#64748B]">Quick Fill:</span>
                   <button
                     type="button"
                     (click)="setAmount(selectedCustomerObj()!.weekly_due_amount / 100)"
-                    class="px-2.5 py-1 text-xs rounded-lg border border-blue-200 bg-blue-50 text-blue-700 font-bold hover:bg-blue-100 transition cursor-pointer shadow-2xs font-mono"
+                    class="px-2.5 py-1 text-xs rounded-lg border border-blue-500/30 bg-blue-500/15 text-[#38BDF8] font-bold hover:bg-blue-500/25 transition cursor-pointer shadow-xs font-mono"
                   >
                     1 Week ({{ formatCurrency(selectedCustomerObj()!.weekly_due_amount) }})
                   </button>
                   <button
                     type="button"
                     (click)="setAmount((selectedCustomerObj()!.weekly_due_amount * 2) / 100)"
-                    class="px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-bold hover:bg-slate-100 transition cursor-pointer shadow-2xs font-mono"
+                    class="px-2.5 py-1 text-xs rounded-lg border border-[#263449] bg-[#18243A] text-[#94A3B8] font-bold hover:bg-[#1E2D47] hover:text-[#F8FAFC] transition cursor-pointer shadow-xs font-mono"
                   >
                     2 Weeks ({{ formatCurrency(selectedCustomerObj()!.weekly_due_amount * 2) }})
                   </button>
@@ -116,7 +116,7 @@
                     <button
                       type="button"
                       (click)="setAmount(selectedCustomerObj()!.outstanding_balance / 100)"
-                      class="px-2.5 py-1 text-xs rounded-lg border border-rose-200 bg-rose-50 text-rose-700 font-bold hover:bg-rose-100 transition cursor-pointer shadow-2xs font-mono"
+                      class="px-2.5 py-1 text-xs rounded-lg border border-rose-500/30 bg-rose-500/15 text-[#F87171] font-bold hover:bg-rose-500/25 transition cursor-pointer shadow-xs font-mono"
                     >
                       Clear Debt ({{ formatCurrency(selectedCustomerObj()!.outstanding_balance) }})
                     </button>
@@ -127,16 +127,17 @@
 
             <!-- Payment Method Segmented Control -->
             <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Payment Channel</label>
+              <label class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-2">Payment Channel</label>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 @for (method of paymentMethods; track method) {
                   <label
-                    [class.border-blue-600]="selectedMethod() === method"
-                    [class.bg-blue-50]="selectedMethod() === method"
-                    [class.text-blue-900]="selectedMethod() === method"
-                    [class.ring-1]="selectedMethod() === method"
-                    [class.ring-blue-600]="selectedMethod() === method"
-                    class="flex items-center justify-center p-3 border border-slate-200 rounded-xl cursor-pointer text-xs font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-50 transition-all select-none shadow-2xs"
+                    [class.border-[#2563EB]]="selectedMethod() === method"
+                    [class.bg-[#2563EB]]="selectedMethod() === method"
+                    [class.text-white]="selectedMethod() === method"
+                    [class.border-[#263449]]="selectedMethod() !== method"
+                    [class.bg-[#0F172A]]="selectedMethod() !== method"
+                    [class.text-[#94A3B8]]="selectedMethod() !== method"
+                    class="flex items-center justify-center p-3 border rounded-xl cursor-pointer text-xs font-bold uppercase tracking-wider hover:bg-[#18243A] hover:text-[#F8FAFC] transition-all select-none shadow-xs"
                   >
                     <input
                       type="radio"
@@ -155,7 +156,7 @@
             <!-- Reference / Cheque Input -->
             @if (selectedMethod() === 'online' || selectedMethod() === 'cheque') {
               <div>
-                <label for="reference" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <label for="reference" class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">
                   {{ selectedMethod() === 'online' ? 'UPI Reference / Transaction ID' : 'Cheque Number' }}
                 </label>
                 <input
@@ -171,7 +172,7 @@
 
             <!-- Notes -->
             <div>
-              <label for="notes" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Audit Note (Optional)</label>
+              <label for="notes" class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Audit Note (Optional)</label>
               <textarea
                 glassInput
                 id="notes"
@@ -182,7 +183,7 @@
               ></textarea>
             </div>
 
-            <div class="pt-4 border-t border-slate-200/80">
+            <div class="pt-4 border-t border-[#263449]">
               <glass-button
                 variant="filled"
                 size="lg"
@@ -200,56 +201,56 @@
       <!-- Customer Spotlight Preview Card (1 Column) -->
       <div>
         @if (selectedCustomerObj(); as cust) {
-          <glass-card variant="elevated" customClass="p-6 space-y-4">
-            <div class="flex items-center gap-3 pb-3 border-b border-slate-200/80">
-              <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-sm flex items-center justify-center shadow-xs flex-shrink-0">
+          <glass-card variant="elevated" customClass="p-6 space-y-4 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+            <div class="flex items-center gap-3 pb-3 border-b border-[#263449]">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-sm flex items-center justify-center shadow-xs flex-shrink-0 border border-blue-400/30">
                 {{ getInitials(cust.name) }}
               </div>
               <div>
-                <h3 class="text-base font-bold text-slate-900 leading-tight">{{ cust.name }}</h3>
-                <span class="text-xs text-slate-500 font-medium">{{ cust.phone || 'No phone' }}</span>
+                <h3 class="text-base font-bold text-[#F8FAFC] leading-tight">{{ cust.name }}</h3>
+                <span class="text-xs text-[#94A3B8] font-medium">{{ cust.phone || 'No phone' }}</span>
               </div>
             </div>
 
             <div class="space-y-3 text-xs">
-              <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
-                <span class="font-medium text-slate-500">Weekly Target:</span>
-                <span class="font-mono font-bold text-slate-900 text-sm">{{ formatCurrency(cust.weekly_due_amount) }}</span>
+              <div class="flex justify-between items-center py-1.5 border-b border-[#263449]">
+                <span class="font-medium text-[#94A3B8]">Weekly Target:</span>
+                <span class="font-mono font-bold text-[#F8FAFC] text-sm">{{ formatCurrency(cust.weekly_due_amount) }}</span>
               </div>
-              <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
-                <span class="font-medium text-slate-500">Current Outstanding:</span>
-                <span class="font-mono font-extrabold text-sm" [class]="cust.outstanding_balance > 0 ? 'text-rose-600' : 'text-emerald-600'">
+              <div class="flex justify-between items-center py-1.5 border-b border-[#263449]">
+                <span class="font-medium text-[#94A3B8]">Current Outstanding:</span>
+                <span class="font-mono font-extrabold text-sm" [class]="cust.outstanding_balance > 0 ? 'text-[#F87171]' : 'text-[#34D399]'">
                   {{ formatCurrency(cust.outstanding_balance) }}
                 </span>
               </div>
-              <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
-                <span class="font-medium text-slate-500">Total Recovered:</span>
-                <span class="font-mono font-bold text-emerald-700 text-sm">{{ formatCurrency(cust.total_paid) }}</span>
+              <div class="flex justify-between items-center py-1.5 border-b border-[#263449]">
+                <span class="font-medium text-[#94A3B8]">Total Recovered:</span>
+                <span class="font-mono font-bold text-[#34D399] text-sm">{{ formatCurrency(cust.total_paid) }}</span>
               </div>
               <div class="flex justify-between items-center py-1.5">
-                <span class="font-medium text-slate-500">Cumulative Due:</span>
-                <span class="font-mono font-bold text-slate-700 text-sm">{{ formatCurrency(cust.total_due) }}</span>
+                <span class="font-medium text-[#94A3B8]">Cumulative Due:</span>
+                <span class="font-mono font-bold text-[#F8FAFC] text-sm">{{ formatCurrency(cust.total_due) }}</span>
               </div>
             </div>
 
             <div class="pt-2">
               <a
                 [routerLink]="['/customers', cust.id]"
-                class="w-full inline-flex items-center justify-center py-2 px-3 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl border border-blue-200 transition-colors"
+                class="w-full inline-flex items-center justify-center py-2 px-3 text-xs font-bold text-[#38BDF8] hover:text-white bg-[#18243A] hover:bg-[#1E2D47] rounded-xl border border-[#263449] transition-colors"
               >
                 View Complete Profile & Ledger →
               </a>
             </div>
           </glass-card>
         } @else {
-          <glass-card variant="default" customClass="p-6 text-center py-12">
-            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-3">
+          <glass-card variant="default" customClass="p-6 text-center py-12 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+            <div class="w-12 h-12 rounded-xl bg-blue-500/15 text-[#38BDF8] border border-blue-500/30 mx-auto flex items-center justify-center mb-3">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
-            <h4 class="text-sm font-bold text-slate-800">No Borrower Selected</h4>
-            <p class="text-xs text-slate-400 mt-1">Select a customer from the dropdown to see their dues summary and payment history.</p>
+            <h4 class="text-sm font-bold text-[#F8FAFC]">No Borrower Selected</h4>
+            <p class="text-xs text-[#94A3B8] mt-1">Select a customer from the dropdown to see their dues summary and payment history.</p>
           </glass-card>
         }
       </div>

@@ -18,46 +18,41 @@ export class GlassInputDirective {
       'py-2.5',
       'text-sm',
       'transition-all',
-      'duration-200',
+      'duration-150',
       'outline-none',
       'focus:ring-2',
       'focus:ring-offset-1',
+      'focus:ring-offset-[#0B1120]',
     ];
 
     if (this.hasError) {
       base.push(
-        'border-red-400',
-        'bg-red-50/40',
-        'text-red-900',
-        'focus:border-red-500',
-        'focus:ring-red-500/25'
+        'border-[#EF4444]',
+        'bg-[#EF4444]/10',
+        'text-[#F8FAFC]',
+        'placeholder:text-[#64748B]',
+        'focus:border-[#EF4444]',
+        'focus:ring-[#EF4444]/30'
       );
     } else {
       base.push(
-        'border-slate-200/80',
-        'bg-white/70',
-        'text-slate-900',
-        'placeholder:text-slate-400',
-        'focus:border-blue-500',
-        'focus:ring-blue-500/25',
-        'focus:bg-white/95'
+        'border-[#263449]',
+        'bg-[#0F172A]',
+        'text-[#F8FAFC]',
+        'placeholder:text-[#64748B]',
+        'focus:border-[#2563EB]',
+        'focus:ring-[#2563EB]/30',
+        'focus:bg-[#0F172A]'
       );
     }
 
     return base.join(' ');
   }
 
-  @HostBinding('style.backdropFilter')
-  backdropFilter = 'blur(12px) saturate(180%)';
-
-  @HostBinding('style.-webkitBackdropFilter')
-  webkitBackdropFilter = 'blur(12px) saturate(180%)';
-
   @HostBinding('style.boxShadow')
   get boxShadow(): string {
     return this.hasError
-      ? 'inset 0 1px 2px 0 rgba(239, 68, 68, 0.08)'
-      : 'inset 0 1px 2px 0 rgba(15, 23, 42, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.85)';
+      ? '0 0 0 1px #EF4444'
+      : 'inset 0 1px 2px 0 rgba(0, 0, 0, 0.4)';
   }
 }
-

@@ -1,9 +1,9 @@
 <div class="weekly-tracker-container space-y-6">
   <!-- Customer Selector Header Card -->
-  <glass-card variant="elevated" customClass="p-5 sm:p-6">
+  <glass-card variant="elevated" customClass="p-5 sm:p-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div class="w-full sm:w-80">
-        <label for="tracker-customer" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+        <label for="tracker-customer" class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">
           Select Borrower for Cycle Audit
         </label>
         <select
@@ -37,7 +37,7 @@
             type="button"
             (click)="loadSchedules(customerId()!)"
             [disabled]="loading()"
-            class="p-2 border border-slate-200 rounded-xl hover:bg-slate-100 text-slate-600 shadow-xs transition cursor-pointer"
+            class="p-2 border border-[#263449] rounded-xl bg-[#0F172A] hover:bg-[#18243A] text-[#94A3B8] hover:text-[#F8FAFC] shadow-xs transition cursor-pointer"
             title="Refresh Schedules"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,37 +50,37 @@
   </glass-card>
 
   @if (error()) {
-    <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-700 flex items-center gap-2.5 backdrop-blur-xs">
+    <div class="p-4 rounded-xl bg-red-500/15 border border-red-500/30 text-sm text-red-400 flex items-center gap-2.5 backdrop-blur-xs">
       <span class="font-bold">!</span>
       <span>{{ error() }}</span>
     </div>
   }
 
   @if (success()) {
-    <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-sm text-emerald-800 flex items-center gap-2.5 backdrop-blur-xs font-medium">
+    <div class="p-4 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-sm text-[#34D399] flex items-center gap-2.5 backdrop-blur-xs font-medium">
       <span class="font-bold">✓</span>
       <span>{{ success() }}</span>
     </div>
   }
 
   @if (!customerId()) {
-    <glass-card variant="default" customClass="text-center py-16 px-6">
-      <div class="w-14 h-14 mx-auto rounded-2xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center mb-4 shadow-xs">
+    <glass-card variant="default" customClass="text-center py-16 px-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-blue-500/15 text-[#38BDF8] border border-blue-500/30 flex items-center justify-center mb-4 shadow-xs">
         <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
-      <h3 class="text-base font-bold text-slate-900">Select a borrower</h3>
-      <p class="mt-1 text-xs text-slate-500 max-w-sm mx-auto">Choose an active borrower from the dropdown above to review their weekly payment cycle schedule and document absences.</p>
+      <h3 class="text-base font-bold text-[#F8FAFC]">Select a borrower</h3>
+      <p class="mt-1 text-xs text-[#94A3B8] max-w-sm mx-auto">Choose an active borrower from the dropdown above to review their weekly payment cycle schedule and document absences.</p>
     </glass-card>
   } @else if (loading() && schedules().length === 0) {
     <div class="flex justify-center py-16">
-      <div class="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+      <div class="h-8 w-8 animate-spin rounded-full border-4 border-[#263449] border-t-[#2563EB]"></div>
     </div>
   } @else if (schedules().length === 0) {
-    <glass-card variant="default" customClass="text-center py-14 px-6">
-      <h3 class="text-base font-bold text-slate-900">No weekly schedules active</h3>
-      <p class="mt-1 text-sm text-slate-500 mb-5">No weekly payment records have been generated for {{ selectedCustomerName() }} yet.</p>
+    <glass-card variant="default" customClass="text-center py-14 px-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+      <h3 class="text-base font-bold text-[#F8FAFC]">No weekly schedules active</h3>
+      <p class="mt-1 text-sm text-[#94A3B8] mb-5">No weekly payment records have been generated for {{ selectedCustomerName() }} yet.</p>
       <glass-button
         variant="filled"
         size="md"
@@ -90,21 +90,21 @@
       </glass-button>
     </glass-card>
   } @else {
-    <glass-card variant="elevated" customClass="overflow-hidden p-0">
-      <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center flex-wrap gap-2">
+    <glass-card variant="elevated" customClass="overflow-hidden p-0 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
+      <div class="p-4 bg-[#111827] border-b border-[#263449] flex justify-between items-center flex-wrap gap-2">
         <div>
-          <h3 class="text-sm font-bold text-slate-900">{{ selectedCustomerName() }}'s Schedule Matrix</h3>
-          <p class="text-xs text-slate-500">Weekly installments generated for audit and tracking.</p>
+          <h3 class="text-sm font-bold text-[#F8FAFC]">{{ selectedCustomerName() }}'s Schedule Matrix</h3>
+          <p class="text-xs text-[#94A3B8]">Weekly installments generated for audit and tracking.</p>
         </div>
-        <div class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-lg border border-blue-200/80 font-medium">
+        <div class="text-xs bg-blue-500/15 text-[#38BDF8] px-2.5 py-1 rounded-lg border border-blue-500/30 font-medium">
           Policy: Missed weeks carry forward as debt
         </div>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200 text-sm">
+        <table class="min-w-full divide-y divide-[#263449] text-sm">
           <thead>
-            <tr class="bg-slate-100/90 text-slate-700 text-xs uppercase font-bold">
+            <tr class="bg-[#0F172A] text-[#94A3B8] text-xs uppercase font-bold">
               <th class="px-5 py-3.5 text-left">Week Period</th>
               <th class="px-5 py-3.5 text-left">Due Date</th>
               <th class="px-5 py-3.5 text-right">Target Due</th>
@@ -112,16 +112,16 @@
               <th class="px-5 py-3.5 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 bg-white/70">
+          <tbody class="divide-y divide-[#263449] bg-[#151F32]">
             @for (schedule of schedules(); track schedule.id) {
-              <tr class="hover:bg-blue-50/40 transition-colors">
-                <td class="px-5 py-4 text-slate-900 font-bold whitespace-nowrap">
+              <tr class="hover:bg-[#18243A]/70 transition-colors">
+                <td class="px-5 py-4 text-[#F8FAFC] font-bold whitespace-nowrap">
                   {{ schedule.week_start_date | date:'mediumDate' }} – {{ schedule.week_end_date | date:'mediumDate' }}
                 </td>
-                <td class="px-5 py-4 text-slate-600 font-medium whitespace-nowrap">
+                <td class="px-5 py-4 text-[#94A3B8] font-medium whitespace-nowrap">
                   {{ schedule.due_date | date:'mediumDate' }}
                 </td>
-                <td class="px-5 py-4 text-slate-900 font-mono font-extrabold text-right whitespace-nowrap">
+                <td class="px-5 py-4 text-[#F8FAFC] font-mono font-extrabold text-right whitespace-nowrap">
                   {{ formatPaise(schedule.due_amount) }}
                 </td>
                 <td class="px-5 py-4 text-center whitespace-nowrap">
@@ -140,7 +140,7 @@
                 <td class="px-5 py-4 text-right whitespace-nowrap space-x-2">
                   @if (!schedule.paid) {
                     <glass-button
-                      variant="tinted"
+                      variant="filled"
                       size="sm"
                       [disabled]="loading()"
                       (onClick)="collectForWeek(schedule.id)"
@@ -159,7 +159,7 @@
                       </glass-button>
                     }
                   } @else {
-                    <span class="text-xs text-emerald-700 font-bold inline-flex items-center gap-1">
+                    <span class="text-xs text-[#34D399] font-bold inline-flex items-center gap-1">
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                       </svg>

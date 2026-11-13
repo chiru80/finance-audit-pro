@@ -11,27 +11,27 @@ import { GlassButtonComponent } from './glass-button.component';
       <div class="glass-dialog-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
         <!-- Frosted Backdrop Blur -->
         <div
-          class="fixed inset-0 bg-slate-900/30 backdrop-blur-md transition-opacity duration-300"
+          class="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity duration-200"
           (click)="onCancel()"
         ></div>
 
         <!-- Floating Glass Modal Card -->
         <div
-          class="glass-dialog-surface relative w-full max-w-lg rounded-2xl p-6 sm:p-8 shadow-2xl z-10 overflow-hidden transform transition-all duration-300"
+          class="glass-dialog-surface relative w-full max-w-lg rounded-2xl p-6 sm:p-8 shadow-2xl z-10 overflow-hidden transform transition-all duration-200"
         >
           <!-- Specular Refraction Highlight Line -->
-          <div class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent"></div>
+          <div class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
           <!-- Dialog Header & Icon -->
           <div class="flex items-start gap-4 mb-4">
             @if (variant === 'danger') {
-              <div class="w-10 h-10 rounded-xl bg-red-500/15 text-red-600 border border-red-500/25 flex items-center justify-center flex-shrink-0">
+              <div class="w-10 h-10 rounded-xl bg-[#EF4444]/15 text-[#F87171] border border-[#EF4444]/25 flex items-center justify-center flex-shrink-0">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
             } @else {
-              <div class="w-10 h-10 rounded-xl bg-blue-500/15 text-blue-600 border border-blue-500/25 flex items-center justify-center flex-shrink-0">
+              <div class="w-10 h-10 rounded-xl bg-[#2563EB]/15 text-[#38BDF8] border border-[#2563EB]/25 flex items-center justify-center flex-shrink-0">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -39,11 +39,11 @@ import { GlassButtonComponent } from './glass-button.component';
             }
 
             <div class="min-w-0 flex-1">
-              <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-snug">
+              <h3 class="text-lg font-bold text-[#F8FAFC] tracking-tight leading-snug">
                 {{ title }}
               </h3>
               @if (description) {
-                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                <p class="text-sm text-[#94A3B8] mt-1 leading-relaxed">
                   {{ description }}
                 </p>
               }
@@ -79,12 +79,10 @@ import { GlassButtonComponent } from './glass-button.component';
   `,
   styles: [`
     .glass-dialog-surface {
-      background: var(--glass-surface-elevated, rgba(255, 255, 255, 0.90));
-      backdrop-filter: blur(var(--glass-blur-lg, 32px)) saturate(var(--glass-saturate, 185%));
-      -webkit-backdrop-filter: blur(var(--glass-blur-lg, 32px)) saturate(var(--glass-saturate, 185%));
-      border: 1px solid var(--glass-border-crisp, rgba(255, 255, 255, 0.85));
-      box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
-      animation: dialogPop 280ms var(--glass-spring-easing, cubic-bezier(0.16, 1, 0.3, 1));
+      background: #111827;
+      border: 1px solid #263449;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      animation: dialogPop 200ms cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes dialogPop {

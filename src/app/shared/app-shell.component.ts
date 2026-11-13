@@ -9,7 +9,7 @@ import { AuthService } from '../auth/auth.service';
   standalone: true,
   imports: [CommonModule, AppHeaderComponent, AppSidebarComponent],
   template: `
-    <div class="app-shell flex flex-row h-screen w-full overflow-hidden bg-slate-50">
+    <div class="app-shell flex flex-row h-screen w-full overflow-hidden bg-[#0B1120] text-[#F8FAFC]">
       @if (authService.isAuthenticated()) {
         <app-sidebar />
       }
@@ -17,7 +17,7 @@ import { AuthService } from '../auth/auth.service';
         @if (authService.isAuthenticated()) {
           <app-header />
         }
-        <main [class]="authService.isAuthenticated() ? 'flex-1 overflow-y-auto p-6 md:p-8' : 'flex-1 overflow-y-auto bg-white'">
+        <main [class]="authService.isAuthenticated() ? 'flex-1 overflow-y-auto p-6 md:p-8 bg-[#0B1120] text-[#F8FAFC]' : 'flex-1 overflow-y-auto bg-[#070D1A] text-[#F8FAFC]'">
           <ng-content></ng-content>
         </main>
       </div>
@@ -28,4 +28,3 @@ import { AuthService } from '../auth/auth.service';
 export class AppShellComponent {
   readonly authService = inject(AuthService);
 }
-

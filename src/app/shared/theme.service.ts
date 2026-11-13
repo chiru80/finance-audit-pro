@@ -13,14 +13,14 @@ export class ThemeService {
   }
 
   /**
-   * Initialize theme from localStorage or default to light
+   * Initialize theme from localStorage or default to dark
    */
   private initializeTheme() {
     const savedTheme = localStorage.getItem(this.THEME_KEY);
-    if (savedTheme === 'dark') {
-      this.setDark();
-    } else {
+    if (savedTheme === 'light') {
       this.setLight();
+    } else {
+      this.setDark();
     }
   }
 
