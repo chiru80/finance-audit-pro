@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
-import { StatCardComponent } from '../shared/stat-card.component';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
@@ -16,7 +15,6 @@ import { formatPaiseToINR } from '../utils/currency.utils';
   imports: [
     CommonModule,
     FormsModule,
-    StatCardComponent,
     GlassCardComponent,
     GlassButtonComponent,
     GlassBadgeComponent,
@@ -34,6 +32,7 @@ export class ReportsComponent implements OnInit {
 
   startDate = signal<string>('');
   endDate = signal<string>('');
+  activePreset = signal<'7d' | '30d' | 'this_month' | 'all'>('30d');
 
   summary = signal<{
     totalCustomers: number;
@@ -47,13 +46,30 @@ export class ReportsComponent implements OnInit {
   customerBalances = signal<any[]>([]);
 
   ngOnInit() {
-    // Default to last 30 days
+    this.setDatePreset('30d');
+  }
+
+  setDatePreset(preset: '7d' | '30d' | 'this_month' | 'all') {
+    this.activePreset.set(preset);
     const end = new Date();
     const start = new Date();
-    start.setDate(end.getDate() - 30);
 
-    this.startDate.set(start.toISOString().split('T')[0]);
-    this.endDate.set(end.toISOString().split('T')[0]);
+    if (preset === '7d') {
+      start.setDate(end.getDate() - 7);
+      this.startDate.set(start.toISOString().split('T')[0]);
+      this.endDate.set(end.toISOString().split('T')[0]);
+    } else if (preset === '30d') {
+      start.setDate(end.getDate() - 30);
+      this.startDate.set(start.toISOString().split('T')[0]);
+      this.endDate.set(end.toISOString().split('T')[0]);
+    } else if (preset === 'this_month') {
+      start.setDate(1);
+      this.startDate.set(start.toISOString().split('T')[0]);
+      this.endDate.set(end.toISOString().split('T')[0]);
+    } else if (preset === 'all') {
+      this.startDate.set('');
+      this.endDate.set('');
+    }
 
     this.loadReports();
   }
@@ -170,7 +186,6 @@ export class ReportsComponent implements OnInit {
     return row
       .map((cell) => {
         const value = String(cell ?? '');
-        // Quote any field containing comma, quote, newline, or leading/trailing whitespace
         if (/[",\n\r]/.test(value) || value !== value.trim()) {
           return `"${value.replace(/"/g, '""')}"`;
         }
@@ -192,4 +207,3 @@ export class ReportsComponent implements OnInit {
     });
   }
 }
-

@@ -139,6 +139,7 @@ export class GlassButtonComponent {
   @Input() customClass = '';
 
   @Output() onClick = new EventEmitter<MouseEvent>();
+  @Output() buttonClick = this.onClick;
 
   get variantClasses(): string {
     return `variant-${this.variant}`;

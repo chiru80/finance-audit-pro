@@ -60,6 +60,13 @@ export class CustomerFormComponent implements OnInit {
     weekly_due_amount: [500, [Validators.required, Validators.min(1), Validators.max(10000)]],
   });
 
+  presetAmounts = [200, 300, 500, 1000, 2000];
+
+  setWeeklyAmount(amount: number) {
+    this.form.get('weekly_due_amount')?.setValue(amount);
+    this.form.get('weekly_due_amount')?.markAsDirty();
+  }
+
   ngOnInit() {
     // Load default weekly due from settings/profile before form initialization
     this.loadDefaultWeeklyDue();

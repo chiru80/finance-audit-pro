@@ -3,8 +3,8 @@
   <glass-card variant="elevated" customClass="p-5 sm:p-6">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div class="w-full sm:w-80">
-        <label for="tracker-customer" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-          Select Customer
+        <label for="tracker-customer" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+          Select Borrower for Cycle Audit
         </label>
         <select
           glassInput
@@ -27,7 +27,7 @@
             [disabled]="loading()"
             (onClick)="generateSchedules()"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
             </svg>
             Generate Next 4 Weeks
@@ -37,8 +37,8 @@
             type="button"
             (click)="loadSchedules(customerId()!)"
             [disabled]="loading()"
-            class="p-2 border border-slate-200/80 dark:border-slate-700/80 rounded-xl hover:bg-white/80 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-xs transition cursor-pointer"
-            title="Refresh"
+            class="p-2 border border-slate-200 rounded-xl hover:bg-slate-100 text-slate-600 shadow-xs transition cursor-pointer"
+            title="Refresh Schedules"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -50,14 +50,14 @@
   </glass-card>
 
   @if (error()) {
-    <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-700 dark:text-red-400 flex items-center gap-2.5 backdrop-blur-xs">
+    <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-700 flex items-center gap-2.5 backdrop-blur-xs">
       <span class="font-bold">!</span>
       <span>{{ error() }}</span>
     </div>
   }
 
   @if (success()) {
-    <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-sm text-emerald-700 dark:text-emerald-400 flex items-center gap-2.5 backdrop-blur-xs">
+    <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-sm text-emerald-800 flex items-center gap-2.5 backdrop-blur-xs font-medium">
       <span class="font-bold">✓</span>
       <span>{{ success() }}</span>
     </div>
@@ -65,13 +65,13 @@
 
   @if (!customerId()) {
     <glass-card variant="default" customClass="text-center py-16 px-6">
-      <div class="w-14 h-14 mx-auto rounded-2xl bg-blue-500/10 text-blue-600 border border-blue-500/20 flex items-center justify-center mb-4 shadow-xs">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center mb-4 shadow-xs">
         <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
-      <h3 class="text-base font-bold text-slate-900 dark:text-white">Select a customer</h3>
-      <p class="mt-1 text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">Pick a customer from the dropdown above to view their weekly payment schedules and absence records.</p>
+      <h3 class="text-base font-bold text-slate-900">Select a borrower</h3>
+      <p class="mt-1 text-xs text-slate-500 max-w-sm mx-auto">Choose an active borrower from the dropdown above to review their weekly payment cycle schedule and document absences.</p>
     </glass-card>
   } @else if (loading() && schedules().length === 0) {
     <div class="flex justify-center py-16">
@@ -79,8 +79,8 @@
     </div>
   } @else if (schedules().length === 0) {
     <glass-card variant="default" customClass="text-center py-14 px-6">
-      <h3 class="text-base font-bold text-slate-900 dark:text-white">No weekly schedules found</h3>
-      <p class="mt-1 text-sm text-slate-500 dark:text-slate-400 mb-5">No schedules have been generated for {{ selectedCustomerName() }} yet.</p>
+      <h3 class="text-base font-bold text-slate-900">No weekly schedules active</h3>
+      <p class="mt-1 text-sm text-slate-500 mb-5">No weekly payment records have been generated for {{ selectedCustomerName() }} yet.</p>
       <glass-button
         variant="filled"
         size="md"
@@ -90,28 +90,38 @@
       </glass-button>
     </glass-card>
   } @else {
-    <glass-card variant="elevated">
+    <glass-card variant="elevated" customClass="overflow-hidden p-0">
+      <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center flex-wrap gap-2">
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">{{ selectedCustomerName() }}'s Schedule Matrix</h3>
+          <p class="text-xs text-slate-500">Weekly installments generated for audit and tracking.</p>
+        </div>
+        <div class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-lg border border-blue-200/80 font-medium">
+          Policy: Missed weeks carry forward as debt
+        </div>
+      </div>
+
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-800/60 text-sm">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
           <thead>
-            <tr class="bg-slate-100/80 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 text-xs uppercase font-bold">
+            <tr class="bg-slate-100/90 text-slate-700 text-xs uppercase font-bold">
               <th class="px-5 py-3.5 text-left">Week Period</th>
               <th class="px-5 py-3.5 text-left">Due Date</th>
-              <th class="px-5 py-3.5 text-right">Due Amount</th>
+              <th class="px-5 py-3.5 text-right">Target Due</th>
               <th class="px-5 py-3.5 text-center">Status</th>
               <th class="px-5 py-3.5 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
+          <tbody class="divide-y divide-slate-100 bg-white/70">
             @for (schedule of schedules(); track schedule.id) {
-              <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
-                <td class="px-5 py-4 text-slate-900 dark:text-white font-semibold whitespace-nowrap">
+              <tr class="hover:bg-blue-50/40 transition-colors">
+                <td class="px-5 py-4 text-slate-900 font-bold whitespace-nowrap">
                   {{ schedule.week_start_date | date:'mediumDate' }} – {{ schedule.week_end_date | date:'mediumDate' }}
                 </td>
-                <td class="px-5 py-4 text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                <td class="px-5 py-4 text-slate-600 font-medium whitespace-nowrap">
                   {{ schedule.due_date | date:'mediumDate' }}
                 </td>
-                <td class="px-5 py-4 text-slate-900 dark:text-white font-mono font-bold text-right whitespace-nowrap">
+                <td class="px-5 py-4 text-slate-900 font-mono font-extrabold text-right whitespace-nowrap">
                   {{ formatPaise(schedule.due_amount) }}
                 </td>
                 <td class="px-5 py-4 text-center whitespace-nowrap">
@@ -149,7 +159,12 @@
                       </glass-button>
                     }
                   } @else {
-                    <span class="text-xs text-slate-400 font-medium">Completed</span>
+                    <span class="text-xs text-emerald-700 font-bold inline-flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                      </svg>
+                      Settled
+                    </span>
                   }
                 </td>
               </tr>

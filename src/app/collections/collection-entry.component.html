@@ -1,9 +1,13 @@
-<div class="max-w-4xl mx-auto p-2 sm:p-4 space-y-6">
+<div class="max-w-4xl mx-auto space-y-6">
   <!-- Page Header & Tab Navigation -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/50 dark:border-slate-800/50">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-slate-200/80">
     <div>
-      <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Collections & Weekly Dues</h2>
-      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Record customer collections and manage weekly schedules & absences</p>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200/80">Cash Flow</span>
+        <span class="text-xs text-slate-500 font-medium">Collections & Schedules</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Collections Operations</h1>
+      <p class="text-sm text-slate-500 mt-1">Record incoming weekly dues and manage borrower cycle attendance.</p>
     </div>
 
     <glass-tabs
@@ -16,123 +20,169 @@
   @if (activeTab() === 'tracker') {
     <app-weekly-tracker />
   } @else {
-    <div class="max-w-2xl">
-      <glass-card variant="elevated" customClass="p-6 sm:p-8">
-        @if (loading()) {
-          <div class="flex justify-center py-10">
-            <div class="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- Form Card (2 Columns) -->
+      <glass-card variant="elevated" customClass="lg:col-span-2 p-6 sm:p-8">
+        @if (loading() && !customersLoaded()) {
+          <div class="flex justify-center py-12">
+            <div class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
           </div>
         }
 
         @if (error()) {
-          <div class="mb-5 flex items-center rounded-xl bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400 border border-red-500/20 backdrop-blur-xs">
-            <span class="font-bold mr-2">!</span>
+          <div class="mb-5 flex items-center rounded-xl bg-red-500/10 p-3.5 text-sm text-red-700 border border-red-500/20 backdrop-blur-xs">
+            <svg class="h-5 w-5 text-red-500 mr-2.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
             <span>{{ error() }}</span>
           </div>
         }
 
         @if (success()) {
-          <div class="mb-5 flex items-center rounded-xl bg-emerald-500/10 p-3 text-sm text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 backdrop-blur-xs">
-            <span class="font-bold mr-2">✓</span>
+          <div class="mb-5 flex items-center rounded-xl bg-emerald-500/10 p-3.5 text-sm text-emerald-800 border border-emerald-500/20 backdrop-blur-xs font-medium">
+            <svg class="h-5 w-5 text-emerald-600 mr-2.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
             <span>{{ success() }}</span>
           </div>
         }
 
-        @if (!loading() && customersLoaded()) {
-          <form (ngSubmit)="collectPayment()" class="space-y-6">
-            <div class="space-y-5">
-              <div>
-                <label for="customer" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Customer <span class="text-red-500">*</span></label>
-                <select
+        @if (customersLoaded()) {
+          <form (ngSubmit)="collectPayment()" class="space-y-5">
+            <!-- Customer Selector -->
+            <div>
+              <label for="customer" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Borrower / Account <span class="text-rose-500">*</span>
+              </label>
+              <select
+                glassInput
+                id="customer"
+                [value]="selectedCustomer()"
+                (change)="onCustomerSelect($event)"
+                required
+              >
+                <option value="">Select a customer from directory</option>
+                @for (customer of customers(); track customer.id) {
+                  <option [value]="customer.id">
+                    {{ customer.name }} (Weekly: {{ formatCurrency(customer.weekly_due_amount) }})
+                  </option>
+                }
+              </select>
+            </div>
+
+            <!-- Collection Amount -->
+            <div>
+              <label for="amount" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Collection Amount (₹) <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative rounded-xl shadow-xs">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10">
+                  <span class="text-slate-500 text-sm font-bold">₹</span>
+                </div>
+                <input
                   glassInput
-                  id="customer"
-                  [value]="selectedCustomer()"
-                  (change)="onCustomerSelect($event)"
+                  type="number"
+                  id="amount"
+                  class="!pl-8 font-mono font-extrabold text-xl text-slate-900"
+                  placeholder="0"
+                  [value]="amountInRupees()"
+                  (input)="amountInRupees.set(+$any($event.target).value)"
+                  min="1"
+                  step="1"
                   required
-                >
-                  <option value="">Select a customer</option>
-                  @for (customer of customers(); track customer.id) {
-                    <option [value]="customer.id">{{ customer.name }} (Weekly: ₹{{ (customer.weekly_due_amount / 100).toFixed(2) }})</option>
-                  }
-                </select>
+                />
               </div>
 
-              <div>
-                <label for="amount" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Collection Amount (₹) <span class="text-red-500">*</span></label>
-                <div class="relative rounded-xl shadow-xs">
-                  <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10">
-                    <span class="text-slate-400 text-sm font-semibold">₹</span>
-                  </div>
-                  <input
-                    glassInput
-                    type="number"
-                    id="amount"
-                    class="!pl-8 font-mono font-bold"
-                    placeholder="500"
-                    [value]="amountInRupees()"
-                    (input)="amountInRupees.set(+$any($event.target).value)"
-                    min="1"
-                    step="1"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">Payment Method</label>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  @for (method of paymentMethods; track method) {
-                    <label
-                      [class.border-blue-500]="selectedMethod() === method"
-                      [class.bg-blue-500/10]="selectedMethod() === method"
-                      [class.text-blue-700]="selectedMethod() === method"
-                      [class.shadow-xs]="selectedMethod() === method"
-                      class="flex items-center justify-center p-3 border border-slate-200/70 dark:border-slate-700/70 rounded-xl cursor-pointer text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:bg-white/80 dark:hover:bg-slate-800 transition-all select-none"
+              <!-- Quick Amount Preset Chips -->
+              @if (selectedCustomerObj()) {
+                <div class="mt-2.5 flex items-center gap-2 flex-wrap">
+                  <span class="text-xs font-medium text-slate-400">Quick Fill:</span>
+                  <button
+                    type="button"
+                    (click)="setAmount(selectedCustomerObj()!.weekly_due_amount / 100)"
+                    class="px-2.5 py-1 text-xs rounded-lg border border-blue-200 bg-blue-50 text-blue-700 font-bold hover:bg-blue-100 transition cursor-pointer shadow-2xs font-mono"
+                  >
+                    1 Week ({{ formatCurrency(selectedCustomerObj()!.weekly_due_amount) }})
+                  </button>
+                  <button
+                    type="button"
+                    (click)="setAmount((selectedCustomerObj()!.weekly_due_amount * 2) / 100)"
+                    class="px-2.5 py-1 text-xs rounded-lg border border-slate-200 bg-slate-50 text-slate-700 font-bold hover:bg-slate-100 transition cursor-pointer shadow-2xs font-mono"
+                  >
+                    2 Weeks ({{ formatCurrency(selectedCustomerObj()!.weekly_due_amount * 2) }})
+                  </button>
+                  @if (selectedCustomerObj()!.outstanding_balance > 0) {
+                    <button
+                      type="button"
+                      (click)="setAmount(selectedCustomerObj()!.outstanding_balance / 100)"
+                      class="px-2.5 py-1 text-xs rounded-lg border border-rose-200 bg-rose-50 text-rose-700 font-bold hover:bg-rose-100 transition cursor-pointer shadow-2xs font-mono"
                     >
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        [value]="method"
-                        [checked]="selectedMethod() === method"
-                        (change)="selectedMethod.set(method)"
-                        class="sr-only"
-                      />
-                      {{ method }}
-                    </label>
+                      Clear Debt ({{ formatCurrency(selectedCustomerObj()!.outstanding_balance) }})
+                    </button>
                   }
-                </div>
-              </div>
-
-              @if (selectedMethod() === 'online' || selectedMethod() === 'cheque') {
-                <div>
-                  <label for="reference" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
-                    {{ selectedMethod() === 'online' ? 'UPI / Transaction Ref ID' : 'Cheque Number' }}
-                  </label>
-                  <input
-                    glassInput
-                    type="text"
-                    id="reference"
-                    placeholder="e.g. UPI/1234567890"
-                    [value]="reference()"
-                    (input)="reference.set($any($event.target).value)"
-                  />
                 </div>
               }
+            </div>
 
-              <div>
-                <label for="notes" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">Notes (Optional)</label>
-                <textarea
-                  glassInput
-                  id="notes"
-                  rows="2"
-                  placeholder="Optional notes or remarks"
-                  [value]="notes()"
-                  (input)="notes.set($any($event.target).value)"
-                ></textarea>
+            <!-- Payment Method Segmented Control -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Payment Channel</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                @for (method of paymentMethods; track method) {
+                  <label
+                    [class.border-blue-600]="selectedMethod() === method"
+                    [class.bg-blue-50]="selectedMethod() === method"
+                    [class.text-blue-900]="selectedMethod() === method"
+                    [class.ring-1]="selectedMethod() === method"
+                    [class.ring-blue-600]="selectedMethod() === method"
+                    class="flex items-center justify-center p-3 border border-slate-200 rounded-xl cursor-pointer text-xs font-bold uppercase tracking-wider text-slate-600 hover:bg-slate-50 transition-all select-none shadow-2xs"
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      [value]="method"
+                      [checked]="selectedMethod() === method"
+                      (change)="selectedMethod.set(method)"
+                      class="sr-only"
+                    />
+                    {{ method }}
+                  </label>
+                }
               </div>
             </div>
 
-            <div class="pt-5 border-t border-slate-200/50 dark:border-slate-800">
+            <!-- Reference / Cheque Input -->
+            @if (selectedMethod() === 'online' || selectedMethod() === 'cheque') {
+              <div>
+                <label for="reference" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  {{ selectedMethod() === 'online' ? 'UPI Reference / Transaction ID' : 'Cheque Number' }}
+                </label>
+                <input
+                  glassInput
+                  type="text"
+                  id="reference"
+                  placeholder="e.g. UPI/3120198457"
+                  [value]="reference()"
+                  (input)="reference.set($any($event.target).value)"
+                />
+              </div>
+            }
+
+            <!-- Notes -->
+            <div>
+              <label for="notes" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Audit Note (Optional)</label>
+              <textarea
+                glassInput
+                id="notes"
+                rows="2"
+                placeholder="Optional remarks regarding this transaction"
+                [value]="notes()"
+                (input)="notes.set($any($event.target).value)"
+              ></textarea>
+            </div>
+
+            <div class="pt-4 border-t border-slate-200/80">
               <glass-button
                 variant="filled"
                 size="lg"
@@ -146,6 +196,63 @@
           </form>
         }
       </glass-card>
+
+      <!-- Customer Spotlight Preview Card (1 Column) -->
+      <div>
+        @if (selectedCustomerObj(); as cust) {
+          <glass-card variant="elevated" customClass="p-6 space-y-4">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-200/80">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-sm flex items-center justify-center shadow-xs flex-shrink-0">
+                {{ getInitials(cust.name) }}
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-slate-900 leading-tight">{{ cust.name }}</h3>
+                <span class="text-xs text-slate-500 font-medium">{{ cust.phone || 'No phone' }}</span>
+              </div>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
+                <span class="font-medium text-slate-500">Weekly Target:</span>
+                <span class="font-mono font-bold text-slate-900 text-sm">{{ formatCurrency(cust.weekly_due_amount) }}</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
+                <span class="font-medium text-slate-500">Current Outstanding:</span>
+                <span class="font-mono font-extrabold text-sm" [class]="cust.outstanding_balance > 0 ? 'text-rose-600' : 'text-emerald-600'">
+                  {{ formatCurrency(cust.outstanding_balance) }}
+                </span>
+              </div>
+              <div class="flex justify-between items-center py-1.5 border-b border-slate-100">
+                <span class="font-medium text-slate-500">Total Recovered:</span>
+                <span class="font-mono font-bold text-emerald-700 text-sm">{{ formatCurrency(cust.total_paid) }}</span>
+              </div>
+              <div class="flex justify-between items-center py-1.5">
+                <span class="font-medium text-slate-500">Cumulative Due:</span>
+                <span class="font-mono font-bold text-slate-700 text-sm">{{ formatCurrency(cust.total_due) }}</span>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <a
+                [routerLink]="['/customers', cust.id]"
+                class="w-full inline-flex items-center justify-center py-2 px-3 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl border border-blue-200 transition-colors"
+              >
+                View Complete Profile & Ledger →
+              </a>
+            </div>
+          </glass-card>
+        } @else {
+          <glass-card variant="default" customClass="p-6 text-center py-12">
+            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <h4 class="text-sm font-bold text-slate-800">No Borrower Selected</h4>
+            <p class="text-xs text-slate-400 mt-1">Select a customer from the dropdown to see their dues summary and payment history.</p>
+          </glass-card>
+        }
+      </div>
     </div>
   }
 </div>

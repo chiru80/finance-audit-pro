@@ -1,6 +1,7 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { Customer } from '../customers/customer.types';
@@ -43,6 +44,7 @@ export class LedgerComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _authService = inject(AuthService);
   private readonly _collectionService = inject(CollectionService);
+  private readonly _route = inject(ActivatedRoute);
 
   loading = signal(true);
   error = signal<string | null>(null);
@@ -50,22 +52,39 @@ export class LedgerComponent implements OnInit {
   selectedCustomer = signal<Customer | null>(null);
   payments = signal<LedgerPayment[]>([]);
   searchQuery = signal<string>('');
+  customerSearch = signal<string>('');
+
+  filteredCustomers = computed(() => {
+    const list = this.customers();
+    const q = this.customerSearch().toLowerCase().trim();
+    if (!q) return list;
+    return list.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      (c.phone || '').toLowerCase().includes(q)
+    );
+  });
 
   filteredPayments = computed(() => {
     if (!this.searchQuery()) return this.payments();
-    const q = this.searchQuery().toLowerCase();
+    const q = this.searchQuery().toLowerCase().trim();
     return this.payments().filter(p =>
       (p.customer_name || '').toLowerCase().includes(q) ||
       (p.id || '').toString().toLowerCase().includes(q) ||
-      (p.payment_method || '').toLowerCase().includes(q)
+      (p.payment_method || '').toLowerCase().includes(q) ||
+      (p.reference || '').toLowerCase().includes(q)
     );
+  });
+
+  totalCustomerPayments = computed(() => {
+    return this.payments().reduce((sum, p) => sum + (p.amount || 0), 0);
   });
 
   ngOnInit() {
     this.loadCustomers();
   }
 
-  private async loadCustomers() {
+  async loadCustomers() {
+    this.loading.set(true);
     try {
       const { data, error } = await this._supabaseService.client
         .from('customers')
@@ -74,7 +93,17 @@ export class LedgerComponent implements OnInit {
         .order('name', { ascending: true });
 
       if (error) throw error;
-      this.customers.set(data as Customer[]);
+      const list = data as Customer[];
+      this.customers.set(list);
+
+      // Check query param for customerId
+      const qCid = this._route.snapshot.queryParamMap.get('customerId');
+      if (qCid) {
+        const found = list.find(c => c.id === qCid);
+        if (found) {
+          this.selectCustomer(found);
+        }
+      }
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to load customers');
     } finally {
@@ -126,6 +155,37 @@ export class LedgerComponent implements OnInit {
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to load payments');
     }
+  }
+
+  exportCustomerLedgerCSV() {
+    const cust = this.selectedCustomer();
+    const payments = this.filteredPayments();
+    if (!cust || !payments.length) return;
+
+    const headers = ['Transaction ID', 'Date', 'Method', 'Amount (INR)', 'Weeks Covered', 'Reference / Note'];
+    const rows = payments.map(p => [
+      p.id,
+      p.payment_date,
+      p.payment_method,
+      (p.amount / 100).toFixed(2),
+      this.getAllocationCount(p),
+      p.reference || p.notes || '',
+    ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers, ...rows].map(row =>
+      row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+    ).join('\n');
+
+    const link = document.createElement('a');
+    link.setAttribute('href', encodeURI(csvContent));
+    link.setAttribute('download', `${cust.name.replace(/\s+/g, '_')}_ledger.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  printLedger() {
+    window.print();
   }
 
   formatCurrency(amount: number | bigint): string {

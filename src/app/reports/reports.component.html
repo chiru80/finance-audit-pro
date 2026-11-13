@@ -1,18 +1,22 @@
-<div class="max-w-6xl mx-auto space-y-6">
+<div class="max-w-7xl mx-auto space-y-6">
   <!-- Header & Export Actions -->
   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
     <div>
-      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Financial Reports & Audit</h1>
-      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Review aggregated financial balances, weekly collectibles, and export transaction logs.</p>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200/80">Intelligence</span>
+        <span class="text-xs text-slate-500 font-medium">Financial Audit & Insights</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Financial Reports & Audit</h1>
+      <p class="text-sm text-slate-500 mt-1">Review aggregated balances, monitor collection velocity, and export verified financial reports.</p>
     </div>
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2.5 flex-wrap">
       <glass-button
         variant="glass"
         size="md"
-        (buttonClick)="exportPaymentsCSV()"
+        (onClick)="exportPaymentsCSV()"
       >
-        <svg class="w-4 h-4 mr-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 mr-1 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z" />
         </svg>
         Export Payments CSV
@@ -21,9 +25,9 @@
       <glass-button
         variant="filled"
         size="md"
-        (buttonClick)="exportBalancesCSV()"
+        (onClick)="exportBalancesCSV()"
       >
-        <svg class="w-4 h-4 mr-1.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z" />
         </svg>
         Export Balances CSV
@@ -31,14 +35,14 @@
     </div>
   </div>
 
-  @if (loading()) {
-    <div class="flex justify-center py-12">
+  @if (loading() && !summary()) {
+    <div class="flex justify-center py-16">
       <div class="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600"></div>
     </div>
   }
 
   @if (error()) {
-    <div class="rounded-xl bg-red-500/10 p-4 border border-red-500/20 text-sm text-red-700 dark:text-red-400 flex items-center gap-2 backdrop-blur-sm">
+    <div class="rounded-xl bg-red-500/10 p-4 border border-red-500/20 text-sm text-red-700 flex items-center gap-2 backdrop-blur-sm">
       <svg class="h-5 w-5 text-red-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
       </svg>
@@ -46,113 +50,141 @@
     </div>
   }
 
-  <!-- Financial Summary Metrics -->
-  <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-    <app-stat-card
-      [label]="'Total Customers'"
-      [value]="summary()?.totalCustomers || 0"
-      [color]="'primary'"
-    />
-    <app-stat-card
-      [label]="'Total Outstanding'"
-      [value]="formatCurrency(summary()?.totalOutstanding ?? 0)"
-      [color]="'warning'"
-      [prefix]="'₹'"
-    />
-    <app-stat-card
-      [label]="'Total Due'"
-      [value]="formatCurrency(summary()?.totalDue ?? 0)"
-      [color]="'primary'"
-      [prefix]="'₹'"
-    />
-    <app-stat-card
-      [label]="'Total Paid'"
-      [value]="formatCurrency(summary()?.totalPaid ?? 0)"
-      [color]="'success'"
-      [prefix]="'₹'"
-    />
-    <app-stat-card
-      [label]="'This Week Due'"
-      [value]="formatCurrency(summary()?.thisWeekCollectible ?? 0)"
-      [color]="'primary'"
-      [prefix]="'₹'"
-    />
+  <!-- Financial Summary Metrics (5 Tiles) -->
+  <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Total Customers</span>
+      <span class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 block">{{ summary()?.totalCustomers || 0 }}</span>
+      <span class="text-xs font-semibold text-slate-400">active borrower accounts</span>
+    </div>
+
+    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Total Outstanding</span>
+      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-rose-600 mt-2 block">{{ formatCurrency(summary()?.totalOutstanding ?? 0) }}</span>
+      <span class="text-xs font-semibold text-rose-500">unrecovered dues</span>
+    </div>
+
+    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Total Lifetime Due</span>
+      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-slate-900 mt-2 block">{{ formatCurrency(summary()?.totalDue ?? 0) }}</span>
+      <span class="text-xs font-semibold text-slate-400">cumulative scheduled</span>
+    </div>
+
+    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">Total Recovered</span>
+      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-700 mt-2 block">{{ formatCurrency(summary()?.totalPaid ?? 0) }}</span>
+      <span class="text-xs font-semibold text-emerald-600">collected in cash/UPI</span>
+    </div>
+
+    <div class="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">This Week Due</span>
+      <span class="text-2xl sm:text-3xl font-extrabold font-mono text-blue-700 mt-2 block">{{ formatCurrency(summary()?.thisWeekCollectible ?? 0) }}</span>
+      <span class="text-xs font-semibold text-blue-600">due this active cycle</span>
+    </div>
   </div>
 
-  <!-- Payment Transactions Table -->
-  <glass-card variant="elevated" customClass="overflow-hidden">
-    <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800/60">
+  <!-- Payment Collection Log Table -->
+  <glass-card variant="elevated" customClass="overflow-hidden p-0">
+    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/60">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 class="text-base font-semibold text-slate-900 dark:text-white">Payment Collection Log</h2>
-          <p class="text-xs text-slate-500 dark:text-slate-400">Filter payments by date range.</p>
+          <h2 class="text-base font-bold text-slate-900">Payment Collection Log</h2>
+          <p class="text-xs text-slate-500">Filter transactions across customized audit periods.</p>
         </div>
 
+        <!-- Filter Controls -->
         <div class="flex items-center gap-2 flex-wrap">
-          <div class="flex flex-col">
-            <label class="sr-only">From</label>
+          <div class="flex items-center p-1 bg-slate-100 rounded-xl">
+            <button
+              type="button"
+              (click)="setDatePreset('7d')"
+              [class]="activePreset() === '7d' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
+              7 Days
+            </button>
+            <button
+              type="button"
+              (click)="setDatePreset('30d')"
+              [class]="activePreset() === '30d' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
+              30 Days
+            </button>
+            <button
+              type="button"
+              (click)="setDatePreset('this_month')"
+              [class]="activePreset() === 'this_month' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
+              This Month
+            </button>
+            <button
+              type="button"
+              (click)="setDatePreset('all')"
+              [class]="activePreset() === 'all' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
+              All Time
+            </button>
+          </div>
+
+          <div class="flex items-center gap-1.5 text-xs text-slate-500">
             <input
               glassInput
               type="date"
+              class="!py-1 !px-2 !text-xs !bg-white"
               [ngModel]="startDate()"
               (ngModelChange)="startDate.set($event)"
             />
-          </div>
-          <span class="text-xs text-slate-400">to</span>
-          <div class="flex flex-col">
-            <label class="sr-only">To</label>
+            <span>to</span>
             <input
               glassInput
               type="date"
+              class="!py-1 !px-2 !text-xs !bg-white"
               [ngModel]="endDate()"
               (ngModelChange)="endDate.set($event)"
             />
+            <glass-button
+              variant="glass"
+              size="sm"
+              (onClick)="loadReports()"
+            >
+              Apply
+            </glass-button>
           </div>
-          <glass-button
-            variant="glass"
-            size="sm"
-            (buttonClick)="loadReports()"
-          >
-            Apply Filter
-          </glass-button>
         </div>
       </div>
     </div>
 
     @if (recentPayments().length === 0) {
-      <div class="py-12 text-center text-slate-400">
-        <svg class="w-10 h-10 mx-auto text-slate-300 dark:text-slate-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="py-14 text-center text-slate-400">
+        <svg class="w-10 h-10 mx-auto text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
-        <p class="text-sm font-medium text-slate-700 dark:text-slate-300">No payment transactions found</p>
-        <p class="text-xs text-slate-400 mt-1">No payments match your date range. Try adjusting the filter.</p>
+        <p class="text-sm font-bold text-slate-700">No payment transactions found</p>
+        <p class="text-xs text-slate-400 mt-1">No collections match the specified date range. Try switching to "All Time".</p>
       </div>
     } @else {
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800/60 text-sm">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
           <thead>
-            <tr class="bg-slate-100/80 dark:bg-slate-800/70 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-              <th class="px-6 py-3.5">Payment ID</th>
+            <tr class="bg-slate-100/90 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
               <th class="px-6 py-3.5">Date</th>
-              <th class="px-6 py-3.5">Customer</th>
+              <th class="px-6 py-3.5">Borrower</th>
               <th class="px-6 py-3.5">Method</th>
-              <th class="px-6 py-3.5">Reference</th>
-              <th class="px-6 py-3.5 text-right">Amount</th>
+              <th class="px-6 py-3.5">Reference / Notes</th>
+              <th class="px-6 py-3.5 text-right">Amount Recovered</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-200/70 dark:divide-slate-800/60">
+          <tbody class="divide-y divide-slate-100 bg-white/70">
             @for (payment of recentPayments(); track payment.id) {
-              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                <td class="px-6 py-3.5 text-sm text-slate-900 dark:text-slate-200 font-mono font-bold">#</td>
-                <td class="px-6 py-3.5 text-sm text-slate-700 dark:text-slate-300 font-medium">{{ formatDate(payment.payment_date) }}</td>
-                <td class="px-6 py-3.5 text-sm text-slate-900 dark:text-white font-bold">{{ payment.customers?.name || 'N/A' }}</td>
+              <tr class="hover:bg-blue-50/40 transition-colors">
+                <td class="px-6 py-3.5 text-sm text-slate-800 font-semibold whitespace-nowrap">{{ formatDate(payment.payment_date) }}</td>
+                <td class="px-6 py-3.5 text-sm text-slate-900 font-bold whitespace-nowrap">{{ payment.customers?.name || 'N/A' }}</td>
                 <td class="px-6 py-3.5 whitespace-nowrap">
-                  <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
                     {{ payment.payment_method }}
                   </span>
                 </td>
-                <td class="px-6 py-3.5 text-sm text-slate-600 dark:text-slate-400">{{ payment.reference || '-' }}</td>
-                <td class="px-6 py-3.5 text-right font-extrabold text-emerald-700 dark:text-emerald-400 font-mono whitespace-nowrap">{{ formatCurrency(payment.amount) }}</td>
+                <td class="px-6 py-3.5 text-xs text-slate-500">{{ payment.reference || payment.notes || '—' }}</td>
+                <td class="px-6 py-3.5 text-right font-extrabold text-emerald-700 font-mono whitespace-nowrap text-base">{{ formatCurrency(payment.amount) }}</td>
               </tr>
             }
           </tbody>
@@ -161,45 +193,42 @@
     }
   </glass-card>
 
-  <!-- Customer Balances / Defaulters Table -->
-  <glass-card variant="elevated" customClass="overflow-hidden">
-    <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800/60">
-      <h2 class="text-base font-semibold text-slate-900 dark:text-white">Highest Outstanding Balances</h2>
-      <p class="text-xs text-slate-500 dark:text-slate-400">Customers with the highest unpaid dues requiring immediate attention.</p>
+  <!-- Customer Balances / Defaulters Risk Audit Table -->
+  <glass-card variant="elevated" customClass="overflow-hidden p-0">
+    <div class="px-6 py-4 border-b border-slate-200 bg-slate-50/60">
+      <h2 class="text-base font-bold text-slate-900">Highest Outstanding Balances (Risk Audit)</h2>
+      <p class="text-xs text-slate-500">Borrowers ordered by total outstanding debt requiring immediate collection follow-up.</p>
     </div>
 
     @if (customerBalances().length === 0) {
-      <div class="py-12 text-center text-slate-400">
-        <svg class="w-10 h-10 mx-auto text-slate-300 dark:text-slate-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-        <p class="text-sm font-medium text-slate-700 dark:text-slate-300">No customer balance records</p>
-        <p class="text-xs text-slate-400 mt-1">No customer balance data is available.</p>
+      <div class="py-14 text-center text-slate-400">
+        <p class="text-sm font-bold text-slate-700">No customer balance records</p>
+        <p class="text-xs text-slate-400 mt-1">No customer balance records are currently available.</p>
       </div>
     } @else {
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800/60 text-sm">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
           <thead>
-            <tr class="bg-slate-100/80 dark:bg-slate-800/70 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-              <th class="px-6 py-3.5">Customer</th>
-              <th class="px-6 py-3.5">Phone</th>
+            <tr class="bg-slate-100/90 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <th class="px-6 py-3.5">Borrower</th>
+              <th class="px-6 py-3.5">Phone Number</th>
               <th class="px-6 py-3.5">Total Paid</th>
-              <th class="px-6 py-3.5">Status</th>
-              <th class="px-6 py-3.5 text-right">Outstanding Balance</th>
+              <th class="px-6 py-3.5">Account Status</th>
+              <th class="px-6 py-3.5 text-right">Outstanding Debt</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-200/70 dark:divide-slate-800/60">
+          <tbody class="divide-y divide-slate-100 bg-white/70">
             @for (c of customerBalances(); track c.id) {
-              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                <td class="px-6 py-3.5 font-bold text-slate-900 dark:text-white">{{ c.name }}</td>
-                <td class="px-6 py-3.5 text-sm text-slate-600 dark:text-slate-400">{{ c.phone || '-' }}</td>
-                <td class="px-6 py-3.5 text-sm text-slate-700 dark:text-slate-300 font-mono font-medium">{{ formatCurrency(c.total_paid) }}</td>
+              <tr class="hover:bg-blue-50/40 transition-colors">
+                <td class="px-6 py-3.5 font-bold text-slate-900 whitespace-nowrap">{{ c.name }}</td>
+                <td class="px-6 py-3.5 text-xs text-slate-600 font-medium whitespace-nowrap">{{ c.phone || '—' }}</td>
+                <td class="px-6 py-3.5 text-sm text-emerald-700 font-mono font-bold whitespace-nowrap">{{ formatCurrency(c.total_paid) }}</td>
                 <td class="px-6 py-3.5 whitespace-nowrap">
-                  <glass-badge [variant]="c.status === 'active' ? 'active' : 'neutral'">
+                  <glass-badge [status]="c.status === 'active' ? 'active' : 'neutral'">
                     {{ c.status }}
                   </glass-badge>
                 </td>
-                <td class="px-6 py-3.5 text-right font-extrabold text-rose-700 dark:text-rose-400 font-mono whitespace-nowrap">{{ formatCurrency(c.outstanding_balance) }}</td>
+                <td class="px-6 py-3.5 text-right font-extrabold text-rose-600 font-mono whitespace-nowrap text-base">{{ formatCurrency(c.outstanding_balance) }}</td>
               </tr>
             }
           </tbody>

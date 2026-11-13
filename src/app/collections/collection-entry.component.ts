@@ -1,6 +1,7 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { Customer } from '../customers/customer.types';
@@ -9,6 +10,7 @@ import { GlassCardComponent } from '../design-system/components/glass-card.compo
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassTabsComponent, GlassTabItem } from '../design-system/components/glass-tabs.component';
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';
+import { formatPaiseToINR } from '../utils/currency.utils';
 
 @Component({
   selector: 'app-collection-entry',
@@ -16,6 +18,7 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
   imports: [
     CommonModule,
     FormsModule,
+    RouterLink,
     WeeklyTrackerComponent,
     GlassCardComponent,
     GlassButtonComponent,
@@ -28,6 +31,7 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
 export class CollectionEntryComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _authService = inject(AuthService);
+  private readonly _route = inject(ActivatedRoute);
 
   activeTab = signal<'record' | 'tracker'>('record');
   loading = signal(true);
@@ -40,6 +44,12 @@ export class CollectionEntryComponent implements OnInit {
   notes = signal<string>('');
   customersLoaded = signal(false);
   success = signal<string | null>(null);
+
+  selectedCustomerObj = computed(() => {
+    const id = this.selectedCustomer();
+    if (!id) return null;
+    return this.customers().find(c => c.id === id) || null;
+  });
 
   paymentMethods: ('cash' | 'online' | 'cheque' | 'other')[] = ['cash', 'online', 'cheque', 'other'];
 
@@ -61,8 +71,19 @@ export class CollectionEntryComponent implements OnInit {
         .order('name', { ascending: true });
 
       if (error) throw error;
-      this.customers.set(data as Customer[]);
+      const list = data as Customer[];
+      this.customers.set(list);
       this.customersLoaded.set(true);
+
+      // Check if customerId is passed via query params
+      const qCid = this._route.snapshot.queryParamMap.get('customerId');
+      if (qCid) {
+        const match = list.find(c => c.id === qCid);
+        if (match) {
+          this.selectedCustomer.set(match.id);
+          this.amountInRupees.set(Math.round(match.weekly_due_amount / 100));
+        }
+      }
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to load customers');
     } finally {
@@ -72,17 +93,28 @@ export class CollectionEntryComponent implements OnInit {
 
   onCustomerSelect(event: Event) {
     const target = event.target as HTMLSelectElement;
-    this.selectedCustomer.set(target.value);
-    this.amountInRupees.set(0);
+    const cid = target.value;
+    this.selectedCustomer.set(cid);
     this.reference.set('');
     this.notes.set('');
     this.error.set(null);
     this.success.set(null);
+
+    const match = this.customers().find(c => c.id === cid);
+    if (match) {
+      this.amountInRupees.set(Math.round(match.weekly_due_amount / 100));
+    } else {
+      this.amountInRupees.set(0);
+    }
+  }
+
+  setAmount(amt: number) {
+    this.amountInRupees.set(amt);
   }
 
   async collectPayment() {
     if (!this.selectedCustomer() || this.amountInRupees() <= 0) {
-      this.error.set('Please select a customer and enter a valid amount');
+      this.error.set('Please select a customer and enter a valid collection amount.');
       return;
     }
 
@@ -108,14 +140,15 @@ export class CollectionEntryComponent implements OnInit {
         throw new Error(result.error_message || 'Payment recording failed');
       }
 
+      const collectedRupees = this.amountInRupees();
       this.amountInRupees.set(0);
       this.reference.set('');
       this.notes.set('');
 
-      this.success.set('Payment recorded successfully');
-      this.loadCustomers();
+      this.success.set(`Successfully recorded collection of ₹${collectedRupees.toFixed(2)}.`);
+      await this.loadCustomers();
 
-      setTimeout(() => this.success.set(null), 3000);
+      setTimeout(() => this.success.set(null), 4000);
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to record payment');
     } finally {
@@ -123,8 +156,14 @@ export class CollectionEntryComponent implements OnInit {
     }
   }
 
-  getFormattedAmount(): string {
-    const amt = this.amountInRupees();
-    return amt ? `₹${amt.toFixed(2)}` : '₹0.00';
+  formatCurrency(paise: number | bigint): string {
+    return formatPaiseToINR(paise || 0);
+  }
+
+  getInitials(name?: string): string {
+    if (!name) return 'C';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
   }
 }

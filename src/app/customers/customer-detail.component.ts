@@ -77,6 +77,20 @@ export class CustomerDetailComponent implements OnInit {
     this.activeTab.set(tab);
   }
 
+  recordPayment() {
+    const c = this.customer();
+    if (c) {
+      this._router.navigate(['/collections'], { queryParams: { customerId: c.id } });
+    }
+  }
+
+  getInitials(name?: string): string {
+    if (!name) return 'C';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
   private async loadCustomer(id: string) {
     this.loading.set(true);
     try {
@@ -137,4 +151,3 @@ export class CustomerDetailComponent implements OnInit {
     this._router.navigate(['/customers']);
   }
 }
-
