@@ -19,60 +19,89 @@ interface NavItem {
   imports: [CommonModule, RouterModule, I18nPipe],
   template: `
     @if (sidebarService.isOpen()) {
-      <aside class="sidebar w-64 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-r border-slate-200/70 dark:border-slate-800/80 flex flex-col flex-shrink-0 h-full select-none shadow-sm relative z-20">
-        <!-- Specular Highlight Line on Top -->
-        <div class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent"></div>
+      <aside class="sidebar w-64 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-r border-slate-200/90 dark:border-slate-800 flex flex-col flex-shrink-0 h-full select-none shadow-xs relative z-30 transition-all duration-300">
+        <!-- Top Specular Line -->
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
 
         <!-- Brand Header -->
-        <div class="h-16 flex items-center gap-3 px-5 border-b border-slate-200/50 dark:border-slate-800/50 bg-white/40 dark:bg-slate-900/40 flex-shrink-0">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-500/25 border border-white/30 flex-shrink-0">
+        <div class="h-16 flex items-center gap-3 px-5 border-b border-slate-200/80 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 flex-shrink-0">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md shadow-blue-500/25 border border-white/30 flex-shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div class="min-w-0">
-            <h1 class="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none truncate">Finance Audit Pro</h1>
-            <span class="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider block mt-1">Audit Engine</span>
+            <h1 class="text-sm font-extrabold text-slate-900 dark:text-white tracking-tight leading-none truncate">Finance Audit Pro</h1>
+            <span class="text-[9px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-widest block mt-1">AUDIT ENGINE</span>
           </div>
         </div>
 
         <!-- Navigation Menu -->
-        <div class="sidebar-content p-3 flex-1 overflow-y-auto">
-          <p class="px-3 pt-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Navigation</p>
-          <nav class="space-y-1">
-            @for (item of navItems; track item.routerLink) {
-              <a
-                [routerLink]="[item.routerLink]"
-                class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white"
-                routerLinkActive="active-nav-link"
-                [routerLinkActiveOptions]="{ exact: item.routerLink === '/dashboard' }"
-              >
-                <span [innerHTML]="getIconHtml(item.icon)" class="w-5 h-5 flex-shrink-0 flex items-center justify-center"></span>
-                <span class="truncate">{{ item.labelKey | i18n }}</span>
-              </a>
-            }
-          </nav>
+        <div class="sidebar-content p-3 flex-1 overflow-y-auto space-y-6">
+          <!-- Main Section -->
+          <div>
+            <p class="px-3 pb-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">Core Navigation</p>
+            <nav class="space-y-1">
+              @for (item of mainNavItems; track item.routerLink) {
+                <a
+                  [routerLink]="[item.routerLink]"
+                  class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+                  routerLinkActive="active-nav-link"
+                  [routerLinkActiveOptions]="{ exact: item.routerLink === '/dashboard' }"
+                >
+                  <span [innerHTML]="getIconHtml(item.icon)" class="w-5 h-5 flex-shrink-0 flex items-center justify-center"></span>
+                  <span class="truncate">{{ item.labelKey | i18n }}</span>
+                </a>
+              }
+            </nav>
+          </div>
+
+          <!-- Administration Section -->
+          <div>
+            <p class="px-3 pb-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">Administration</p>
+            <nav class="space-y-1">
+              @for (item of adminNavItems; track item.routerLink) {
+                <a
+                  [routerLink]="[item.routerLink]"
+                  class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
+                  routerLinkActive="active-nav-link"
+                >
+                  <span [innerHTML]="getIconHtml(item.icon)" class="w-5 h-5 flex-shrink-0 flex items-center justify-center"></span>
+                  <span class="truncate">{{ item.labelKey | i18n }}</span>
+                </a>
+              }
+            </nav>
+          </div>
         </div>
 
         <!-- User Profile & Sign Out Footer -->
         @if (authService.isAuthenticated()) {
-          <div class="p-3 border-t border-slate-200/50 dark:border-slate-800/50 bg-white/40 dark:bg-slate-900/40 flex-shrink-0">
-            <div class="flex items-center gap-2.5 px-2.5 py-2 mb-2 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 shadow-xs backdrop-blur-md">
-              <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 font-bold text-xs flex items-center justify-center flex-shrink-0 uppercase border border-blue-200/50">
+          <div class="p-3 border-t border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 flex-shrink-0">
+            <div class="flex items-center gap-2.5 px-2.5 py-2 mb-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 shadow-xs">
+              <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center flex-shrink-0 uppercase shadow-xs">
                 {{ (authService.user()?.email || 'U')[0] }}
               </div>
               <div class="min-w-0 flex-1">
-                <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate leading-tight">
+                <p class="text-xs font-bold text-slate-900 dark:text-slate-100 truncate leading-tight">
                   {{ authService.user()?.user_metadata?.['full_name'] || 'Owner' }}
                 </p>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate leading-tight">
+                <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate leading-tight">
                   {{ authService.user()?.email }}
                 </p>
               </div>
+              <a
+                routerLink="/settings"
+                class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                title="Settings"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                </svg>
+              </a>
             </div>
             <button
               (click)="signOut()"
-              class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 rounded-xl hover:bg-red-500/10 transition-colors border border-red-500/20 cursor-pointer"
+              class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors border border-rose-200 dark:border-rose-900/50 cursor-pointer"
               type="button"
             >
               <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,17 +132,19 @@ interface NavItem {
     }
 
     .active-nav-link {
-      background: rgba(37, 99, 235, 0.10) !important;
+      background: #eff6ff !important;
       color: #1d4ed8 !important;
-      font-weight: 600 !important;
-      border: 1px solid rgba(37, 99, 235, 0.25) !important;
-      box-shadow: 0 1px 3px 0 rgba(37, 99, 235, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 0.70) !important;
+      font-weight: 700 !important;
+      border: 1px solid #bfdbfe !important;
+      border-left: 3.5px solid #2563eb !important;
+      box-shadow: 0 1px 2px 0 rgba(37, 99, 235, 0.06) !important;
     }
 
     [data-theme="dark"] .active-nav-link {
       background: rgba(37, 99, 235, 0.20) !important;
       color: #93c5fd !important;
       border-color: rgba(37, 99, 235, 0.40) !important;
+      border-left-color: #60a5fa !important;
     }
   `],
 })
@@ -124,12 +155,15 @@ export class AppSidebarComponent {
   private router = inject(Router);
   private sanitizer = inject(DomSanitizer);
 
-  navItems: NavItem[] = [
+  mainNavItems: NavItem[] = [
     { labelKey: 'nav.dashboard', icon: 'dashboard', routerLink: '/dashboard' },
     { labelKey: 'nav.customers', icon: 'customers', routerLink: '/customers' },
     { labelKey: 'nav.collections', icon: 'collections', routerLink: '/collections' },
     { labelKey: 'nav.ledger', icon: 'ledger', routerLink: '/ledger' },
     { labelKey: 'nav.reports', icon: 'reports', routerLink: '/reports' },
+  ];
+
+  adminNavItems: NavItem[] = [
     { labelKey: 'nav.settings', icon: 'settings', routerLink: '/settings' },
   ];
 

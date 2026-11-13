@@ -4,6 +4,9 @@
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
 
 @theme {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
   --color-primary-50: #f0f4ff;
   --color-primary-100: #e2ebff;
   --color-primary-200: #c9dbff;
