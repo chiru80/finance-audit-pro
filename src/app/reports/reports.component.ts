@@ -4,12 +4,24 @@ import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { StatCardComponent } from '../shared/stat-card.component';
+import { GlassCardComponent } from '../design-system/components/glass-card.component';
+import { GlassButtonComponent } from '../design-system/components/glass-button.component';
+import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
+import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 import { formatPaiseToINR } from '../utils/currency.utils';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule, StatCardComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    StatCardComponent,
+    GlassCardComponent,
+    GlassButtonComponent,
+    GlassBadgeComponent,
+    GlassInputDirective,
+  ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.css',
 })

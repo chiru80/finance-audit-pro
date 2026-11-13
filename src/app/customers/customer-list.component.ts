@@ -5,11 +5,23 @@ import { Router, RouterLink } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { Customer } from './customer.types';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { GlassCardComponent } from '../design-system/components/glass-card.component';
+import { GlassButtonComponent } from '../design-system/components/glass-button.component';
+import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
+import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 
 @Component({
   selector: 'app-customer-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    GlassCardComponent,
+    GlassButtonComponent,
+    GlassBadgeComponent,
+    GlassInputDirective,
+  ],
   templateUrl: './customer-list.component.html',
   styleUrls: ['./customer-list.component.css'],
 })

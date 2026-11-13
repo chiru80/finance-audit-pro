@@ -6,11 +6,23 @@ import { AuthService } from '../auth/auth.service';
 import { CollectionService } from '../collection.service';
 import { Customer } from '../customers/customer.types';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { GlassCardComponent } from '../design-system/components/glass-card.component';
+import { GlassButtonComponent } from '../design-system/components/glass-button.component';
+import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
+import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 
 @Component({
   selector: 'app-weekly-tracker',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DatePipe,
+    GlassCardComponent,
+    GlassButtonComponent,
+    GlassBadgeComponent,
+    GlassInputDirective,
+  ],
   templateUrl: './weekly-tracker.component.html',
   styleUrls: ['./weekly-tracker.component.css'],
 })

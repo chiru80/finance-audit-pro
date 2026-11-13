@@ -5,11 +5,23 @@ import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { Customer } from '../customers/customer.types';
 import { WeeklyTrackerComponent } from './weekly-tracker.component';
+import { GlassCardComponent } from '../design-system/components/glass-card.component';
+import { GlassButtonComponent } from '../design-system/components/glass-button.component';
+import { GlassTabsComponent, GlassTabItem } from '../design-system/components/glass-tabs.component';
+import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 
 @Component({
   selector: 'app-collection-entry',
   standalone: true,
-  imports: [CommonModule, FormsModule, WeeklyTrackerComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    WeeklyTrackerComponent,
+    GlassCardComponent,
+    GlassButtonComponent,
+    GlassTabsComponent,
+    GlassInputDirective,
+  ],
   templateUrl: './collection-entry.component.html',
   styleUrls: ['./collection-entry.component.css'],
 })
@@ -30,6 +42,11 @@ export class CollectionEntryComponent implements OnInit {
   success = signal<string | null>(null);
 
   paymentMethods: ('cash' | 'online' | 'cheque' | 'other')[] = ['cash', 'online', 'cheque', 'other'];
+
+  tabs: GlassTabItem[] = [
+    { id: 'record', label: 'Record Collection' },
+    { id: 'tracker', label: 'Weekly Tracker & Absences' },
+  ];
 
   ngOnInit() {
     this.loadCustomers();

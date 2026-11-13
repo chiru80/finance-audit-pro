@@ -7,6 +7,9 @@ import { AuthService } from '../auth/auth.service';
 import { CustomerService } from './customer.service';
 import { Customer } from './customer.types';
 import { validatePhoneNumber } from '../utils/form-validation.utils';
+import { GlassCardComponent } from '../design-system/components/glass-card.component';
+import { GlassButtonComponent } from '../design-system/components/glass-button.component';
+import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 
 function indianPhoneValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value || control.value.trim() === '') return null;
@@ -17,7 +20,13 @@ function indianPhoneValidator(control: AbstractControl): ValidationErrors | null
 @Component({
   selector: 'app-customer-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    GlassCardComponent,
+    GlassButtonComponent,
+    GlassInputDirective,
+  ],
   templateUrl: './customer-form.component.html',
   styleUrls: ['./customer-form.component.css'],
 })

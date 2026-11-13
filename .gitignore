@@ -48,6 +48,13 @@ Thumbs.db
 .env.local
 .env.*.local
 .env.development.local
+
+# Agent/Tool config
+.agents/
+.claude/
+.grok/
+.mcpjam/
+skills-lock.json
 .env.test.local
 .env.production.local
 

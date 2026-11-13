@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
+import { GlassCardComponent } from '../design-system/components/glass-card.component';
+import { GlassButtonComponent } from '../design-system/components/glass-button.component';
+import { GlassSwitchComponent } from '../design-system/components/glass-switch.component';
+import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 import { formatPaiseToINR } from '../utils/currency.utils';
 
 type SettingsKey =
@@ -16,7 +20,14 @@ type SettingsKey =
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    GlassCardComponent,
+    GlassButtonComponent,
+    GlassSwitchComponent,
+    GlassInputDirective,
+  ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css',
 })

@@ -3,34 +3,48 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { GlassCardComponent } from '../design-system/components/glass-card.component';
+import { GlassButtonComponent } from '../design-system/components/glass-button.component';
+import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 
 @Component({
-  imports: [FormsModule, RouterLink],
   selector: 'app-signup',
+  standalone: true,
+  imports: [FormsModule, RouterLink, GlassCardComponent, GlassButtonComponent, GlassInputDirective],
   template: `
-    <div class="flex min-h-screen items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div class="w-full max-w-md rounded-xl bg-white p-8 shadow-sm border border-gray-200">
-        <div>
-          <h2 class="text-center text-2xl font-bold text-gray-900">Create Account</h2>
-          <p class="mt-1 text-center text-sm text-gray-500">Sign up to start managing your finances</p>
+    <div class="flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-slate-50 dark:bg-slate-950">
+      <!-- Ambient Fluid Light Drops in Background -->
+      <div class="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-blue-500/15 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-indigo-500/15 blur-3xl"></div>
+
+      <glass-card variant="elevated" customClass="w-full max-w-md p-8 sm:p-10 relative z-10">
+        <!-- Logo & Header -->
+        <div class="text-center mb-8">
+          <div class="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 items-center justify-center text-white shadow-lg shadow-blue-500/30 border border-white/40 mb-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Create Account</h2>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Sign up to start managing your finances</p>
         </div>
 
         @if (isPlaceholderEnv) {
-          <div class="mt-4 rounded-lg bg-amber-50 p-3.5 border border-amber-200 text-xs text-amber-800 leading-relaxed">
+          <div class="mb-4 rounded-xl bg-amber-500/10 p-3.5 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-300 leading-relaxed backdrop-blur-sm">
             <span class="font-semibold block mb-0.5">⚠️ Supabase Configuration Note</span>
-            Your app is currently using placeholder credentials. To connect live auth and database, update <code class="bg-amber-100 px-1 rounded">src/environments/environment.ts</code> with your Supabase URL and Anon Key.
+            Your app is currently using placeholder credentials. Update <code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">src/environments/environment.ts</code> with your Supabase URL and Anon Key.
           </div>
         }
 
         @if (error()) {
-          <div class="mt-4 flex items-center rounded-lg bg-red-50 p-3 text-sm text-red-700 border border-red-200">
-            <span class="mr-2 font-bold">!</span>
+          <div class="mb-4 flex items-center rounded-xl bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400 border border-red-500/20 backdrop-blur-sm">
+            <span class="mr-2 font-bold flex-shrink-0">!</span>
             <span>{{ error() }}</span>
           </div>
         }
 
         @if (isCreatingProfile()) {
-          <div class="mt-4 flex items-center rounded-lg bg-blue-50 p-3 text-sm text-blue-700 border border-blue-200">
+          <div class="mb-4 flex items-center rounded-xl bg-blue-500/10 p-3 text-sm text-blue-700 dark:text-blue-300 border border-blue-500/20 backdrop-blur-sm">
             <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -39,14 +53,14 @@ import { environment } from '../../environments/environment';
           </div>
         }
 
-        <form (ngSubmit)="onSubmit()" class="mt-6 space-y-4">
+        <form (ngSubmit)="onSubmit()" class="space-y-4">
           <div>
-            <label for="fullName" class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1">Full name</label>
+            <label for="fullName" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">Full Name</label>
             <input
+              glassInput
               type="text"
               id="fullName"
-              class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-              placeholder="John Doe"
+              placeholder="Your Name"
               [(ngModel)]="fullName"
               name="fullName"
               required
@@ -54,11 +68,11 @@ import { environment } from '../../environments/environment';
           </div>
 
           <div>
-            <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1">Email address</label>
+            <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">Email address</label>
             <input
+              glassInput
               type="email"
               id="email"
-              class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
               placeholder="owner@example.com"
               [(ngModel)]="email"
               name="email"
@@ -67,34 +81,36 @@ import { environment } from '../../environments/environment';
           </div>
 
           <div>
-            <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1">Password</label>
+            <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">Password</label>
             <input
+              glassInput
               type="password"
               id="password"
-              class="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
               placeholder="••••••••"
               [(ngModel)]="password"
               name="password"
               minlength="6"
               required
             />
-            <p class="text-[11px] text-gray-400 mt-1">Must be at least 6 characters</p>
+            <p class="text-[11px] text-slate-400 mt-1">Must be at least 6 characters</p>
           </div>
 
-          <button
+          <glass-button
+            variant="filled"
             type="submit"
-            class="w-full justify-center rounded-lg bg-blue-600 py-2.5 px-4 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition cursor-pointer"
+            size="lg"
+            customClass="w-full mt-2"
             [disabled]="isCreatingProfile()"
           >
             Create Account
-          </button>
+          </glass-button>
         </form>
 
-        <div class="mt-6 text-center text-sm text-gray-500 border-t border-gray-100 pt-4">
+        <div class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200/50 dark:border-slate-800 pt-4">
           <span>Already have an account?</span>
-          <a routerLink="/login" class="font-medium text-blue-600 hover:text-blue-500 ml-1">Sign in</a>
+          <a routerLink="/login" class="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 ml-1">Sign in</a>
         </div>
-      </div>
+      </glass-card>
     </div>
   `,
 })
@@ -131,7 +147,6 @@ export class SignupComponent {
       return;
     }
 
-    // Create profile for the new user after successful signup
     try {
       await this._authService.createProfileAfterSignup(
         data?.user ?? null,

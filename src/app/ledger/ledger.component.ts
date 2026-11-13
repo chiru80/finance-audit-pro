@@ -6,6 +6,10 @@ import { AuthService } from '../auth/auth.service';
 import { Customer } from '../customers/customer.types';
 import { CollectionService } from '../collection.service';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { GlassCardComponent } from '../design-system/components/glass-card.component';
+import { GlassButtonComponent } from '../design-system/components/glass-button.component';
+import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
+import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 
 export interface LedgerPayment {
   id: string;
@@ -23,7 +27,15 @@ export interface LedgerPayment {
 @Component({
   selector: 'app-ledger',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DatePipe,
+    GlassCardComponent,
+    GlassButtonComponent,
+    GlassBadgeComponent,
+    GlassInputDirective,
+  ],
   templateUrl: './ledger.component.html',
   styleUrl: './ledger.component.css',
 })

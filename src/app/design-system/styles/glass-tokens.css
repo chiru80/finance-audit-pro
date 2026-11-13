@@ -1,0 +1,105 @@
+/**
+ * Finance Audit Pro — Liquid Glass Design Tokens
+ * Adapted from Glisse (0kzh/glisse) optical physics principles
+ */
+
+:root {
+  /* Surfaces & Translucency */
+  --glass-surface-base: rgba(255, 255, 255, 0.75);
+  --glass-surface-muted: rgba(255, 255, 255, 0.55);
+  --glass-surface-elevated: rgba(255, 255, 255, 0.88);
+  --glass-surface-active: rgba(255, 255, 255, 0.95);
+  --glass-surface-dock: rgba(255, 255, 255, 0.82);
+
+  /* Optical Refraction & Frosted Blur */
+  --glass-blur-xs: 6px;
+  --glass-blur-sm: 12px;
+  --glass-blur-md: 20px;
+  --glass-blur-lg: 32px;
+  --glass-saturate: 185%;
+
+  /* Micro-Borders & Specular Rim Lighting */
+  --glass-border-subtle: rgba(226, 232, 240, 0.75);
+  --glass-border-crisp: rgba(255, 255, 255, 0.85);
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.90);
+  --glass-specular-rim: inset 0 1px 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.03);
+  --glass-specular-recessed: inset 0 2px 4px 0 rgba(15, 23, 42, 0.05);
+
+  /* Shadows (Ambient + Elevation) */
+  --glass-shadow-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.04), 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+  --glass-shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --glass-shadow-lg: 0 20px 38px -8px rgba(15, 23, 42, 0.09), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+  --glass-shadow-glow-accent: 0 0 24px 0 rgba(37, 99, 235, 0.20);
+  --glass-shadow-glow-success: 0 0 24px 0 rgba(22, 163, 74, 0.20);
+  --glass-shadow-glow-warning: 0 0 24px 0 rgba(217, 119, 6, 0.20);
+
+  /* Interaction & Spring Physics */
+  --glass-spring-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-transition-fast: 150ms var(--glass-spring-easing);
+  --glass-transition-normal: 250ms var(--glass-spring-easing);
+  --glass-transition-slow: 380ms var(--glass-spring-easing);
+
+  /* Hover & Active Scale */
+  --glass-scale-hover: scale(1.012);
+  --glass-scale-active: scale(0.985);
+}
+
+/* Dark Mode Tokens */
+[data-theme="dark"] {
+  --glass-surface-base: rgba(15, 23, 42, 0.72);
+  --glass-surface-muted: rgba(30, 41, 59, 0.55);
+  --glass-surface-elevated: rgba(30, 41, 59, 0.88);
+  --glass-surface-active: rgba(51, 65, 85, 0.90);
+  --glass-surface-dock: rgba(15, 23, 42, 0.85);
+
+  --glass-border-subtle: rgba(51, 65, 85, 0.65);
+  --glass-border-crisp: rgba(255, 255, 255, 0.15);
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+  --glass-specular-rim: inset 0 1px 1px 0 rgba(255, 255, 255, 0.20), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.25);
+  --glass-specular-recessed: inset 0 2px 4px 0 rgba(0, 0, 0, 0.35);
+
+  --glass-shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.25);
+  --glass-shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.40);
+  --glass-shadow-lg: 0 20px 38px -8px rgba(0, 0, 0, 0.55);
+}
+
+/* Utility Glass Classes */
+.glass-surface {
+  background: var(--glass-surface-base);
+  backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+}
+
+.glass-surface-elevated {
+  background: var(--glass-surface-elevated);
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border-crisp);
+  box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
+}
+
+.glass-surface-subtle {
+  background: var(--glass-surface-muted);
+  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--glass-shadow-sm), var(--glass-specular-top);
+}
+
+/* Fallback for environments lacking backdrop-filter support */
+@supports not (backdrop-filter: blur(10px)) {
+  .glass-surface,
+  .glass-surface-elevated,
+  .glass-surface-subtle {
+    background: #ffffff;
+    border-color: #e2e8f0;
+  }
+  [data-theme="dark"] .glass-surface,
+  [data-theme="dark"] .glass-surface-elevated,
+  [data-theme="dark"] .glass-surface-subtle {
+    background: #1e293b;
+    border-color: #334155;
+  }
+}

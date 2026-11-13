@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./app/design-system/styles/glass-tokens.css";
 
 @theme {
   --color-primary-50: #f0f4ff;

@@ -19,29 +19,32 @@ interface NavItem {
   imports: [CommonModule, RouterModule, I18nPipe],
   template: `
     @if (sidebarService.isOpen()) {
-      <aside class="sidebar w-64 bg-white border-r border-slate-200 flex flex-col flex-shrink-0 h-full select-none">
+      <aside class="sidebar w-64 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-r border-slate-200/70 dark:border-slate-800/80 flex flex-col flex-shrink-0 h-full select-none shadow-sm relative z-20">
+        <!-- Specular Highlight Line on Top -->
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent"></div>
+
         <!-- Brand Header -->
-        <div class="h-16 flex items-center gap-3 px-5 border-b border-slate-100 bg-white flex-shrink-0">
-          <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm shadow-blue-200 flex-shrink-0">
+        <div class="h-16 flex items-center gap-3 px-5 border-b border-slate-200/50 dark:border-slate-800/50 bg-white/40 dark:bg-slate-900/40 flex-shrink-0">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-500/25 border border-white/30 flex-shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div class="min-w-0">
-            <h1 class="text-sm font-bold text-slate-900 tracking-tight leading-none truncate">Finance Audit Pro</h1>
-            <span class="text-[10px] font-semibold text-blue-600 uppercase tracking-wider block mt-1">Audit Engine</span>
+            <h1 class="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none truncate">Finance Audit Pro</h1>
+            <span class="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider block mt-1">Audit Engine</span>
           </div>
         </div>
 
         <!-- Navigation Menu -->
         <div class="sidebar-content p-3 flex-1 overflow-y-auto">
-          <p class="px-3 pt-2 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Navigation</p>
+          <p class="px-3 pt-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Navigation</p>
           <nav class="space-y-1">
             @for (item of navItems; track item.routerLink) {
               <a
                 [routerLink]="[item.routerLink]"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                routerLinkActive="bg-blue-50 text-blue-700 font-semibold shadow-xs"
+                class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 text-slate-600 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white"
+                routerLinkActive="active-nav-link"
                 [routerLinkActiveOptions]="{ exact: item.routerLink === '/dashboard' }"
               >
                 <span [innerHTML]="getIconHtml(item.icon)" class="w-5 h-5 flex-shrink-0 flex items-center justify-center"></span>
@@ -53,23 +56,23 @@ interface NavItem {
 
         <!-- User Profile & Sign Out Footer -->
         @if (authService.isAuthenticated()) {
-          <div class="p-3 border-t border-slate-100 bg-slate-50/70 flex-shrink-0">
-            <div class="flex items-center gap-2.5 px-2 py-1.5 mb-2 rounded-lg bg-white border border-slate-200/60 shadow-xs">
-              <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center flex-shrink-0 uppercase">
+          <div class="p-3 border-t border-slate-200/50 dark:border-slate-800/50 bg-white/40 dark:bg-slate-900/40 flex-shrink-0">
+            <div class="flex items-center gap-2.5 px-2.5 py-2 mb-2 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 shadow-xs backdrop-blur-md">
+              <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 font-bold text-xs flex items-center justify-center flex-shrink-0 uppercase border border-blue-200/50">
                 {{ (authService.user()?.email || 'U')[0] }}
               </div>
               <div class="min-w-0 flex-1">
-                <p class="text-xs font-semibold text-slate-800 truncate leading-tight">
+                <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate leading-tight">
                   {{ authService.user()?.user_metadata?.['full_name'] || 'Owner' }}
                 </p>
-                <p class="text-[11px] text-slate-500 truncate leading-tight">
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate leading-tight">
                   {{ authService.user()?.email }}
                 </p>
               </div>
             </div>
             <button
               (click)="signOut()"
-              class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-red-600 rounded-lg hover:bg-red-50 hover:text-red-700 transition-colors border border-red-200/50 cursor-pointer"
+              class="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 rounded-xl hover:bg-red-500/10 transition-colors border border-red-500/20 cursor-pointer"
               type="button"
             >
               <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,7 +85,37 @@ interface NavItem {
       </aside>
     }
   `,
-  styleUrls: ['./app-sidebar.component.css'],
+  styles: [`
+    :host {
+      display: flex;
+      height: 100%;
+      flex-shrink: 0;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .nav-link {
+      transition-timing-function: var(--glass-spring-easing, cubic-bezier(0.16, 1, 0.3, 1));
+    }
+
+    .active-nav-link {
+      background: rgba(37, 99, 235, 0.10) !important;
+      color: #1d4ed8 !important;
+      font-weight: 600 !important;
+      border: 1px solid rgba(37, 99, 235, 0.25) !important;
+      box-shadow: 0 1px 3px 0 rgba(37, 99, 235, 0.08), inset 0 1px 0 0 rgba(255, 255, 255, 0.70) !important;
+    }
+
+    [data-theme="dark"] .active-nav-link {
+      background: rgba(37, 99, 235, 0.20) !important;
+      color: #93c5fd !important;
+      border-color: rgba(37, 99, 235, 0.40) !important;
+    }
+  `],
 })
 export class AppSidebarComponent {
   sidebarService = inject(SidebarService);

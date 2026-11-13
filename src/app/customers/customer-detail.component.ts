@@ -6,11 +6,23 @@ import { AuthService } from '../auth/auth.service';
 import { Customer } from './customer.types';
 import { CollectionService } from '../collection.service';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { GlassCardComponent } from '../design-system/components/glass-card.component';
+import { GlassButtonComponent } from '../design-system/components/glass-button.component';
+import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
+import { GlassTabsComponent, GlassTabItem } from '../design-system/components/glass-tabs.component';
 
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, DatePipe],
+  imports: [
+    CommonModule,
+    RouterLink,
+    DatePipe,
+    GlassCardComponent,
+    GlassButtonComponent,
+    GlassBadgeComponent,
+    GlassTabsComponent,
+  ],
   templateUrl: './customer-detail.component.html',
   styleUrls: ['./customer-detail.component.css'],
 })
@@ -28,6 +40,14 @@ export class CustomerDetailComponent implements OnInit {
   schedules = signal<any[]>([]);
   absences = signal<any[]>([]);
   activeTab = signal<'schedules' | 'payments' | 'absences'>('schedules');
+
+  get detailTabs(): GlassTabItem[] {
+    return [
+      { id: 'schedules', label: 'Weekly Schedules', badge: this.schedules().length },
+      { id: 'payments', label: 'Payment Ledger', badge: this.paymentHistory().length },
+      { id: 'absences', label: 'Absence History', badge: this.absences().length },
+    ];
+  }
 
   summary = computed(() => {
     const c = this.customer();
