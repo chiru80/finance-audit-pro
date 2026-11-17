@@ -11,11 +11,11 @@ export type GlassCardGlow = 'accent' | 'success' | 'warning' | 'none';
   template: `
     <div
       class="glass-card-root rounded-2xl transition-all duration-200 relative overflow-hidden"
-      [ngClass]="[variantClasses, glowClasses, interactiveClasses, customClass]"
+      [ngClass]="[surfaceClasses, glowClasses, interactiveClasses, customClass]"
     >
-      <!-- Specular Refraction Highlight Line -->
-      <div class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
-      
+      <!-- Specular Refraction Highlight Line (uses design token --glass-specular-top) -->
+      <div class="glass-specular-top pointer-events-none absolute inset-x-0 top-0 h-[1px]"></div>
+
       <!-- Content Projection -->
       <ng-content></ng-content>
     </div>
@@ -29,50 +29,59 @@ export type GlassCardGlow = 'accent' | 'success' | 'warning' | 'none';
       transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .glass-card-default {
-      background: #151F32;
-      border: 1px solid #263449;
-      box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.45);
-      color: #F8FAFC;
+    /* Map variants to design system tokens directly */
+    .surface-default {
+      background: var(--glass-surface-base);
+      backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+      border: 1px solid var(--glass-border-subtle);
+      box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+      color: var(--text-primary);
     }
 
-    .glass-card-elevated {
-      background: #18243A;
-      border: 1px solid #263449;
-      box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.55);
-      color: #F8FAFC;
+    .surface-elevated {
+      background: var(--glass-surface-elevated);
+      backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+      border: 1px solid var(--glass-border-crisp);
+      box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
+      color: var(--text-primary);
     }
 
-    .glass-card-subtle {
-      background: #111827;
-      border: 1px solid #263449;
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.35);
-      color: #94A3B8;
+    .surface-subtle {
+      background: var(--glass-surface-muted);
+      backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+      border: 1px solid var(--glass-border-subtle);
+      box-shadow: var(--glass-shadow-sm), var(--glass-specular-top);
+      color: var(--text-secondary);
     }
 
-    .glass-card-kpi {
-      background: #151F32;
-      border: 1px solid #263449;
-      box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.45);
-      color: #F8FAFC;
+    .surface-kpi {
+      background: var(--glass-surface-base);
+      backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+      border: 1px solid var(--glass-border-subtle);
+      box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+      color: var(--text-primary);
     }
 
     .card-interactive:hover {
       transform: translateY(-2px);
-      border-color: #3B82F6;
-      box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.60);
+      border-color: var(--primary-accent);
+      box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
     }
 
     .glow-accent {
-      box-shadow: 0 0 20px rgba(37, 99, 235, 0.25);
+      box-shadow: var(--glass-shadow-glow-accent);
     }
 
     .glow-success {
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+      box-shadow: var(--glass-shadow-glow-success);
     }
 
     .glow-warning {
-      box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
+      box-shadow: var(--glass-shadow-glow-warning);
     }
   `],
 })
@@ -82,8 +91,8 @@ export class GlassCardComponent {
   @Input() interactive = false;
   @Input() customClass = '';
 
-  get variantClasses(): string {
-    return `glass-card-${this.variant}`;
+  get surfaceClasses(): string {
+    return `surface-${this.variant}`;
   }
 
   get glowClasses(): string {

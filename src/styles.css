@@ -3,267 +3,190 @@
 
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
 
-@theme {
+/*!
+ * Finance Audit Pro - Liquid Glass Design System
+ * Premium FinTech SaaS Color Palette
+ * Dark Theme by Default
+ */
+
+/* =====================
+ * Foundation Colors
+ * =====================
+ * Dark theme surfaces (default)
+ */
+:root {
+  /* =====================
+   * Foundation Colors (Dark Theme - Default)
+   * ===================== */
+
+  /* Background Surfaces - Dark Theme as default */
+  --surface-0: #0B1120;    /* Primary background */
+  --surface-1: #111827;    /* Secondary background */
+  --surface-2: #151F32;    /* Card surfaces */
+  --surface-3: #18243A;    /* Elevated cards */
+  --surface-4: #1D2B42;    /* Active/hover surfaces */
+  --surface-dock: #0F172A; /* Dock/Sidebar / Topbar */
+
+  /* Text Colors - Dark Theme */
+  --text-on-surface-0: #F8FAFC;  /* Primary text */
+  --text-on-surface-1: #94A3B8;  /* Secondary/Muted text */
+  --text-on-surface-2: #64748B;  /* Disabled/Hint text */
+
+  /* Brand Accent Colors */
+  --brand-primary: #2563EB;      /* Primary brand blue */
+  --brand-primary-hover: #3B82F6;
+  --brand-primary-active: #1D4ED8;
+  --brand-success: #10B981;      /* Emerald for success */
+  --brand-success-hover: #059669;
+  --brand-warning: #F59E0B;      /* Amber for warning */
+  --brand-danger: #EF4444;       /* Red for danger */
+  --brand-info: #38BDF8;         /* Light blue for info */
+
+  /* =====================
+   * Glass System Tokens (from glass-tokens.css)
+   * ===================== */
+
+  /* Glass Surface Variants */
+  --glass-surface-base: var(--surface-2);
+  --glass-surface-muted: var(--surface-1);
+  --glass-surface-elevated: var(--surface-3);
+  --glass-surface-active: var(--surface-4);
+  --glass-surface-dock: var(--surface-dock);
+
+  /* Glass Borders */
+  --glass-border-subtle: #263449;
+  --glass-border-crisp: #33435C;
+
+  /* Glass Blur Effects */
+  --glass-blur-xs: 6px;
+  --glass-blur-sm: 12px;
+  --glass-blur-md: 20px;
+  --glass-blur-lg: 32px;
+  --glass-saturate: 185%;
+
+  /* Glass Shadows */
+  --glass-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.35);
+  --glass-shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.50);
+  --glass-shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.65);
+  --glass-shadow-glow: 0 0 24px 0;
+  --glass-shadow-glow-accent: var(--glass-shadow-glow) rgba(37, 99, 235, 0.25);
+  --glass-shadow-glow-success: var(--glass-shadow-glow) rgba(16, 185, 129, 0.25);
+  --glass-shadow-glow-warning: var(--glass-shadow-glow) rgba(245, 158, 11, 0.25);
+
+  /* Glass Transitions */
+  --glass-transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-transition-slow: 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-spring-easing: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* =====================
+   * Component Token Aliases
+   * ===================== */
+  --primary: var(--brand-primary);
+  --primary-hover: var(--brand-primary-hover);
+  --primary-active: var(--brand-primary-active);
+  --success: var(--brand-success);
+  --warning: var(--brand-warning);
+  --danger: var(--brand-danger);
+  --info: var(--brand-info);
+
+  /* Text aliases */
+  --text-primary: var(--text-on-surface-0);
+  --text-secondary: var(--text-on-surface-1);
+  --text-muted: var(--text-on-surface-2);
+
+  /* Background aliases */
+  --background-primary: var(--surface-0);
+  --background-secondary: var(--surface-1);
+  --background-tertiary: var(--surface-2);
+
+  /* RGB color tokens for fallback support */
+  --surface-0-rgb: 11, 17, 32;
+  --surface-1-rgb: 17, 24, 39;
+  --surface-2-rgb: 21, 31, 50;
+  --surface-3-rgb: 24, 36, 58;
+  --surface-4-rgb: 29, 43, 66;
+  --surface-dock-rgb: 15, 23, 42;
+
+  /* Border aliases */
+  --border-color: var(--glass-border-subtle);
+  --border-moderate: #33435C; /* ds-allow-hardcode: direct border color for inline use */
+  --border-moderate-rgb: 51, 67, 92;
+
+  /* =====================
+   * Font Configuration
+   * ===================== */
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-
-  --color-primary-50: #f0f4ff;
-  --color-primary-100: #e2ebff;
-  --color-primary-200: #c9dbff;
-  --color-primary-300: #a3c4ff;
-  --color-primary-400: #74a9ff;
-  --color-primary-500: #4d8bff;
-  --color-primary-600: #3370ff;
-  --color-primary-700: #265ae9;
-  --color-primary-800: #1d4bd9;
-  --color-primary-900: #163ec2;
-
-  --color-accent-50: #f0f9ff;
-  --color-accent-100: #cff4ff;
-  --color-accent-200: #a3daff;
-  --color-accent-300: #70bdff;
-  --color-accent-400: #3f99ff;
-  --color-accent-500: #1e7aff;
-  --color-accent-600: #005acc;
-  --color-accent-700: #004a99;
-  --color-accent-800: #003b7a;
-  --color-accent-900: #002e5e;
-
-  --color-success-50: #f0fdf4;
-  --color-success-100: #dcfce7;
-  --color-success-200: #bbf7d0;
-  --color-success-300: #86efac;
-  --color-success-400: #22c55e;
-  --color-success-500: #16a34a;
-  --color-success-600: #15803d;
-  --color-success-700: #166534;
-  --color-success-800: #14532d;
-  --color-success-900: #166534;
-
-  --color-warning-50: #fffbeb;
-  --color-warning-100: #fef3c7;
-  --color-warning-200: #fed7aa;
-  --color-warning-300: #fcd34d;
-  --color-warning-400: #f59e0b;
-  --color-warning-500: #d97706;
-  --color-warning-600: #b45309;
-  --color-warning-700: #92400e;
-  --color-warning-800: #78350f;
-  --color-warning-900: #78350f;
-
-  --color-error-50: #fef2f2;
-  --color-error-100: #fee2e2;
-  --color-error-200: #fecaca;
-  --color-error-300: #fca5a5;
-  --color-error-400: #f87171;
-  --color-error-500: #ef4444;
-  --color-error-600: #dc2626;
-  --color-error-700: #b91c1c;
-  --color-error-800: #991b1b;
-  --color-error-900: #7f1d1d;
 }
 
-/* Finance Audit Pro Design System */
-/* Premium financial SaaS palette with muted blues, slate grays, warm neutrals */
+/* =====================
+ * Light Theme Override
+ * =====================
+ * Use data-theme="light" attribute to enable light theme
+ * ds-allow-hardcode: theme-specific color overrides
+ */
+[data-theme="light"] {
+  /* Light backgrounds */
+  --surface-0: #ffffff;           /* ds-allow-hardcode */
+  --surface-1: #f8fafc;           /* ds-allow-hardcode */
+  --surface-2: #f1f5f9;           /* ds-allow-hardcode */
+  --surface-3: #e2e8f0;           /* ds-allow-hardcode */
+  --surface-4: #cbd5e1;           /* ds-allow-hardcode */
+  --surface-dock: #f1f5f9;        /* ds-allow-hardcode */
 
-/* Root variables for light theme */
-:root {
-  /* Primary colors - Muted blues */
-  --color-primary-50: #f0f4ff;
-  --color-primary-100: #e2ebff;
-  --color-primary-200: #c9dbff;
-  --color-primary-300: #a3c4ff;
-  --color-primary-400: #74a9ff;
-  --color-primary-500: #4d8bff;
-  --color-primary-600: #3370ff;
-  --color-primary-700: #265ae9;
-  --color-primary-800: #1d4bd9;
-  --color-primary-900: #163ec2;
+  /* Light text */
+  --text-on-surface-0: #0F172A;   /* ds-allow-hardcode */
+  --text-on-surface-1: #475569;   /* ds-allow-hardcode */
+  --text-on-surface-2: #64748B;   /* ds-allow-hardcode */
 
-  /* Accent colors for CTAs */
-  --color-accent-50: #f0f9ff;
-  --color-accent-100: #cff4ff;
-  --color-accent-200: #a3daff;
-  --color-accent-300: #70bdff;
-  --color-accent-400: #3f99ff;
-  --color-accent-500: #1e7aff;
-  --color-accent-600: #005acc;
-  --color-accent-700: #004a99;
-  --color-accent-800: #003b7a;
-  --color-accent-900: #002e5e;
-
-  /* Success colors */
-  --color-success-50: #f0fdf4;
-  --color-success-100: #dcfce7;
-  --color-success-200: #bbf7d0;
-  --color-success-300: #86efac;
-  --color-success-400: #22c55e;
-  --color-success-500: #16a34a;
-  --color-success-600: #15803d;
-  --color-success-700: #166534;
-  --color-success-800: #14532d;
-  --color-success-900: #166534;
-
-  /* Warning colors */
-  --color-warning-50: #fffbeb;
-  --color-warning-100: #fef3c7;
-  --color-warning-200: #fed7aa;
-  --color-warning-300: #fcd34d;
-  --color-warning-400: #f59e0b;
-  --color-warning-500: #d97706;
-  --color-warning-600: #b45309;
-  --color-warning-700: #92400e;
-  --color-warning-800: #78350f;
-  --color-warning-900: #78350f;
-
-  /* Error colors */
-  --color-error-50: #fef2f2;
-  --color-error-100: #fee2e2;
-  --color-error-200: #fecaca;
-  --color-error-300: #fca5a5;
-  --color-error-400: #f87171;
-  --color-error-500: #ef4444;
-  --color-error-600: #dc2626;
-  --color-error-700: #b91c1c;
-  --color-error-800: #991b1b;
-  --color-error-900: #7f1d1d;
-
-  /* Slate grays */
-  --color-slate-50: #f8fafc;
-  --color-slate-100: #f1f5f9;
-  --color-slate-200: #e2e8f0;
-  --color-slate-300: #cbd5e1;
-  --color-slate-400: #94a3b8;
-  --color-slate-500: #64748b;
-  --color-slate-600: #475569;
-  --color-slate-700: #334155;
-  --color-slate-800: #1e293b;
-  --color-slate-900: #0f172a;
-
-  /* Neutral grays */
-  --color-neutral-50: #fafafa;
-  --color-neutral-100: #f5f5f5;
-  --color-neutral-200: #e5e5e5;
-  --color-neutral-300: #d4d4d4;
-  --color-neutral-400: #a3a3a3;
-  --color-neutral-500: #737373;
-  --color-neutral-600: #525252;
-  --color-neutral-700: #404040;
-  --color-neutral-800: #262626;
-  --color-neutral-900: #171717;
-
-  /* Background colors */
-  --color-background-primary: #0b1120;
-  --color-background-secondary: #111827;
-  --color-background-tertiary: #151f32;
-  --color-background-dark: #0b1120;
-  --color-background-dark-secondary: #0f172a;
-  --color-background-dark-tertiary: #151f32;
-
-  /* Text colors */
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
-  --color-text-dark: #f8fafc;
-  --color-text-dark-secondary: #94a3b8;
-  --color-text-dark-muted: #64748b;
-
-  /* Border colors */
-  --color-border-light: #263449;
-  --color-border-moderate: #33435c;
-  --color-border-dark: #1e293b;
-
-  /* Status colors */
-  --color-status-positive: #10b981;
-  --color-status-negative: #ef4444;
-  --color-status-neutral: #64748b;
-
-  /* Shadow */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-
-  /* Border radius */
-  --radius-xs: 0.125rem;   /* 2px */
-  --radius-sm: 0.25rem;    /* 4px */
-  --radius-md: 0.5rem;     /* 8px */
-  --radius-lg: 0.75rem;    /* 12px */
-  --radius-xl: 1rem;       /* 16px */
-  --radius-2xl: 1.5rem;    /* 24px */
-  --radius-3xl: 9999px;    /* fully rounded */
-
-  /* Spacing */
-  --spacing-xs: 0.25rem;   /* 4px */
-  --spacing-sm: 0.5rem;    /* 8px */
-  --spacing-md: 0.75rem;   /* 12px */
-  --spacing-lg: 1rem;      /* 16px */
-  --spacing-xl: 1.25rem;   /* 20px */
-  --spacing-2xl: 1.5rem;   /* 24px */
-  --spacing-3xl: 1.75rem;  /* 28px */
-  --spacing-4xl: 2rem;     /* 32px */
-  --spacing-5xl: 2.5rem;   /* 40px */
-  --spacing-6xl: 3rem;     /* 48px */
-  --spacing-7xl: 3.5rem;   /* 56px */
-  --spacing-8xl: 4rem;     /* 64px */
-
-  /* Typography */
-  --font-family-primary: 'Inter', 'Noto Sans Telugu', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-family-mono: 'Fira Code', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  --text-xs: 0.75rem;      /* 12px */
-  --text-sm: 0.875rem;     /* 14px */
-  --text-md: 1rem;         /* 16px */
-  --text-lg: 1.125rem;     /* 18px */
-  --text-xl: 1.25rem;      /* 20px */
-  --text-2xl: 1.5rem;      /* 24px */
-  --text-3xl: 1.875rem;    /* 30px */
-  --text-4xl: 2.25rem;     /* 36px */
-  --text-5xl: 3rem;        /* 48px */
-  --text-6xl: 3.75rem;     /* 60px */
+  /* Glass adjustments for light theme */
+  --glass-border-subtle: #CBD5E1;  /* ds-allow-hardcode */
+  --glass-border-crisp: #94A3B8;   /* ds-allow-hardcode */
 }
 
-/* Dark theme variables */
-[data-theme="dark"] {
-  /* Background colors */
-  --color-background-primary: #0f172a;
-  --color-background-secondary: #1e293b;
-  --color-background-tertiary: #334155;
+/* =====================
+ * Utility Classes
+ * ===================== */
 
-  /* Text colors */
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #cbd5e1;
-  --color-text-muted: #94a3b8;
-
-  /* Border colors */
-  --color-border-light: #334155;
-  --color-border-moderate: #475569;
-  --color-border-dark: #1e293b;
-
-  /* Card background */
-  --card-bg: #1e293b;
+/* Glass Surface Utilities */
+.glass-surface {
+  background: var(--glass-surface-base);
+  backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--glass-shadow-md), inset 0 1px 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.40); /* ds-allow-hardcode: specular highlights */
 }
 
-/* Component-specific aliases */
-:root {
-  --primary: var(--color-primary-500);
-  --primary-600: var(--color-primary-600);
-  --primary-100: var(--color-primary-100);
-  --success: var(--color-success-500);
-  --success-100: var(--color-success-100);
-  --warning: var(--color-warning-500);
-  --warning-100: var(--color-warning-100);
-  --error: var(--color-error-500);
-  --error-100: var(--color-error-100);
-  --background-primary: var(--color-background-primary);
-  --background-secondary: var(--color-background-secondary);
-  --background-tertiary: var(--color-background-tertiary);
-  --text-primary-color: var(--color-text-primary);
-  --text-secondary-color: var(--color-text-secondary);
-  --border-light-color: var(--color-border-light);
+.glass-surface-elevated {
+  background: var(--glass-surface-elevated);
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border-crisp);
+  box-shadow: var(--glass-shadow-lg), inset 0 1px 1px 0 rgba(255, 255, 255, 0.10), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.40); /* ds-allow-hardcode: specular highlights */
 }
 
+.glass-surface-subtle {
+  background: var(--glass-surface-muted);
+  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--glass-shadow-sm), inset 0 1px 2px 0 rgba(0, 0, 0, 0.35); /* ds-allow-hardcode: specular highlight */
+}
+
+/* =====================
+ * Fallback Support (No Backdrop Filter)
+ * ===================== */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-surface,
+  .glass-surface-elevated,
+  .glass-surface-subtle {
+    background: rgba(var(--surface-2-rgb), 0.08);
+  }
+
+  [data-theme="light"] .glass-surface,
+  [data-theme="light"] .glass-surface-elevated,
+  [data-theme="light"] .glass-surface-subtle {
+    background: rgba(var(--surface-0-rgb), 0.05);
+  }
+}
