@@ -139,7 +139,7 @@ import { GlassEmptyStateComponent } from '../design-system/components/glass-empt
 
             <!-- SVG Visual Trend Chart -->
             <div class="w-full h-44 relative mt-2">
-              <svg class="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none">
+              <svg class="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none" role="img" aria-label="Collection velocity trend chart showing weekly cycles progress with data points at weeks 3, 8, and 15 highlighted.">
                 <defs>
                   <linearGradient id="velocityGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stop-color="rgba(37, 99, 235, 0.35)"/>
