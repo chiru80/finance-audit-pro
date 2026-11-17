@@ -6,6 +6,12 @@ export default {
     './src/**/*.html',
     './src/**/*.ts',
   ],
+  safelist: [
+    'focus-visible:ring-2',
+    'focus-visible:ring-[var(--primary-accent)]/40',
+    'focus-visible:ring-offset-1',
+    'focus-visible:ring-offset-[var(--bg-primary)]',
+  ],
   theme: {
     extend: {
       fontFamily: {

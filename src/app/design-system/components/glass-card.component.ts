@@ -44,8 +44,18 @@ export type GlassCardGlow = 'accent' | 'success' | 'warning' | 'none';
       backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
       -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
       border: 1px solid var(--glass-border-crisp);
-      box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
+      box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim), var(--glass-specular-highlight);
       color: var(--text-primary);
+    }
+
+    .surface-elevated::before {
+      content: '';
+      position: absolute;
+      inset-x: 0;
+      top: 0;
+      height: 1px;
+      pointer-events: none;
+      box-shadow: var(--glass-specular-top);
     }
 
     .surface-subtle {

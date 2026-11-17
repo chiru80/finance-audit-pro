@@ -31,7 +31,7 @@ import { GlassEmptyStateComponent } from '../design-system/components/glass-empt
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#263449]">
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-[#38BDF8] uppercase tracking-widest">Overview</span>
+            <span class="text-xs font-bold text-[var(--color-info)] uppercase tracking-widest">Overview</span>
             <span class="text-[#64748B]">•</span>
             <span class="text-xs text-[var(--text-secondary)]">{{ todayFormatted }}</span>
           </div>
@@ -142,8 +142,8 @@ import { GlassEmptyStateComponent } from '../design-system/components/glass-empt
               <svg class="w-full h-full overflow-visible" viewBox="0 0 500 120" preserveAspectRatio="none" role="img" aria-label="Collection velocity trend chart showing weekly cycles progress with data points at weeks 3, 8, and 15 highlighted.">
                 <defs>
                   <linearGradient id="velocityGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="rgba(37, 99, 235, 0.35)"/>
-                    <stop offset="100%" stop-color="rgba(37, 99, 235, 0.00)"/>
+                    <stop offset="0%" stop-color="var(--primary-accent)" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="var(--primary-accent)" stop-opacity="0.00"/>
                   </linearGradient>
                 </defs>
                 <!-- Subtle grid lines -->
@@ -193,7 +193,7 @@ import { GlassEmptyStateComponent } from '../design-system/components/glass-empt
             <div class="flex items-center justify-center py-2 relative">
               <svg class="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36" role="img" aria-label="Portfolio health score 92%; dues status: 65% collected, 25% outstanding, 10% pending review">
                 <!-- Track -->
-                <path stroke="var(--color-surface-hover)" stroke-width="3.5" fill="none"
+                <path stroke="var(--glass-surface-elevated)" stroke-width="3.5" fill="none"
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                 <!-- Paid Segment (65%) -->
                 <path stroke="var(--color-success)" stroke-dasharray="65, 100" stroke-width="3.5" stroke-linecap="round" fill="none"
@@ -260,11 +260,11 @@ import { GlassEmptyStateComponent } from '../design-system/components/glass-empt
         <div class="overflow-x-auto">
           <table class="w-full text-left">
             <thead>
-              <tr class="bg-[var(--bg-card)] border-b border-[var(--border-color)]">
-                <th class="px-6 py-3.5 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">{{ 'dashboard.date' | i18n }}</th>
-                <th class="px-6 py-3.5 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">{{ 'dashboard.customer' | i18n }}</th>
-                <th class="px-6 py-3.5 text-right text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">{{ 'dashboard.amount' | i18n }}</th>
-                <th class="px-6 py-3.5 text-center text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">{{ 'dashboard.status_label' | i18n }}</th>
+              <tr class="bg-[var(--bg-input)] border-b border-[var(--border-color)]">
+                <th class="px-6 py-3.5 text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider">{{ 'dashboard.date' | i18n }}</th>
+                <th class="px-6 py-3.5 text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider">{{ 'dashboard.customer' | i18n }}</th>
+                <th class="px-6 py-3.5 text-right text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider">{{ 'dashboard.amount' | i18n }}</th>
+                <th class="px-6 py-3.5 text-center text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider">{{ 'dashboard.status_label' | i18n }}</th>
                 <th class="px-6 py-3.5 text-right w-16"></th>
               </tr>
             </thead>
@@ -284,7 +284,7 @@ import { GlassEmptyStateComponent } from '../design-system/components/glass-empt
                   <td class="px-6 py-4 text-right">
                     <a
                       [routerLink]="['/ledger']"
-                      class="text-[var(--text-muted)] hover:text-[var(--color-info)] transition-colors inline-flex items-center justify-center p-1.5 rounded-lg hover:bg-[var(--color-surface-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary-accent)]/40 focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-primary)]"
+                      class="text-[var(--text-muted)] hover:text-[var(--color-info)] transition-colors inline-flex items-center justify-center p-1.5 rounded-lg hover:bg-[var(--color-surface-hover)] glass-focus-visible"
                       title="View in ledger"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
