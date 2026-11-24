@@ -1,140 +1,157 @@
 /**
- * Finance Audit Pro - Liquid Glass & FinTech Dark Design Tokens
- * Master Dark Color System
+ * Finance Audit Pro - Premium FinTech Design Tokens
+ * ---------------------------------------------------------------------------
+ * Single source of truth for the visual language.
+ * Dark is the default; light is applied when <html> has no data-theme="dark"
+ * (ThemeService removes the attribute for light mode).
+ *
+ * Design intent: a quiet private-banking editorial system. Warm ink canvas,
+ * ivory text and a single aged-copper accent. Muted sage/ochre/terracotta
+ * status roles. Hairline warm borders, flat surfaces, no decorative glow.
  */
 
 :root {
-  /* Core FinTech Dark Theme Tokens */
-  --bg-primary: #0B1120;
-  --bg-secondary: #111827;
-  --bg-sidebar: #0F172A;
-  --bg-topbar: #111827;
-  --bg-card: #151F32;
-  --bg-card-elevated: #18243A;
-  --bg-input: #0F172A;
-  --border-color: #263449;
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --primary-accent: #2563EB;
-  --primary-hover: #3B82F6;
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
-  --color-info: #38BDF8;
+  /* ---------------------------------------------------------------------
+   * Canvas & Surfaces (Dark) - warm ink, not blue slate
+   * ------------------------------------------------------------------- */
+  --bg-primary: #141210;
+  --bg-secondary: #1a1714;
+  --bg-sidebar: #100f0d;
+  --bg-topbar: #171512;
+  --bg-card: #1e1b17;
+  --bg-card-elevated: #26221d;
+  --bg-input: #191713;
+  --border-color: #332e27;
+  --text-primary: #f5efe4;
+  --text-secondary: #c2b7a6;
+  --text-muted: #938777;
 
-  /* Semantic Color Aliases */
+  /* ---------------------------------------------------------------------
+   * Brand & Status - one accent (aged copper), muted semantic roles
+   * ------------------------------------------------------------------- */
+  --primary-accent: #c8794b;
+  --primary-hover: #dd9668;
+  --color-on-primary: #241f1a;
+  --color-on-danger: #241f1a;
+  --color-success: #8fae8b;
+  --color-warning: #d4a23f;
+  --color-danger: #cf6b5b;
+  --color-info: #8fa9bd;
+
   --color-primary: var(--primary-accent);
   --color-primary-hover: var(--primary-hover);
-  --color-primary-light: rgba(37, 99, 235, 0.15);
-  --color-primary-border: rgba(37, 99, 235, 0.30);
 
-  --color-success-light: rgba(16, 185, 129, 0.15);
-  --color-success-border: rgba(16, 185, 129, 0.30);
+  /* Tints (backgrounds), borders and foregrounds (text/icons) */
+  --color-primary-tint: rgba(200, 121, 75, 0.12);
+  --color-primary-border: rgba(200, 121, 75, 0.3);
+  --color-primary-text: #e0a078;
 
-  --color-warning-light: rgba(245, 158, 11, 0.15);
-  --color-warning-border: rgba(245, 158, 11, 0.30);
+  --color-success-tint: rgba(143, 174, 139, 0.12);
+  --color-success-border: rgba(143, 174, 139, 0.28);
+  --color-success-text: #a9c4a4;
 
-  --color-danger-light: rgba(239, 68, 68, 0.15);
-  --color-danger-border: rgba(239, 68, 68, 0.30);
+  --color-warning-tint: rgba(212, 162, 63, 0.12);
+  --color-warning-border: rgba(212, 162, 63, 0.28);
+  --color-warning-text: #e3b65f;
 
-  --color-info-light: rgba(56, 189, 248, 0.15);
-  --color-info-border: rgba(56, 189, 248, 0.30);
+  --color-danger-tint: rgba(207, 107, 91, 0.12);
+  --color-danger-border: rgba(207, 107, 91, 0.28);
+  --color-danger-text: #e28a7a;
 
-  --color-neutral-light: rgba(100, 116, 139, 0.15);
-  --color-neutral-border: rgba(100, 116, 139, 0.30);
+  --color-info-tint: rgba(143, 169, 189, 0.12);
+  --color-info-border: rgba(143, 169, 189, 0.28);
+  --color-info-text: #adc4d4;
 
-  /* Semantic Light Shades (tints used for badge labels, icons, selected states) */
-  --color-success-light: #34D399;   /* ds-allow-hardcode: base token definition */
-  --color-warning-light: #FBBF24;   /* ds-allow-hardcode: base token definition */
-  --color-danger-light: #F87171;   /* ds-allow-hardcode: base token definition */
-  --color-info-light: #60A5FA;      /* ds-allow-hardcode: base token definition */
-  --color-primary-light: #60A5FA;   /* ds-allow-hardcode: base token definition */
+  --color-neutral-tint: rgba(230, 218, 199, 0.07);
+  --color-neutral-border: rgba(230, 218, 199, 0.16);
+  --color-neutral-text: #c2b7a6;
 
-  /* Text on saturated / inverse surfaces */
-  --color-text-inverse: #FFFFFF;    /* ds-allow-hardcode: base token definition */
+  /* Backwards-compatible aliases used by older templates */
+  --color-primary-light: var(--color-primary-tint);
+  --color-success-light: var(--color-success-tint);
+  --color-warning-light: var(--color-warning-tint);
+  --color-danger-light: var(--color-danger-tint);
+  --color-info-light: var(--color-info-tint);
+  --color-neutral-light: var(--color-neutral-tint);
 
-  /* Elevated hover / active surfaces */
-  --color-surface-hover: #1E2D47;   /* ds-allow-hardcode: base token definition */
-  --color-surface-active: #1D2B42;  /* ds-allow-hardcode: base token definition */
+  --color-text-inverse: var(--color-on-primary);
+  --color-surface-hover: #2a251f;
+  --color-surface-active: #332d25;
+  --color-border-medium: #4a4237;
 
-  /* Medium border strength for hover / active / selected states */
-  --color-border-medium: #334460;   /* ds-allow-hardcode: base token definition */
+  /* ---------------------------------------------------------------------
+   * Flat ink surfaces - quiet material, no frosted-glass look
+   * ------------------------------------------------------------------- */
+  --glass-surface-base: #1e1b17;
+  --glass-surface-muted: #171512;
+  --glass-surface-elevated: #26221d;
+  --glass-surface-active: #2e2923;
+  --glass-surface-dock: #100f0d;
+  --glass-surface-subtle: #171512;
+  --glass-surface-overlay: #171512;
 
-  /* Surfaces & Translucency - Default Dark SaaS */
-  --glass-surface-base: #151F32;
-  --glass-surface-muted: #111827;
-  --glass-surface-elevated: #18243A;
-  --glass-surface-active: #1D2B42;
-  --glass-surface-dock: #0F172A;
-  --glass-surface-subtle: #0F172A;
-  --glass-surface-overlay: #111827;
+  --glass-blur-xs: 2px;
+  --glass-blur-sm: 4px;
+  --glass-blur-md: 6px;
+  --glass-blur-lg: 10px;
+  --glass-blur-xl: 14px;
+  --glass-saturate: 100%;
+  --glass-saturate-high: 105%;
 
-  /* Optical Refraction & Frosted Blur */
-  --glass-blur-xs: 6px;
-  --glass-blur-sm: 12px;
-  --glass-blur-md: 20px;
-  --glass-blur-lg: 32px;
-  --glass-blur-xl: 48px;
-  --glass-saturate: 185%;
-  --glass-saturate-high: 200%;
+  --glass-border-subtle: #332e27;
+  --glass-border-crisp: #4a4237;
+  --glass-border-strong: #c8794b;
 
-  /* Micro-Borders & Specular Rim Lighting */
-  --glass-border-subtle: #263449;
-  --glass-border-crisp: #33435C;
-  --glass-border-strong: #3B82F6;
-  /* ds-allow-hardcode: specular tokens are base design primitives defining light interaction */
-  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-  /* ds-allow-hardcode: specular tokens are base design primitives defining light interaction */
-  --glass-specular-rim: inset 0 1px 1px 0 rgba(255, 255, 255, 0.10), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.40);
-  /* ds-allow-hardcode: specular tokens are base design primitives defining light interaction */
-  --glass-specular-recessed: inset 0 2px 4px 0 rgba(0, 0, 0, 0.45);
-  /* ds-allow-hardcode: specular tokens are base design primitives defining light interaction */
-  --glass-specular-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  /* Almost invisible warm rim; depth comes from borders, not highlights */
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 248, 235, 0.02);
+  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 248, 235, 0.02);
+  --glass-specular-recessed: inset 0 1px 2px 0 rgba(10, 7, 4, 0.35);
+  --glass-specular-highlight: inset 0 1px 0 0 rgba(255, 248, 235, 0.03);
 
-  /* Shadows (FinTech Depth & Elevation) */
-  /* ds-allow-hardcode: shadow alpha values are base design primitives defining depth perception */
-  --glass-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.30);
-  --glass-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.35);
-  --glass-shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.50);
-  --glass-shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.65);
-  --glass-shadow-xl: 0 20px 40px -8px rgba(0, 0, 0, 0.70);
-  --glass-shadow-glow-accent: 0 0 24px 0 rgba(37, 99, 235, 0.25);
-  --glass-shadow-glow-success: 0 0 24px 0 rgba(16, 185, 129, 0.25);
-  --glass-shadow-glow-warning: 0 0 24px 0 rgba(245, 158, 11, 0.25);
-  --glass-shadow-glow-danger: 0 0 24px 0 rgba(239, 68, 68, 0.25);
-  --glass-shadow-glow-info: 0 0 24px 0 rgba(56, 189, 248, 0.25);
-  --glass-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+  /* ---------------------------------------------------------------------
+   * Elevation - quiet, warm shadows; no coloured halos
+   * ------------------------------------------------------------------- */
+  --glass-shadow-xs: 0 1px 2px 0 rgba(10, 7, 4, 0.35);
+  --glass-shadow-sm: 0 1px 3px 0 rgba(10, 7, 4, 0.4);
+  --glass-shadow-md: 0 6px 20px -8px rgba(10, 7, 4, 0.6);
+  --glass-shadow-lg: 0 18px 40px -18px rgba(10, 7, 4, 0.7);
+  --glass-shadow-xl: 0 28px 60px -24px rgba(10, 7, 4, 0.75);
+  --glass-shadow-glow-accent: 0 0 0 1px rgba(200, 121, 75, 0.16);
+  --glass-shadow-glow-success: 0 0 0 1px rgba(143, 174, 139, 0.16);
+  --glass-shadow-glow-warning: 0 0 0 1px rgba(212, 162, 63, 0.16);
+  --glass-shadow-glow-danger: 0 0 0 1px rgba(207, 107, 91, 0.16);
+  --glass-shadow-glow-info: 0 0 0 1px rgba(143, 169, 189, 0.16);
+  --glass-shadow-inner: inset 0 1px 2px 0 rgba(10, 7, 4, 0.45);
 
-  /* Border Radius */
+  /* ---------------------------------------------------------------------
+   * Form & Motion
+   * ------------------------------------------------------------------- */
   --glass-radius-xs: 4px;
   --glass-radius-sm: 8px;
-  --glass-radius-md: 12px;
-  --glass-radius-lg: 16px;
-  --glass-radius-xl: 20px;
-  --glass-radius-2xl: 24px;
+  --glass-radius-md: 10px;
+  --glass-radius-lg: 14px;
+  --glass-radius-xl: 18px;
+  --glass-radius-2xl: 22px;
   --glass-radius-full: 9999px;
 
-  /* Spacing */
-  --glass-space-xs: 0.25rem;   /* 4px */
-  --glass-space-sm: 0.5rem;    /* 8px */
-  --glass-space-md: 1rem;      /* 16px */
-  --glass-space-lg: 1.5rem;    /* 24px */
-  --glass-space-xl: 2rem;      /* 32px */
-  --glass-space-2xl: 3rem;     /* 48px */
+  --glass-space-xs: 0.25rem;
+  --glass-space-sm: 0.5rem;
+  --glass-space-md: 1rem;
+  --glass-space-lg: 1.5rem;
+  --glass-space-xl: 2rem;
+  --glass-space-2xl: 3rem;
 
-  /* Typography */
-  --glass-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --glass-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --glass-font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --glass-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
-  --glass-text-xs: 0.75rem;      /* 12px */
-  --glass-text-sm: 0.875rem;     /* 14px */
-  --glass-text-base: 1rem;       /* 16px */
-  --glass-text-lg: 1.125rem;     /* 18px */
-  --glass-text-xl: 1.25rem;      /* 20px */
-  --glass-text-2xl: 1.5rem;      /* 24px */
-  --glass-text-3xl: 1.875rem;    /* 30px */
-  --glass-text-4xl: 2.25rem;     /* 36px */
+  --glass-text-xs: 0.75rem;
+  --glass-text-sm: 0.8125rem;
+  --glass-text-base: 0.875rem;
+  --glass-text-lg: 1.0625rem;
+  --glass-text-xl: 1.25rem;
+  --glass-text-2xl: 1.5rem;
+  --glass-text-3xl: 1.875rem;
+  --glass-text-4xl: 2.25rem;
 
   --glass-font-normal: 400;
   --glass-font-medium: 500;
@@ -142,71 +159,218 @@
   --glass-font-bold: 700;
   --glass-font-extrabold: 800;
 
-  /* Interaction & Spring Physics */
   --glass-spring-easing: cubic-bezier(0.16, 1, 0.3, 1);
-  --glass-spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --glass-transition-fast: 100ms var(--glass-spring-easing);
+  --glass-spring-bounce: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --glass-transition-fast: 120ms var(--glass-spring-easing);
   --glass-transition-normal: 200ms var(--glass-spring-easing);
   --glass-transition-slow: 300ms var(--glass-spring-easing);
   --glass-transition-very-slow: 500ms var(--glass-spring-easing);
 
-  /* Hover & Active Scale */
-  --glass-scale-hover: scale(1.008);
-  --glass-scale-hover-lg: scale(1.02);
-  --glass-scale-active: scale(0.988);
-  --glass-scale-active-lg: scale(0.97);
+  --glass-scale-hover: scale(1.004);
+  --glass-scale-hover-lg: scale(1.01);
+  --glass-scale-active: scale(0.99);
+  --glass-scale-active-lg: scale(0.975);
 
-  /* Z-Index Scale */
   --glass-z-dropdown: 50;
   --glass-z-tooltip: 60;
   --glass-z-modal: 100;
   --glass-z-toast: 200;
 
-  /* Fallback colors - reference existing tokens */
   --glass-fallback-bg: var(--glass-surface-base);
   --glass-fallback-border: var(--glass-border-subtle);
   --glass-fallback-bg-dark: var(--glass-surface-base);
   --glass-fallback-border-dark: var(--glass-border-subtle);
+
+  --focus-ring-width: 2px;
+  --focus-ring-color: var(--primary-accent);
+  --focus-ring-offset: 2px;
+  --focus-ring-offset-color: var(--bg-primary);
+
+  --glass-fade-in-from-opacity: 0;
+  --glass-fade-in-to-opacity: 1;
+  --glass-slide-up-from-translate: 8px;
+  --glass-slide-down-from-translate: -8px;
+  --glass-scale-in-from-scale: 0.96;
+  --glass-scale-in-to-scale: 1;
+
+  --container-xs: 280px;
+  --container-sm: 320px;
+  --container-md: 420px;
+  --container-lg: 540px;
+  --container-xl: 720px;
+  --container-2xl: 960px;
+  --container-3xl: 1100px;
+  --container-4xl: 1440px;
 }
 
-[data-theme="dark"] {
-  --glass-surface-base: #151F32;
-  --glass-surface-muted: #111827;
-  --glass-surface-elevated: #18243A;
-  --glass-surface-active: #1D2B42;
-  --glass-surface-dock: #0F172A;
-  --glass-surface-subtle: #0F172A;
-  --glass-surface-overlay: #111827;
-  --glass-border-subtle: #263449;
-  --glass-border-crisp: #33435C;
+/* ------------------------------------------------------------------------
+ * Light theme (ThemeService removes data-theme for light)
+ * --------------------------------------------------------------------- */
+:root:not([data-theme='dark']) {
+  --bg-primary: #f4f0e8;
+  --bg-secondary: #fbf8f2;
+  --bg-sidebar: #fbf8f2;
+  --bg-topbar: #fbf8f2;
+  --bg-card: #ffffff;
+  --bg-card-elevated: #ffffff;
+  --bg-input: #faf7f1;
+  --border-color: #ddd5c8;
+  --text-primary: #241f1a;
+  --text-secondary: #60574b;
+  --text-muted: #726858;
+
+  --primary-accent: #a8582b;
+  --primary-hover: #8f4620;
+  --color-on-primary: #ffffff;
+  --color-on-danger: #ffffff;
+  --color-success: #3f6b45;
+  --color-warning: #9a6710;
+  --color-danger: #a93e32;
+  --color-info: #3d6079;
+
+  --color-primary-tint: rgba(168, 88, 43, 0.08);
+  --color-primary-border: rgba(168, 88, 43, 0.22);
+  --color-primary-text: #8f4620;
+  --color-success-tint: rgba(63, 107, 69, 0.08);
+  --color-success-border: rgba(63, 107, 69, 0.2);
+  --color-success-text: #315837;
+  --color-warning-tint: rgba(154, 103, 16, 0.08);
+  --color-warning-border: rgba(154, 103, 16, 0.2);
+  --color-warning-text: #87590c;
+  --color-danger-tint: rgba(169, 62, 50, 0.08);
+  --color-danger-border: rgba(169, 62, 50, 0.2);
+  --color-danger-text: #93332a;
+  --color-info-tint: rgba(61, 96, 121, 0.08);
+  --color-info-border: rgba(61, 96, 121, 0.2);
+  --color-info-text: #34546b;
+  --color-neutral-tint: rgba(71, 60, 45, 0.06);
+  --color-neutral-border: rgba(71, 60, 45, 0.14);
+  --color-neutral-text: #60574b;
+
+  --color-primary-light: var(--color-primary-tint);
+  --color-success-light: var(--color-success-tint);
+  --color-warning-light: var(--color-warning-tint);
+  --color-danger-light: var(--color-danger-tint);
+  --color-info-light: var(--color-info-tint);
+  --color-neutral-light: var(--color-neutral-tint);
+
+  --color-text-inverse: #ffffff;
+  --color-surface-hover: #f1ece3;
+  --color-surface-active: #e8e0d3;
+  --color-border-medium: #c8bdae;
+
+  --glass-surface-base: #ffffff;
+  --glass-surface-muted: #faf7f1;
+  --glass-surface-elevated: #ffffff;
+  --glass-surface-active: #f1ece3;
+  --glass-surface-dock: #fbf8f2;
+  --glass-surface-subtle: #faf7f1;
+  --glass-surface-overlay: #ffffff;
+
+  --glass-border-subtle: #ddd5c8;
+  --glass-border-crisp: #c8bdae;
+  --glass-border-strong: #a8582b;
+
+  --glass-specular-top: none;
+  --glass-specular-rim: none;
+  --glass-specular-recessed: inset 0 1px 2px 0 rgba(60, 45, 25, 0.05);
+  --glass-specular-highlight: none;
+
+  --glass-shadow-xs: 0 1px 2px 0 rgba(60, 45, 25, 0.04);
+  --glass-shadow-sm: 0 1px 3px 0 rgba(60, 45, 25, 0.06);
+  --glass-shadow-md: 0 4px 16px -8px rgba(60, 45, 25, 0.14);
+  --glass-shadow-lg: 0 16px 36px -18px rgba(60, 45, 25, 0.2);
+  --glass-shadow-xl: 0 24px 50px -24px rgba(60, 45, 25, 0.25);
+  --glass-shadow-glow-accent: 0 0 0 1px rgba(168, 88, 43, 0.14);
+  --glass-shadow-glow-success: 0 0 0 1px rgba(63, 107, 69, 0.14);
+  --glass-shadow-glow-warning: 0 0 0 1px rgba(154, 103, 16, 0.14);
+  --glass-shadow-glow-danger: 0 0 0 1px rgba(169, 62, 50, 0.14);
+  --glass-shadow-glow-info: 0 0 0 1px rgba(61, 96, 121, 0.14);
+
+  --focus-ring-offset-color: #fbf8f2;
 }
 
-/* Utility Glass Classes */
-.glass-surface {
+/* Deprecated explicit dark block kept as a no-op for older templates */
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+:root:not([data-theme='dark']) {
+  color-scheme: light;
+}
+
+/* ------------------------------------------------------------------------
+ * Reduced-motion override (WCAG 2.1 SC 2.3.3 / 4.1.2)
+ * Honours the OS setting by cancelling every motion token. Pure CSS, so
+ * it covers every component that reads the token variables - no per-file
+ * changes needed. Emphasis is kept on focus rings so keyboard users are
+ * never left without a pointer.
+ * --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --glass-transition-fast: 0ms !important;
+    --glass-transition-normal: 0ms !important;
+    --glass-transition-slow: 0ms !important;
+    --glass-transition-very-slow: 0ms !important;
+    --glass-spring-easing: linear;
+    --glass-spring-bounce: linear;
+  }
+
+  .glass-btn-root,
+  .glass-switch-track,
+  .glass-switch-thumb,
+  .glass-dropdown-item,
+  .glass-table-row,
+  .glass-table-action-btn,
+  .glass-tooltip-root,
+  .glass-dialog-surface,
+  .glass-progress-bar,
+  .glass-skeleton {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+    animation-name: none !important;
+  }
+
+  .glass-btn-root:hover:not(:disabled),
+  .glass-btn-root:active:not(:disabled) {
+    transform: none;
+  }
+
+  /* Spinners keep a static glyph so screen readers still announce loading */
+  .fx-spin {
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------------
+ * Utility classes
+ * --------------------------------------------------------------------- */
+.glass-surface,
+.glass-surface-elevated,
+.glass-surface-subtle,
+.glass-surface-overlay {
   background: var(--glass-surface-base);
-  backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
   border: 1px solid var(--glass-border-subtle);
   box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
 }
 
 .glass-surface-elevated {
   background: var(--glass-surface-elevated);
-  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
-  border: 1px solid var(--glass-border-crisp);
+  border-color: var(--glass-border-crisp);
   box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
 }
 
 .glass-surface-subtle {
   background: var(--glass-surface-muted);
-  backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
-  border: 1px solid var(--glass-border-subtle);
   box-shadow: var(--glass-shadow-sm), var(--glass-specular-top);
 }
 
-/* Semantic Color Aliases - maps to glass tokens */
+.glass-surface-overlay {
+  background: var(--glass-surface-overlay);
+  box-shadow: var(--glass-shadow-xl), var(--glass-specular-rim);
+}
+
+/* Semantic aliases used across older templates */
 :root {
   --color-bg-primary: var(--bg-primary);
   --color-bg-secondary: var(--bg-secondary);
@@ -219,94 +383,19 @@
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
-  --color-primary: var(--primary-accent);
-  --color-primary-hover: var(--primary-hover);
-  --color-success: var(--color-success);
-  --color-warning: var(--color-warning);
-  --color-danger: var(--color-danger);
-  --color-info: var(--color-info);
+  --color-primary-hover-alt: var(--primary-hover);
+  --color-success-alt: var(--color-success);
+  --color-warning-alt: var(--color-warning);
+  --color-danger-alt: var(--color-danger);
+  --color-info-alt: var(--color-info);
 }
 
-/* Focus ring tokens */
-/* ds-allow-hardcode: focus ring dimensions are base design primitives */
-:root {
-  --focus-ring-width: 2px;
-  --focus-ring-color: var(--primary-accent);
-  --focus-ring-offset: 2px;
-  --focus-ring-offset-color: var(--bg-primary);
-}
-
-/* Animation primitives - keyframe values are base design tokens */
-/* ds-allow-hardcode: animation primitive values */
-:root {
-  --glass-fade-in-from-opacity: 0;
-  --glass-fade-in-to-opacity: 1;
-  --glass-slide-up-from-translate: 8px;
-  --glass-slide-down-from-translate: -8px;
-  --glass-scale-in-from-scale: 0.96;
-  --glass-scale-in-to-scale: 1;
-}
-
-/* Motion tokens with reduced-motion support */
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --glass-transition-fast: 0ms;
-    --glass-transition-normal: 0ms;
-    --glass-transition-slow: 0ms;
-  }
-}
-
-/* Container query tokens for component-level responsive design */
-/* ds-allow-hardcode: container breakpoints are base design primitives */
-:root {
-  --container-xs: 280px;
-  --container-sm: 320px;
-  --container-md: 420px;
-  --container-lg: 540px;
-  --container-xl: 720px;
-  --container-2xl: 960px;
-  --container-3xl: 1100px;
-  --container-4xl: 1440px;
-}
-
-/* Utility: focus-visible ring */
+/* Focus helpers */
 .glass-focus-ring {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
 }
 
-/* Utility: reduced motion */
-.glass-reduced-motion {
-  transition: none !important;
-  animation: none !important;
-}
-
-.glass-surface-overlay {
-  background: var(--glass-surface-overlay);
-  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
-  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
-  border: 1px solid var(--glass-border-subtle);
-  box-shadow: var(--glass-shadow-xl), var(--glass-specular-rim);
-}
-
-/* Specular Highlight Utility */
-.glass-specular-top {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 1px;
-  pointer-events: none;
-  box-shadow: var(--glass-specular-top);
-}
-
-/* Focus Ring Utility */
-.glass-focus-ring {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--primary-accent);
-}
-
-/* Focus Visible Utility — for links and non-button interactives */
 .glass-focus-visible {
   outline: none;
 }
@@ -318,87 +407,77 @@
   outline-color: var(--focus-ring-color);
 }
 
-/* Alternative: explicit ring with offset for dark theme */
 .glass-focus-visible-dark:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color), 0 0 0 calc(var(--focus-ring-width) + var(--focus-ring-offset)) var(--focus-ring-offset-color);
+  box-shadow:
+    0 0 0 var(--focus-ring-width) var(--focus-ring-color),
+    0 0 0 calc(var(--focus-ring-width) + var(--focus-ring-offset)) var(--focus-ring-offset-color);
 }
 
-/* Animation Utilities */
-.glass-animate-in {
-  animation: glassFadeIn 200ms var(--glass-spring-easing);
+.glass-reduced-motion {
+  transition: none !important;
+  animation: none !important;
 }
 
-.glass-animate-slide-up {
-  animation: glassSlideUp 250ms var(--glass-spring-easing);
+.glass-specular-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  pointer-events: none;
+  box-shadow: var(--glass-specular-top);
 }
 
-.glass-animate-slide-down {
-  animation: glassSlideDown 250ms var(--glass-spring-easing);
-}
+/* Motion */
+.glass-animate-in { animation: glassFadeIn 200ms var(--glass-spring-easing); }
+.glass-animate-slide-up { animation: glassSlideUp 250ms var(--glass-spring-easing); }
+.glass-animate-slide-down { animation: glassSlideDown 250ms var(--glass-spring-easing); }
+.glass-animate-scale-in { animation: glassScaleIn 200ms var(--glass-spring-bounce); }
 
-.glass-animate-scale-in {
-  animation: glassScaleIn 200ms var(--glass-spring-bounce);
-}
-
-/* ds-allow-hardcode: keyframe values are base animation primitives */
 @keyframes glassFadeIn {
-  from { /* ds-allow-hardcode: keyframe values are base animation primitives */ opacity: 0; }
-  to { /* ds-allow-hardcode: keyframe values are base animation primitives */ opacity: 1; }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-
-/* ds-allow-hardcode: keyframe values are base animation primitives */
 @keyframes glassSlideUp {
-  from {
-    opacity: 0; /* ds-allow-hardcode: keyframe values are base animation primitives */
-    transform: translateY(8px); /* ds-allow-hardcode: keyframe values are base animation primitives */
-  }
-  to {
-    opacity: 1; /* ds-allow-hardcode: keyframe values are base animation primitives */
-    transform: translateY(0); /* ds-allow-hardcode: keyframe values are base animation primitives */
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-/* ds-allow-hardcode: keyframe values are base animation primitives */
 @keyframes glassSlideDown {
-  from {
-    opacity: 0; /* ds-allow-hardcode: keyframe values are base animation primitives */
-    transform: translateY(-8px); /* ds-allow-hardcode: keyframe values are base animation primitives */
-  }
-  to {
-    opacity: 1; /* ds-allow-hardcode: keyframe values are base animation primitives */
-    transform: translateY(0); /* ds-allow-hardcode: keyframe values are base animation primitives */
-  }
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-/* ds-allow-hardcode: keyframe values are base animation primitives */
 @keyframes glassScaleIn {
-  from {
-    opacity: 0; /* ds-allow-hardcode: keyframe values are base animation primitives */
-    transform: scale(0.96); /* ds-allow-hardcode: keyframe values are base animation primitives */
-  }
-  to {
-    opacity: 1; /* ds-allow-hardcode: keyframe values are base animation primitives */
-    transform: scale(1); /* ds-allow-hardcode: keyframe values are base animation primitives */
-  }
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
-
-/* Shimmer Animation for Skeletons */
-/* ds-allow-hardcode: keyframe percentages and shimmer alphas are base animation primitives */
 @keyframes glass-shimmer {
-  0% { /* ds-allow-hardcode: keyframe values are base animation primitives */ background-position: 200% 0; }
-  100% { /* ds-allow-hardcode: keyframe values are base animation primitives */ background-position: -200% 0; }
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .glass-shimmer {
-  /* ds-allow-hardcode: shimmer gradient stops are base animation primitives */
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.03) 0%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.03) 100%
+    rgba(230, 218, 199, 0.04) 0%,
+    rgba(230, 218, 199, 0.09) 50%,
+    rgba(230, 218, 199, 0.04) 100%
   );
   background-size: 200% 100%;
-  /* ds-allow-hardcode: animation duration is a base animation primitive */
   animation: glass-shimmer 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --glass-transition-fast: 0ms;
+    --glass-transition-normal: 0ms;
+    --glass-transition-slow: 0ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

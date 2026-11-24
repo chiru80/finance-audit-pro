@@ -2,7 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Injector, runInInjectionContext } from '@angular/core';
 import { AuthService } from './auth.service';
 import { SupabaseService } from '../supabase.service';
-import { User, Session } from '@supabase/supabase-js';
+import type { User } from '@supabase/supabase-js';
+import { Session } from '@supabase/supabase-js';
 
 describe('AuthService', () => {
   let mockSupabaseService: any;
@@ -38,17 +39,19 @@ describe('AuthService', () => {
         })),
       },
       getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
-      signIn: vi.fn((email, password) => Promise.resolve({ data: { user: { id: 'u1', email } }, error: null })),
-      signUp: vi.fn((email, password) => Promise.resolve({ data: { user: { id: 'u2', email } }, error: null })),
+      signIn: vi.fn((email, password) =>
+        Promise.resolve({ data: { user: { id: 'u1', email } }, error: null }),
+      ),
+      signUp: vi.fn((email, password) =>
+        Promise.resolve({ data: { user: { id: 'u2', email } }, error: null }),
+      ),
       signOut: vi.fn(() => Promise.resolve({ error: null })),
     };
   });
 
   const createService = () => {
     const injector = Injector.create({
-      providers: [
-        { provide: SupabaseService, useValue: mockSupabaseService },
-      ],
+      providers: [{ provide: SupabaseService, useValue: mockSupabaseService }],
     });
     return runInInjectionContext(injector, () => new AuthService());
   };
@@ -71,7 +74,10 @@ describe('AuthService', () => {
   });
 
   it('should return error on signIn failure', async () => {
-    mockSupabaseService.signIn.mockResolvedValueOnce({ data: null, error: { message: 'Invalid credentials' } });
+    mockSupabaseService.signIn.mockResolvedValueOnce({
+      data: null,
+      error: { message: 'Invalid credentials' },
+    });
 
     const service = createService();
     const result = await service.signIn('bad@example.com', 'wrong');
@@ -114,4 +120,3 @@ describe('AuthService', () => {
     expect(result.error).toBe('No user provided');
   });
 });
-

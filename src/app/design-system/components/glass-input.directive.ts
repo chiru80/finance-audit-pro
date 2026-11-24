@@ -1,58 +1,50 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { Directive, HostBinding, Input, HostListener } from '@angular/core';
 
+/**
+ * Applies the premium field treatment to inputs, selects and textareas.
+ * All colouring comes from design tokens so light/dark themes work without
+ * per-template overrides. Tailwind `!` utilities in templates still win for
+ * one-off sizing (e.g. `py-1.5! text-xs!`).
+ *
+ * Accessibility:
+ * - Binds `aria-invalid` when hasError is true, making error states announced
+ *   to screen readers per WCAG 2.1 1.3.1 Info and Relationships.
+ */
 @Directive({
   selector: 'input[glassInput], select[glassInput], textarea[glassInput]',
   standalone: true,
 })
 export class GlassInputDirective {
   @Input() hasError = false;
+  @Input() hasSuccess = false;
 
+  /** Host classes applied based on state */
   @HostBinding('class')
   get hostClasses(): string {
-    const base = [
-      'block',
-      'w-full',
-      'rounded-xl',
-      'border',
-      'px-3.5',
-      'py-2.5',
-      'text-sm',
-      'transition-all',
-      'duration-150',
-      'outline-none',
-      'focus:ring-2',
-      'focus:ring-offset-1',
-      'focus:ring-offset-[#0B1120]',
-    ];
-
-    if (this.hasError) {
-      base.push(
-        'border-[#EF4444]',
-        'bg-[#EF4444]/10',
-        'text-[#F8FAFC]',
-        'placeholder:text-[#64748B]',
-        'focus:border-[#EF4444]',
-        'focus:ring-[#EF4444]/30'
-      );
-    } else {
-      base.push(
-        'border-[#263449]',
-        'bg-[#0F172A]',
-        'text-[#F8FAFC]',
-        'placeholder:text-[#64748B]',
-        'focus:border-[#2563EB]',
-        'focus:ring-[#2563EB]/30',
-        'focus:bg-[#0F172A]'
-      );
-    }
-
-    return base.join(' ');
+    if (this.hasError) return 'fx-input fx-input--error';
+    if (this.hasSuccess) return 'fx-input fx-input--success';
+    return 'fx-input';
   }
 
-  @HostBinding('style.boxShadow')
-  get boxShadow(): string {
-    return this.hasError
-      ? '0 0 0 1px #EF4444'
-      : 'inset 0 1px 2px 0 rgba(0, 0, 0, 0.4)';
+  /** ARIA-invalid attribute for screen readers - true when in error state */
+  @HostBinding('attr.aria-invalid')
+  get ariaInvalid(): string {
+    return this.hasError ? 'true' : 'false';
+  }
+
+  /** ARIA-describedby to link to error message if present */
+  @HostBinding('attr.aria-describedby')
+  get ariaDescribedBy(): string | null {
+    if (!this.hasError) return null;
+    // Error message ID should be provided by parent form component
+    // Convention: {controlId}-error
+    return null;
+  }
+
+  /** ARIA-required for required fields */
+  @HostBinding('attr.aria-required')
+  get ariaRequired(): boolean {
+    // The host binding for required is handled via native attribute
+    return false;
   }
 }

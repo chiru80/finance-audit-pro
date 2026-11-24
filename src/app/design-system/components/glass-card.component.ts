@@ -20,80 +20,83 @@ export type GlassCardGlow = 'accent' | 'success' | 'warning' | 'none';
       <ng-content></ng-content>
     </div>
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
+  styles: [
+    `
+      :host {
+        display: block;
+      }
 
-    .glass-card-root {
-      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-    }
+      .glass-card-root {
+        transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+      }
 
-    /* Map variants to design system tokens directly */
-    .surface-default {
-      background: var(--glass-surface-base);
-      backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
-      -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
-      border: 1px solid var(--glass-border-subtle);
-      box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
-      color: var(--text-primary);
-    }
+      /* Map variants to design system tokens directly */
+      .surface-default {
+        background: var(--glass-surface-base);
+        backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+        -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+        border: 1px solid var(--glass-border-subtle);
+        box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+        color: var(--text-primary);
+      }
 
-    .surface-elevated {
-      background: var(--glass-surface-elevated);
-      backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
-      -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
-      border: 1px solid var(--glass-border-crisp);
-      box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim), var(--glass-specular-highlight);
-      color: var(--text-primary);
-    }
+      .surface-elevated {
+        background: var(--glass-surface-elevated);
+        backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+        -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+        border: 1px solid var(--glass-border-crisp);
+        box-shadow:
+          var(--glass-shadow-lg), var(--glass-specular-rim), var(--glass-specular-highlight);
+        color: var(--text-primary);
+      }
 
-    .surface-elevated::before {
-      content: '';
-      position: absolute;
-      inset-x: 0;
-      top: 0;
-      height: 1px;
-      pointer-events: none;
-      box-shadow: var(--glass-specular-top);
-    }
+      .surface-elevated::before {
+        content: '';
+        position: absolute;
+        inset-x: 0;
+        top: 0;
+        height: 1px;
+        pointer-events: none;
+        box-shadow: var(--glass-specular-top);
+      }
 
-    .surface-subtle {
-      background: var(--glass-surface-muted);
-      backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
-      -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
-      border: 1px solid var(--glass-border-subtle);
-      box-shadow: var(--glass-shadow-sm), var(--glass-specular-top);
-      color: var(--text-secondary);
-    }
+      .surface-subtle {
+        background: var(--glass-surface-muted);
+        backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+        -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+        border: 1px solid var(--glass-border-subtle);
+        box-shadow: var(--glass-shadow-sm), var(--glass-specular-top);
+        color: var(--text-secondary);
+      }
 
-    .surface-kpi {
-      background: var(--glass-surface-base);
-      backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
-      -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
-      border: 1px solid var(--glass-border-subtle);
-      box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
-      color: var(--text-primary);
-    }
+      .surface-kpi {
+        background: var(--glass-surface-base);
+        backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+        -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+        border: 1px solid var(--glass-border-subtle);
+        box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+        color: var(--text-primary);
+      }
 
-    .card-interactive:hover {
-      transform: translateY(-2px);
-      border-color: var(--primary-accent);
-      box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
-    }
+      .card-interactive:hover {
+        transform: translateY(-2px);
+        border-color: var(--primary-accent);
+        box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
+      }
 
-    .glow-accent {
-      box-shadow: var(--glass-shadow-glow-accent);
-    }
+      .glow-accent {
+        box-shadow: var(--glass-shadow-glow-accent);
+      }
 
-    .glow-success {
-      box-shadow: var(--glass-shadow-glow-success);
-    }
+      .glow-success {
+        box-shadow: var(--glass-shadow-glow-success);
+      }
 
-    .glow-warning {
-      box-shadow: var(--glass-shadow-glow-warning);
-    }
-  `],
+      .glow-warning {
+        box-shadow: var(--glass-shadow-glow-warning);
+      }
+    `,
+  ],
 })
 export class GlassCardComponent {
   @Input() variant: GlassCardVariant = 'default';

@@ -1,31 +1,32 @@
-/* Customer Detail Component Styles - Uses Design Tokens */
+/* Customer Detail Component Styles - Uses the active design tokens */
 .customer-detail-container {
   max-width: 800px;
   margin: 0 auto;
 }
 
 .detail-section {
-  background: var(--color-background-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: var(--spacing-6);
-  margin-bottom: var(--spacing-6);
+  background: var(--glass-surface-base);
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: var(--glass-radius-lg);
+  box-shadow: var(--glass-shadow-sm);
+  padding: var(--glass-space-lg);
+  margin-bottom: var(--glass-space-lg);
 }
 
 .detail-section h2 {
-  font-size: var(--text-lg);
-  font-weight: var(--font-semibold);
-  color: var(--color-text-primary);
-  margin-bottom: var(--spacing-4);
-  padding-bottom: var(--spacing-2);
-  border-bottom: 1px solid var(--color-border-light);
+  font-size: var(--glass-text-lg);
+  font-weight: var(--glass-font-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--glass-space-md);
+  padding-bottom: var(--glass-space-sm);
+  border-bottom: 1px solid var(--glass-border-subtle);
 }
 
 .detail-row {
   display: flex;
   justify-content: space-between;
-  padding: var(--spacing-3) 0;
-  border-bottom: 1px solid var(--color-neutral-100);
+  padding: var(--glass-space-sm) 0;
+  border-bottom: 1px solid var(--glass-border-subtle);
 }
 
 .detail-row:last-child {
@@ -33,56 +34,56 @@
 }
 
 .detail-label {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
+  font-size: var(--glass-text-sm);
+  color: var(--text-muted);
 }
 
 .detail-value {
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
-  color: var(--color-text-primary);
+  font-size: var(--glass-text-sm);
+  font-weight: var(--glass-font-medium);
+  color: var(--text-primary);
   text-align: right;
 }
 
 .detail-value.outstanding {
-  color: var(--color-status-negative);
+  color: var(--color-danger-text);
 }
 
 .detail-value.positive {
-  color: var(--color-status-positive);
+  color: var(--color-success-text);
 }
 
 .action-buttons {
   display: flex;
-  gap: var(--spacing-3);
-  margin-top: var(--spacing-6);
+  gap: var(--glass-space-md);
+  margin-top: var(--glass-space-lg);
 }
 
 .btn {
-  padding: var(--spacing-2) var(--spacing-4);
-  border-radius: var(--radius-md);
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
+  padding: var(--glass-space-sm) var(--glass-space-md);
+  border-radius: var(--glass-radius-sm);
+  font-size: var(--glass-text-sm);
+  font-weight: var(--glass-font-medium);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--glass-transition-fast);
 }
 
 .btn-primary {
-  background-color: var(--color-primary-600);
-  color: var(--color-text-dark);
-  border: none;
+  background-color: var(--primary-accent);
+  color: var(--color-on-primary);
+  border: 1px solid transparent;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-700);
+  background-color: var(--primary-hover);
 }
 
 .btn-secondary {
-  background-color: var(--color-background-primary);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border-moderate);
+  background-color: var(--glass-surface-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border-crisp);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-neutral-50);
+  background-color: var(--color-surface-hover);
 }

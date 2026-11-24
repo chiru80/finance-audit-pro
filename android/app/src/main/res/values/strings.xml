@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Finance Audit Pro</string>
+    <string name="title_activity_main">Finance Audit Pro</string>
+    <string name="package_name">com.financeauditpro.app</string>
+    <string name="custom_url_scheme">com.financeauditpro.app</string>
+</resources>

@@ -21,23 +21,27 @@ describe('CustomerService', () => {
       client: {
         from: vi.fn(() => ({
           select: vi.fn(() => ({
-            order: vi.fn(() => Promise.resolve({
-              data: [
-                { id: 'c1', name: 'Ravi Kumar', weekly_due_amount: 50000, status: 'active' },
-                { id: 'c2', name: 'Sita Devi', weekly_due_amount: 30000, status: 'active' },
-              ],
-              error: null,
-            })),
+            order: vi.fn(() =>
+              Promise.resolve({
+                data: [
+                  { id: 'c1', name: 'Ravi Kumar', weekly_due_amount: 50000, status: 'active' },
+                  { id: 'c2', name: 'Sita Devi', weekly_due_amount: 30000, status: 'active' },
+                ],
+                error: null,
+              }),
+            ),
             eq: vi.fn(() => ({
               single: vi.fn(() => Promise.resolve({ data: {}, error: null })),
             })),
           })),
           insert: vi.fn(() => ({
             select: vi.fn(() => ({
-              single: vi.fn(() => Promise.resolve({
-                data: { id: 'c3', name: 'New Customer', weekly_due_amount: 50000 },
-                error: null,
-              })),
+              single: vi.fn(() =>
+                Promise.resolve({
+                  data: { id: 'c3', name: 'New Customer', weekly_due_amount: 50000 },
+                  error: null,
+                }),
+              ),
             })),
           })),
           update: vi.fn(() => ({
@@ -95,7 +99,7 @@ describe('CustomerService', () => {
         phone: '',
         email: '',
         weekly_due_amount: 50000,
-      })
+      }),
     ).rejects.toThrow('User not authenticated');
   });
 
@@ -118,4 +122,3 @@ describe('CustomerService', () => {
     expect(mockSupabaseService.client.from).toHaveBeenCalledWith('customers');
   });
 });
-

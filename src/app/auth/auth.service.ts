@@ -1,5 +1,5 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import { User, Session, SupabaseClient } from '@supabase/supabase-js';
+import type { User, Session, SupabaseClient } from '@supabase/supabase-js';
 import { SupabaseService } from '../supabase.service';
 
 @Injectable({
@@ -27,7 +27,10 @@ export class AuthService {
 
   private async initializeAuth() {
     try {
-      const { data: { session }, error: sessionError } = await this._supabaseService.getSession();
+      const {
+        data: { session },
+        error: sessionError,
+      } = await this._supabaseService.getSession();
 
       if (sessionError) {
         this._error.set(sessionError.message);
@@ -63,26 +66,33 @@ export class AuthService {
   /**
    * Ensure a profile exists for the given user
    * This handles OAuth signups and cases where profile was deleted
+   * Uses upsert to prevent race conditions on concurrent SIGNED_IN events
    */
   private async ensureProfileExists(user: User) {
     try {
-      // Check if profile already exists
-      const { data: existingProfile, error: checkError } = await this._supabaseService.client
+      const fullName =
+        ((user.user_metadata as Record<string, unknown>)['full_name'] as string) ||
+        ((user.user_metadata as Record<string, unknown>)['name'] as string) ||
+        '';
+
+      // Upsert instead of select-then-insert to avoid race conditions
+      const { error } = await this._supabaseService.client
         .from('profiles')
-        .select('id')
-        .eq('id', user.id)
+        .upsert({
+          id: user.id,
+          email: user.email,
+          full_name: fullName || null,
+          language: 'en',
+          theme_mode: 'light',
+          weekly_due_day: 1,
+          weekly_due_amount: 50000, // default; may be overridden later via settings
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
         .single();
 
-      if (checkError && checkError.code !== 'PGRST116') { // PGRST116 = no rows returned
-        console.error('Error checking profile:', checkError);
-        return;
-      }
-
-      // Profile doesn't exist, create it
-      if (!existingProfile) {
-        const fullName = (user.user_metadata as Record<string, unknown>)['full_name'] as string ||
-                         (user.user_metadata as Record<string, unknown>)['name'] as string || '';
-        await this.createProfileAfterSignup(user, fullName);
+      if (error) {
+        console.error('Failed to ensure profile exists:', error);
       }
     } catch (e) {
       console.error('Failed to ensure profile exists:', e);
@@ -131,7 +141,10 @@ export class AuthService {
    * This is required because the profiles table uses id = auth.uid()
    * and must be created after the user is created in auth.users
    */
-  async createProfileAfterSignup(user: User | null, fullName: string): Promise<{ success: boolean, error?: string }> {
+  async createProfileAfterSignup(
+    user: User | null,
+    fullName: string,
+  ): Promise<{ success: boolean; error?: string }> {
     if (!user) {
       return { success: false, error: 'No user provided' };
     }
@@ -146,21 +159,30 @@ export class AuthService {
         .eq('key', 'default_weekly_due_amount')
         .single();
 
-      const defaultWeeklyDueAmount = settingsData?.value
-        ? parseInt(settingsData.value, 10)
-        : 50000; // Ultimate fallback if settings unavailable
+      // Parse validated integer; fall back to 50000 paise (₹500) on any parse failure
+      const rawValue = settingsData?.value;
+      let defaultWeeklyDueAmount = 50000;
+      if (rawValue !== null && rawValue !== undefined) {
+        const parsed = parseInt(rawValue, 10);
+        if (!Number.isNaN(parsed) && parsed > 0) {
+          defaultWeeklyDueAmount = parsed;
+        }
+      }
 
-      const { error } = await this._supabaseService.client.from('profiles').insert({
-        id: user.id,
-        email: user.email,
-        full_name: fullName || null,
-        language: 'en',
-        theme_mode: 'light',
-        weekly_due_day: 1,
-        weekly_due_amount: defaultWeeklyDueAmount,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }).single();
+      const { error } = await this._supabaseService.client
+        .from('profiles')
+        .insert({
+          id: user.id,
+          email: user.email,
+          full_name: fullName || null,
+          language: 'en',
+          theme_mode: 'light',
+          weekly_due_day: 1,
+          weekly_due_amount: defaultWeeklyDueAmount,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .single();
 
       if (error) {
         return { success: false, error: error.message };

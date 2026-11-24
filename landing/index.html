@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en" data-type="software" data-radius="soft" data-buttons="solid" data-motion>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="site-kind" content="software">
+<title>Finance Audit Pro — Weekly payment tracking for finance teams</title>
+<meta name="description" content="Finance Audit Pro helps finance teams track weekly collections, manage customer ledgers, and stay audit-ready. Built for Indian finance workflows with paise-precision.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap">
+<!-- <link rel="canonical" href="https://weeklyfinance.online/"> -->
+<style id="premium-theme">
+/* ---- premium theme: minimal overrides only; the kit drives layout ---- */
+h1, .t-h1 { line-height: 1; letter-spacing: -0.02em; }
+h2, .t-h2 { line-height: 1; letter-spacing: -0.02em; }
+.t-lead { line-height: 1.5; }
+.t-body { line-height: 1.5; }
+.section-head p { line-height: 1.5; }
+body { line-height: 1.5; }
+::selection { background: color-mix(in oklab, var(--p-accent) 26%, transparent); }
+:root:has(meta[name="site-kind"]:is([content="tech"], [content="software"], [content="gaming"])) .panel:not([data-fx], .panel--device) { background-image: none; }
+.hero--collage h1 { font-size: var(--t-h1); max-width: 22ch; }
+.hero .hero__lead { font-size: var(--t-lead); max-width: 44ch; color: var(--p-muted); }
+.btn--primary { background: var(--p-action); color: var(--p-action-ink); }
+.btn--primary[height="44px"], .btn--primary:not([height]) { height: 44px; }
+.btn--secondary[height="44px"], .btn--secondary:not([height]) { height: 44px; }
+
+/* Focus visible styles */
+:focus { outline: 2px solid var(--p-action); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--p-action); outline-offset: 2px; border-radius: var(--r-sm); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--p-action); outline-offset: 2px; border-radius: var(--r-sm); }
+
+/* Mobile fixes */
+@media (max-width: 639px) {
+  .chev { flex-shrink: 0; }
+  .nav__links { position: fixed; top: 72px; left: 0; right: 0; background: var(--p-bg); border-bottom: 1px solid var(--p-border); max-height: calc(100vh - 72px); overflow-y: auto; z-index: 50; display: none; }
+  .nav__links.is-open { display: flex; flex-direction: column; }
+  .nav__item { width: 100%; }
+  .menu-card { flex-shrink: 0; }
+  .btn--primary { width: 100%; max-width: 280px; }
+  main { padding-top: 72px !important; }
+  .hero { padding-top: 0 !important; margin-top: -72px; }
+  header.nav { height: 72px; }
+  .nav__toggle { display: block !important; min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  .nav__actions { display: none; }
+}
+
+@media (min-width: 640px) {
+  .nav__toggle { display: none; }
+}
+
+@media (min-width: 1024px) {
+  .nav__links .nav__link { min-width: 0; overflow: hidden; }
+}
+</style>
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/ui/cards.css">
+<link rel="stylesheet" href="assets/motion/motion.css">
+<link rel="stylesheet" href="assets/backgrounds/backgrounds.css">
+<link rel="stylesheet" href="assets/layout/layout.css">
+<link rel="stylesheet" href="assets/icons/icon.css">
+</head>
+<body>
+<header class="nav" role="banner">
+  <div class="wrap">
+    <a class="nav__brand" href="/" aria-label="Finance Audit Pro home">
+      <svg class="nav__logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="currentColor"/><path d="M8 12h16M8 16h12M8 20h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <span class="nav__name">Finance Audit Pro</span>
+    </a>
+    <nav class="nav__links" role="navigation" aria-label="Main navigation">
+      <a class="nav__link" href="#how">How Finance Audit Pro works</a>
+      <a class="nav__link" href="#features">Features</a>
+      <a class="nav__link" href="#collect">Collections in Finance Audit Pro</a>
+      <a class="nav__link" href="#faq">Questions we get asked</a>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--secondary" href="/login" style="height:44px">Log in</a>
+      <a class="btn btn--primary" href="https://weeklyfinance.online/signup" rel="nofollow noopener" style="height:44px">Create an account</a>
+    </div>
+    <button class="nav__toggle nav__control" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+      <svg class="chev" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="nav__menu" role="navigation" aria-label="Mega menu">
+    <div class="wrap grid">
+      <a class="menu-card span-4" href="#how">
+        <div class="panel"><div class="d-card" aria-hidden="true">
+          <div class="d-card__row"><h5>How Finance Audit Pro works</h5><span class="d-chip">Week 46</span></div>
+          <div class="d-note__line"><i>✓</i><span><b>Customer 0142</b> paid <b>₹7,200</b></span></div>
+          <div class="d-note__line"><i>✓</i><span><b>Customer 0145</b> paid <b>₹3,400</b></span></div>
+          <div class="d-note__line"><i class="warn">!</i><span><b>Customer 0147</b> due <b>Tue</b></span></div>
+          <div class="d-note__line"><i class="warn">!</i><span><b>Customer 0149</b> due <b>Fri</b></span></div>
+        </div></div>
+        <span class="t-card">How it works</span>
+        <span class="t-small muted">Weekly tracker, collections, ledger.</span>
+      </a>
+      <a class="menu-card span-4" href="#features">
+        <div class="panel"><div class="d-card" aria-hidden="true">
+          <div class="d-card__row"><h5>Features</h5><span class="d-chip">Core</span></div>
+          <div class="d-note__line"><i>✓</i><span>Weekly tracker</span></div>
+          <div class="d-note__line"><i>✓</i><span>Collections, ledger, reports</span></div>
+        </div></div>
+        <span class="t-card">Features</span>
+        <span class="t-small muted">Tracker, collections, ledger.</span>
+      </a>
+      <a class="menu-card span-4" href="#collect">
+        <div class="panel"><div class="d-card" aria-hidden="true">
+          <div class="d-card__row"><h5>Collections in Finance Audit Pro</h5><span class="d-chip">Draft</span></div>
+          <div class="d-note__line"><i>✓</i><span><b>Customer 0144</b> selected</span></div>
+          <div class="d-note__line"><i>✓</i><span>Amount in <b>paise</b></span></div>
+        </div></div>
+        <span class="t-card">Collections in Finance Audit Pro</span>
+        <span class="t-small muted">Record daily payments.</span>
+      </a>
+      <a class="menu-card span-4" href="#faq">
+        <div class="panel"><div class="d-card" aria-hidden="true">
+          <div class="d-card__row"><h5>Questions we get asked</h5><span class="d-chip">Help</span></div>
+          <div class="d-note__line"><i>✓</i><span>Export formats</span></div>
+          <div class="d-note__line"><i>✓</i><span>Pricing info</span></div>
+        </div></div>
+        <span class="t-card">Questions we get asked</span>
+        <span class="t-small muted">FAQ, export, pricing.</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="top" role="main">
+  <section class="hero hero--collage" aria-labelledby="hero-h" style="min-height: 100svh">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="hero__art" data-fx="collage" data-seed="finance-audit-pro"></div>
+    </div>
+    <div class="wrap">
+      <div class="hero__text grid">
+        <h1 id="hero-h" class="t-h1">Weekly payment tracking for finance teams</h1>
+        <p class="hero__lead t-lead">Finance Audit Pro helps you record daily collections, manage customer ledgers with paise-precision, and stay audit-ready — all in one weekly workflow.</p>
+        <div class="hero__actions" style="display:flex; gap:var(--s-3); flex-wrap:wrap; margin-top:var(--s-6);">
+          <a class="btn btn--primary" href="https://weeklyfinance.online/signup" rel="nofollow noopener" style="height:44px">Create an account</a>
+          <a class="btn btn--secondary" href="#how" style="height:44px">See how Finance Audit Pro works</a>
+        </div>
+      </div>
+    </div>
+    <svg class="m-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+  </section>
+
+  <section class="section section-air" id="how" aria-labelledby="how-h" style="--h:1">
+    <div class="wrap container-edges">
+      <header class="section-head">
+        <h2 id="how-h" class="t-h2">How Finance Audit Pro works</h2>
+        <p class="t-lead">A weekly rhythm that keeps collections, ledger, and reporting in sync.</p>
+      </header>
+      <div class="grid">
+        <article class="panel fit">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Week 46</h5><span class="d-chip">This week</span></div>
+            <div class="d-note__line"><i>✓</i><span><b>Customer 0142</b> paid <b>₹7,200</b></span></div>
+            <div class="d-note__line"><i>✓</i><span><b>Customer 0145</b> paid <b>₹3,400</b></span></div>
+            <div class="d-note__line"><i class="warn">!</i><span><b>Customer 0147</b> due <b>Tue</b></span></div>
+            <div class="d-note__line"><i class="warn">!</i><span><b>Customer 0149</b> due <b>Fri</b></span></div>
+          </div>
+        </article>
+        <article class="panel fit">
+          <h4 class="t-h4" style="margin-bottom:var(--s-3)">Record a collection</h4>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Choose customer</b> — search by name, phone, or ID</div></div>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Enter amount</b> — stored as integer paise (₹7,200 → 720000)</div></div>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Select method</b> — Cash or UPI</div></div>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Save</b> — ledger updates instantly</div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-air" id="collect" aria-labelledby="collect-h" style="--h:1">
+    <div class="wrap container-edges">
+      <header class="section-head">
+        <h2 id="collect-h" class="t-h2">Collections in Finance Audit Pro</h2>
+        <p class="t-lead">Daily entry, weekly review, audit-ready output.</p>
+      </header>
+      <div class="grid">
+        <div class="panel fit">
+          <h4 class="t-h4" style="margin-bottom:var(--s-3)">Add customers once</h4>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Name, phone, GSTIN</b> — searchable, filterable</div></div>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Star key accounts</b> — pinned to top of picker</div></div>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Default UPI ID</b> — pre-fills on collection</div></div>
+        </div>
+        <div class="panel fit">
+          <h4 class="t-h4" style="margin-bottom:var(--s-3)">Record collections daily</h4>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Amount in paise</b> — no floating-point drift</div></div>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Method: Cash or UPI</b> — two-tap entry</div></div>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Reference number</b> — optional, for reconciliation</div></div>
+          <div class="d-row"><span class="d-dot" aria-hidden="true"></span><div><b>Timestamp auto-captured</b> — editable for back-dating</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-air" id="features" aria-labelledby="features-h" style="--h:2">
+    <div class="wrap container-edges">
+      <header class="section-head">
+        <h2 id="features-h" class="t-h2">Features</h2>
+        <p class="t-lead">Weekly tracker, collections, ledger, reports — all in one place.</p>
+      </header>
+      <div class="grid">
+        <div class="panel fit">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Weekly tracker</h5><span class="d-chip">Core</span></div>
+            <div class="d-note__line"><i>✓</i><span>Monday–Sunday cycles</span></div>
+            <div class="d-note__line"><i>✓</i><span>Due/paid/overdue badges</span></div>
+            <div class="d-note__line"><i>✓</i><span>One-tap carry-forward</span></div>
+          </div>
+        </div>
+        <div class="panel fit">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Collections</h5><span class="d-chip">Core</span></div>
+            <div class="d-note__line"><i>✓</i><span>Paise-precision entry</span></div>
+            <div class="d-note__line"><i>✓</i><span>Cash &amp; UPI methods</span></div>
+            <div class="d-note__line"><i>✓</i><span>Reference &amp; notes</span></div>
+          </div>
+        </div>
+        <div class="panel fit">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Ledger &amp; reports</h5><span class="d-chip">Core</span></div>
+            <div class="d-note__line"><i>✓</i><span>Per-customer running balance</span></div>
+            <div class="d-note__line"><i>✓</i><span>Weekly summary export</span></div>
+            <div class="d-note__line"><i>✓</i><span>Audit trail (immutable)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-air" id="features-two" aria-labelledby="features-two-h" style="--h:2">
+    <div class="wrap container-edges">
+      <header class="section-head">
+        <h2 id="features-two-h" class="t-h2">How the features work together</h2>
+        <p class="t-lead">A single weekly flow from entry to audit-ready output.</p>
+      </header>
+      <div class="grid">
+        <div class="panel fit">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Monday</h5><span class="d-chip">Start</span></div>
+            <div class="d-note__line"><i>✓</i><span>Open week, review overdue</span></div>
+            <div class="d-note__line"><i>✓</i><span>Carry forward pending</span></div>
+          </div>
+        </div>
+        <div class="panel fit">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Tue–Fri</h5><span class="d-chip">Collect</span></div>
+            <div class="d-note__line"><i>✓</i><span>Daily entry, instant ledger</span></div>
+            <div class="d-note__line"><i>✓</i><span>UPI ref auto-captured</span></div>
+          </div>
+        </div>
+        <div class="panel fit">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Weekend</h5><span class="d-chip">Close</span></div>
+            <div class="d-note__line"><i>✓</i><span>Generate summary</span></div>
+            <div class="d-note__line"><i>✓</i><span>Export for auditor</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:center; margin-top:var(--s-8);">
+        <a class="btn btn--primary" href="https://weeklyfinance.online/signup" rel="nofollow noopener" style="height:44px">Create an account</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-air" id="faq" aria-labelledby="faq-h" style="--h:1">
+    <div class="wrap container-edges">
+      <header class="section-head">
+        <h2 id="faq-h" class="t-h2">Questions we get asked</h2>
+        <p class="t-lead">Straight answers for finance teams evaluating Finance Audit Pro.</p>
+      </header>
+      <div class="grid">
+        <div class="panel span">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Q: Is my data stored in paise or rupees?</h5><span class="d-chip">Answer</span></div>
+            <div class="d-note__line"><i>✓</i><span>All amounts are stored as integer paise (₹1 = 100 paise). This eliminates floating-point errors and ensures audit-grade precision. The UI displays rupees with two decimals for readability.</span></div>
+          </div>
+        </div>
+        <div class="panel span">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Q: Can I export data for my auditor?</h5><span class="d-chip">Answer</span></div>
+            <div class="d-note__line"><i>✓</i><span>Yes. Weekly summaries export as CSV and PDF with immutable audit trails — timestamps, user IDs, and entry hashes included. No manual compilation needed.</span></div>
+          </div>
+        </div>
+        <div class="panel span">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Q: What payment methods are supported?</h5><span class="d-chip">Answer</span></div>
+            <div class="d-note__line"><i>✓</i><span>Cash and UPI. Each collection records the method, reference number (optional for UPI), and timestamp. The ledger splits totals by method automatically.</span></div>
+          </div>
+        </div>
+        <div class="panel span">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Q: How does the weekly cycle work?</h5><span class="d-chip">Answer</span></div>
+            <div class="d-note__line"><i>✓</i><span>Weeks run Monday–Sunday. On Monday, overdue items carry forward automatically. You collect Tue–Fri, then generate the weekly summary on the weekend. The cycle repeats.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-air" id="faq-more" aria-labelledby="faq-more-h" style="--h:2">
+    <div class="wrap container-edges">
+      <header class="section-head">
+        <h2 id="faq-more-h" class="t-h2">Export, settings &amp; pricing</h2>
+        <p class="t-lead">What you need to know before you start.</p>
+      </header>
+      <div class="grid">
+        <div class="panel span">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Q: What export formats are available?</h5><span class="d-chip">Answer</span></div>
+            <div class="d-note__line"><i>✓</i><span>CSV for accounting software import, PDF for auditor packets. Both include the immutable audit trail: entry hash, timestamp, user, and method.</span></div>
+          </div>
+        </div>
+        <div class="panel span">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Q: Can I customize the week start day?</h5><span class="d-chip">Answer</span></div>
+            <div class="d-note__line"><i>✓</i><span>Yes. Settings let you choose Monday, Saturday, or Sunday as week start. All reports, carry-forwards, and summaries respect your choice.</span></div>
+          </div>
+        </div>
+        <div class="panel span">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Q: Is there a free tier?</h5><span class="d-chip">Answer</span></div>
+            <div class="d-note__line"><i>✓</i><span>Finance Audit Pro is a paid product. Sign up at <a href="https://weeklyfinance.online/signup" rel="nofollow noopener">weeklyfinance.online/signup</a> for full access — tracker, collections, ledger, reports, and audit exports.</a></span></div>
+          </div>
+        </div>
+        <div class="panel span">
+          <div class="d-card">
+            <div class="d-card__row"><h5>Q: How do I contact support?</h5><span class="d-chip">Answer</span></div>
+            <div class="d-note__line"><i>✓</i><span>Email <a href="mailto:support@weeklyfinance.online">support@weeklyfinance.online</a> — we respond within one business day. For urgent audit queries, mark the subject <b>URGENT: AUDIT</b>.</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:center; margin-top:var(--s-8);">
+        <a class="btn btn--primary" href="https://weeklyfinance.online/signup" rel="nofollow noopener" style="height:44px">Create an account</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-air" id="statement" aria-labelledby="statement-h" style="--h:1">
+    <div class="wrap container-edges">
+      <header class="section-head">
+        <h2 id="statement-h" class="t-h2">One ledger in Finance Audit Pro.</h2>
+        <p class="muted">Paise-precision, weekly rhythm, audit-ready — every time.</p>
+      </header>
+    </div>
+  </section>
+</main>
+
+<footer class="closing" id="contact" role="contentinfo">
+  <div class="wrap container-edges">
+    <div class="grid">
+      <div class="span-4">
+        <p class="t-body" style="color:var(--p-muted); margin-bottom:var(--s-4);">Finance Audit Pro — Weekly payment tracking for finance teams.</p>
+        <a class="btn btn--primary" href="https://weeklyfinance.online/signup" rel="nofollow noopener" style="height:44px">Create an account</a>
+      </div>
+      <nav class="span-2" aria-label="Product">
+        <h4 class="t-h4" style="margin-bottom:var(--s-3)">Product</h4>
+        <ul style="list-style:none; padding:0; margin:0;">
+          <li style="margin-bottom:var(--s-2);"><a href="#how" class="link">How Finance Audit Pro works</a></li>
+          <li style="margin-bottom:var(--s-2);"><a href="#features" class="link">Features</a></li>
+          <li style="margin-bottom:var(--s-2);"><a href="#collect" class="link">Collections in Finance Audit Pro</a></li>
+          <li style="margin-bottom:var(--s-2);"><a href="#faq" class="link">Questions we get asked</a></li>
+        </ul>
+      </nav>
+      <nav class="span-2" aria-label="Company">
+        <h4 class="t-h4" style="margin-bottom:var(--s-3)">Company</h4>
+        <ul style="list-style:none; padding:0; margin:0;">
+          <li style="margin-bottom:var(--s-2);"><a href="mailto:support@weeklyfinance.online" class="link">Contact</a></li>
+          <li style="margin-bottom:var(--s-2);"><a href="/privacy" class="link">Privacy</a></li>
+          <li style="margin-bottom:var(--s-2);"><a href="/terms" class="link">Terms</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div style="border-top:1px solid var(--p-border); margin-top:var(--s-8); padding-top:var(--s-6); display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--s-4);">
+      <p class="t-small" style="margin:0; color:var(--p-muted);">© 2026 Finance Audit Pro. All rights reserved.</p>
+      <p class="t-small" style="margin:0; color:var(--p-muted);">Built for Indian finance workflows.</p>
+    </div>
+  </div>
+</footer>
+
+<nav class="actionbar" role="navigation" aria-label="Persistent actions">
+  <div class="wrap" style="display:flex; gap:var(--s-3); justify-content:center; align-items:center;">
+    <a class="btn btn--secondary" href="/login" style="height:44px">Log in</a>
+    <a class="btn btn--primary" href="https://weeklyfinance.online/signup" rel="nofollow noopener" style="height:44px">Create an account</a>
+  </div>
+</nav>
+
+<script>
+/* Mobile nav toggle */
+document.querySelector('.nav__toggle')?.addEventListener('click', function() {
+  const links = document.querySelector('.nav__links');
+  const expanded = this.getAttribute('aria-expanded') === 'true';
+  this.setAttribute('aria-expanded', !expanded);
+  links.classList.toggle('is-open');
+});
+
+/* Close mobile menu on link click */
+document.querySelectorAll('.nav__links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelector('.nav__links').classList.remove('is-open');
+    document.querySelector('.nav__toggle').setAttribute('aria-expanded', 'false');
+  });
+});
+
+/* Mega menu hover */
+const brand = document.querySelector('.nav__brand');
+const menu = document.querySelector('.nav__menu');
+brand?.addEventListener('mouseenter', () => menu.classList.add('is-open'));
+menu?.addEventListener('mouseleave', () => menu.classList.remove('is-open'));
+brand?.addEventListener('focusin', () => menu.classList.add('is-open'));
+menu?.addEventListener('focusout', (e) => { if (!menu.contains(e.relatedTarget)) menu.classList.remove('is-open'); });
+</script>
+</body>
+</html>

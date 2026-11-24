@@ -1,9 +1,11 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { Pipe } from '@angular/core';
 
 /**
- * Pipe for formatting paise to INR currency
+ * Formats integer paise as INR currency. This is the single paise -> rupee
+ * conversion point for template display; services must pass raw paise.
  * Usage: {{ amountInPaise | money }}
- * Example: 1500 -> ₹15.00
+ * Example: 150000 -> ₹1,500.00
  */
 @Pipe({
   name: 'money',
@@ -13,7 +15,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class MoneyPipe implements PipeTransform {
   /**
    * Transform amount from paise to INR formatted string
-   * @param value - Amount in paise (or INR if already in rupees)
+   * @param value - Amount in paise
    * @param currency - Currency code (default: 'INR')
    * @param display - 'code', 'symbol', or 'name' (default: 'symbol')
    * @param digitsInfo - Decimal digits info (default: '1.2-2')
@@ -22,7 +24,7 @@ export class MoneyPipe implements PipeTransform {
     value: number | string | null | undefined,
     currency: string = 'INR',
     display: 'code' | 'symbol' | 'name' = 'symbol',
-    digitsInfo: string = '1.2-2'
+    digitsInfo: string = '1.2-2',
   ): string {
     if (value === null || value === undefined) {
       return '';
@@ -34,7 +36,7 @@ export class MoneyPipe implements PipeTransform {
       return '';
     }
 
-    // Convert paise to rupees (assuming input is in paise/100)
+    // Single paise -> rupee conversion for display.
     const rupeeValue = numValue / 100;
 
     // Format as INR
@@ -55,7 +57,10 @@ export class MoneyPipe implements PipeTransform {
    * Parse digits info string
    * @param digitsInfo - e.g., '1.2-2' for minimumIntegerDigits.fractionDigits-minFractionDigits
    */
-  private parseDigitsInfo(digitsInfo: string): { minimumFractionDigits?: number; maximumFractionDigits?: number } {
+  private parseDigitsInfo(digitsInfo: string): {
+    minimumFractionDigits?: number;
+    maximumFractionDigits?: number;
+  } {
     const parts = digitsInfo.split('.');
     if (parts.length < 2) {
       return {};
@@ -65,10 +70,10 @@ export class MoneyPipe implements PipeTransform {
     const result: { minimumFractionDigits?: number; maximumFractionDigits?: number } = {};
 
     if (fractionParts.length >= 1) {
-      result.maximumFractionDigits = parseInt(fractionParts[1] || fractionParts[0], 10);
+      result.minimumFractionDigits = parseInt(fractionParts[0] || '0', 10);
     }
     if (fractionParts.length >= 2) {
-      result.minimumFractionDigits = parseInt(fractionParts[1], 10);
+      result.maximumFractionDigits = parseInt(fractionParts[1], 10);
     }
 
     return result;
@@ -76,9 +81,9 @@ export class MoneyPipe implements PipeTransform {
 }
 
 /**
- * Simple pipe for basic INR formatting
+ * Simple pipe for basic INR formatting from paise.
  * Usage: {{ amountInPaise | moneySimple }}
- * Example: 1500 -> ₹15.00
+ * Example: 150000 -> ₹1,500.00
  */
 @Pipe({
   name: 'moneySimple',

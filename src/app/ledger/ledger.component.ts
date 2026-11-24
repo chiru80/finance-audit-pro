@@ -1,10 +1,12 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { I18nPipe } from '../shared/i18n.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
-import { Customer } from '../customers/customer.types';
+import type { Customer } from '../customers/customer.types';
 import { CollectionService } from '../collection.service';
 import { formatPaiseToINR } from '../utils/currency.utils';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
@@ -32,6 +34,7 @@ export interface LedgerPayment {
     CommonModule,
     FormsModule,
     DatePipe,
+    I18nPipe,
     GlassCardComponent,
     GlassButtonComponent,
     GlassBadgeComponent,
@@ -58,25 +61,27 @@ export class LedgerComponent implements OnInit {
     const list = this.customers();
     const q = this.customerSearch().toLowerCase().trim();
     if (!q) return list;
-    return list.filter(c =>
-      c.name.toLowerCase().includes(q) ||
-      (c.phone || '').toLowerCase().includes(q)
+    return list.filter(
+      (c) => c.name.toLowerCase().includes(q) || (c.phone || '').toLowerCase().includes(q),
     );
   });
 
   filteredPayments = computed(() => {
     if (!this.searchQuery()) return this.payments();
     const q = this.searchQuery().toLowerCase().trim();
-    return this.payments().filter(p =>
-      (p.customer_name || '').toLowerCase().includes(q) ||
-      (p.id || '').toString().toLowerCase().includes(q) ||
-      (p.payment_method || '').toLowerCase().includes(q) ||
-      (p.reference || '').toLowerCase().includes(q)
+    return this.payments().filter(
+      (p) =>
+        (p.customer_name || '').toLowerCase().includes(q) ||
+        (p.id || '').toString().toLowerCase().includes(q) ||
+        (p.payment_method || '').toLowerCase().includes(q) ||
+        (p.reference || '').toLowerCase().includes(q),
     );
   });
 
   totalCustomerPayments = computed(() => {
-    return this.payments().reduce((sum, p) => sum + (p.amount || 0), 0);
+    return this.payments()
+      .filter((p) => !p.reversed)
+      .reduce((sum, p) => sum + (p.amount || 0), 0);
   });
 
   ngOnInit() {
@@ -99,7 +104,7 @@ export class LedgerComponent implements OnInit {
       // Check query param for customerId
       const qCid = this._route.snapshot.queryParamMap.get('customerId');
       if (qCid) {
-        const found = list.find(c => c.id === qCid);
+        const found = list.find((c) => c.id === qCid);
         if (found) {
           this.selectCustomer(found);
         }
@@ -118,23 +123,32 @@ export class LedgerComponent implements OnInit {
 
   private async loadPayments(customerId: string) {
     try {
-      const { data, error } = await this._supabaseService.client
+      const { data: history, error } = await this._supabaseService.client
         .from('payment_history')
-        .select(`
-          *,
-          payment_allocations (
-            id,
-            amount,
-            schedule_id,
-            weekly_schedules ( week_start_date )
-          )
-        `)
+        .select('*')
         .eq('customer_id', customerId)
         .order('payment_date', { ascending: false });
 
       if (error) throw error;
 
-      const payments: LedgerPayment[] = (data || []).map((p: any) => ({
+      const rows = (history || []) as any[];
+      const paymentIds = rows.map((r) => r.original_payment_id).filter(Boolean);
+
+      const allocationsByPayment = new Map<string, any[]>();
+      if (paymentIds.length) {
+        const { data: allocs, error: allocError } = await this._supabaseService.client
+          .from('payment_allocations')
+          .select('id, amount, schedule_id, payment_id, weekly_schedules(week_start_date)')
+          .in('payment_id', paymentIds);
+
+        if (allocError) throw allocError;
+        for (const a of (allocs || []) as any[]) {
+          if (!allocationsByPayment.has(a.payment_id)) allocationsByPayment.set(a.payment_id, []);
+          allocationsByPayment.get(a.payment_id)!.push(a);
+        }
+      }
+
+      const payments: LedgerPayment[] = rows.map((p: any) => ({
         id: p.id,
         payment_date: p.payment_date,
         payment_method: p.payment_method,
@@ -144,7 +158,7 @@ export class LedgerComponent implements OnInit {
         reversed: p.reversed,
         reference: p.reference,
         notes: p.notes,
-        allocations: (p.payment_allocations || []).map((a: any) => ({
+        allocations: (allocationsByPayment.get(p.original_payment_id) || []).map((a: any) => ({
           schedule_id: a.schedule_id,
           amount: a.amount,
           week_start_date: a.weekly_schedules?.week_start_date,
@@ -162,8 +176,15 @@ export class LedgerComponent implements OnInit {
     const payments = this.filteredPayments();
     if (!cust || !payments.length) return;
 
-    const headers = ['Transaction ID', 'Date', 'Method', 'Amount (INR)', 'Weeks Covered', 'Reference / Note'];
-    const rows = payments.map(p => [
+    const headers = [
+      'Transaction ID',
+      'Date',
+      'Method',
+      'Amount (INR)',
+      'Weeks Covered',
+      'Reference / Note',
+    ];
+    const rows = payments.map((p) => [
       p.id,
       p.payment_date,
       p.payment_method,
@@ -172,9 +193,11 @@ export class LedgerComponent implements OnInit {
       p.reference || p.notes || '',
     ]);
 
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers, ...rows].map(row =>
-      row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
-    ).join('\n');
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      [headers, ...rows]
+        .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+        .join('\n');
 
     const link = document.createElement('a');
     link.setAttribute('href', encodeURI(csvContent));
@@ -190,6 +213,23 @@ export class LedgerComponent implements OnInit {
 
   formatCurrency(amount: number | bigint): string {
     return formatPaiseToINR(amount || 0);
+  }
+
+  async reversePayment(paymentId: string) {
+    const reason = window.prompt('Reason for reversing this payment:');
+    if (!reason) return;
+    try {
+      const { data, error } = await this._supabaseService.client.rpc('reverse_payment', {
+        p_payment_id: paymentId,
+        p_reason: reason,
+      });
+      if (error) throw error;
+      const res = Array.isArray(data) ? data[0] : data;
+      if (res && res.success === false) throw new Error(res.error_message || 'Reversal failed');
+      if (this.selectedCustomer()) await this.loadPayments(this.selectedCustomer()!.id);
+    } catch (err) {
+      this.error.set(err instanceof Error ? err.message : 'Failed to reverse payment');
+    }
   }
 
   getAllocationCount(payment: LedgerPayment): number {

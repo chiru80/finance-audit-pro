@@ -5,8 +5,10 @@
  */
 
 import { inject } from '@angular/core';
-import { CanActivateFn, Router, CanMatchFn } from '@angular/router';
+import type { CanActivateFn, CanMatchFn } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
+import { SupabaseService } from '../supabase.service';
 
 /**
  * Guard to protect routes that require authentication
@@ -39,20 +41,27 @@ export const authGuard: CanMatchFn = () => {
 };
 
 /**
- * Admin guard for admin-only routes
- * Currently redirects to auth service check
- * Can be extended for role-based access control
+ * Admin guard for owner-only routes.
+ * Authentication alone is not enough in a single-owner app: the server-side
+ * is_app_owner() check is authoritative because the anon key is public.
  */
-export const adminGuard: CanActivateFn = () => {
+export const adminGuard: CanActivateFn = async () => {
   const authService = inject(AuthService);
+  const router = inject(Router);
 
   if (!authService.isAuthenticated()) {
-    const router = inject(Router);
-    router.navigate(['/login']);
-    return false;
+    return router.createUrlTree(['/login']);
   }
 
-  // TODO: Add role checking when roles are implemented
+  const supabaseService = inject(SupabaseService);
+  const { data, error } = await supabaseService.client.rpc('is_app_owner');
+  if (error || data !== true) {
+    // Returning a UrlTree lets the router perform the redirect as part of this
+    // navigation. Calling router.navigate() here can be cancelled because the
+    // original navigation is still in progress, which makes the click look dead.
+    return router.createUrlTree(['/dashboard']);
+  }
+
   return true;
 };
 

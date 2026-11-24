@@ -27,99 +27,101 @@ export type GlassProgressVariant = 'default' | 'success' | 'warning' | 'danger' 
       }
     </div>
   `,
-  styles: [`
-    :host {
-      display: block;
-    }
-
-    .glass-progress-track {
-      background: #0F172A;
-      border: 1px solid #263449;
-      border-radius: 12px;
-      height: 12px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .glass-progress-fill {
-      height: 100%;
-      border-radius: 12px;
-      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 8px;
-
-      /* Glow effect for completed progress */
-      &.complete {
-        box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+  styles: [
+    `
+      :host {
+        display: block;
       }
-    }
 
-    .glass-progress-label {
-      margin-top: 0.5rem;
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: #94A3B8;
-    }
+      .glass-progress-track {
+        background: var(--glass-surface-dock);
+        border: 1px solid var(--glass-border-subtle);
+        border-radius: 12px;
+        height: 12px;
+        overflow: hidden;
+        position: relative;
+      }
 
-    /* Variant Backgrounds */
-    .variant-default .glass-progress-track {
-      background: #0F172A;
-    }
+      .glass-progress-fill {
+        height: 100%;
+        border-radius: 12px;
+        transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 8px;
 
-    .variant-success .glass-progress-track {
-      background: #0F172A;
-      border-color: #10B981;
-    }
+        /* Glow effect for completed progress */
+        &.complete {
+          box-shadow: none;
+        }
+      }
 
-    .variant-warning .glass-progress-track {
-      background: #0F172A;
-      border-color: #F59E0B;
-    }
+      .glass-progress-label {
+        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
 
-    .variant-danger .glass-progress-track {
-      background: #0F172A;
-      border-color: #EF4444;
-    }
+      /* Variant Backgrounds */
+      .variant-default .glass-progress-track {
+        background: var(--glass-surface-dock);
+      }
 
-    .variant-info .glass-progress-track {
-      background: #0F172A;
-      border-color: #38BDF8;
-    }
+      .variant-success .glass-progress-track {
+        background: var(--glass-surface-dock);
+        border-color: var(--color-success);
+      }
 
-    /* Fill Variants */
-    .fill-default {
-      background: linear-gradient(90deg, #3B82F6, #60A5FA);
-    }
+      .variant-warning .glass-progress-track {
+        background: var(--glass-surface-dock);
+        border-color: var(--color-warning-border);
+      }
 
-    .fill-success {
-      background: linear-gradient(90deg, #10B981, #34D399);
-    }
+      .variant-danger .glass-progress-track {
+        background: var(--glass-surface-dock);
+        border-color: var(--color-danger-text);
+      }
 
-    .fill-warning {
-      background: linear-gradient(90deg, #F59E0B, #FBBF24);
-    }
+      .variant-info .glass-progress-track {
+        background: var(--glass-surface-dock);
+        border-color: var(--color-info-text);
+      }
 
-    .fill-danger {
-      background: linear-gradient(90deg, #EF4444, #F87171);
-    }
+      /* Fill Variants */
+      .fill-default {
+        background: linear-gradient(90deg, var(--primary-hover), var(--color-info-text));
+      }
 
-    .fill-info {
-      background: linear-gradient(90deg, #38BDF8, #60A5FA);
-    }
+      .fill-success {
+        background: linear-gradient(90deg, var(--color-success), var(--color-success-text));
+      }
 
-    /* Specular highlight on fill */
-    .glass-progress-fill::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100%;
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent);
-    }
-  `],
+      .fill-warning {
+        background: var(--color-warning-text);
+      }
+
+      .fill-danger {
+        background: linear-gradient(90deg, var(--color-danger-text), var(--color-danger-text));
+      }
+
+      .fill-info {
+        background: linear-gradient(90deg, var(--color-info-text), var(--color-info-text));
+      }
+
+      /* Specular highlight on fill */
+      .glass-progress-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        background: var(--glass-surface-active);
+      }
+    `,
+  ],
 })
 export class GlassProgressComponent {
   @Input() value: number = 0;

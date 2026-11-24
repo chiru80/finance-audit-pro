@@ -1,12 +1,16 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { I18nPipe } from '../shared/i18n.pipe';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';
+import type { GlassDropdownItem } from '../design-system/components/glass-dropdown.component';
+import { GlassDropdownComponent } from '../design-system/components/glass-dropdown.component';
 import { formatPaiseToINR } from '../utils/currency.utils';
 
 @Component({
@@ -15,10 +19,12 @@ import { formatPaiseToINR } from '../utils/currency.utils';
   imports: [
     CommonModule,
     FormsModule,
+    I18nPipe,
     GlassCardComponent,
     GlassButtonComponent,
     GlassBadgeComponent,
     GlassInputDirective,
+    GlassDropdownComponent,
   ],
   templateUrl: './reports.component.html',
   styleUrl: './reports.component.css',
@@ -44,6 +50,19 @@ export class ReportsComponent implements OnInit {
 
   recentPayments = signal<any[]>([]);
   customerBalances = signal<any[]>([]);
+
+  // WhatsApp send state
+  whatsappLoading = signal<Record<string, boolean>>({});
+  whatsappError = signal<string | null>(null);
+  whatsappSuccess = signal<string | null>(null);
+  recipientPhone = signal<string>('');
+
+  // Dropdown items for report type
+  reportTypeItems: GlassDropdownItem[] = [
+    { label: 'Payments Report', value: 'payments' },
+    { label: 'Balances Report', value: 'balances' },
+    { label: 'Summary Report', value: 'summary' },
+  ];
 
   ngOnInit() {
     this.setDatePreset('30d');
@@ -83,7 +102,7 @@ export class ReportsComponent implements OnInit {
         .from('customers')
         .select('id, name, outstanding_balance, total_due, total_paid, status');
 
-      if (customersError) throw customersError;
+      if (customersError) throw new Error(customersError.message || 'DB error');
 
       const summaryData = {
         totalCustomers: customers.length,
@@ -97,13 +116,19 @@ export class ReportsComponent implements OnInit {
       thisWeekStart.setDate(thisWeekStart.getDate() - thisWeekStart.getDay() + 1);
       thisWeekStart.setHours(0, 0, 0, 0);
 
+      const thisWeekEnd = new Date(thisWeekStart);
+      thisWeekEnd.setDate(thisWeekEnd.getDate() + 6);
+      thisWeekEnd.setHours(23, 59, 59, 999);
+
       const { data: thisWeekSchedules } = await this._supabaseService.client
         .from('weekly_schedules')
         .select('due_amount')
         .eq('paid', false)
-        .gte('due_date', thisWeekStart.toISOString().split('T')[0]);
+        .gte('due_date', thisWeekStart.toISOString().split('T')[0])
+        .lte('due_date', thisWeekEnd.toISOString().split('T')[0]);
 
-      summaryData.thisWeekCollectible = thisWeekSchedules?.reduce((sum, s) => sum + (s.due_amount || 0), 0) || 0;
+      summaryData.thisWeekCollectible =
+        thisWeekSchedules?.reduce((sum, s) => sum + (s.due_amount || 0), 0) || 0;
 
       this.summary.set(summaryData);
 
@@ -121,7 +146,7 @@ export class ReportsComponent implements OnInit {
 
       const { data: payments, error: paymentsError } = await paymentsQuery.limit(100);
 
-      if (paymentsError) throw paymentsError;
+      if (paymentsError) throw new Error(paymentsError.message || 'DB error');
       this.recentPayments.set(payments as any[]);
 
       const { data: balances, error: balancesError } = await this._supabaseService.client
@@ -130,7 +155,7 @@ export class ReportsComponent implements OnInit {
         .order('outstanding_balance', { ascending: false })
         .limit(50);
 
-      if (balancesError) throw balancesError;
+      if (balancesError) throw new Error(balancesError.message || 'DB error');
       this.customerBalances.set(balances as any[]);
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to load reports');
@@ -160,7 +185,13 @@ export class ReportsComponent implements OnInit {
     const balances = this.customerBalances();
     if (!balances.length) return;
 
-    const headers = ['Customer Name', 'Phone', 'Outstanding Balance (INR)', 'Total Paid (INR)', 'Status'];
+    const headers = [
+      'Customer Name',
+      'Phone',
+      'Outstanding Balance (INR)',
+      'Total Paid (INR)',
+      'Status',
+    ];
     const rows = balances.map((c) => [
       c.name,
       c.phone || '',
@@ -173,7 +204,8 @@ export class ReportsComponent implements OnInit {
   }
 
   private downloadCSV(filename: string, rows: (string | number)[][]) {
-    const csvContent = 'data:text/csv;charset=utf-8,' + rows.map((row) => this.escapeCsvRow(row)).join('\n');
+    const csvContent =
+      'data:text/csv;charset=utf-8,' + rows.map((row) => this.escapeCsvRow(row)).join('\n');
     const link = document.createElement('a');
     link.setAttribute('href', encodeURI(csvContent));
     link.setAttribute('download', filename);
@@ -205,5 +237,56 @@ export class ReportsComponent implements OnInit {
       month: 'short',
       day: 'numeric',
     });
+  }
+
+  async sendToWhatsApp(reportType: 'payments' | 'balances' | 'summary') {
+    const phone = this.recipientPhone().trim();
+    if (!phone || !/^\+\d{8,15}$/.test(phone)) {
+      this.whatsappError.set(
+        'Please enter a valid phone number in E.164 format (e.g., +919876543210)',
+      );
+      this.whatsappSuccess.set(null);
+      return;
+    }
+
+    this.whatsappLoading.update((prev) => ({ ...prev, [reportType]: true }));
+    this.whatsappError.set(null);
+    this.whatsappSuccess.set(null);
+
+    try {
+      const { data, error } = await this._supabaseService.functions.invoke('whatsapp-send-report', {
+        body: {
+          reportType,
+          recipientPhone: phone,
+          startDate: this.startDate() || undefined,
+          endDate: this.endDate() || undefined,
+        },
+      });
+
+      if (error) throw error;
+
+      this.whatsappSuccess.set(
+        `${reportType.charAt(0).toUpperCase() + reportType.slice(1)} report sent successfully! Message ID: ${data?.messageId || 'unknown'}`,
+      );
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to send report';
+      if (msg.includes('401') || msg.includes('Invalid API key')) {
+        this.whatsappError.set('Invalid WhatsApp API key. Check Settings → WhatsApp Gateway.');
+      } else if (
+        msg.includes('409') ||
+        msg.includes('session not ready') ||
+        msg.includes('unlinked')
+      ) {
+        this.whatsappError.set('WhatsApp session not linked. Scan QR in OpenWA dashboard.');
+      } else if (msg.includes('404') || msg.includes('session not found')) {
+        this.whatsappError.set('Session not found. Check session name in Settings.');
+      } else if (msg.includes('429') || msg.includes('rate limit')) {
+        this.whatsappError.set('Rate limited. Try again shortly.');
+      } else {
+        this.whatsappError.set(msg);
+      }
+    } finally {
+      this.whatsappLoading.update((prev) => ({ ...prev, [reportType]: false }));
+    }
   }
 }

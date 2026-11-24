@@ -1,25 +1,25 @@
 <div class="max-w-4xl mx-auto space-y-6">
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[#263449]">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[var(--glass-border-subtle)]">
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-500/15 text-[#38BDF8] border border-blue-500/30">Administration</span>
-        <span class="text-xs text-[#94A3B8] font-medium">System Configuration</span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.1em] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)]">{{ 'settings.administration' | i18n }}</span>
+        <span class="text-xs text-[var(--text-secondary)] font-medium">{{ 'settings.system_config' | i18n }}</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F8FAFC]">Application Settings</h1>
-      <p class="text-sm text-[#94A3B8] mt-1">Configure business rules, payment allocation algorithms, and weekly dues policies.</p>
+      <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{{ 'settings.title' | i18n }}</h1>
+      <p class="text-sm text-[var(--text-secondary)] mt-1">{{ 'settings.subtitle' | i18n }}</p>
     </div>
   </div>
 
   @if (loading()) {
     <div class="flex justify-center py-16">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#263449] border-t-[#2563EB]"></div>
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-[var(--glass-border-subtle)] border-t-[var(--primary-accent)]"></div>
     </div>
   }
 
   @if (error()) {
-    <div class="rounded-xl bg-red-500/15 p-4 border border-red-500/30 text-sm text-red-400 flex items-center gap-2 backdrop-blur-sm">
-      <svg class="h-5 w-5 text-red-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+    <div aria-live="polite" class="rounded-xl bg-[var(--color-danger-tint)] p-4 border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-2 backdrop-blur-sm">
+      <svg class="h-5 w-5 text-[var(--color-danger-text)] flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
       </svg>
       <span>{{ error() }}</span>
@@ -27,8 +27,8 @@
   }
 
   @if (success()) {
-    <div class="rounded-xl bg-emerald-500/15 p-4 border border-emerald-500/30 text-sm text-[#34D399] flex items-center gap-2 backdrop-blur-sm font-medium">
-      <svg class="h-5 w-5 text-[#34D399] flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+    <div aria-live="polite" class="rounded-xl bg-[var(--color-success-tint)] p-4 border border-[var(--color-success-border)] text-sm text-[var(--color-success-text)] flex items-center gap-2 backdrop-blur-sm font-medium">
+      <svg class="h-5 w-5 text-[var(--color-success-text)] flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l7-7z" clip-rule="evenodd" />
       </svg>
       <span>{{ success() }}</span>
@@ -39,44 +39,46 @@
     <div class="space-y-6">
 
       <!-- Section 1: Weekly Schedule & Default Target -->
-      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
-        <div class="flex items-center gap-3 pb-3 border-b border-[#263449]">
-          <div class="w-8 h-8 rounded-lg bg-blue-500/15 text-[#38BDF8] border border-blue-500/30 flex items-center justify-center font-bold">
+      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+        <div class="flex items-center gap-3 pb-3 border-b border-[var(--glass-border-subtle)]">
+          <div class="w-8 h-8 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center font-bold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
           <div>
-            <h2 class="text-base font-bold text-[#F8FAFC]">Weekly Schedule & Cycle Defaults</h2>
-            <p class="text-xs text-[#94A3B8]">Configure default targets and recurring collection schedules.</p>
+            <h2 class="text-base font-bold text-[var(--text-primary)]">{{ 'settings.weekly_schedule' | i18n }}</h2>
+            <p class="text-xs text-[var(--text-secondary)]">{{ 'settings.weekly_schedule_hint' | i18n }}</p>
           </div>
         </div>
 
         <div class="flex items-center justify-between gap-4 py-2">
           <div>
-            <span class="text-sm font-bold text-[#F8FAFC] block">Enable Weekly Payments Engine</span>
-            <p class="text-xs text-[#94A3B8] mt-0.5">Automatically manage and generate weekly payment schedules for active borrowers.</p>
+            <span class="text-sm font-bold text-[var(--text-primary)] block">{{ 'settings.enable_weekly_engine' | i18n }}</span>
+            <p class="text-xs text-[var(--text-secondary)] mt-0.5">{{ 'settings.enable_weekly_engine_hint' | i18n }}</p>
           </div>
           <glass-switch
+            ariaLabel="{{ 'settings.weekly_engine_aria' | i18n }}"
             [checked]="settings().weekly_payments_start"
             (checkedChange)="updateCheckbox('weekly_payments_start', $event)"
           />
         </div>
 
-        <div class="pt-4 border-t border-[#263449]">
-          <label class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">
-            Default Weekly Due Amount (₹)
+        <div class="pt-4 border-t border-[var(--glass-border-subtle)]">
+          <label for="weekly-due-amount" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+            {{ 'settings.default_weekly_due' | i18n }}
           </label>
           <div class="flex items-center gap-3 max-w-md">
             <div class="relative flex-1">
-              <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[#64748B] font-bold text-sm">₹</span>
+              <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[var(--text-muted)] font-bold text-sm">₹</span>
               <input
                 glassInput
                 type="number"
+                id="weekly-due-amount"
                 [ngModel]="weeklyDueRupees()"
                 (ngModelChange)="weeklyDueRupees.set($event)"
                 min="1"
-                class="!pl-7 font-mono font-bold text-[#F8FAFC]"
+                class="pl-7! font-mono font-bold text-[var(--text-primary)]"
               />
             </div>
             <glass-button
@@ -84,100 +86,302 @@
               size="md"
               (onClick)="onRupeeAmountSave()"
             >
-              Save Target
+              {{ 'settings.save_target' | i18n }}
             </glass-button>
           </div>
-          <p class="text-xs text-[#64748B] mt-1.5">Applied as default when onboarding new borrowers (Current stored: {{ formatCurrency(settings().weekly_due_amount) }}).</p>
+          <p class="text-xs text-[var(--text-muted)] mt-1.5">{{ 'settings.default_weekly_due_hint' | i18n }} ({{ formatCurrency(settings().weekly_due_amount) }}).</p>
         </div>
 
-        <div class="pt-4 border-t border-[#263449]">
-          <label for="due-day" class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Default Collection Day of Week</label>
-          <select
-            glassInput
-            id="due-day"
-            [value]="settings().default_weekly_due_day"
-            (change)="onSelectChange('default_weekly_due_day', $event)"
+        <div class="pt-4 border-t border-[var(--glass-border-subtle)]">
+          <label class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+            {{ 'settings.default_collection_day' | i18n }}
+          </label>
+          <glass-dropdown
+            [items]="dueDayItems"
+            [selectedValue]="settings().default_weekly_due_day"
+            [placeholder]="'select_collection_day' | i18n"
+            (selectionChange)="onDueDayChange($event)"
             class="max-w-md"
-          >
-            <option [value]="1">Monday (Cycle Start)</option>
-            <option [value]="2">Tuesday</option>
-            <option [value]="3">Wednesday</option>
-            <option [value]="4">Thursday</option>
-            <option [value]="5">Friday</option>
-            <option [value]="6">Saturday</option>
-            <option [value]="7">Sunday</option>
-          </select>
+          />
         </div>
       </glass-card>
 
       <!-- Section 2: Payments & Allocation Rules -->
-      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
-        <div class="flex items-center gap-3 pb-3 border-b border-[#263449]">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/15 text-[#34D399] border border-emerald-500/30 flex items-center justify-center font-bold">
+      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+        <div class="flex items-center gap-3 pb-3 border-b border-[var(--glass-border-subtle)]">
+          <div class="w-8 h-8 rounded-lg bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)] flex items-center justify-center font-bold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <div>
-            <h2 class="text-base font-bold text-[#F8FAFC]">Payments & Allocation Engine</h2>
-            <p class="text-xs text-[#94A3B8]">Define how multi-week payments are credited across pending schedules.</p>
+            <h2 class="text-base font-bold text-[var(--text-primary)]">{{ 'settings.allocation_engine' | i18n }}</h2>
+            <p class="text-xs text-[var(--text-secondary)]">{{ 'settings.allocation_engine_hint' | i18n }}</p>
           </div>
         </div>
 
         <div class="flex items-center justify-between gap-4 py-2">
           <div>
-            <span class="text-sm font-bold text-[#F8FAFC] block">Allow Partial Payments</span>
-            <p class="text-xs text-[#94A3B8] mt-0.5">Permit payments lower than full weekly installment amount, partially fulfilling schedules.</p>
+            <span class="text-sm font-bold text-[var(--text-primary)] block">{{ 'settings.allow_partial' | i18n }}</span>
+            <p class="text-xs text-[var(--text-secondary)] mt-0.5">{{ 'settings.allow_partial_hint' | i18n }}</p>
           </div>
           <glass-switch
+            ariaLabel="{{ 'settings.allow_partial_aria' | i18n }}"
             [checked]="settings().allow_partial_payments"
             (checkedChange)="updateCheckbox('allow_partial_payments', $event)"
           />
         </div>
 
-        <div class="pt-4 border-t border-[#263449]">
-          <label for="allocation-direction" class="block text-xs font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5">Payment Allocation Priority</label>
-          <select
-            glassInput
-            id="allocation-direction"
-            [value]="settings().payment_allocation_direction"
-            (change)="onSelectChange('payment_allocation_direction', $event)"
+        <div class="pt-4 border-t border-[var(--glass-border-subtle)]">
+          <label class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+            {{ 'settings.allocation_priority' | i18n }}
+          </label>
+          <glass-dropdown
+            [items]="allocationDirectionItems"
+            [selectedValue]="settings().payment_allocation_direction"
+            [placeholder]="'select_allocation' | i18n"
+            (selectionChange)="onAllocationDirectionChange($event)"
             class="max-w-md"
-          >
-            <option value="fifo">FIFO — Oldest Unpaid Dues First (Approved Policy)</option>
-            <option value="lifo">LIFO — Newest Dues First</option>
-          </select>
-          <p class="text-xs text-[#64748B] mt-1.5">Complies with Decision 2: Payments systematically cover the oldest overdue installments first.</p>
+          />
+          <p class="text-xs text-[var(--text-muted)] mt-1.5">{{ 'settings.allocation_hint' | i18n }}</p>
         </div>
       </glass-card>
 
       <!-- Section 3: Absence & Debt Policy -->
-      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[#151F32] border border-[#263449] rounded-2xl shadow-xl">
-        <div class="flex items-center gap-3 pb-3 border-b border-[#263449]">
-          <div class="w-8 h-8 rounded-lg bg-amber-500/15 text-[#FBBF24] border border-amber-500/30 flex items-center justify-center font-bold">
+      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+        <div class="flex items-center gap-3 pb-3 border-b border-[var(--glass-border-subtle)]">
+          <div class="w-8 h-8 rounded-lg bg-[var(--color-warning-tint)] text-[var(--color-warning-text)] border border-[var(--color-warning-border)] flex items-center justify-center font-bold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
           <div>
-            <h2 class="text-base font-bold text-[#F8FAFC]">Absence Governance & Debt Policy</h2>
-            <p class="text-xs text-[#94A3B8]">Customer absence handling and carried-forward debt treatment.</p>
+            <h2 class="text-base font-bold text-[var(--text-primary)]">{{ 'settings.absence_policy' | i18n }}</h2>
+            <p class="text-xs text-[var(--text-secondary)]">{{ 'settings.absence_policy_hint' | i18n }}</p>
           </div>
         </div>
 
         <div class="flex items-center justify-between gap-4 py-2">
           <div>
-            <span class="text-sm font-bold text-[#F8FAFC] block">Absences Require Owner Approval</span>
-            <p class="text-xs text-[#94A3B8] mt-0.5">Absences marked during collections require confirmation by an owner before finalization.</p>
+            <span class="text-sm font-bold text-[var(--text-primary)] block">{{ 'settings.absence_approval' | i18n }}</span>
+            <p class="text-xs text-[var(--text-secondary)] mt-0.5">{{ 'settings.absence_approval_hint' | i18n }}</p>
           </div>
           <glass-switch
+            ariaLabel="{{ 'settings.absence_approval_aria' | i18n }}"
             [checked]="settings().absence_requires_approval"
             (checkedChange)="updateCheckbox('absence_requires_approval', $event)"
           />
         </div>
 
-        <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs text-[#38BDF8] leading-relaxed">
-          <strong class="font-bold">Active Debt Policy (Decision 1 - Option A):</strong> When an absence is recorded and approved, the installment is retained and carried forward into the customer's total outstanding balance. Dues are never forgiven upon absence.
+        <div class="p-4 rounded-xl bg-[var(--color-primary-tint)] border border-[var(--color-primary-border)] text-xs text-[var(--color-info-text)] leading-relaxed">
+          <strong class="font-bold">{{ 'settings.debt_policy_title' | i18n }}</strong> {{ 'settings.debt_policy_text' | i18n }}
+        </div>
+      </glass-card>
+
+      <!-- Section 4: Loan Disbursement Deduction -->
+      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+        <div class="flex items-center gap-3 pb-3 border-b border-[var(--glass-border-subtle)]">
+          <div class="w-8 h-8 rounded-lg bg-[var(--color-warning-tint)] text-[var(--color-warning-text)] border border-[var(--color-warning-border)] flex items-center justify-center font-bold">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a4 4 0 00-8 0v2M8 9h8m-4 10v-4a2 2 0 014 0v4" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-[var(--text-primary)]">{{ 'settings.deduction' | i18n }}</h2>
+            <p class="text-xs text-[var(--text-secondary)]">{{ 'settings.deduction_hint' | i18n }}</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+              {{ 'settings.deduction_per_1000' | i18n }}
+            </label>
+            <glass-dropdown
+              [items]="deductionPresets"
+              [selectedValue]="settings().loan_deduction_per_1000"
+              [placeholder]="'select_deduction' | i18n"
+              (selectionChange)="onDeductionChange($event)"
+              class="max-w-md"
+            />
+            <p class="text-xs text-[var(--text-muted)] mt-1.5">
+              {{ 'settings.deduction_example' | i18n }}
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-[var(--glass-surface-muted)] border border-[var(--glass-border-subtle)]">
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-[var(--text-secondary)]">{{ 'settings.current_setting' | i18n }}</span>
+              <span class="font-bold text-[var(--text-primary)] font-mono">
+                {{ settings().loan_deduction_per_1000 === 0 ? ('settings.full_amount' | i18n) : ('Rs ' + settings().loan_deduction_per_1000 + ' per Rs 1000') }}
+              </span>
+            </div>
+            <p class="text-xs text-[var(--text-muted)] mt-2 leading-relaxed">
+              {{ 'settings.full_amount' | i18n }}
+              <code class="font-mono text-[var(--text-primary)] bg-[var(--glass-surface-base)] px-1 rounded">
+                loan_amount - loan_amount * (deduction / 1000)
+              </code>.
+              Rs 10000 with Rs 20 deduction -> customer receives Rs 9800.
+            </p>
+          </div>
+        </div>
+      </glass-card>
+
+      <!-- Section 5: WhatsApp Gateway (OpenWA) -->
+      <glass-card variant="elevated" customClass="p-6 space-y-6 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+        <div class="flex items-center gap-3 pb-3 border-b border-[var(--glass-border-subtle)]">
+          <div class="w-8 h-8 rounded-lg bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)] flex items-center justify-center font-bold">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-[var(--text-primary)]">{{ 'settings.whatsapp_gateway' | i18n }}</h2>
+            <p class="text-xs text-[var(--text-secondary)]">{{ 'settings.whatsapp_gateway_hint' | i18n }}</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label for="wa-base-url" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+              {{ 'settings.wa_base_url' | i18n }}
+            </label>
+            <input
+              glassInput
+              type="url"
+              id="wa-base-url"
+              placeholder="{{ 'settings.wa_url_placeholder' | i18n }}"
+              [ngModel]="whatsappForm().base_url"
+              (ngModelChange)="onWhatsAppInputChange('base_url', $event)"
+              class="w-full max-w-xl"
+            />
+            <p class="text-xs text-[var(--text-muted)] mt-1">{{ 'settings.wa_url_hint' | i18n }}</p>
+          </div>
+
+          <div>
+            <label for="wa-api-key" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+              {{ 'settings.wa_api_key' | i18n }}
+            </label>
+            <input
+              glassInput
+              type="password"
+              id="wa-api-key"
+              placeholder="sk_••••••••••••••••"
+              [ngModel]="whatsappForm().api_key"
+              (ngModelChange)="onWhatsAppInputChange('api_key', $event)"
+              class="w-full max-w-xl font-mono"
+              autocomplete="off"
+            />
+            <p class="text-xs text-[var(--text-muted)] mt-1">{{ 'settings.wa_api_key_hint' | i18n }}</p>
+          </div>
+
+          <div>
+            <label for="wa-session-name" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+              {{ 'settings.wa_session_name' | i18n }}
+            </label>
+            <input
+              glassInput
+              type="text"
+              id="wa-session-name"
+              [ngModel]="whatsappForm().session_name"
+              (ngModelChange)="onWhatsAppInputChange('session_name', $event)"
+              class="w-full max-w-md"
+            />
+            <p class="text-xs text-[var(--text-muted)] mt-1">{{ 'settings.wa_session_hint' | i18n }}</p>
+          </div>
+
+          <div class="flex items-center gap-3 pt-2">
+            <glass-button
+              variant="filled"
+              size="md"
+              [disabled]="whatsappLoading()"
+              (onClick)="saveWhatsAppConfig()"
+            >
+              @if (whatsappLoading()) {
+                <svg class="w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                {{ 'settings.saving' | i18n }}
+              } @else {
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {{ 'settings.save_config' | i18n }}
+              }
+            </glass-button>
+
+            <glass-button
+              variant="glass"
+              size="md"
+              [disabled]="whatsappTestLoading()"
+              (onClick)="testWhatsAppConnection()"
+            >
+              @if (whatsappTestLoading()) {
+                <svg class="w-4 h-4 mr-1 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                {{ 'settings.testing' | i18n }}
+              } @else {
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                {{ 'settings.test_connection' | i18n }}
+              }
+            </glass-button>
+          </div>
+
+          @if (whatsappTestResult()) {
+            <div class="p-3 rounded-lg bg-[var(--color-success-tint)] border border-[var(--color-success-border)] text-xs text-[var(--color-success-text)] flex items-center gap-2">
+              <svg class="w-4 h-4 text-[var(--color-success-text)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{{ whatsappTestResult() }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="p-4 rounded-xl bg-[var(--glass-surface-muted)] border border-[var(--glass-border-subtle)] text-xs text-[var(--text-secondary)] leading-relaxed">
+          <strong class="font-bold text-[var(--text-primary)] block mb-1">{{ 'settings.security_model' | i18n }}</strong>
+          <ul class="list-disc pl-4 space-y-1">
+            <li>API key and base URL stored in <code class="font-mono text-[var(--text-primary)] bg-[var(--glass-surface-base)] px-1 rounded">app_whatsapp_config</code> table (owner-only RLS)</li>
+            <li>Edge function <code class="font-mono text-[var(--text-primary)] bg-[var(--glass-surface-base)] px-1 rounded">whatsapp-send-report</code> reads config with user JWT, sends via OpenWA</li>
+            <li>Browser never receives API key; only invokes edge function</li>
+            <li>Every send logged to <code class="font-mono text-[var(--text-primary)] bg-[var(--glass-surface-base)] px-1 rounded">whatsapp_report_sends</code> for audit trail</li>
+          </ul>
+        </div>
+      </glass-card>
+
+      <!-- Push notifications -->
+      <glass-card class="mt-6">
+        <h3 class="text-lg font-semibold mb-2">Push notifications (PWA)</h3>
+        <p class="text-sm text-[var(--text-secondary)] mb-3">
+          Subscribe this device to receive push notifications. Requires a VAPID public key and a configured sending endpoint.
+          {{ push.supported() ? '' : ' (Not supported in this build/browser.)' }}
+        </p>
+        <div class="space-y-3">
+          <input
+            glassInput
+            type="text"
+            placeholder="VAPID public key (base64url)"
+            [ngModel]="vapidPublicKey()"
+            (ngModelChange)="vapidPublicKey.set($event)"
+          />
+          <div class="flex gap-2">
+            <glass-button variant="filled" [disabled]="push.loading() || !push.supported()" (click)="enablePush()">
+              {{ push.loading() ? 'Enabling…' : (push.subscribed() ? 'Re-subscribe' : 'Enable push') }}
+            </glass-button>
+            @if (push.subscribed()) {
+              <glass-button variant="glass" [disabled]="push.loading()" (click)="disablePush()">Disable</glass-button>
+            }
+          </div>
+          @if (push.subscribed()) {
+            <p class="text-xs text-green-500">This device is subscribed.</p>
+          }
+          @if (push.error()) {
+            <p class="text-xs text-red-500">{{ push.error() }}</p>
+          }
         </div>
       </glass-card>
     </div>

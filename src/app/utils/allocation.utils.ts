@@ -90,9 +90,7 @@ export function allocatePaymentFIFO(
   let totalAllocated = 0;
 
   // Sort schedules by dueDate (oldest first) - FIFO
-  const sortedSchedules = [...schedules].sort(
-    (a, b) => a.dueDate.getTime() - b.dueDate.getTime(),
-  );
+  const sortedSchedules = [...schedules].sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
 
   for (const schedule of sortedSchedules) {
     if (remainingAmount <= 0) {
@@ -174,9 +172,7 @@ export function calculateTotalOutstanding(schedules: WeeklySchedule[]): number {
  * @returns Total paid in paise
  */
 export function calculateTotalPaid(schedules: WeeklySchedule[]): number {
-  return schedules
-    .filter((s) => s.paid)
-    .reduce((sum, s) => sum + s.dueAmount, 0);
+  return schedules.filter((s) => s.paid).reduce((sum, s) => sum + s.dueAmount, 0);
 }
 
 /**
@@ -249,10 +245,7 @@ export function processPartialPayment(
  * @param weeklyDue - The weekly due amount in paise
  * @returns Amount that should be charged (always full amount under Option A)
  */
-export function calculateAbsenceImpact(
-  isAbsenceApproved: boolean,
-  weeklyDue: number,
-): number {
+export function calculateAbsenceImpact(isAbsenceApproved: boolean, weeklyDue: number): number {
   // Under Option A, the weekly due is ALWAYS charged and carried forward.
   // Absence approval documents the missed collection visit but does NOT waive the debt.
   return weeklyDue;
@@ -269,9 +262,7 @@ export function calculateAbsenceImpact(
  * @param dueSchedules - Array of weekly schedules (may have absence flags)
  * @returns Net balance in paise after accounting for absences
  */
-export function calculateBalanceWithAbsences(
-  schedules: WeeklySchedule[],
-): number {
+export function calculateBalanceWithAbsences(schedules: WeeklySchedule[]): number {
   let totalDue = 0;
 
   for (const schedule of schedules) {
@@ -313,9 +304,7 @@ export function validateAllocation(
 
   // Calculated paid schedules should match schedule paid status
   const paidFromSchedules = schedules.filter((s) => s.paid).length;
-  const allocatedToPaidSchedules = schedules.filter(
-    (s) => s.paid && s.dueAmount > 0,
-  ).length;
+  const allocatedToPaidSchedules = schedules.filter((s) => s.paid && s.dueAmount > 0).length;
 
   // Verify each paid schedule has an allocation
   for (const schedule of schedules) {
@@ -323,9 +312,7 @@ export function validateAllocation(
       // Check if there's an allocation covering this schedule
       const hasAllocation = schedule.paymentId !== null;
       if (!hasAllocation) {
-        errors.push(
-          `Schedule ${schedule.id} is marked paid but has no allocation`,
-        );
+        errors.push(`Schedule ${schedule.id} is marked paid but has no allocation`);
       }
     }
   }

@@ -1,15 +1,17 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
-import { Customer } from './customer.types';
+import type { Customer } from './customer.types';
 import { CollectionService } from '../collection.service';
 import { formatPaiseToINR } from '../utils/currency.utils';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
-import { GlassTabsComponent, GlassTabItem } from '../design-system/components/glass-tabs.component';
+import type { GlassTabItem } from '../design-system/components/glass-tabs.component';
+import { GlassTabsComponent } from '../design-system/components/glass-tabs.component';
 
 @Component({
   selector: 'app-customer-detail',
@@ -56,13 +58,19 @@ export class CustomerDetailComponent implements OnInit {
       total_due: c?.total_due ?? 0,
       total_paid: c?.total_paid ?? 0,
       weekly_due_amount: c?.weekly_due_amount ?? 0,
+      loan_amount: c?.loan_amount ?? 0,
+      amount_given: c?.amount_given ?? 0,
+      total_weeks: c?.total_weeks ?? 12,
       enrollment_date: c?.enrollment_date ?? null,
+      village_name: c?.village_name ?? null,
     };
   });
 
   ngOnInit() {
     const routeId = this._route.snapshot.paramMap.get('id');
-    const stateId = (this._router.getCurrentNavigation()?.extras?.state as Record<string, unknown> | undefined)?.['id'] as string | undefined;
+    const stateId = (
+      this._router.getCurrentNavigation()?.extras?.state as Record<string, unknown> | undefined
+    )?.['id'] as string | undefined;
     const id = routeId || stateId;
 
     if (id) {
@@ -96,7 +104,12 @@ export class CustomerDetailComponent implements OnInit {
     try {
       const { data, error } = await this._supabaseService.client
         .from('customers')
-        .select('*')
+        .select(
+          `
+          *,
+          villages(name)
+        `,
+        )
         .eq('id', id)
         .single();
 
@@ -140,6 +153,39 @@ export class CustomerDetailComponent implements OnInit {
       this.absences.set(data || []);
     } catch (err) {
       console.error('Failed to load absences:', err);
+    }
+  }
+
+  async approveAbsence(absenceId: string, approve: boolean) {
+    try {
+      const { data, error } = await this._supabaseService.client.rpc('approve_absence', {
+        p_absence_id: absenceId,
+        p_approve: approve,
+      });
+      if (error) throw error;
+      const res = Array.isArray(data) ? data[0] : data;
+      if (res && res.success === false) throw new Error(res.error_message || 'Failed');
+      await this.loadAbsences(this.customer()?.id || '');
+      await this.loadSchedules(this.customer()?.id || '');
+    } catch (err) {
+      this.error.set(err instanceof Error ? err.message : 'Failed to update absence');
+    }
+  }
+
+  async updateStatus(event: Event) {
+    const c = this.customer();
+    if (!c) return;
+    const target = event.target as HTMLSelectElement;
+    const status = target.value as 'active' | 'inactive' | 'suspended';
+    try {
+      const { error } = await this._supabaseService.client
+        .from('customers')
+        .update({ status })
+        .eq('id', c.id);
+      if (error) throw error;
+      this.customer.set({ ...c, status });
+    } catch (err) {
+      this.error.set(err instanceof Error ? err.message : 'Failed to update status');
     }
   }
 

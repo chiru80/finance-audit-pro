@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { ThemeService } from './theme.service';
 import { LanguageSwitcherComponent } from './language-switcher.component';
 import { SidebarService } from './sidebar.service';
@@ -10,68 +10,81 @@ import { filter } from 'rxjs';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
   template: `
-    <header class="header sticky top-0 h-16 flex items-center justify-between px-4 sm:px-6 bg-[#111827] border-b border-[#263449] flex-shrink-0 z-20 select-none">
-      <!-- Left: Sidebar Toggle & Dynamic Breadcrumb -->
-      <div class="header-left flex items-center gap-3">
+    <header
+      class="sticky top-0 z-20 flex h-16 flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--glass-border-subtle)] bg-[var(--bg-topbar)]/95 px-4 backdrop-blur-sm sm:px-6"
+    >
+      <div class="flex min-w-0 items-center gap-3">
         <button
           (click)="sidebarService.toggle()"
-          class="p-2 rounded-xl text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-white/[0.05] border border-[#263449] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/40 transition cursor-pointer"
-          aria-label="Toggle navigation"
+          class="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)] text-[var(--text-secondary)] transition-colors hover:border-[var(--glass-border-crisp)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--text-primary)]"
+          [attr.aria-label]="sidebarService.isOpen() ? 'Collapse navigation' : 'Expand navigation'"
           type="button"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-          >
+          <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="2"
+              stroke-width="1.8"
               d="M4 6h16M4 12h16M4 18h16"
             />
           </svg>
         </button>
 
-        <div class="flex items-center gap-2 text-xs sm:text-sm font-medium">
-          <span class="text-[#64748B] hidden sm:inline">Finance Audit Pro</span>
-          <span class="text-[#263449] hidden sm:inline">/</span>
-          <span class="px-2.5 py-1 rounded-lg bg-[#18243A] text-[#38BDF8] font-semibold border border-[#263449] capitalize">
-            {{ currentSection }}
-          </span>
+        <div class="hidden h-5 w-px bg-[var(--glass-border-subtle)] sm:block"></div>
+
+        <div class="min-w-0">
+          <p
+            class="hidden text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--text-muted)] sm:block"
+          >
+            Workspace
+          </p>
+          <p class="truncate text-sm font-semibold tracking-tight text-[var(--text-primary)]">
+            {{ currentSection() }}
+          </p>
         </div>
       </div>
 
-      <!-- Right: Status, Language, Notifications, Avatar -->
-      <div class="header-right flex items-center gap-2 sm:gap-3">
-        <!-- Live Status Pill -->
-        <div class="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#10B981]/10 text-[#10B981] text-xs font-semibold border border-[#10B981]/20">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></span>
-          <span>Live Sync</span>
-        </div>
-
+      <div class="flex flex-shrink-0 items-center gap-1.5 sm:gap-2">
         <app-language-switcher></app-language-switcher>
 
-        <!-- Notification Bell -->
         <button
+          (click)="toggleTheme()"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)] text-[var(--text-secondary)] transition-colors hover:border-[var(--glass-border-crisp)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--text-primary)]"
+          [attr.aria-label]="themeLabel()"
+          [attr.title]="themeLabel()"
           type="button"
-          class="p-2 rounded-xl text-[#94A3B8] hover:text-[#F8FAFC] bg-[#151F32] border border-[#263449] hover:bg-[#18243A] transition cursor-pointer relative"
-          title="Notifications"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#2563EB] ring-2 ring-[#111827]"></span>
+          @if (isDarkMode()) {
+            <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z"
+              />
+            </svg>
+          } @else {
+            <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+              />
+            </svg>
+          }
         </button>
 
-        <!-- User Quick Avatar -->
-        <div class="w-8 h-8 rounded-lg bg-[#2563EB] text-[#F8FAFC] font-bold text-xs flex items-center justify-center uppercase shadow-xs border border-blue-400/30">
-          {{ (authService.user()?.email || 'U')[0] }}
-        </div>
+        <a
+          routerLink="/settings"
+          class="ml-0.5 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-primary-tint)] text-xs font-bold uppercase text-[var(--color-primary-text)] ring-1 ring-inset ring-[var(--color-primary-border)] transition-colors hover:bg-[var(--color-primary-border)]"
+          title="Settings"
+          aria-label="Settings"
+        >
+          {{ userInitial() }}
+        </a>
       </div>
     </header>
   `,
@@ -83,28 +96,40 @@ export class AppHeaderComponent {
   authService = inject(AuthService);
   private router = inject(Router);
 
-  currentSection = 'Dashboard';
+  currentSection = signal('Dashboard');
+  isDarkMode = signal(this.themeService.isDark());
 
   constructor() {
     this.updateCurrentSection(this.router.url);
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      this.updateCurrentSection(event.urlAfterRedirects || event.url);
-    });
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        const navigation = event as NavigationEnd;
+        this.updateCurrentSection(navigation.urlAfterRedirects || navigation.url);
+      });
+  }
+
+  userInitial(): string {
+    return (this.authService.user()?.email || 'U').charAt(0).toUpperCase();
+  }
+
+  themeLabel(): string {
+    return this.isDarkMode() ? 'Switch to light theme' : 'Switch to dark theme';
   }
 
   toggleTheme() {
     this.themeService.toggleTheme();
+    this.isDarkMode.set(this.themeService.isDark());
   }
 
   private updateCurrentSection(url: string) {
     const cleanUrl = url.split('?')[0].split('#')[0];
     const segments = cleanUrl.split('/').filter(Boolean);
     if (segments.length === 0 || segments[0] === 'dashboard') {
-      this.currentSection = 'Dashboard';
-    } else {
-      this.currentSection = segments[0].replace('-', ' ');
+      this.currentSection.set('Dashboard');
+      return;
     }
+    const section = segments[0].replace(/-/g, ' ');
+    this.currentSection.set(section.charAt(0).toUpperCase() + section.slice(1));
   }
 }

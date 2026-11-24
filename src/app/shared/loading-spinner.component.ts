@@ -7,9 +7,12 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="loading-spinner flex items-center justify-center" [class]="containerClasses">
-      <div class="animate-spin rounded-full border-2 border-t-[#2563EB] border-[#263449]" [class]="spinnerClasses"></div>
+      <div
+        class="animate-spin rounded-full border-2 border-t-[var(--primary-accent)] border-[var(--glass-border-subtle)]"
+        [class]="spinnerClasses"
+      ></div>
       @if (showText) {
-        <span class="ml-3 text-sm text-[#94A3B8]">{{ text }}</span>
+        <span class="ml-3 text-sm text-[var(--text-secondary)]">{{ text }}</span>
       }
     </div>
   `,

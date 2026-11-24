@@ -21,9 +21,7 @@ describe('Allocation Utilities', () => {
     });
 
     // Helper to create a weekly schedule with default values
-    const createSchedule = (
-      overrides: Partial<WeeklySchedule> = {},
-    ): WeeklySchedule => ({
+    const createSchedule = (overrides: Partial<WeeklySchedule> = {}): WeeklySchedule => ({
       id: overrides.id ?? `schedule-${scheduleCounter++}`,
       weekStartDate: new Date('2024-01-01'),
       weekEndDate: new Date('2024-01-07'),
@@ -107,10 +105,7 @@ describe('Allocation Utilities', () => {
     });
 
     it('should skip zero due amount schedules', () => {
-      const schedules = [
-        createSchedule({ dueAmount: 0 }),
-        createSchedule({ dueAmount: 50000 }),
-      ];
+      const schedules = [createSchedule({ dueAmount: 0 }), createSchedule({ dueAmount: 50000 })];
       const result = allocatePaymentFIFO('p1', 50000, schedules);
 
       expect(result.allocationCount).toBe(1);

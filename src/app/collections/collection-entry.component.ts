@@ -1,16 +1,22 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
-import { Customer } from '../customers/customer.types';
+import { OfflineStatusService } from '../core/offline-status.service';
+import { OutboxService } from '../core/outbox.service';
+import { IndexedDbService } from '../core/indexed-db.service';
+import type { Customer } from '../customers/customer.types';
 import { WeeklyTrackerComponent } from './weekly-tracker.component';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
-import { GlassTabsComponent, GlassTabItem } from '../design-system/components/glass-tabs.component';
+import type { GlassTabItem } from '../design-system/components/glass-tabs.component';
+import { GlassTabsComponent } from '../design-system/components/glass-tabs.component';
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { I18nPipe } from '../shared/i18n.pipe';
 
 @Component({
   selector: 'app-collection-entry',
@@ -24,6 +30,7 @@ import { formatPaiseToINR } from '../utils/currency.utils';
     GlassButtonComponent,
     GlassTabsComponent,
     GlassInputDirective,
+    I18nPipe,
   ],
   templateUrl: './collection-entry.component.html',
   styleUrls: ['./collection-entry.component.css'],
@@ -32,6 +39,9 @@ export class CollectionEntryComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _authService = inject(AuthService);
   private readonly _route = inject(ActivatedRoute);
+  protected readonly offlineStatus = inject(OfflineStatusService);
+  private readonly outbox = inject(OutboxService);
+  private readonly idb = inject(IndexedDbService);
 
   activeTab = signal<'record' | 'tracker'>('record');
   loading = signal(true);
@@ -48,10 +58,15 @@ export class CollectionEntryComponent implements OnInit {
   selectedCustomerObj = computed(() => {
     const id = this.selectedCustomer();
     if (!id) return null;
-    return this.customers().find(c => c.id === id) || null;
+    return this.customers().find((c) => c.id === id) || null;
   });
 
-  paymentMethods: ('cash' | 'online' | 'cheque' | 'other')[] = ['cash', 'online', 'cheque', 'other'];
+  paymentMethods: ('cash' | 'online' | 'cheque' | 'other')[] = [
+    'cash',
+    'online',
+    'cheque',
+    'other',
+  ];
 
   tabs: GlassTabItem[] = [
     { id: 'record', label: 'Record Collection' },
@@ -74,18 +89,28 @@ export class CollectionEntryComponent implements OnInit {
       const list = data as Customer[];
       this.customers.set(list);
       this.customersLoaded.set(true);
+      // Cache for offline use
+      await this.idb.put('cache', { key: 'customers:active', value: list, ts: Date.now() });
 
       // Check if customerId is passed via query params
       const qCid = this._route.snapshot.queryParamMap.get('customerId');
       if (qCid) {
-        const match = list.find(c => c.id === qCid);
+        const match = list.find((c) => c.id === qCid);
         if (match) {
           this.selectedCustomer.set(match.id);
           this.amountInRupees.set(Math.round(match.weekly_due_amount / 100));
         }
       }
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load customers');
+      // Fall back to cached data when offline/unreachable
+      const cached = await this.idb.get<{ key: string; value: Customer[] }>('cache', 'customers:active');
+      if (cached?.value?.length) {
+        this.customers.set(cached.value);
+        this.customersLoaded.set(true);
+        this.error.set('Showing cached customers (offline).');
+      } else {
+        this.error.set(err instanceof Error ? err.message : 'Failed to load customers');
+      }
     } finally {
       this.loading.set(false);
     }
@@ -100,7 +125,7 @@ export class CollectionEntryComponent implements OnInit {
     this.error.set(null);
     this.success.set(null);
 
-    const match = this.customers().find(c => c.id === cid);
+    const match = this.customers().find((c) => c.id === cid);
     if (match) {
       this.amountInRupees.set(Math.round(match.weekly_due_amount / 100));
     } else {
@@ -124,6 +149,28 @@ export class CollectionEntryComponent implements OnInit {
     try {
       const customerId = this.selectedCustomer();
       const amountPaise = Math.round(this.amountInRupees() * 100);
+      const customer = this.selectedCustomerObj();
+
+      // Offline: queue for later sync instead of hitting the network.
+      if (!this.offlineStatus.isOnline()) {
+        await this.outbox.enqueue({
+          customerId,
+          customerName: customer?.name,
+          amountPaise,
+          method: this.selectedMethod(),
+          reference: this.reference() || null,
+          notes: this.notes() || null,
+        });
+        const collectedRupees = this.amountInRupees();
+        this.amountInRupees.set(0);
+        this.reference.set('');
+        this.notes.set('');
+        this.success.set(
+          `Saved offline: ₹${collectedRupees.toFixed(2)} queued for sync when connection returns.`,
+        );
+        setTimeout(() => this.success.set(null), 5000);
+        return;
+      }
 
       const { data, error } = await this._supabaseService.client.rpc('record_weekly_payment', {
         p_customer_id: customerId,

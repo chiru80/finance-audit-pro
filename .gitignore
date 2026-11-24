@@ -1,5 +1,5 @@
 
-ca# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
 /dist
@@ -62,3 +62,23 @@ skills-lock.json
 
 # Supabase temp files
 supabase/.temp/
+.vercel
+
+# Temporary and scratch files
+scratch/
+shots/
+security-audit-skill/
+.taste-skill/
+.impeccable/
+.opencode/
+_*.js
+_*.txt
+out.txt
+consistency.txt
+cso-results.json
+gate-check.json
+tmp_*.js
+download-cypress*.js
+unzip-cypress.js
+financeauditpro/extract-cypress*.js
+financeauditpro/junit.xml

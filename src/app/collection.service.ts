@@ -21,7 +21,7 @@ export class CollectionService {
     amount_paise: number,
     method: 'cash' | 'online' | 'cheque' | 'other',
     reference: string = '',
-    notes: string = ''
+    notes: string = '',
   ) {
     try {
       const { data, error } = await this._supabaseService.client.rpc('record_weekly_payment', {
@@ -34,19 +34,27 @@ export class CollectionService {
 
       if (error) throw error;
 
+      const result = Array.isArray(data) ? data[0] : data;
+      if (result && result.success === false) {
+        throw new Error(result.error_message || 'Payment recording failed');
+      }
+
       this.showSuccess('Payment recorded successfully');
-      return { success: true, data };
+      return { success: true, data: result };
     } catch (err) {
-      this.showSuccess(err instanceof Error ? err.message : 'Failed to record payment');
-      return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+      const message = err instanceof Error ? err.message : 'Failed to record payment';
+      return { success: false, error: message };
     }
   }
 
   async getCustomerPaymentSummary(customerId: string) {
     try {
-      const { data, error } = await this._supabaseService.client.rpc('get_customer_payment_summary', {
-        p_customer_id: customerId
-      });
+      const { data, error } = await this._supabaseService.client.rpc(
+        'get_customer_payment_summary',
+        {
+          p_customer_id: customerId,
+        },
+      );
 
       if (error) throw error;
       return data as {
@@ -66,25 +74,37 @@ export class CollectionService {
 
   async getPaymentHistory(customerId: string) {
     try {
-      const { data, error } = await this._supabaseService.client
+      const { data: history, error } = await this._supabaseService.client
         .from('payment_history')
-        .select(`
-          *,
-          payment_allocations (
-            id,
-            amount,
-            schedule_id,
-            weekly_schedules (
-              week_start_date,
-              due_date
-            )
-          )
-        `)
+        .select('*')
         .eq('customer_id', customerId)
         .order('payment_date', { ascending: false });
 
       if (error) throw error;
-      return data;
+
+      const rows = (history || []) as any[];
+      const paymentIds = rows.map((r) => r.original_payment_id).filter(Boolean);
+
+      const allocationsByPayment = new Map<string, any[]>();
+      if (paymentIds.length) {
+        const { data: allocs, error: allocError } = await this._supabaseService.client
+          .from('payment_allocations')
+          .select(
+            'id, amount, schedule_id, payment_id, weekly_schedules(week_start_date, due_date)',
+          )
+          .in('payment_id', paymentIds);
+
+        if (allocError) throw allocError;
+        for (const a of (allocs || []) as any[]) {
+          if (!allocationsByPayment.has(a.payment_id)) allocationsByPayment.set(a.payment_id, []);
+          allocationsByPayment.get(a.payment_id)!.push(a);
+        }
+      }
+
+      return rows.map((r) => ({
+        ...r,
+        payment_allocations: allocationsByPayment.get(r.original_payment_id) || [],
+      }));
     } catch (err) {
       console.error('Failed to get payment history:', err);
       return [];

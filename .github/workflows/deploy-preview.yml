@@ -1,0 +1,41 @@
+name: Deploy Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  deploy-preview:
+    name: Deploy to Vercel Preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build -- --configuration development
+      - uses: amondnet/vercel-action@v25
+        id: vercel
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod=false'
+      - name: Run E2E Tests
+        run: |
+          npx wait-on ${{ steps.vercel.outputs.preview-url }} --timeout 120000
+          CYPRESS_BASE_URL=${{ steps.vercel.outputs.preview-url }} npx cypress run
+        env:
+          CYPRESS_BASE_URL: ${{ steps.vercel.outputs.preview-url }}
+      - uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 Preview deployment ready: ${{ steps.vercel.outputs.preview-url }}\n✅ E2E tests passed!'
+            })

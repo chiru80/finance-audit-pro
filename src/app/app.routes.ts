@@ -1,6 +1,8 @@
-import { Routes, Router } from '@angular/router';
+import type { Routes } from '@angular/router';
+import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
+import { adminGuard } from './auth/auth.guard';
 
 // Guard for authentication
 const canAuthenticate = async () => {
@@ -33,12 +35,14 @@ export const routes: Routes = [
   },
   {
     path: 'auth/callback',
-    loadComponent: () => import('./auth/oauth-callback.component').then((m) => m.OauthCallbackComponent),
+    loadComponent: () =>
+      import('./auth/oauth-callback.component').then((m) => m.OauthCallbackComponent),
   },
   {
     path: 'dashboard',
     canActivate: [() => canAuthenticate()],
-    loadComponent: () => import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    loadComponent: () =>
+      import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
   {
     path: 'customers',
@@ -71,22 +75,36 @@ export const routes: Routes = [
       import('./collections/collection-entry.component').then((m) => m.CollectionEntryComponent),
   },
   {
-    path: 'ledger',
+    path: 'outbox',
     canActivate: [() => canAuthenticate()],
     loadComponent: () =>
-      import('./ledger/ledger.component').then((m) => m.LedgerComponent),
+      import('./collections/outbox.component').then((m) => m.OutboxComponent),
+  },
+  {
+    path: 'ledger',
+    canActivate: [() => canAuthenticate()],
+    loadComponent: () => import('./ledger/ledger.component').then((m) => m.LedgerComponent),
   },
   {
     path: 'reports',
     canActivate: [() => canAuthenticate()],
+    loadComponent: () => import('./reports/reports.component').then((m) => m.ReportsComponent),
+  },
+  {
+    path: 'online-payments',
+    canActivate: [() => canAuthenticate()],
     loadComponent: () =>
-      import('./reports/reports.component').then((m) => m.ReportsComponent),
+      import('./online-payments/online-payments.component').then((m) => m.OnlinePaymentsComponent),
+  },
+  {
+    path: 'audit-log',
+    canActivate: [() => canAuthenticate()],
+    loadComponent: () => import('./audit-log/audit-log.component').then((m) => m.AuditLogComponent),
   },
   {
     path: 'settings',
-    canActivate: [() => canAuthenticate()],
-    loadComponent: () =>
-      import('./settings/settings.component').then((m) => m.SettingsComponent),
+    canActivate: [adminGuard],
+    loadComponent: () => import('./settings/settings.component').then((m) => m.SettingsComponent),
   },
   {
     path: '**',

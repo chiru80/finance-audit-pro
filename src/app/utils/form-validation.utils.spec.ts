@@ -57,10 +57,10 @@ describe('Form Validation Utilities', () => {
 
   describe('validatePhoneNumber', () => {
     it('should accept valid Indian phone format', () => {
-      const errors = validatePhoneNumber('+919876543210');
+      const errors = validatePhoneNumber('9876543210');
       expect(errors).toHaveLength(0);
 
-      const errors2 = validatePhoneNumber('9876543210');
+      const errors2 = validatePhoneNumber('8765432109');
       expect(errors2).toHaveLength(0);
     });
 

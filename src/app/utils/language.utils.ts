@@ -332,8 +332,6 @@ export function translate(key: TranslationKey, lang: SupportedLanguage): string 
  * @param lang - Language code
  * @returns Function that translates keys to the given language
  */
-export function createTranslateFn(
-  lang: SupportedLanguage,
-): (key: TranslationKey) => string {
+export function createTranslateFn(lang: SupportedLanguage): (key: TranslationKey) => string {
   return (key: TranslationKey) => translate(key, lang);
 }

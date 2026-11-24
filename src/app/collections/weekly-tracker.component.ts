@@ -1,10 +1,12 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { I18nPipe } from '../shared/i18n.pipe';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import { CollectionService } from '../collection.service';
-import { Customer } from '../customers/customer.types';
+import type { Customer } from '../customers/customer.types';
 import { formatPaiseToINR } from '../utils/currency.utils';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
@@ -18,6 +20,7 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
     CommonModule,
     FormsModule,
     DatePipe,
+    I18nPipe,
     GlassCardComponent,
     GlassButtonComponent,
     GlassBadgeComponent,
@@ -148,7 +151,8 @@ export class WeeklyTrackerComponent implements OnInit {
     const cid = this.customerId();
     if (!cid) return;
 
-    const reason = window.prompt('Enter reason for customer absence:', 'Customer was unavailable') ?? '';
+    const reason =
+      window.prompt('Enter reason for customer absence:', 'Customer was unavailable') ?? '';
     if (!reason) return;
 
     this.loading.set(true);
@@ -167,17 +171,9 @@ export class WeeklyTrackerComponent implements OnInit {
         throw new Error(res.error_message || 'Failed to record absence');
       }
 
-      // Auto-approve the absence (as Owner) to finalize documentation
-      // Under Option A, due remains charged and carries forward
-      const absenceId = res.absence_id;
-      if (absenceId) {
-        await this._supabaseService.client.rpc('approve_absence', {
-          p_absence_id: absenceId,
-          p_approve: true,
-        });
-      }
-
-      this.success.set('Absence recorded and approved. Due is carried forward as debt.');
+      // Server applies absence_requires_approval setting; owner can approve/reject
+      // pending absences from the customer detail page.
+      this.success.set('Absence recorded. Owner approval may be required per settings.');
       setTimeout(() => this.success.set(null), 3000);
       await this.loadSchedules(cid);
     } catch (err) {
@@ -195,10 +191,12 @@ export class WeeklyTrackerComponent implements OnInit {
     try {
       const { data, error } = await this._supabaseService.client
         .from('weekly_schedules')
-        .select(`
+        .select(
+          `
           *,
           customers!inner(name, phone)
-        `)
+        `,
+        )
         .eq('customer_id', customerId)
         .order('due_date', { ascending: true });
 

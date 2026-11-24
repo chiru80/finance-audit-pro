@@ -3,117 +3,245 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, RouterLink, GlassCardComponent, GlassButtonComponent, GlassInputDirective],
+  imports: [FormsModule, RouterLink, GlassButtonComponent, GlassInputDirective],
   template: `
-    <div class="flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-[#070D1A] text-[#F8FAFC]">
-      <!-- Ambient Fluid Light Drops in Background -->
-      <div class="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-blue-600/10 blur-3xl"></div>
-      <div class="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-cyan-600/10 blur-3xl"></div>
-      <div class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-indigo-600/5 blur-3xl"></div>
-
-      <glass-card variant="elevated" customClass="w-full max-w-md p-8 sm:p-10 relative z-10 bg-[#151F32] border border-[#263449] shadow-2xl rounded-2xl">
-        <!-- Logo & Header -->
-        <div class="text-center mb-8">
-          <div class="inline-flex w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 items-center justify-center text-white shadow-lg shadow-blue-500/20 border border-blue-400/30 mb-3">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
+    <div
+      class="fx-auth-shell min-h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] lg:grid lg:grid-cols-[minmax(420px,540px)_minmax(0,1fr)]"
+    >
+      <!-- Form panel -->
+      <section class="flex items-center justify-center px-5 py-10 sm:px-8 lg:py-12">
+        <div class="w-full max-w-[420px]">
+          <div class="mb-8 flex items-center gap-3 lg:hidden">
+            <span
+              class="inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
+            >
+              <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.9"
+                  d="M4 19V9m5 10V5m5 14v-7m5 7V8"
+                />
+              </svg>
+            </span>
+            <p class="text-sm font-bold tracking-tight">Finance Audit Pro</p>
           </div>
-          <h2 class="text-2xl font-bold tracking-tight text-[#F8FAFC]">Create Account</h2>
-          <p class="mt-1 text-sm text-[#94A3B8]">Sign up to start managing your finances</p>
+
+          <div class="fx-card p-7 sm:p-8">
+            <div class="mb-7">
+              <span class="fx-eyebrow">Create account</span>
+              <h2 class="mt-3 text-2xl font-semibold tracking-[-0.03em]">Set up your workspace</h2>
+              <p class="mt-1.5 text-sm text-[var(--text-secondary)]">
+                One private owner account for your collections and audit records.
+              </p>
+            </div>
+
+            @if (isPlaceholderEnv) {
+              <div
+                class="mb-5 rounded-[10px] border border-[var(--color-warning-border)] bg-[var(--color-warning-tint)] px-3.5 py-3 text-xs leading-relaxed text-[var(--color-warning-text)]"
+              >
+                <span class="font-semibold">Supabase configuration needed.</span>
+                Update
+                <code class="rounded bg-[var(--glass-surface-muted)] px-1 py-0.5"
+                  >src/environments/environment.ts</code
+                >
+                with your project URL and anon key.
+              </div>
+            }
+
+            @if (error()) {
+              <div
+                role="alert"
+                aria-live="polite"
+                class="mb-5 rounded-[10px] border border-[var(--color-danger-border)] bg-[var(--color-danger-tint)] px-3.5 py-3 text-xs leading-relaxed text-[var(--color-danger-text)]"
+              >
+                {{ error() }}
+              </div>
+            }
+
+            @if (isCreatingProfile()) {
+              <div
+                class="mb-5 flex items-center gap-2 rounded-[10px] border border-[var(--color-primary-border)] bg-[var(--color-primary-tint)] px-3.5 py-3 text-xs text-[var(--color-primary-text)]"
+              >
+                <span class="fx-spin h-4! w-4!"></span>
+                Creating your owner account...
+              </div>
+            }
+
+            <form (ngSubmit)="onSubmit()" class="space-y-4">
+              <div>
+                <label for="fullName" class="fx-label mb-2 block">Full name</label>
+                <input
+                  glassInput
+                  type="text"
+                  id="fullName"
+                  placeholder="Your name"
+                  [(ngModel)]="fullName"
+                  name="fullName"
+                  required
+                  autocomplete="name"
+                />
+              </div>
+
+              <div>
+                <label for="email" class="fx-label mb-2 block">Email address</label>
+                <input
+                  glassInput
+                  type="email"
+                  id="email"
+                  placeholder="owner@example.com"
+                  [(ngModel)]="email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                />
+              </div>
+
+              <div>
+                <label for="password" class="fx-label mb-2 block">Password</label>
+                <input
+                  glassInput
+                  type="password"
+                  id="password"
+                  placeholder="At least 6 characters"
+                  [(ngModel)]="password"
+                  name="password"
+                  minlength="6"
+                  required
+                  autocomplete="new-password"
+                />
+                <p class="mt-1.5 text-[11px] text-[var(--text-muted)]">
+                  Use at least 6 characters.
+                </p>
+              </div>
+
+              <glass-button
+                variant="filled"
+                type="submit"
+                size="lg"
+                customClass="mt-6! w-full"
+                [disabled]="isCreatingProfile()"
+              >
+                Create account
+              </glass-button>
+            </form>
+
+            <p
+              class="mt-6 border-t border-[var(--glass-border-subtle)] pt-5 text-center text-xs text-[var(--text-secondary)]"
+            >
+              Already have an account?
+              <a routerLink="/login" class="fx-link ml-1 font-semibold">Sign in</a>
+            </p>
+          </div>
         </div>
+      </section>
 
-        @if (isPlaceholderEnv) {
-          <div class="mb-4 rounded-xl bg-amber-500/10 p-3.5 border border-amber-500/20 text-xs text-amber-300 leading-relaxed backdrop-blur-sm">
-            <span class="font-semibold block mb-0.5">⚠️ Supabase Configuration Note</span>
-            Your app is currently using placeholder credentials. Update <code class="bg-[#0F172A] text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded">src/environments/environment.ts</code> with your Supabase URL and Anon Key.
+      <!-- Editorial panel -->
+      <section
+        class="fx-auth-story hidden flex-col justify-between border-l border-[var(--glass-border-subtle)] px-10 py-10 lg:flex xl:px-16 xl:py-12"
+      >
+        <div class="flex items-center justify-end gap-3">
+          <div class="text-right">
+            <p class="text-[13px] font-bold tracking-tight">Finance Audit Pro</p>
+            <p
+              class="mt-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary-text)]"
+            >
+              Collections & audit
+            </p>
           </div>
-        }
-
-        @if (error()) {
-          <div class="mb-4 flex items-center rounded-xl bg-red-500/15 p-3 text-sm text-red-400 border border-red-500/30 backdrop-blur-sm">
-            <span class="mr-2 font-bold flex-shrink-0">!</span>
-            <span>{{ error() }}</span>
-          </div>
-        }
-
-        @if (isCreatingProfile()) {
-          <div class="mb-4 flex items-center rounded-xl bg-blue-500/15 p-3 text-sm text-[#38BDF8] border border-blue-500/30 backdrop-blur-sm">
-            <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Creating your owner account...
-          </div>
-        }
-
-        <form (ngSubmit)="onSubmit()" class="space-y-4">
-          <div>
-            <label for="fullName" class="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-1.5">Full Name</label>
-            <input
-              glassInput
-              type="text"
-              id="fullName"
-              placeholder="Your Name"
-              [(ngModel)]="fullName"
-              name="fullName"
-              required
-            />
-          </div>
-
-          <div>
-            <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-1.5">Email address</label>
-            <input
-              glassInput
-              type="email"
-              id="email"
-              placeholder="owner@example.com"
-              [(ngModel)]="email"
-              name="email"
-              required
-            />
-          </div>
-
-          <div>
-            <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-[#94A3B8] mb-1.5">Password</label>
-            <input
-              glassInput
-              type="password"
-              id="password"
-              placeholder="••••••••"
-              [(ngModel)]="password"
-              name="password"
-              minlength="6"
-              required
-            />
-            <p class="text-[11px] text-[#64748B] mt-1">Must be at least 6 characters</p>
-          </div>
-
-          <glass-button
-            variant="filled"
-            type="submit"
-            size="lg"
-            customClass="w-full mt-2"
-            [disabled]="isCreatingProfile()"
+          <span
+            class="fx-brand-mark inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
           >
-            Create Account
-          </glass-button>
-        </form>
-
-        <div class="mt-6 text-center text-sm text-[#94A3B8] border-t border-[#263449] pt-4">
-          <span>Already have an account?</span>
-          <a routerLink="/login" class="font-semibold text-[#38BDF8] hover:text-[#60A5FA] ml-1">Sign in</a>
+            <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.9"
+                d="M4 19V9m5 10V5m5 14v-7m5 7V8"
+              />
+            </svg>
+          </span>
         </div>
-      </glass-card>
+
+        <div class="max-w-lg">
+          <span class="fx-eyebrow">Built for clarity</span>
+          <h1
+            class="mt-5 text-[clamp(2rem,3.4vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.045em]"
+          >
+            Start with a ledger you can trust.
+          </h1>
+          <p class="mt-5 max-w-md text-sm leading-relaxed text-[var(--text-secondary)]">
+            Add customers, record weekly collections, and keep every outstanding balance visible in
+            one secure workspace.
+          </p>
+
+          <div class="mt-10 grid gap-3 sm:grid-cols-2">
+            <div class="fx-auth-point">
+              <p class="text-xs font-semibold text-[var(--text-primary)]">Single-owner security</p>
+              <p class="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">
+                Your records stay private to your account.
+              </p>
+            </div>
+            <div class="fx-auth-point">
+              <p class="text-xs font-semibold text-[var(--text-primary)]">Audit-ready history</p>
+              <p class="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">
+                Transactions remain traceable over time.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-right text-[11px] text-[var(--text-muted)]">
+          Private workspace · Built for single-owner operations
+        </p>
+      </section>
     </div>
   `,
+  styles: [
+    `
+      .fx-auth-story {
+        position: relative;
+        background-color: var(--bg-sidebar);
+        background-image:
+          linear-gradient(to bottom, var(--glass-border-subtle) 1px, transparent 1px),
+          linear-gradient(to right, var(--glass-border-subtle) 1px, transparent 1px);
+        background-size: 64px 64px;
+        background-position: -1px -1px;
+      }
+
+      .fx-auth-story::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        border-left: 1px solid var(--glass-border-subtle);
+      }
+
+      .fx-auth-story > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .fx-auth-point {
+        padding: 0.875rem;
+        border-radius: 10px;
+        border: 1px solid var(--glass-border-subtle);
+        background: var(--glass-surface-base);
+      }
+
+      @media (max-width: 1023px) {
+        .fx-auth-story {
+          display: none !important;
+        }
+      }
+    `,
+  ],
 })
 export class SignupComponent {
   private readonly _authService = inject(AuthService);
@@ -141,7 +269,10 @@ export class SignupComponent {
       return;
     }
 
-    const { success, error, data } = await this._authService.signUp(this.email.trim(), this.password);
+    const { success, error, data } = await this._authService.signUp(
+      this.email.trim(),
+      this.password,
+    );
 
     if (!success) {
       this.error.set(error || 'Signup failed');
@@ -149,11 +280,7 @@ export class SignupComponent {
     }
 
     try {
-      await this._authService.createProfileAfterSignup(
-        data?.user ?? null,
-        this.fullName.trim()
-      );
-
+      await this._authService.createProfileAfterSignup(data?.user ?? null, this.fullName.trim());
       this._router.navigate(['/login']);
     } catch (e) {
       console.error('Unexpected error creating profile:', e);

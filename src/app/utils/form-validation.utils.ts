@@ -84,24 +84,22 @@ export function validatePhoneNumber(phone: string): string[] {
   // Remove spaces and hyphens for validation
   const cleaned = phone.replace(/[\s\-]/g, '');
 
-  // Check for valid Indian phone number patterns
-  // +91 followed by 10 digits, or just 10 digits
+  // Mobile number must be exactly 10 digits (Indian mobile)
   const validPatterns = [
-    /^\+91\d{10}$/, // +91XXXXXXXXXX
-    /^91\d{10}$/, // 91XXXXXXXXXX
     /^\d{10}$/, // XXXXXXXXXX
   ];
 
   const isValid = validPatterns.some((pattern) => pattern.test(cleaned));
 
   if (!isValid) {
-    errors.push('Invalid phone number format (expected: +91 XXXXX XXXXX or 10 digits)');
+    errors.push('Mobile number must be exactly 10 digits');
+    return errors;
   }
 
   // Check if first digit is valid (6-9 for Indian mobile numbers)
-  const firstDigit = cleaned.replace(/[^0-9]/g, '')[0];
+  const firstDigit = cleaned[0];
   if (firstDigit && !['6', '7', '8', '9'].includes(firstDigit)) {
-    errors.push('Phone number must start with 6, 7, 8, or 9');
+    errors.push('Mobile number must start with 6, 7, 8, or 9');
   }
 
   return errors;

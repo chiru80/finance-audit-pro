@@ -41,7 +41,13 @@ describe('CollectionService', () => {
       });
 
       const service = createService();
-      const res = await service.recordWeeklyPayment('cust-1', 50000, 'cash', 'REC-001', 'Weekly collection');
+      const res = await service.recordWeeklyPayment(
+        'cust-1',
+        50000,
+        'cash',
+        'REC-001',
+        'Weekly collection',
+      );
 
       expect(mockSupabaseService.client.rpc).toHaveBeenCalledWith('record_weekly_payment', {
         p_customer_id: 'cust-1',
@@ -98,22 +104,43 @@ describe('CollectionService', () => {
   describe('getPaymentHistory', () => {
     it('queries payment_history table with allocations and schedules', async () => {
       const mockHistory = [
-        { id: 'p1', amount: 50000, payment_method: 'cash', payment_date: '2026-11-10' },
+        {
+          id: 'p1',
+          original_payment_id: 'pay-1',
+          amount: 50000,
+          payment_method: 'cash',
+          payment_date: '2026-11-10',
+        },
+      ];
+      const mockAllocs = [
+        {
+          id: 'a1',
+          amount: 50000,
+          schedule_id: 's1',
+          payment_id: 'pay-1',
+          weekly_schedules: { week_start_date: '2026-11-10' },
+        },
       ];
 
       const mockOrder = vi.fn().mockResolvedValueOnce({ data: mockHistory, error: null });
       const mockEq = vi.fn().mockReturnValue({ order: mockOrder });
       const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
 
-      mockSupabaseService.client.from.mockReturnValueOnce({ select: mockSelect });
+      const mockIn = vi.fn().mockResolvedValueOnce({ data: mockAllocs, error: null });
+      const mockAllocSelect = vi.fn().mockReturnValue({ in: mockIn });
+
+      mockSupabaseService.client.from
+        .mockReturnValueOnce({ select: mockSelect })
+        .mockReturnValueOnce({ select: mockAllocSelect });
 
       const service = createService();
       const res = await service.getPaymentHistory('cust-1');
 
-      expect(mockSupabaseService.client.from).toHaveBeenCalledWith('payment_history');
+      expect(mockSupabaseService.client.from).toHaveBeenNthCalledWith(1, 'payment_history');
       expect(mockEq).toHaveBeenCalledWith('customer_id', 'cust-1');
       expect(mockOrder).toHaveBeenCalledWith('payment_date', { ascending: false });
-      expect(res).toEqual(mockHistory);
+      expect(mockSupabaseService.client.from).toHaveBeenNthCalledWith(2, 'payment_allocations');
+      expect(res).toEqual([{ ...mockHistory[0], payment_allocations: mockAllocs }]);
     });
   });
 
@@ -198,4 +225,3 @@ describe('CollectionService', () => {
     });
   });
 });
-

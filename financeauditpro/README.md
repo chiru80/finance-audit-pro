@@ -1,59 +1,105 @@
-# Financeauditpro
+# Finance Audit Pro
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.6.
+A precise, auditable weekly collection ledger for microfinance / chit-fund businesses. Built with Angular 22, Supabase/PostgreSQL, and Tailwind CSS.
 
-## Development server
+## Getting Started
 
-To start a local development server, run:
+### Prerequisites
 
-```bash
-ng serve
-```
+- Node.js 20+
+- npm 10+
+- Supabase project (free tier works)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Setup
 
 ```bash
-ng generate component component-name
+# 1. Clone
+git clone https://github.com/your-org/finance-audit-pro.git
+cd finance-audit-pro
+
+# 2. Install
+npm install
+
+# 3. Configure environment
+cp .env.example .env.local
+# Edit .env.local with your Supabase credentials
+
+# 4. Run dev server
+npm start
+# Opens http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Environment Variables
+
+| Variable                 | Required | Description                |
+| ------------------------ | -------- | -------------------------- |
+| `VITE_SUPABASE_URL`      | ✅       | Supabase project URL       |
+| `VITE_SUPABASE_ANON_KEY` | ✅       | Supabase anon public key   |
+| `PLAUSIBLE_DOMAIN`       | ❌       | Analytics domain (v1.1.6+) |
+| `SENTRY_DSN`             | ❌       | Error tracking (future)    |
+
+See `.env.example` for full list.
+
+## Development
 
 ```bash
-ng generate --help
+# Start dev server
+npm start
+
+# Run unit tests
+npm test
+
+# Run linting
+npm run lint
+
+# Check formatting
+npm run format:check
+
+# Production build
+npm run build
 ```
 
-## Building
+## Project Structure
 
-To build the project run:
-
-```bash
-ng build
+```
+src/
+├── app/
+│   ├── auth/           # Authentication (login, signup, guards)
+│   ├── customers/      # Customer management (list, form, detail)
+│   ├── collections/    # Weekly collection entry & tracker
+│   ├── dashboard/      # Financial KPI cards
+│   ├── ledger/         # Transaction ledger
+│   ├── reports/        # Financial reports & CSV export
+│   ├── settings/       # Business policy configuration
+│   ├── shared/         # Shell, header, sidebar, theme, i18n
+│   ├── design-system/  # Glisse Liquid Glass components
+│   └── utils/          # Currency, allocation, validation utilities
+├── environments/       # Environment configs
+└── styles.css          # Global styles & Tailwind
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Tech Stack
 
-## Running unit tests
+- **Frontend:** Angular 22 + TypeScript + Tailwind CSS 4
+- **Backend:** Supabase (PostgreSQL + Auth + RLS)
+- **Testing:** Vitest (unit) + Cypress (e2e)
+- **Design:** Glisse Liquid Glass (native Angular adaptation)
+- **Languages:** English + Telugu (full bilingual)
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Deployment
 
-```bash
-ng test
-```
+- **Target:** `weeklyfinance.online` (Vercel)
+- **Staging:** Automatic preview deployments on PRs
+- **Production:** Manual promotion via GitHub Actions
 
-## Running end-to-end tests
+## Documentation
 
-For end-to-end (e2e) testing, run:
+- `PROJECT_STATUS.md` — Current implementation status
+- `PRODUCT.md` — Product principles & constraints
+- `ROADMAP.md` — Future releases
+- `SECURITY_AUDIT.md` — Security posture
+- `ACCESSIBILITY.md` — WCAG 2.2 AA conformance (v1.1+)
 
-```bash
-ng e2e
-```
+## License
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Proprietary — Single-owner use only.

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { I18nService, Language } from './i18n.service';
+import type { Language } from './i18n.service';
+import { I18nService } from './i18n.service';
 
 @Component({
   selector: 'app-language-switcher',
@@ -10,7 +11,7 @@ import { I18nService, Language } from './i18n.service';
     <div class="language-switcher relative inline-block text-left">
       <button
         (click)="toggleDropdown()"
-        class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-[#94A3B8] hover:text-[#F8FAFC] bg-[#151F32] border border-[#263449] rounded-xl hover:bg-[#18243A] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/40 transition cursor-pointer"
+        class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-xl hover:bg-[var(--glass-surface-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-border)] transition cursor-pointer"
         aria-haspopup="listbox"
         [attr.aria-expanded]="isOpen"
         type="button"
@@ -19,26 +20,31 @@ import { I18nService, Language } from './i18n.service';
         <span class="w-4 h-4" [innerHTML]="currentLanguageIcon"></span>
         <span>{{ currentLanguageName }}</span>
         <svg
-          class="h-4 w-4 text-[#64748B] transition-transform"
+          class="h-4 w-4 text-[var(--text-muted)] transition-transform"
           [class.transform-180]="isOpen"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
       @if (isOpen) {
         <div
-          class="absolute right-0 mt-2 w-40 rounded-xl shadow-2xl bg-[#151F32] border border-[#263449] overflow-hidden z-50 p-1"
+          class="absolute right-0 mt-2 w-40 rounded-xl shadow-2xl bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] overflow-hidden z-50 p-1"
           role="listbox"
         >
           @for (lang of availableLanguages; track lang.code) {
             <button
               type="button"
               (click)="selectLanguage(lang.code)"
-              class="flex items-center w-full px-3 py-2 text-xs font-medium text-left text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#18243A] rounded-lg transition-colors cursor-pointer"
+              class="flex items-center w-full px-3 py-2 text-xs font-medium text-left text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--glass-surface-elevated)] rounded-lg transition-colors cursor-pointer"
               [attr.aria-selected]="lang.code === currentLanguage"
               role="option"
             >
