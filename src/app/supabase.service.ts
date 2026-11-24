@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, Session, AuthChangeEvent } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -15,6 +16,10 @@ export class SupabaseService {
     return this._client;
   }
 
+  get functions(): SupabaseClient['functions'] {
+    return this._client.functions;
+  }
+
   /** Get the current session user */
   getSession() {
     return this._client.auth.getSession();
@@ -26,7 +31,7 @@ export class SupabaseService {
   }
 
   /** Subscribe to auth state changes */
-  onAuthStateChange(callback: (event: string, session: unknown) => void) {
+  onAuthStateChange(callback: (event: AuthChangeEvent, session: Session | null) => void) {
     return this._client.auth.onAuthStateChange(callback);
   }
 

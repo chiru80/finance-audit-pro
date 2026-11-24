@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import type { OnInit, OnDestroy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 
@@ -6,16 +7,29 @@ import { SupabaseService } from '../supabase.service';
   selector: 'app-oauth-callback',
   standalone: true,
   template: `
-    <div class="flex min-h-screen items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div class="w-full max-w-md rounded-xl bg-white p-8 shadow-sm border border-gray-200 text-center">
-        <div class="animate-spin mb-4">
-          <svg class="h-10 w-10 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    <div
+      class="fx-canvas flex min-h-[100dvh] items-center justify-center bg-[var(--bg-primary)] px-5 py-12 text-[var(--text-primary)]"
+    >
+      <div class="fx-card w-full max-w-md p-8 text-center">
+        <span
+          class="fx-brand-mark mx-auto mb-5 inline-flex h-10 w-10 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
+        >
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.9"
+              d="M4 19V9m5 10V5m5 14v-7m5 7V8"
+            />
           </svg>
-        </div>
-        <h2 class="text-xl font-bold text-gray-900 mb-2">Completing Sign In...</h2>
-        <p class="text-sm text-gray-600">Please wait while we verify your session.</p>
+        </span>
+        <div
+          class="mx-auto mb-5 h-8 w-8 animate-spin rounded-full border-2 border-[var(--glass-border-crisp)] border-t-[var(--primary-accent)]"
+        ></div>
+        <h2 class="text-xl font-semibold tracking-[-0.03em]">Completing sign in</h2>
+        <p class="mt-2 text-sm text-[var(--text-secondary)]">
+          Please wait while we verify your session.
+        </p>
       </div>
     </div>
   `,
@@ -23,45 +37,75 @@ import { SupabaseService } from '../supabase.service';
 export class OauthCallbackComponent implements OnInit, OnDestroy {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _router = inject(Router);
+  private _authSubscription: { unsubscribe: () => void } | null = null;
 
   ngOnInit() {
-    // Handle the OAuth callback - Supabase will process the URL hash/token
     this.handleAuthCallback();
   }
 
   ngOnDestroy() {
-    // Clean up any pending operations
+    if (this._authSubscription) {
+      this._authSubscription.unsubscribe();
+      this._authSubscription = null;
+    }
   }
 
   private async handleAuthCallback() {
     try {
-      // Supabase handles the OAuth callback automatically
-      // The getSession() will return the new session after the redirect
-      const { data: { session }, error } = await this._supabaseService.getSession();
+      // 1. Check existing session immediately
+      const {
+        data: { session },
+        error,
+      } = await this._supabaseService.getSession();
 
       if (error) {
         console.error('OAuth callback error:', error);
-        // Navigate to login with error
         this._router.navigate(['/login'], {
-          queryParams: { error: 'oauth_failed' }
+          queryParams: { error: 'oauth_failed' },
         });
         return;
       }
 
       if (session?.user) {
-        // Successfully authenticated via Google
-        // The AuthService will auto-create the profile via the auth state listener
-        setTimeout(() => {
-          this._router.navigate(['/dashboard']);
-        }, 1000); // Brief delay to ensure profile is created
-      } else {
-        // No session - redirect to login
-        this._router.navigate(['/login']);
+        this._router.navigate(['/dashboard']);
+        return;
       }
+
+      // 2. Listen for auth state change (in case Supabase JS is still parsing the URL hash)
+      const { data: { subscription } } = this._supabaseService.onAuthStateChange(
+        (event, newSession) => {
+          if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && newSession?.user) {
+            subscription.unsubscribe();
+            this._router.navigate(['/dashboard']);
+          }
+        },
+      );
+      this._authSubscription = subscription;
+
+      // 3. Fallback verification with timeout
+      setTimeout(async () => {
+        const retry = await this._supabaseService.getSession();
+        if (retry.data.session?.user) {
+          if (this._authSubscription) {
+            this._authSubscription.unsubscribe();
+            this._authSubscription = null;
+          }
+          this._router.navigate(['/dashboard']);
+        } else {
+          // If still no session after wait, redirect to login
+          setTimeout(() => {
+            if (this._authSubscription) {
+              this._authSubscription.unsubscribe();
+              this._authSubscription = null;
+            }
+            this._router.navigate(['/login']);
+          }, 2000);
+        }
+      }, 500);
     } catch (err) {
       console.error('Unexpected error in OAuth callback:', err);
       this._router.navigate(['/login'], {
-        queryParams: { error: 'callback_error' }
+        queryParams: { error: 'callback_error' },
       });
     }
   }
