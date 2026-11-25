@@ -55,7 +55,7 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
       <section class="fx-hero-panel" aria-labelledby="dashboard-title">
         <div class="fx-hero-content">
           <p class="fx-hero-eyebrow">
-            Weekly Finance <span aria-hidden="true">/</span> Portfolio overview
+            Finance Audit Pro <span aria-hidden="true">/</span> Portfolio overview
           </p>
           <h2 id="dashboard-title" class="fx-hero-title">Portfolio balance</h2>
           <p class="fx-hero-subtitle">Collections received across the trailing 30 days.</p>

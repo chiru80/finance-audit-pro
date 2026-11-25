@@ -36,7 +36,7 @@ import { I18nService } from '../shared/i18n.service';
             </svg>
           </span>
           <div>
-            <p class="text-[13px] font-bold tracking-tight">Weekly Finance</p>
+            <p class="text-[13px] font-bold tracking-tight">Finance Audit Pro</p>
             <p
               class="mt-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary-text)]"
             >
@@ -110,7 +110,7 @@ import { I18nService } from '../shared/i18n.service';
                 />
               </svg>
             </span>
-            <p class="text-sm font-bold tracking-tight">Weekly Finance</p>
+            <p class="text-sm font-bold tracking-tight">Finance Audit Pro</p>
           </div>
 
           <div class="fx-card fx-auth-form-card p-6 sm:p-8 lg:p-10">
