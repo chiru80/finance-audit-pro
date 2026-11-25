@@ -24,14 +24,5 @@ export class App {
   constructor() {
     this.i18n.initialize();
     void this.loading;
-    // Remove the initial HTML loader once Angular boots.
-    if (typeof document !== 'undefined') {
-      const loader = document.getElementById('app-loader');
-      if (loader) {
-        loader.style.transition = 'opacity 0.3s ease';
-        loader.style.opacity = '0';
-        setTimeout(() => loader.remove(), 320);
-      }
-    }
   }
 }

@@ -23,26 +23,17 @@ interface NavItem {
   },
   template: `
     <aside
+      id="primary-navigation"
       class="fx-sidebar flex h-full w-[264px] flex-col border-r border-[var(--glass-border-subtle)] bg-[var(--bg-sidebar)]"
       [class.fx-sidebar--open]="sidebarService.isOpen()"
       [attr.aria-hidden]="sidebarService.isOpen() ? null : 'true'"
+      [attr.inert]="sidebarService.isOpen() ? null : ''"
     >
       <!-- Brand -->
       <div
         class="flex h-16 flex-shrink-0 items-center gap-3 border-b border-[var(--glass-border-subtle)] px-5"
       >
-        <span
-          class="fx-brand-mark inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)] shadow-[var(--glass-shadow-sm)]"
-        >
-          <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.9"
-              d="M4 19V9m5 10V5m5 14v-7m5 7V8"
-            />
-          </svg>
-        </span>
+        <span class="fx-brand-mark" aria-hidden="true">F</span>
         <div class="min-w-0">
           <p class="truncate text-[13px] font-bold tracking-tight text-[var(--text-primary)]">
             Finance Audit Pro
@@ -56,7 +47,7 @@ interface NavItem {
       </div>
 
       <!-- Navigation -->
-      <nav class="fx-sidebar-nav flex-1 overflow-y-auto px-3 py-5">
+      <nav aria-label="Primary navigation" class="fx-sidebar-nav flex-1 overflow-y-auto px-3 py-5">
         <p class="fx-nav-label">Workspace</p>
         <div class="mb-6 space-y-0.5">
           @for (item of mainNavItems; track item.routerLink) {
@@ -64,6 +55,7 @@ interface NavItem {
               [routerLink]="[item.routerLink]"
               class="fx-nav-link"
               routerLinkActive="is-active"
+              ariaCurrentWhenActive="page"
               [routerLinkActiveOptions]="{ exact: item.routerLink === '/dashboard' }"
             >
               <span class="fx-nav-icon" [innerHTML]="getIconHtml(item.icon)"></span>
@@ -71,6 +63,11 @@ interface NavItem {
             </a>
           }
         </div>
+
+        <a routerLink="/collections" class="fx-nav-quick">
+          <span aria-hidden="true">+</span>
+          <span>Record a collection</span>
+        </a>
 
         <p class="fx-nav-label">Account</p>
         <div class="space-y-0.5">
@@ -162,11 +159,100 @@ interface NavItem {
 
       .fx-sidebar {
         width: 264px;
+        background: var(--bg-sidebar);
+        -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+        backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+        box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.06);
+        color: var(--text-primary);
+        --text-primary: #f2f7f1;
+        --text-secondary: #c4d7c9;
+        --text-muted: #93b09d;
+        --glass-border-subtle: rgba(232, 244, 235, 0.13);
+        --glass-border-crisp: rgba(232, 244, 235, 0.22);
+        --glass-surface-muted: rgba(232, 244, 235, 0.07);
+        --color-primary-tint: rgba(208, 237, 145, 0.14);
+        --color-primary-border: rgba(208, 237, 145, 0.24);
+        --color-primary-text: #d5ef9e;
+        --primary-accent: #d5ef9e;
+        --color-on-primary: #183b30;
+        --color-surface-hover: rgba(232, 244, 235, 0.08);
+        --color-danger-text: #f0a69a;
         transition: transform var(--glass-transition-normal);
       }
 
       .fx-brand-mark {
-        box-shadow: inset 0 1px 0 rgba(255, 248, 235, 0.14);
+        display: inline-flex;
+        width: 2.25rem;
+        height: 2.25rem;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(213, 239, 158, 0.45);
+        border-radius: 11px;
+        background: #d5ef9e;
+        color: #173c30;
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        line-height: 1;
+        box-shadow: 0 5px 16px -8px rgba(0, 0, 0, 0.45);
+      }
+
+      .fx-sidebar p {
+        color: var(--text-primary);
+      }
+
+      .fx-sidebar .fx-nav-label {
+        color: var(--text-muted);
+      }
+
+      .fx-sidebar .fx-nav-link {
+        color: var(--text-secondary);
+      }
+
+      .fx-sidebar .fx-nav-link:hover {
+        background: var(--color-surface-hover);
+        color: var(--text-primary);
+      }
+
+      .fx-sidebar .fx-nav-link.is-active {
+        border-color: var(--color-primary-border);
+        background: var(--color-primary-tint);
+        color: #e0f2b4;
+      }
+
+      .fx-nav-quick {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        min-height: 2.75rem;
+        margin: 0.75rem 0 1.5rem;
+        padding: 0 0.8rem;
+        border: 1px solid rgba(213, 239, 158, 0.55);
+        border-radius: 10px;
+        background: #d5ef9e;
+        color: #173c30;
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition:
+          background-color var(--glass-transition-fast),
+          transform var(--glass-transition-fast);
+      }
+
+      .fx-nav-quick:hover {
+        background: #e1f4b5;
+        transform: translateY(-1px);
+      }
+
+      .fx-nav-quick span:first-child {
+        display: grid;
+        width: 1.4rem;
+        height: 1.4rem;
+        place-items: center;
+        border: 1px solid rgba(23, 60, 48, 0.22);
+        border-radius: 7px;
+        font-size: 1.1rem;
+        line-height: 1;
       }
 
       .fx-nav-label {

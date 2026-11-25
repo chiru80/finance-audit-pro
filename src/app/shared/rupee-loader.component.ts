@@ -37,8 +37,8 @@ import { LoadingService } from '../core/loading.service';
         justify-content: center;
         background: radial-gradient(
           ellipse 80% 60% at 50% 40%,
-          var(--color-primary-tint, rgba(37, 99, 235, 0.18)) 0%,
-          var(--bg-primary, #0f172a) 70%
+          var(--color-primary-tint) 0%,
+          var(--bg-primary) 70%
         );
         backdrop-filter: blur(6px);
         animation: rupee-overlay-in 0.25s ease-out;
@@ -65,14 +65,9 @@ import { LoadingService } from '../core/loading.service';
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(
-          135deg,
-          var(--primary-accent, #2563eb) 0%,
-          #1d4ed8 50%,
-          #1e40af 100%
-        );
+        background: linear-gradient(135deg, var(--primary-hover), var(--primary-accent));
         box-shadow:
-          0 12px 32px rgba(37, 99, 235, 0.45),
+          0 12px 32px var(--color-primary-tint),
           inset 0 2px 6px rgba(255, 255, 255, 0.25),
           inset 0 -4px 8px rgba(0, 0, 0, 0.25);
         animation: rupee-coin-flip 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -83,7 +78,7 @@ import { LoadingService } from '../core/loading.service';
         font-size: 2.75rem;
         font-weight: 800;
         line-height: 1;
-        color: #fff;
+        color: var(--color-on-primary);
         text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         position: relative;
         z-index: 2;
@@ -104,11 +99,7 @@ import { LoadingService } from '../core/loading.service';
         position: absolute;
         inset: -0.75rem;
         border-radius: 50%;
-        background: radial-gradient(
-          circle,
-          var(--color-primary-tint, rgba(37, 99, 235, 0.35)) 0%,
-          transparent 70%
-        );
+        background: radial-gradient(circle, var(--color-primary-tint) 0%, transparent 70%);
         animation: rupee-glow-pulse 1.6s ease-in-out infinite;
         z-index: -1;
       }
@@ -122,12 +113,12 @@ import { LoadingService } from '../core/loading.service';
         font-size: 1rem;
         font-weight: 700;
         letter-spacing: 0.02em;
-        color: var(--text-primary, #f1f5f9);
+        color: var(--text-primary);
       }
       .rupee-brand-sub {
         font-size: 0.75rem;
         font-weight: 500;
-        color: var(--text-secondary, #94a3b8);
+        color: var(--text-secondary);
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
@@ -135,7 +126,7 @@ import { LoadingService } from '../core/loading.service';
         width: 8rem;
         height: 3px;
         border-radius: 9999px;
-        background: var(--glass-border-subtle, rgba(255, 255, 255, 0.12));
+        background: var(--glass-border-subtle);
         overflow: hidden;
       }
       .rupee-progress-bar {
@@ -143,7 +134,7 @@ import { LoadingService } from '../core/loading.service';
         height: 100%;
         width: 40%;
         border-radius: 9999px;
-        background: var(--primary-accent, #2563eb);
+        background: var(--primary-accent);
         animation: rupee-progress-slide 1.2s ease-in-out infinite;
       }
       @keyframes rupee-coin-flip {

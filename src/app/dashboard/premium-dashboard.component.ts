@@ -25,7 +25,6 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
             <span class="fx-hero-muted">Last updated {{ todayFormatted }}</span>
           </p>
         </div>
-        <div class="fx-hero-decoration"></div>
       </section>
 
       <!-- Quick Actions -->
@@ -253,18 +252,18 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
                 @if (transactionsLoading()) {
                   <tr>
                     <td colspan="5">
-                      <div class="fx-empty-state">
-                        <div class="fx-gold-coin-placeholder fx-coin-skeleton"></div>
-                        <p class="fx-empty-title">Loading recent transactions…</p>
+                      <div class="fx-empty">
+                        <div class="fx-gold-coin-placeholder"></div>
+                        <p>Loading recent transactions…</p>
                       </div>
                     </td>
                   </tr>
                 } @else if (transactionsError()) {
                   <tr>
                     <td colspan="5">
-                      <div class="fx-empty-state">
-                        <h3 class="fx-empty-title">Could not load transactions</h3>
-                        <p class="fx-empty-message">{{ transactionsError() }}</p>
+                      <div class="fx-empty">
+                        <h3>Could not load transactions</h3>
+                        <p>{{ transactionsError() }}</p>
                         <button
                           type="button"
                           class="fx-btn fx-btn--gold-outlined"
@@ -333,7 +332,7 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
                   @if (!transactions().length) {
                     <tr>
                       <td colspan="5" class="fx-empty-cell">
-                        <div class="fx-empty-state">
+                        <div class="fx-empty">
                           <div class="fx-table-icon">
                             <svg
                               class="w-5 h-5"
@@ -349,8 +348,8 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
                               />
                             </svg>
                           </div>
-                          <h3 class="fx-empty-title">No transactions yet</h3>
-                          <p class="fx-empty-message">
+                          <h3>No transactions yet</h3>
+                          <p>
                             Collections and payments will appear here as soon as they are recorded.
                           </p>
                           <a [routerLink]="['/collections']" class="fx-btn fx-btn--gold">

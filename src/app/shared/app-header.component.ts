@@ -13,13 +13,15 @@ import { filter } from 'rxjs';
   imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
   template: `
     <header
-      class="sticky top-0 z-20 flex h-16 flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--glass-border-subtle)] bg-[var(--bg-topbar)]/95 px-4 backdrop-blur-sm sm:px-6"
+      class="fx-topbar sticky top-0 z-20 flex h-[72px] flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--glass-border-subtle)] bg-[var(--bg-topbar)] px-4 sm:px-7"
     >
       <div class="flex min-w-0 items-center gap-3">
         <button
           (click)="sidebarService.toggle()"
           class="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)] text-[var(--text-secondary)] transition-colors hover:border-[var(--glass-border-crisp)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--text-primary)]"
           [attr.aria-label]="sidebarService.isOpen() ? 'Collapse navigation' : 'Expand navigation'"
+          [attr.aria-expanded]="sidebarService.isOpen()"
+          aria-controls="primary-navigation"
           type="button"
         >
           <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +81,7 @@ import { filter } from 'rxjs';
 
         <a
           routerLink="/settings"
-          class="ml-0.5 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-primary-tint)] text-xs font-bold uppercase text-[var(--color-primary-text)] ring-1 ring-inset ring-[var(--color-primary-border)] transition-colors hover:bg-[var(--color-primary-border)]"
+          class="ml-0.5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-[var(--bg-sidebar)] text-sm font-semibold uppercase text-white ring-2 ring-[var(--bg-topbar)] shadow-[var(--glass-shadow-sm)] transition-transform hover:scale-[1.03]"
           title="Settings"
           aria-label="Settings"
         >

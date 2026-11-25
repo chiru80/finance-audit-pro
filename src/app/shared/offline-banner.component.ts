@@ -24,8 +24,9 @@ import { OfflineStatusService } from '../core/offline-status.service';
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 1rem;
-        background: #b45309;
-        color: #fff;
+        border-bottom: 1px solid var(--color-warning-border);
+        background: var(--color-warning-tint);
+        color: var(--color-warning-text);
         font-size: 0.875rem;
         font-weight: 500;
       }
@@ -33,7 +34,7 @@ import { OfflineStatusService } from '../core/offline-status.service';
         width: 0.5rem;
         height: 0.5rem;
         border-radius: 9999px;
-        background: #fde68a;
+        background: var(--color-warning-text);
         animation: pulse 1.5s infinite;
       }
       @keyframes pulse {

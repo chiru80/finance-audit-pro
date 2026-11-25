@@ -1,0 +1,62 @@
+name: Authenticated E2E
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dashboard-e2e:
+    name: Dashboard browser test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+      - run: npm ci --legacy-peer-deps
+      - name: Check test account secrets
+        env:
+          E2E_EMAIL: ${{ secrets.E2E_EMAIL }}
+          E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+        run: |
+          if [[ -z "$E2E_EMAIL" || -z "$E2E_PASSWORD" ]]; then
+            echo "::error::Add E2E_EMAIL and E2E_PASSWORD as GitHub Actions secrets."
+            exit 1
+          fi
+      - name: Configure isolated Supabase staging environment
+        env:
+          E2E_SUPABASE_URL: ${{ secrets.E2E_SUPABASE_URL }}
+          E2E_SUPABASE_ANON_KEY: ${{ secrets.E2E_SUPABASE_ANON_KEY }}
+        run: node scripts/configure-e2e-environment.mjs
+      - name: Start the Angular app
+        run: |
+          npm run start -- --port 4201 --host 127.0.0.1 > "$RUNNER_TEMP/angular-e2e.log" 2>&1 &
+          server_pid=$!
+          echo "$server_pid" > "$RUNNER_TEMP/angular-e2e.pid"
+          for attempt in $(seq 1 90); do
+            if curl --silent --fail http://127.0.0.1:4201/ >/dev/null; then
+              exit 0
+            fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then
+              cat "$RUNNER_TEMP/angular-e2e.log"
+              exit 1
+            fi
+            sleep 2
+          done
+          cat "$RUNNER_TEMP/angular-e2e.log"
+          echo "::error::Angular did not become ready on port 4201."
+          exit 1
+      - name: Run Cypress E2E
+        run: npx cypress run --browser electron
+        env:
+          E2E_EMAIL: ${{ secrets.E2E_EMAIL }}
+          E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+          E2E_AUTH_REQUIRED: 'true'
+          CYPRESS_VIDEO: 'false'

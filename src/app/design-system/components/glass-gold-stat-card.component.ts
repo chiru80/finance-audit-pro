@@ -30,7 +30,7 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
           <p class="fx-gold-label">{{ label }}</p>
 
           <!-- Value -->
-          <h3 class="fx-gold-value" [innerHTML]="formattedValueHtml"></h3>
+          <h3 class="fx-gold-value">{{ formattedValue }}</h3>
 
           <!-- Sub-value / Prefix info -->
           @if (subValue) {
@@ -47,58 +47,61 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
       }
 
       .fx-gold-stat-root {
-        background: linear-gradient(135deg, #fffbeb 0%, #feece8 100%);
-        border: 1px solid #e5d8c9;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow:
-          0 4px 20px -8px rgba(0, 0, 0, 0.08),
-          0 1px 3px 0 rgba(0, 0, 0, 0.05);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        transition:
-          transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
-          box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1),
-          border-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
+        overflow: hidden;
+        border: 1px solid var(--glass-border-subtle);
+        border-radius: 16px;
+        background: var(--glass-surface-base);
+        box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+        -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+        backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+        animation: glassSlideUp 420ms var(--glass-spring-easing) both;
+        transition:
+          transform var(--glass-transition-normal),
+          box-shadow var(--glass-transition-normal),
+          border-color var(--glass-transition-normal);
       }
 
       .fx-gold-stat-root:hover {
-        transform: translateY(-4px);
-        box-shadow:
-          0 8px 32px -8px rgba(0, 0, 0, 0.12),
-          0 4px 12px 0 rgba(0, 0, 0, 0.08),
-          0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        transform: translateY(-2px) scale(1.008);
+        border-color: var(--glass-border-crisp);
+        box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
       }
+
+      :host:nth-child(2) .fx-gold-stat-root { animation-delay: 45ms; }
+      :host:nth-child(3) .fx-gold-stat-root { animation-delay: 90ms; }
+      :host:nth-child(4) .fx-gold-stat-root { animation-delay: 135ms; }
+      :host:nth-child(5) .fx-gold-stat-root { animation-delay: 180ms; }
+      :host:nth-child(6) .fx-gold-stat-root { animation-delay: 225ms; }
 
       .fx-gold-accent-bar {
         position: absolute;
         top: 0;
         left: 0;
-        width: 4px;
-        height: 100%;
-        background: linear-gradient(180deg, #d4af37 0%, #b58a2f 100%);
-        border-radius: 0 0 16px 16px;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-accent), transparent 76%);
+        border-radius: 16px 16px 0 0;
       }
 
       .fx-gold-stat-content {
         display: flex;
         align-items: flex-start;
-        gap: 1rem;
-        padding: 1.5rem;
+        gap: 0.875rem;
+        padding: 1.25rem;
       }
 
       .fx-gold-icon-circle {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 44px;
-        height: 44px;
+        width: 38px;
+        height: 38px;
         flex-shrink: 0;
-        border-radius: 12px;
-        background: linear-gradient(135deg, var(--gold-icon-bg, #fff7ed) 0%, #feece8 100%);
-        border: 1px solid var(--gold-icon-border, #fcd7ba);
-        color: var(--gold-icon-text, #92400e);
+        border-radius: 11px;
+        background: var(--gold-icon-bg, var(--color-primary-tint));
+        border: 1px solid var(--gold-icon-border, var(--color-primary-border));
+        color: var(--gold-icon-text, var(--color-primary-text));
         stroke: currentColor;
         transition: transform 150ms ease;
       }
@@ -114,33 +117,33 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
 
       /* Color variants */
       .fx-color-primary {
-        --gold-icon-bg: #fff7ed;
-        --gold-icon-border: #fcd7ba;
-        --gold-icon-text: #92400e;
+        --gold-icon-bg: var(--color-primary-tint);
+        --gold-icon-border: var(--color-primary-border);
+        --gold-icon-text: var(--color-primary-text);
       }
 
       .fx-color-success {
-        --gold-icon-bg: #f0fdf4;
-        --gold-icon-border: #bbf7d0;
-        --gold-icon-text: #166534;
+        --gold-icon-bg: var(--color-success-tint);
+        --gold-icon-border: var(--color-success-border);
+        --gold-icon-text: var(--color-success-text);
       }
 
       .fx-color-warning {
-        --gold-icon-bg: #fffbeb;
-        --gold-icon-border: #fde68a;
-        --gold-icon-text: #92400e;
+        --gold-icon-bg: var(--color-warning-tint);
+        --gold-icon-border: var(--color-warning-border);
+        --gold-icon-text: var(--color-warning-text);
       }
 
       .fx-color-danger {
-        --gold-icon-bg: #fef2f2;
-        --gold-icon-border: #fecaca;
-        --gold-icon-text: #991b1b;
+        --gold-icon-bg: var(--color-danger-tint);
+        --gold-icon-border: var(--color-danger-border);
+        --gold-icon-text: var(--color-danger-text);
       }
 
       .fx-color-info {
-        --gold-icon-bg: #f0f9ff;
-        --gold-icon-border: #bfdbfe;
-        --gold-icon-text: #0c4a6e;
+        --gold-icon-bg: var(--color-info-tint);
+        --gold-icon-border: var(--color-info-border);
+        --gold-icon-text: var(--color-info-text);
       }
 
       .fx-gold-stat-main {
@@ -150,23 +153,23 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
 
       .fx-gold-label {
         margin: 0 0 0.25rem 0;
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.6875rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #718096;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
         white-space: nowrap;
         font-variant-numeric: tabular-nums;
       }
 
       .fx-gold-value {
         margin: 0;
-        font-size: 1.5rem;
-        font-weight: 700;
-        line-height: 1.1;
-        letter-spacing: -0.03em;
+        font-size: clamp(1.25rem, 1.8vw, 1.7rem);
+        font-weight: 600;
+        line-height: 1.15;
+        letter-spacing: -0.045em;
         font-variant-numeric: tabular-nums;
-        color: #111827;
+        color: var(--text-primary);
         word-break: break-word;
       }
 
@@ -174,7 +177,7 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
         margin: 0.25rem 0 0;
         font-size: 0.75rem;
         font-weight: 500;
-        color: #92400e;
+        color: var(--text-secondary);
         letter-spacing: 0.02em;
       }
 
@@ -224,7 +227,7 @@ export class GlassGoldStatCardComponent {
     return this.sanitizer.bypassSecurityTrustHtml(svgStr);
   }
 
-  get formattedValueHtml(): string {
+  get formattedValue(): string {
     const prefix = this.prefix;
     const suffix = this.suffix;
 
