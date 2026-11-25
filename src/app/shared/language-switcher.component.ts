@@ -11,7 +11,7 @@ import { I18nService } from './i18n.service';
     <div class="language-switcher relative inline-block text-left">
       <button
         (click)="toggleDropdown()"
-        class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-xl hover:bg-[var(--glass-surface-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-border)] transition cursor-pointer"
+        class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-transparent rounded-full hover:bg-[var(--color-surface-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-border)] transition cursor-pointer"
         aria-haspopup="listbox"
         [attr.aria-expanded]="isOpen"
         type="button"

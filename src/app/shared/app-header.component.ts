@@ -5,88 +5,119 @@ import { ThemeService } from './theme.service';
 import { LanguageSwitcherComponent } from './language-switcher.component';
 import { SidebarService } from './sidebar.service';
 import { AuthService } from '../auth/auth.service';
+import { I18nPipe } from './i18n.pipe';
 import { filter } from 'rxjs';
+
+interface TopNavLink {
+  labelKey: string;
+  route: string;
+}
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterModule, LanguageSwitcherComponent, I18nPipe],
   template: `
-    <header
-      class="fx-topbar sticky top-0 z-20 flex h-[72px] flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--glass-border-subtle)] bg-[var(--bg-topbar)] px-4 sm:px-7"
-    >
-      <div class="flex min-w-0 items-center gap-3">
-        <button
-          (click)="sidebarService.toggle()"
-          class="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)] text-[var(--text-secondary)] transition-colors hover:border-[var(--glass-border-crisp)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--text-primary)]"
-          [attr.aria-label]="sidebarService.isOpen() ? 'Collapse navigation' : 'Expand navigation'"
-          [attr.aria-expanded]="sidebarService.isOpen()"
-          aria-controls="primary-navigation"
-          type="button"
-        >
-          <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.8"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
-
-        <div class="hidden h-5 w-px bg-[var(--glass-border-subtle)] sm:block"></div>
-
-        <div class="min-w-0">
-          <p
-            class="hidden text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--text-muted)] sm:block"
+    <header class="fx-topbar sticky top-0 z-20 px-4 sm:px-6">
+      <div class="fx-topbar-inner">
+        <!-- Left: Sidebar Toggle & Breadcrumb -->
+        <div class="fx-topbar-left">
+          <button
+            (click)="sidebarService.toggle()"
+            class="fx-topbar-icon-btn"
+            [attr.aria-label]="sidebarService.isOpen() ? 'Collapse navigation' : 'Expand navigation'"
+            [attr.aria-expanded]="sidebarService.isOpen()"
+            aria-controls="primary-navigation"
+            type="button"
           >
-            Workspace
-          </p>
-          <p class="truncate text-sm font-semibold tracking-tight text-[var(--text-primary)]">
-            {{ currentSection() }}
-          </p>
+            <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+
+          <div class="hidden h-5 w-px bg-[var(--glass-border-subtle)] sm:block"></div>
+
+          <div class="min-w-0">
+            <p
+              class="hidden text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--text-muted)] sm:block"
+            >
+              Finance Audit Pro
+            </p>
+            <p class="truncate text-sm font-semibold tracking-tight text-[var(--text-primary)]">
+              {{ currentSection() }}
+            </p>
+          </div>
         </div>
-      </div>
 
-      <div class="flex flex-shrink-0 items-center gap-1.5 sm:gap-2">
-        <app-language-switcher></app-language-switcher>
-
-        <button
-          (click)="toggleTheme()"
-          class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)] text-[var(--text-secondary)] transition-colors hover:border-[var(--glass-border-crisp)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--text-primary)]"
-          [attr.aria-label]="themeLabel()"
-          [attr.title]="themeLabel()"
-          type="button"
-        >
-          @if (isDarkMode()) {
-            <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.8"
-                d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z"
-              />
-            </svg>
-          } @else {
-            <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.8"
-                d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
-              />
-            </svg>
+        <!-- Center: Floating Pill Navigation Dock -->
+        <nav class="fx-topbar-center hidden xl:flex" aria-label="Quick navigation">
+          @for (item of quickLinks; track item.route) {
+            <a
+              [routerLink]="item.route"
+              routerLinkActive="is-active"
+              [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+              class="fx-topbar-nav-pill"
+            >
+              {{ item.labelKey | i18n }}
+            </a>
           }
-        </button>
+        </nav>
 
-        <a
-          routerLink="/settings"
-          class="ml-0.5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-primary-border)] bg-[var(--primary-accent)] text-sm font-semibold uppercase text-[var(--color-on-primary)] ring-2 ring-[var(--bg-topbar)] shadow-[var(--glass-shadow-sm)] transition-transform hover:scale-[1.03]"
-          title="Settings"
-          aria-label="Settings"
-        >
-          {{ userInitial() }}
-        </a>
+        <!-- Right: Unified Language, Theme & Account Control Cluster -->
+        <div class="fx-topbar-right">
+          <div class="fx-topbar-controls">
+            <app-language-switcher></app-language-switcher>
+
+            <span class="fx-topbar-divider" aria-hidden="true"></span>
+
+            <button
+              (click)="toggleTheme()"
+              class="fx-topbar-theme-btn"
+              [attr.aria-label]="themeLabel()"
+              [attr.title]="themeLabel()"
+              type="button"
+            >
+              @if (isDarkMode()) {
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.8"
+                    d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0l-1.414-1.414M7.05 7.05L5.636 5.636M12 8a4 4 0 100 8 4 4 0 000-8z"
+                  />
+                </svg>
+              } @else {
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.8"
+                    d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+                  />
+                </svg>
+              }
+            </button>
+
+            <span class="fx-topbar-divider" aria-hidden="true"></span>
+
+            <a
+              routerLink="/settings"
+              class="fx-topbar-account"
+              title="Account & Settings"
+              aria-label="Account & Settings"
+            >
+              <span class="fx-topbar-avatar">{{ userInitial() }}</span>
+              <span class="hidden md:inline truncate max-w-[110px] text-xs font-semibold">
+                {{ userDisplayName() }}
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
     </header>
   `,
@@ -101,6 +132,15 @@ export class AppHeaderComponent {
   currentSection = signal('Dashboard');
   isDarkMode = signal(this.themeService.isDark());
 
+  readonly quickLinks: TopNavLink[] = [
+    { labelKey: 'nav.dashboard', route: '/dashboard' },
+    { labelKey: 'nav.customers', route: '/customers' },
+    { labelKey: 'nav.villages', route: '/villages' },
+    { labelKey: 'nav.collections', route: '/collections' },
+    { labelKey: 'nav.ledger', route: '/ledger' },
+    { labelKey: 'nav.reports', route: '/reports' },
+  ];
+
   constructor() {
     this.updateCurrentSection(this.router.url);
     this.router.events
@@ -113,6 +153,12 @@ export class AppHeaderComponent {
 
   userInitial(): string {
     return (this.authService.user()?.email || 'U').charAt(0).toUpperCase();
+  }
+
+  userDisplayName(): string {
+    const user = this.authService.user();
+    const fullName = user?.user_metadata?.['full_name'] as string | undefined;
+    return fullName?.trim() || user?.email?.split('@')[0] || 'Account';
   }
 
   themeLabel(): string {
