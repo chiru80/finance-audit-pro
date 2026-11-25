@@ -51,18 +51,38 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
         </div>
       </header>
 
-      <!-- Collection overview uses the verified rolling total from the ledger. -->
+      <!-- Top-Center Premium Hero Bar -->
       <section class="fx-hero-panel" aria-labelledby="dashboard-title">
+        <div class="fx-hero-ambient" aria-hidden="true"></div>
         <div class="fx-hero-content">
-          <p class="fx-hero-eyebrow">
-            Finance Audit Pro <span aria-hidden="true">/</span> Portfolio overview
-          </p>
+          <div class="fx-hero-pill">
+            <span class="fx-hero-live-dot" aria-hidden="true"></span>
+            <p class="fx-hero-eyebrow">
+              Finance Audit Pro <span aria-hidden="true">·</span> Portfolio overview
+            </p>
+          </div>
+
           <h2 id="dashboard-title" class="fx-hero-title">Portfolio balance</h2>
           <p class="fx-hero-subtitle">Collections received across the trailing 30 days.</p>
+
           <div class="fx-hero-balance" aria-live="polite">
-            <span class="fx-hero-balance-label">Collections received · trailing 30 days</span>
             <strong>{{ stats()?.monthlyCollection ?? 0 | money }}</strong>
             <span class="fx-hero-muted">Ledger updated {{ todayFormatted }}</span>
+          </div>
+
+          <div class="fx-hero-metrics" aria-label="Quick portfolio summary">
+            <div class="fx-hero-metric-pill">
+              <span class="fx-hero-metric-label">Today</span>
+              <span class="fx-hero-metric-value">{{ stats()?.todaysCollection ?? 0 | money }}</span>
+            </div>
+            <div class="fx-hero-metric-pill">
+              <span class="fx-hero-metric-label">This Week</span>
+              <span class="fx-hero-metric-value">{{ stats()?.weeklyCollection ?? 0 | money }}</span>
+            </div>
+            <div class="fx-hero-metric-pill">
+              <span class="fx-hero-metric-label">Outstanding</span>
+              <span class="fx-hero-metric-value">{{ stats()?.totalOutstanding ?? 0 | money }}</span>
+            </div>
           </div>
         </div>
       </section>
