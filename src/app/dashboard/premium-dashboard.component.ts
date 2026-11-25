@@ -16,42 +16,119 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
   imports: [CommonModule, RouterModule, MoneyPipe, I18nPipe, GlassGoldStatCardComponent],
   template: `
     <div class="w-full max-w-[1440px] mx-auto space-y-8">
-      <!-- Hero Panel -->
-      <section class="fx-hero-panel">
+      <!-- Dashboard Hero -->
+      <section class="fx-hero-panel" aria-labelledby="dashboard-hero-title">
         <div class="fx-hero-content">
-          <h1 class="fx-hero-title">{{ greeting() }}, {{ userName() }}</h1>
+          <div class="fx-hero-overline">
+            <span class="fx-hero-live-dot" aria-hidden="true"></span>
+            <span>Portfolio overview</span>
+            <span class="fx-hero-date">{{ todayFormatted }}</span>
+          </div>
+          <h1 class="fx-hero-title" id="dashboard-hero-title">
+            {{ greeting() }}, <span>{{ userName() }}</span>
+          </h1>
           <p class="fx-hero-subtitle">
-            A clear view of collections, dues, and recent activity across your portfolio.
-            <span class="fx-hero-muted">Last updated {{ todayFormatted }}</span>
+            Your collections, customer balances, and ledger activity — all in one clear view.
           </p>
+          <div class="fx-hero-actions">
+            <a [routerLink]="['/collections']" class="fx-btn fx-btn--gold">
+              <svg
+                aria-hidden="true"
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              {{ 'dashboard.add_collection' | i18n }}
+            </a>
+            <a [routerLink]="['/customers']" class="fx-btn fx-btn--gold-outline">
+              <svg
+                aria-hidden="true"
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                />
+              </svg>
+              {{ 'dashboard.add_customer' | i18n }}
+            </a>
+          </div>
         </div>
-      </section>
 
-      <!-- Quick Actions -->
-      <div class="fx-action-bar">
-        <a [routerLink]="['/customers']" class="fx-btn fx-btn--gold">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.8"
-              d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-            />
-          </svg>
-          {{ 'dashboard.add_customer' | i18n }}
-        </a>
-        <a [routerLink]="['/collections']" class="fx-btn fx-btn--gold-outline">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.8"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          {{ 'dashboard.add_collection' | i18n }}
-        </a>
-      </div>
+        <aside class="fx-hero-insight" aria-label="Recent collection activity">
+          <div class="fx-hero-insight-header">
+            <div>
+              <p class="fx-hero-insight-kicker">Collection pulse</p>
+              <h2 class="fx-hero-insight-title">A steady view of your ledger</h2>
+            </div>
+            <span class="fx-hero-insight-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.7"
+                  d="M4 17.5 9 12l3.5 3.5L20 7.5M14.5 7.5H20V13"
+                />
+              </svg>
+            </span>
+          </div>
+
+          <div class="fx-hero-total">
+            <span>Collected in the last 30 days</span>
+            @if (stats(); as dashboardStats) {
+              <strong>{{ dashboardStats.monthlyCollection | money }}</strong>
+            } @else if (statsLoading()) {
+              <strong class="fx-hero-value-placeholder" aria-label="Loading collection total"
+                >—</strong
+              >
+            } @else {
+              <strong class="fx-hero-value-placeholder" aria-label="Collection total unavailable"
+                >—</strong
+              >
+            }
+          </div>
+
+          @if (stats()) {
+            <div class="fx-hero-periods">
+              @for (period of collectionPeriods(); track period.label) {
+                <div class="fx-hero-period">
+                  <div class="fx-hero-period-labels">
+                    <span>{{ period.label }}</span>
+                    <span>{{ period.amount | money }}</span>
+                  </div>
+                  <div class="fx-hero-period-track" aria-hidden="true">
+                    <span class="fx-hero-period-fill" [style.width.%]="period.share"></span>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="fx-hero-insight-status" role="status">
+              {{
+                statsLoading() ? 'Loading recent collections…' : 'Collection summary unavailable'
+              }}
+            </p>
+          }
+
+          <div class="fx-hero-insight-footer">
+            <span class="fx-hero-live-dot" aria-hidden="true"></span>
+            <span>Based on recorded collections</span>
+          </div>
+        </aside>
+      </section>
 
       @if (statsLoading()) {
         <section class="fx-card fx-loading-card" role="status" aria-live="polite">
