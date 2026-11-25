@@ -2,10 +2,10 @@ import type { OnInit } from '@angular/core';
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { IndexedDbService } from '../core/indexed-db.service';
-import type { Customer } from './customer.types';
+import type { Customer, Village } from './customer.types';
 import { formatPaiseToINR } from '../utils/currency.utils';
 import { I18nService } from '../shared/i18n.service';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
@@ -33,14 +33,21 @@ import { I18nPipe } from '../shared/i18n.pipe';
 export class CustomerListComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _router = inject(Router);
+  private readonly _route = inject(ActivatedRoute);
   private readonly _i18n = inject(I18nService);
   private readonly idb = inject(IndexedDbService);
 
   customers = signal<Customer[]>([]);
+  villages = signal<Village[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
   searchQuery = signal<string>('');
   statusFilter = signal<'all' | 'active' | 'outstanding' | 'inactive' | 'suspended'>('all');
+  villageFilter = signal<string>('all');
+
+  selectedVillage = computed(
+    () => this.villages().find((v) => v.id === this.villageFilter()) || null,
+  );
 
   totalCustomers = computed(() => this.customers().length);
   activeCustomers = computed(() => this.customers().filter((c) => c.status === 'active').length);
@@ -54,6 +61,10 @@ export class CustomerListComponent implements OnInit {
   });
 
   ngOnInit() {
+    const qVillageId = this._route.snapshot.queryParamMap.get('villageId');
+    if (qVillageId) {
+      this.villageFilter.set(qVillageId);
+    }
     this.loadCustomers();
   }
 
@@ -61,19 +72,29 @@ export class CustomerListComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
     try {
-      const { data, error } = await this._supabaseService.client
-        .from('customers')
-        .select(
-          `
+      const [custRes, villageRes] = await Promise.all([
+        this._supabaseService.client
+          .from('customers')
+          .select(
+            `
           *,
           villages(name)
         `,
-        )
-        .order('name', { ascending: true });
+          )
+          .order('name', { ascending: true }),
+        this._supabaseService.client
+          .from('villages')
+          .select('*')
+          .eq('is_active', true)
+          .order('name', { ascending: true }),
+      ]);
 
-      if (error) throw error;
-      const list = data as Customer[];
+      if (custRes.error) throw custRes.error;
+      const list = (custRes.data || []) as Customer[];
       this.customers.set(list);
+      if (!villageRes.error && villageRes.data) {
+        this.villages.set(villageRes.data as Village[]);
+      }
       await this.idb.put('cache', { key: 'customers:all', value: list, ts: Date.now() });
     } catch (err) {
       const cached = await this.idb.get<{ key: string; value: Customer[] }>(
@@ -92,7 +113,12 @@ export class CustomerListComponent implements OnInit {
   }
 
   createCustomer() {
-    this._router.navigate(['/customers/new']);
+    const vf = this.villageFilter();
+    if (vf && vf !== 'all' && vf !== 'unassigned') {
+      this._router.navigate(['/customers/new'], { queryParams: { villageId: vf } });
+    } else {
+      this._router.navigate(['/customers/new']);
+    }
   }
 
   editCustomer(id: string) {
@@ -143,6 +169,14 @@ export class CustomerListComponent implements OnInit {
       list = list.filter((c) => c.status !== 'active');
     } else if (sf === 'suspended') {
       list = list.filter((c) => c.status === 'suspended');
+    }
+
+    // Apply village filter
+    const vf = this.villageFilter();
+    if (vf === 'unassigned') {
+      list = list.filter((c) => !c.village_id);
+    } else if (vf !== 'all') {
+      list = list.filter((c) => c.village_id === vf);
     }
 
     // Apply search query

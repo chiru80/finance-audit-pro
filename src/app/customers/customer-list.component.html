@@ -14,7 +14,11 @@
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
       </svg>
-      {{ 'customers.add_new' | i18n }}
+      @if (selectedVillage(); as sv) {
+        Add to {{ sv.name }}
+      } @else {
+        {{ 'customers.add_new' | i18n }}
+      }
     </glass-button>
   </div>
 
@@ -81,23 +85,41 @@
   </div>
 
   <!-- Search & Filter Controls -->
-  <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-[var(--glass-surface-base)] p-3 rounded-[14px] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-    <!-- Search Input -->
-    <div class="relative flex-1 max-w-md">
-      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10">
-        <svg class="h-4 w-4 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
+  <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 bg-[var(--glass-surface-base)] p-3 rounded-[14px] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
+      <!-- Search Input -->
+      <div class="relative flex-1 max-w-md">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10">
+          <svg class="h-4 w-4 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input
+          glassInput
+          type="text"
+          placeholder="{{ 'customers.search_placeholder' | i18n }}"
+          aria-label="{{ 'customers.search_label' | i18n }}"
+          class="pl-10!"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+        />
       </div>
-      <input
-        glassInput
-        type="text"
-        placeholder="{{ 'customers.search_placeholder' | i18n }}"
-        aria-label="{{ 'customers.search_label' | i18n }}"
-        class="pl-10!"
-        [ngModel]="searchQuery()"
-        (ngModelChange)="searchQuery.set($event)"
-      />
+
+      <!-- Village Filter -->
+      <div class="sm:w-52">
+        <select
+          glassInput
+          aria-label="Filter by village"
+          [ngModel]="villageFilter()"
+          (ngModelChange)="villageFilter.set($event)"
+        >
+          <option value="all">All Villages</option>
+          @for (v of villages(); track v.id) {
+            <option [value]="v.id">{{ v.name }}</option>
+          }
+          <option value="unassigned">Unassigned</option>
+        </select>
+      </div>
     </div>
 
     <!-- Status Filter Pills -->
@@ -169,20 +191,24 @@
       </div>
       <h3 class="text-lg font-bold text-[var(--text-primary)]">{{ 'customers.no_customers_found' | i18n }}</h3>
       <p class="mt-1 text-sm text-[var(--text-secondary)] max-w-sm mx-auto">
-        @if (searchQuery() || statusFilter() !== 'all') {
+        @if (searchQuery() || statusFilter() !== 'all' || villageFilter() !== 'all') {
           {{ 'customers.no_match_filters' | i18n }}
         } @else {
           {{ 'customers.get_started' | i18n }}
         }
       </p>
       <div class="mt-6 flex justify-center gap-3">
-        @if (searchQuery() || statusFilter() !== 'all') {
-          <glass-button variant="glass" size="md" (onClick)="searchQuery.set(''); statusFilter.set('all')">
+        @if (searchQuery() || statusFilter() !== 'all' || villageFilter() !== 'all') {
+          <glass-button variant="glass" size="md" (onClick)="searchQuery.set(''); statusFilter.set('all'); villageFilter.set('all')">
             {{ 'customers.try_clearing_search' | i18n }}
           </glass-button>
         }
         <glass-button variant="filled" size="md" (onClick)="createCustomer()">
-          {{ 'customers.add_borrower' | i18n }}
+          @if (selectedVillage(); as sv) {
+            Add Customer to {{ sv.name }}
+          } @else {
+            {{ 'customers.add_borrower' | i18n }}
+          }
         </glass-button>
       </div>
     </glass-card>
@@ -244,13 +270,13 @@
 
                 <!-- Village -->
                 <td class="px-3.5 py-3.5 whitespace-nowrap hidden md:table-cell">
-                  @if (customer.village_name) {
+                  @if (customer.village_name || customer.villages?.name) {
                     <span class="text-sm text-[var(--text-primary)] flex items-center gap-1.5">
                       <svg class="w-3.5 h-3.5 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
-                      {{ customer.village_name }}
+                      {{ customer.village_name || customer.villages?.name }}
                     </span>
                   } @else {
                     <span class="text-[var(--text-muted)] text-xs italic">—</span>

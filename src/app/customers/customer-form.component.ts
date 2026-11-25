@@ -188,6 +188,10 @@ export class CustomerFormComponent implements OnInit {
       // Set default enrollment date to today for new customers
       const today = new Date().toISOString().split('T')[0];
       this.form.get('enrollment_date')?.setValue(today, { emitEvent: false });
+      const preselectedVillageId = this._route.snapshot.queryParamMap.get('villageId');
+      if (preselectedVillageId) {
+        this.form.get('village_id')?.setValue(preselectedVillageId, { emitEvent: false });
+      }
     }
   }
 
