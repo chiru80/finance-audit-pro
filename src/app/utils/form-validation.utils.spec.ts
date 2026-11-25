@@ -11,8 +11,6 @@ import {
   validateAmountString,
   type CustomerFormData,
   type PaymentFormData,
-  type AbsenceFormData,
-  type OnlinePaymentReconciliationData,
 } from './form-validation.utils';
 
 describe('Form Validation Utilities', () => {
@@ -208,7 +206,8 @@ describe('Form Validation Utilities', () => {
         customerId: 'c1',
         weekStartDate: '2024-01-17', // Wednesday - will fail day check
       });
-      // Will fail on day check, but let's check other validations
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContain('Week start date must be a Monday');
     });
 
     it('should error on missing customerId', () => {

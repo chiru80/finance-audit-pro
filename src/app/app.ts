@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AppShellComponent } from './shared/app-shell.component';
 import { I18nService } from './shared/i18n.service';

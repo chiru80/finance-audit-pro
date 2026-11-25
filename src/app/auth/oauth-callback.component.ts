@@ -79,6 +79,7 @@ export class OauthCallbackComponent implements OnInit, OnDestroy {
         return;
       }
 
+      // 2. Listen for auth state change (in case Supabase JS is still parsing the URL hash)
       const {
         data: { subscription },
       } = this._supabaseService.onAuthStateChange((event, newSession) => {

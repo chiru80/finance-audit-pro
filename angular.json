@@ -25,9 +25,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "styles": ["src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -70,7 +68,10 @@
               "buildTarget": "financeauditpro:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "allowedHosts": ["sb-41awalmvamhg.vercel.run"]
+          }
         },
         "test": {
           "builder": "@angular/build:unit-test"

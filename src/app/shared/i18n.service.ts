@@ -791,7 +791,7 @@ const teluguTranslations: Translations = {
   'settings.security_2': 'ఎడ్జ్ ఫంక్షన్ whatsapp-send-report యూజర్ JWT ద్వారా కనెఫిగరేషన్ చర్చిస్తుంది...',
   'settings.security_3': 'బ్రౌజర్ API కీని కొన్ని కాదు; కేవలం ఎడ్జ్ ఫంక్షన్‌ను వాలించుతుంది',
   'settings.security_4': 'ప్రతి పంపడం కంప్లయెన్స్ కోసం whatsapp_report_sends లో నమోదు చేయబడుతుంది',
-'collections.amount_label': 'వసూలు మొత్తం (₹)',
+  'collections.amount_label': 'వసూలు మొత్తం (₹)',
   'collections.audit_note': 'ఆడిట్ నోట్ (ఐచ్ఛికం)',
   'collections.borrower_account': 'రుణగ్రహీత / ఖాతా',
   'collections.cheque_number': 'చెక్ నంబర్',
@@ -799,7 +799,8 @@ const teluguTranslations: Translations = {
   'collections.confirm_button': 'వసూలు నిర్ధారించి నమోదు చేయి',
   'collections.cumulative_due': 'సంచిత బాకీ:',
   'collections.current_outstanding': 'ప్రస్తుత బాకీ:',
-  'collections.no_borrower_hint': 'వారి బాకీ సారాంశం మరియు చెల్లింపు చరిత్ర చూడటానికి డ్రాప్‌డౌన్ నుండి కస్టమర్‌ను ఎంచుకోండి.',
+  'collections.no_borrower_hint':
+    'వారి బాకీ సారాంశం మరియు చెల్లింపు చరిత్ర చూడటానికి డ్రాప్‌డౌన్ నుండి కస్టమర్‌ను ఎంచుకోండి.',
   'collections.no_borrower_selected': 'రుణగ్రహీత ఎంచుకోబడలేదు',
   'collections.no_phone': 'ఫోన్ లేదు',
   'collections.payment_channel': 'చెల్లింపు మార్గం',
@@ -895,7 +896,8 @@ const teluguTranslations: Translations = {
   'customers.section_loan': 'రుణ వివరాలు',
   'customers.select_village': 'గ్రామం ఎంచుకోండి...',
   'customers.status_aria': 'కస్టమర్ స్థితి',
-  'customers.subtitle': 'రుణగ్రహీత ప్రొఫైల్‌లు నిర్వహించండి, బాకీ మిగిలిన మొత్తాలు పర్యవేక్షించండి మరియు వసూలు షెడ్యూల్‌లను ట్రాక్ చేయండి.',
+  'customers.subtitle':
+    'రుణగ్రహీత ప్రొఫైల్‌లు నిర్వహించండి, బాకీ మిగిలిన మొత్తాలు పర్యవేక్షించండి మరియు వసూలు షెడ్యూల్‌లను ట్రాక్ చేయండి.',
   'customers.suspended': 'సస్పెండ్ చేయబడింది',
   'customers.tenure_hint': 'వారపు వాయిదాల సంఖ్య...',
   'customers.tenure_label': 'రుణ కాలపరిమితి (వారాలు)',

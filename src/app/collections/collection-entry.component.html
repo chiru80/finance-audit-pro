@@ -1,12 +1,21 @@
 <div class="max-w-4xl mx-auto space-y-6">
   <!-- Page Header & Tab Navigation -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-[var(--glass-border-subtle)]">
+  <div
+    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-[var(--glass-border-subtle)]"
+  >
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.1em] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)]">Cash Flow</span>
-        <span class="text-xs text-[var(--text-secondary)] font-medium">Collections & Schedules</span>
+        <span
+          class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.1em] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)]"
+          >Cash Flow</span
+        >
+        <span class="text-xs text-[var(--text-secondary)] font-medium"
+          >Collections & Schedules</span
+        >
       </div>
-      <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{{ 'collections.title' | i18n }}</h1>
+      <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+        {{ 'collections.title' | i18n }}
+      </h1>
       <p class="text-sm text-[var(--text-secondary)] mt-1">{{ 'collections.subtitle' | i18n }}</p>
     </div>
 
@@ -21,28 +30,54 @@
     <app-weekly-tracker />
   } @else {
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
       <!-- Form Card (2 Columns) -->
-      <glass-card variant="elevated" customClass="lg:col-span-2 p-6 sm:p-8 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+      <glass-card
+        variant="elevated"
+        customClass="lg:col-span-2 p-6 sm:p-8 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+      >
         @if (loading() && !customersLoaded()) {
           <div class="flex justify-center py-12">
-            <div class="h-10 w-10 animate-spin rounded-full border-4 border-[var(--glass-border-subtle)] border-t-[var(--primary-accent)]"></div>
+            <div
+              class="h-10 w-10 animate-spin rounded-full border-4 border-[var(--glass-border-subtle)] border-t-[var(--primary-accent)]"
+            ></div>
           </div>
         }
 
         @if (error()) {
-          <div aria-live="polite" class="mb-5 flex items-center rounded-xl bg-[var(--color-danger-tint)] p-3.5 text-sm text-[var(--color-danger-text)] border border-[var(--color-danger-border)] backdrop-blur-xs">
-            <svg class="h-5 w-5 text-[var(--color-danger-text)] mr-2.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          <div
+            aria-live="polite"
+            class="mb-5 flex items-center rounded-xl bg-[var(--color-danger-tint)] p-3.5 text-sm text-[var(--color-danger-text)] border border-[var(--color-danger-border)] backdrop-blur-xs"
+          >
+            <svg
+              class="h-5 w-5 text-[var(--color-danger-text)] mr-2.5 flex-shrink-0"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"
+              />
             </svg>
             <span>{{ error() }}</span>
           </div>
         }
 
         @if (success()) {
-          <div aria-live="polite" class="mb-5 flex items-center rounded-xl bg-[var(--color-success-tint)] p-3.5 text-sm text-[var(--color-success-text)] border border-[var(--color-success-border)] backdrop-blur-xs font-medium">
-            <svg class="h-5 w-5 text-[var(--color-success-text)] mr-2.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          <div
+            aria-live="polite"
+            class="mb-5 flex items-center rounded-xl bg-[var(--color-success-tint)] p-3.5 text-sm text-[var(--color-success-text)] border border-[var(--color-success-border)] backdrop-blur-xs font-medium"
+          >
+            <svg
+              class="h-5 w-5 text-[var(--color-success-text)] mr-2.5 flex-shrink-0"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              />
             </svg>
             <span>{{ success() }}</span>
           </div>
@@ -52,8 +87,12 @@
           <form (ngSubmit)="collectPayment()" class="space-y-5">
             <!-- Customer Selector -->
             <div>
-              <label for="customer" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
-                {{ 'collections.borrower_account' | i18n }} <span class="text-[var(--color-danger-text)]">*</span>
+              <label
+                for="customer"
+                class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+              >
+                {{ 'collections.borrower_account' | i18n }}
+                <span class="text-[var(--color-danger-text)]">*</span>
               </label>
               <select
                 glassInput
@@ -73,11 +112,17 @@
 
             <!-- Collection Amount -->
             <div>
-              <label for="amount" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
-                {{ 'collections.amount_label' | i18n }} <span class="text-[var(--color-danger-text)]">*</span>
+              <label
+                for="amount"
+                class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+              >
+                {{ 'collections.amount_label' | i18n }}
+                <span class="text-[var(--color-danger-text)]">*</span>
               </label>
               <div class="relative rounded-xl shadow-xs">
-                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10">
+                <div
+                  class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10"
+                >
                   <span class="text-[var(--text-muted)] text-sm font-bold">₹</span>
                 </div>
                 <input
@@ -97,7 +142,9 @@
               <!-- Quick Amount Preset Chips -->
               @if (selectedCustomerObj()) {
                 <div class="mt-2.5 flex items-center gap-2 flex-wrap">
-                  <span class="text-xs font-medium text-[var(--text-muted)]">{{ 'collections.quick_fill' | i18n }}:</span>
+                  <span class="text-xs font-medium text-[var(--text-muted)]"
+                    >{{ 'collections.quick_fill' | i18n }}:</span
+                  >
                   <button
                     type="button"
                     (click)="setAmount(selectedCustomerObj()!.weekly_due_amount / 100)"
@@ -118,7 +165,9 @@
                       (click)="setAmount(selectedCustomerObj()!.outstanding_balance / 100)"
                       class="px-2.5 py-1 text-xs rounded-lg border border-[var(--color-danger-border)] bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] font-bold hover:bg-[var(--color-danger-border)] transition cursor-pointer shadow-xs font-mono"
                     >
-                      {{ 'collections.clear_debt' | i18n }} ({{ formatCurrency(selectedCustomerObj()!.outstanding_balance) }})
+                      {{ 'collections.clear_debt' | i18n }} ({{
+                        formatCurrency(selectedCustomerObj()!.outstanding_balance)
+                      }})
                     </button>
                   }
                 </div>
@@ -127,7 +176,10 @@
 
             <!-- Payment Method Segmented Control -->
             <div>
-              <label class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-2">{{ 'collections.payment_channel' | i18n }}</label>
+              <label
+                class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-2"
+                >{{ 'collections.payment_channel' | i18n }}</label
+              >
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 @for (method of paymentMethods; track method) {
                   <label
@@ -156,8 +208,15 @@
             <!-- Reference / Cheque Input -->
             @if (selectedMethod() === 'online' || selectedMethod() === 'cheque') {
               <div>
-                <label for="reference" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
-                  {{ selectedMethod() === 'online' ? ('collections.upi_reference' | i18n) : ('collections.cheque_number' | i18n) }}
+                <label
+                  for="reference"
+                  class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+                >
+                  {{
+                    selectedMethod() === 'online'
+                      ? ('collections.upi_reference' | i18n)
+                      : ('collections.cheque_number' | i18n)
+                  }}
                 </label>
                 <input
                   glassInput
@@ -172,7 +231,11 @@
 
             <!-- Notes -->
             <div>
-              <label for="notes" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">{{ 'collections.audit_note' | i18n }}</label>
+              <label
+                for="notes"
+                class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+                >{{ 'collections.audit_note' | i18n }}</label
+              >
               <textarea
                 glassInput
                 id="notes"
@@ -201,35 +264,71 @@
       <!-- Customer Spotlight Preview Card (1 Column) -->
       <div>
         @if (selectedCustomerObj(); as cust) {
-          <glass-card variant="elevated" customClass="p-6 space-y-4 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+          <glass-card
+            variant="elevated"
+            customClass="p-6 space-y-4 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+          >
             <div class="flex items-center gap-3 pb-3 border-b border-[var(--glass-border-subtle)]">
-              <div class="w-12 h-12 rounded-xl bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] text-sm flex items-center justify-center shadow-xs flex-shrink-0 border border-[var(--color-primary-border)]">
+              <div
+                class="w-12 h-12 rounded-xl bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] text-sm flex items-center justify-center shadow-xs flex-shrink-0 border border-[var(--color-primary-border)]"
+              >
                 {{ getInitials(cust.name) }}
               </div>
               <div>
-                <h3 class="text-base font-bold text-[var(--text-primary)] leading-tight">{{ cust.name }}</h3>
-                <span class="text-xs text-[var(--text-secondary)] font-medium">{{ cust.phone || ('collections.no_phone' | i18n) }}</span>
+                <h3 class="text-base font-bold text-[var(--text-primary)] leading-tight">
+                  {{ cust.name }}
+                </h3>
+                <span class="text-xs text-[var(--text-secondary)] font-medium">{{
+                  cust.phone || ('collections.no_phone' | i18n)
+                }}</span>
               </div>
             </div>
 
             <div class="space-y-3 text-xs">
-              <div class="flex justify-between items-center py-1.5 border-b border-[var(--glass-border-subtle)]">
-                <span class="font-medium text-[var(--text-secondary)]">{{ 'collections.weekly_target' | i18n }}:</span>
-                <span class="font-mono font-bold text-[var(--text-primary)] text-sm">{{ formatCurrency(cust.weekly_due_amount) }}</span>
+              <div
+                class="flex justify-between items-center py-1.5 border-b border-[var(--glass-border-subtle)]"
+              >
+                <span class="font-medium text-[var(--text-secondary)]"
+                  >{{ 'collections.weekly_target' | i18n }}:</span
+                >
+                <span class="font-mono font-bold text-[var(--text-primary)] text-sm">{{
+                  formatCurrency(cust.weekly_due_amount)
+                }}</span>
               </div>
-              <div class="flex justify-between items-center py-1.5 border-b border-[var(--glass-border-subtle)]">
-                <span class="font-medium text-[var(--text-secondary)]">{{ 'collections.current_outstanding' | i18n }}:</span>
-                <span class="font-mono font-semibold text-sm" [class]="cust.outstanding_balance > 0 ? 'text-[var(--color-danger-text)]' : 'text-[var(--color-success-text)]'">
+              <div
+                class="flex justify-between items-center py-1.5 border-b border-[var(--glass-border-subtle)]"
+              >
+                <span class="font-medium text-[var(--text-secondary)]"
+                  >{{ 'collections.current_outstanding' | i18n }}:</span
+                >
+                <span
+                  class="font-mono font-semibold text-sm"
+                  [class]="
+                    cust.outstanding_balance > 0
+                      ? 'text-[var(--color-danger-text)]'
+                      : 'text-[var(--color-success-text)]'
+                  "
+                >
                   {{ formatCurrency(cust.outstanding_balance) }}
                 </span>
               </div>
-              <div class="flex justify-between items-center py-1.5 border-b border-[var(--glass-border-subtle)]">
-                <span class="font-medium text-[var(--text-secondary)]">{{ 'collections.total_recovered' | i18n }}:</span>
-                <span class="font-mono font-bold text-[var(--color-success-text)] text-sm">{{ formatCurrency(cust.total_paid) }}</span>
+              <div
+                class="flex justify-between items-center py-1.5 border-b border-[var(--glass-border-subtle)]"
+              >
+                <span class="font-medium text-[var(--text-secondary)]"
+                  >{{ 'collections.total_recovered' | i18n }}:</span
+                >
+                <span class="font-mono font-bold text-[var(--color-success-text)] text-sm">{{
+                  formatCurrency(cust.total_paid)
+                }}</span>
               </div>
               <div class="flex justify-between items-center py-1.5">
-                <span class="font-medium text-[var(--text-secondary)]">{{ 'collections.cumulative_due' | i18n }}:</span>
-                <span class="font-mono font-bold text-[var(--text-primary)] text-sm">{{ formatCurrency(cust.total_due) }}</span>
+                <span class="font-medium text-[var(--text-secondary)]"
+                  >{{ 'collections.cumulative_due' | i18n }}:</span
+                >
+                <span class="font-mono font-bold text-[var(--text-primary)] text-sm">{{
+                  formatCurrency(cust.total_due)
+                }}</span>
               </div>
             </div>
 
@@ -243,14 +342,28 @@
             </div>
           </glass-card>
         } @else {
-          <glass-card variant="default" customClass="p-6 text-center py-12 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
-            <div class="w-12 h-12 rounded-xl bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] mx-auto flex items-center justify-center mb-3">
+          <glass-card
+            variant="default"
+            customClass="p-6 text-center py-12 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+          >
+            <div
+              class="w-12 h-12 rounded-xl bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] mx-auto flex items-center justify-center mb-3"
+            >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
               </svg>
             </div>
-            <h4 class="text-sm font-bold text-[var(--text-primary)]">{{ 'collections.no_borrower_selected' | i18n }}</h4>
-            <p class="text-xs text-[var(--text-secondary)] mt-1">{{ 'collections.select_borrower_hint' | i18n }}</p>
+            <h4 class="text-sm font-bold text-[var(--text-primary)]">
+              {{ 'collections.no_borrower_selected' | i18n }}
+            </h4>
+            <p class="text-xs text-[var(--text-secondary)] mt-1">
+              {{ 'collections.select_borrower_hint' | i18n }}
+            </p>
           </glass-card>
         }
       </div>

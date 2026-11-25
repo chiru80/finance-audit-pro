@@ -96,6 +96,7 @@ serve(async (req) => {
     return jsonResponse({ error: 'Method not allowed' }, 405);
   }
 
+  let parsedBody: Partial<SendReportPayload> = {};
   try {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
@@ -129,8 +130,29 @@ serve(async (req) => {
       return jsonResponse({ error: 'WhatsApp gateway URL and API key are required.' }, 400);
     }
 
-    const body = await req.json() as SendReportPayload;
-    const { reportType, recipientPhone, recipientName, startDate, endDate, messageIdempotencyKey } = body;
+    let gatewayUrl: URL;
+    try {
+      gatewayUrl = new URL(cfg.base_url);
+    } catch {
+      return jsonResponse({ error: 'Invalid WhatsApp gateway URL.' }, 400);
+    }
+    const hostname = gatewayUrl.hostname.toLowerCase();
+    if (
+      (gatewayUrl.protocol !== 'https:' && gatewayUrl.protocol !== 'http:') ||
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '::1' ||
+      hostname === '0.0.0.0' ||
+      hostname.startsWith('169.254.') ||
+      hostname.startsWith('10.') ||
+      hostname.startsWith('192.168.') ||
+      hostname === 'metadata.google.internal'
+    ) {
+      return jsonResponse({ error: 'WhatsApp gateway URL points to a disallowed internal address.' }, 400);
+    }
+
+    parsedBody = (await req.json()) as SendReportPayload;
+    const { reportType, recipientPhone, recipientName, startDate, endDate, messageIdempotencyKey } = parsedBody as SendReportPayload;
 
     if (!reportType || !['payments', 'balances', 'summary'].includes(reportType)) {
       return jsonResponse({ error: 'Invalid reportType. Must be: payments, balances, or summary.' }, 400);
@@ -183,12 +205,11 @@ serve(async (req) => {
           const auditClient = createClient(supabaseUrl, serviceKey);
           const { data: { user } } = await auditClient.auth.getUser(authHeader.replace('Bearer ', ''));
           if (user) {
-            const body = await req.json().catch(() => ({})) as SendReportPayload;
             await auditClient.from('whatsapp_report_sends').insert({
               profile_id: user.id,
-              recipient_phone: body.recipientPhone || 'unknown',
-              recipient_name: body.recipientName || null,
-              report_type: body.reportType || 'unknown',
+              recipient_phone: parsedBody.recipientPhone || 'unknown',
+              recipient_name: parsedBody.recipientName || null,
+              report_type: parsedBody.reportType || 'unknown',
               message_id: null,
               delivered: false,
               error: msg.slice(0, 500),

@@ -79,6 +79,35 @@ function bad(message: string, status = 400) {
   return json({ error: message }, status);
 }
 
+async function verifyUser(req: NextRequest): Promise<string | null> {
+  const authHeader = req.headers.get('authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return null;
+
+  const res = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/user`, {
+    headers: { Authorization: authHeader, apikey: supabaseKey },
+  });
+  if (!res.ok) return null;
+  const user = (await res.json()) as { id?: string };
+  return user?.id ?? null;
+}
+
+function scopeKey(rawKey: unknown, userId: string): string | null {
+  if (typeof rawKey !== 'string') return null;
+  const trimmed = rawKey.trim().replace(/^\/+/, '');
+  if (!trimmed || trimmed.includes('\0') || trimmed.split('/').some((seg) => seg === '..' || seg === '.')) {
+    return null;
+  }
+  return trimmed.startsWith(`${userId}/`) ? trimmed : `${userId}/${trimmed}`;
+}
+
+function clampExpiresIn(raw: unknown): number {
+  const num = typeof raw === 'number' && Number.isFinite(raw) ? Math.floor(raw) : 3600;
+  return Math.min(Math.max(num, 1), 604800);
+}
+
 // ---- Route ----
 export async function OPTIONS() {
   return new Response(null, { headers: corsHeaders() });
@@ -91,14 +120,23 @@ export async function POST(
   const { action } = await params;
 
   try {
+    const userId = await verifyUser(req);
+    if (!userId) {
+      return bad('Unauthorized', 401);
+    }
+
     const cfg = getConfig();
     const body = await req.json();
 
     switch (action) {
       case 'presign-upload': {
-        const { key, contentType, expiresIn = 3600 } = body;
-        if (!key) return bad('Missing key');
-        if (!contentType) return bad('Missing contentType');
+        const key = scopeKey(body.key, userId);
+        const { contentType } = body;
+        const expiresIn = clampExpiresIn(body.expiresIn);
+        if (!key) return bad('Invalid or missing key');
+        if (typeof contentType !== 'string' || !contentType.trim()) {
+          return bad('Missing contentType');
+        }
 
         const cmd = new PutObjectCommand({
           Bucket: cfg.bucket,
@@ -106,41 +144,38 @@ export async function POST(
           ContentType: contentType,
         });
 
-        const uploadUrl = await getSignedUrl(client, cmd, {
-          expiresIn: Math.min(expiresIn, 604800),
-        });
+        const uploadUrl = await getSignedUrl(client, cmd, { expiresIn });
 
         return json({
           uploadUrl,
           key,
-          expiresAt: new Date(Date.now() + Math.min(expiresIn, 604800) * 1000).toISOString(),
+          expiresAt: new Date(Date.now() + expiresIn * 1000).toISOString(),
           requiredHeaders: { 'Content-Type': contentType },
         });
       }
 
       case 'presign-download': {
-        const { key, expiresIn = 3600 } = body;
-        if (!key) return bad('Missing key');
+        const key = scopeKey(body.key, userId);
+        const expiresIn = clampExpiresIn(body.expiresIn);
+        if (!key) return bad('Invalid or missing key');
 
         const cmd = new GetObjectCommand({
           Bucket: cfg.bucket,
           Key: key,
         });
 
-        const downloadUrl = await getSignedUrl(client, cmd, {
-          expiresIn: Math.min(expiresIn, 604800),
-        });
+        const downloadUrl = await getSignedUrl(client, cmd, { expiresIn });
 
         return json({
           downloadUrl,
           key,
-          expiresAt: new Date(Date.now() + Math.min(expiresIn, 604800) * 1000).toISOString(),
+          expiresAt: new Date(Date.now() + expiresIn * 1000).toISOString(),
         });
       }
 
       case 'head': {
-        const { key } = body;
-        if (!key) return bad('Missing key');
+        const key = scopeKey(body.key, userId);
+        if (!key) return bad('Invalid or missing key');
 
         try {
           const res = await client.send(
@@ -164,7 +199,15 @@ export async function POST(
       }
 
       case 'list': {
-        const { prefix = '', maxKeys = 100 } = body;
+        const rawPrefix = typeof body.prefix === 'string' ? body.prefix.trim().replace(/^\/+/, '') : '';
+        if (rawPrefix.includes('\0') || rawPrefix.split('/').some((seg: string) => seg === '..' || seg === '.')) {
+          return bad('Invalid prefix');
+        }
+        const prefix = rawPrefix.startsWith(`${userId}/`) ? rawPrefix : `${userId}/${rawPrefix}`;
+        const maxKeys =
+          typeof body.maxKeys === 'number' && Number.isFinite(body.maxKeys)
+            ? Math.min(Math.max(Math.floor(body.maxKeys), 1), 1000)
+            : 100;
         const res = await client.send(
           new ListObjectsV2Command({
             Bucket: cfg.bucket,
@@ -185,8 +228,8 @@ export async function POST(
       }
 
       case 'delete': {
-        const { key } = body;
-        if (!key) return bad('Missing key');
+        const key = scopeKey(body.key, userId);
+        if (!key) return bad('Invalid or missing key');
 
         await client.send(
           new DeleteObjectCommand({ Bucket: cfg.bucket, Key: key }),

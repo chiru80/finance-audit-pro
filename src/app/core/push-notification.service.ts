@@ -28,14 +28,17 @@ export class PushNotificationService {
       const user = this.auth.user();
       if (!user?.id) throw new Error('Not authenticated');
 
-      const { error } = await this.supabase.client.from('push_subscriptions').upsert({
-        profile_id: user.id,
-        endpoint: json.endpoint,
-        p256dh: keys['p256dh'],
-        auth: keys['auth'],
-        user_agent: navigator.userAgent,
-        updated_at: new Date().toISOString(),
-      });
+      const { error } = await this.supabase.client.from('push_subscriptions').upsert(
+        {
+          profile_id: user.id,
+          endpoint: json.endpoint,
+          p256dh: keys['p256dh'],
+          auth: keys['auth'],
+          user_agent: navigator.userAgent,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'profile_id,endpoint' },
+      );
       if (error) throw error;
 
       this.subscribed.set(true);

@@ -2,6 +2,8 @@
 
 /* Finance Audit Pro - Application Styles */
 /* Global resets and utilities */
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }

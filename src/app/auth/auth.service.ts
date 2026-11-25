@@ -75,21 +75,21 @@ export class AuthService {
         ((user.user_metadata as Record<string, unknown>)['name'] as string) ||
         '';
 
-      // Upsert instead of select-then-insert to avoid race conditions
-      const { error } = await this._supabaseService.client
-        .from('profiles')
-        .upsert({
+      // Ignore duplicate IDs so SIGNED_IN events never reset saved profile preferences.
+      const { error } = await this._supabaseService.client.from('profiles').upsert(
+        {
           id: user.id,
           email: user.email,
           full_name: fullName || null,
           language: 'en',
           theme_mode: 'light',
           weekly_due_day: 1,
-          weekly_due_amount: 50000, // default; may be overridden later via settings
+          weekly_due_amount: 50000,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-        })
-        .single();
+        },
+        { onConflict: 'id', ignoreDuplicates: true },
+      );
 
       if (error) {
         console.error('Failed to ensure profile exists:', error);

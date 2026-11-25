@@ -430,30 +430,64 @@
 }
 
 /* Motion */
-.glass-animate-in { animation: glassFadeIn 200ms var(--glass-spring-easing); }
-.glass-animate-slide-up { animation: glassSlideUp 250ms var(--glass-spring-easing); }
-.glass-animate-slide-down { animation: glassSlideDown 250ms var(--glass-spring-easing); }
-.glass-animate-scale-in { animation: glassScaleIn 200ms var(--glass-spring-bounce); }
+.glass-animate-in {
+  animation: glassFadeIn 200ms var(--glass-spring-easing);
+}
+.glass-animate-slide-up {
+  animation: glassSlideUp 250ms var(--glass-spring-easing);
+}
+.glass-animate-slide-down {
+  animation: glassSlideDown 250ms var(--glass-spring-easing);
+}
+.glass-animate-scale-in {
+  animation: glassScaleIn 200ms var(--glass-spring-bounce);
+}
 
 @keyframes glassFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes glassSlideUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes glassSlideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes glassScaleIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 @keyframes glass-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .glass-shimmer {

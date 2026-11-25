@@ -10,7 +10,13 @@ import { InstallBannerComponent } from './install-banner.component';
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [CommonModule, AppHeaderComponent, AppSidebarComponent, OfflineBannerComponent, InstallBannerComponent],
+  imports: [
+    CommonModule,
+    AppHeaderComponent,
+    AppSidebarComponent,
+    OfflineBannerComponent,
+    InstallBannerComponent,
+  ],
   template: `
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <div

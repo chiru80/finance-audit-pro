@@ -14,16 +14,6 @@ import { GlassDropdownComponent } from '../design-system/components/glass-dropdo
 import { formatPaiseToINR } from '../utils/currency.utils';
 import { I18nPipe } from '../shared/i18n.pipe';
 
-type SettingsKey =
-  | 'weekly_payments_start'
-  | 'absence_requires_approval'
-  | 'allow_partial_payments'
-  | 'payment_allocation_direction'
-  | 'default_weekly_due_day'
-  | 'weekly_due_amount'
-  | 'loan_deduction_mode'
-  | 'loan_deduction_per_1000';
-
 interface WhatsAppConfig {
   base_url: string;
   api_key: string;

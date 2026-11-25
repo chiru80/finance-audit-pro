@@ -1,15 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { GlassButtonComponent } from '../design-system/components/glass-button.component';
-import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, RouterLink, GlassButtonComponent, GlassInputDirective],
+  imports: [RouterLink],
   template: `
     <div
       class="fx-auth-shell min-h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] md:grid md:grid-cols-[minmax(400px,.95fr)_minmax(0,1.05fr)] xl:grid-cols-[minmax(460px,.9fr)_minmax(0,1.1fr)]"
@@ -74,63 +71,12 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
               </div>
             }
 
-            <form (ngSubmit)="onSubmit()" class="space-y-4">
-              <div>
-                <label for="fullName" class="fx-label mb-2 block">Full name</label>
-                <input
-                  glassInput
-                  type="text"
-                  id="fullName"
-                  placeholder="Your name"
-                  [(ngModel)]="fullName"
-                  name="fullName"
-                  required
-                  autocomplete="name"
-                />
-              </div>
-
-              <div>
-                <label for="email" class="fx-label mb-2 block">Email address</label>
-                <input
-                  glassInput
-                  type="email"
-                  id="email"
-                  placeholder="owner@example.com"
-                  [(ngModel)]="email"
-                  name="email"
-                  required
-                  autocomplete="email"
-                />
-              </div>
-
-              <div>
-                <label for="password" class="fx-label mb-2 block">Password</label>
-                <input
-                  glassInput
-                  type="password"
-                  id="password"
-                  placeholder="At least 6 characters"
-                  [(ngModel)]="password"
-                  name="password"
-                  minlength="6"
-                  required
-                  autocomplete="new-password"
-                />
-                <p class="mt-1.5 text-[11px] text-[var(--text-muted)]">
-                  Use at least 6 characters.
-                </p>
-              </div>
-
-              <glass-button
-                variant="filled"
-                type="submit"
-                size="lg"
-                customClass="mt-6! w-full"
-                [disabled]="isCreatingProfile()"
-              >
-                Create account
-              </glass-button>
-            </form>
+            <div
+              role="status"
+              class="rounded-[10px] border border-[var(--glass-border-subtle)] bg-[var(--glass-surface-muted)] px-3.5 py-3 text-sm leading-relaxed text-[var(--text-secondary)]"
+            >
+              New account registration is closed. Sign in with the existing owner account.
+            </div>
 
             <p
               class="mt-6 border-t border-[var(--glass-border-subtle)] pt-5 text-center text-xs text-[var(--text-secondary)]"
