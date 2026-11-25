@@ -38,7 +38,6 @@
      glass-tokens.css. Only the legacy aliases are declared here. */
 
   --primary: var(--brand-primary);
-  --primary-hover: var(--brand-primary-hover);
   --primary-active: var(--brand-primary-active);
   --success: var(--brand-success);
   --warning: var(--brand-warning);

@@ -20,6 +20,8 @@ import { filter } from 'rxjs';
           (click)="sidebarService.toggle()"
           class="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)] text-[var(--text-secondary)] transition-colors hover:border-[var(--glass-border-crisp)] hover:bg-[var(--color-surface-hover)] hover:text-[var(--text-primary)]"
           [attr.aria-label]="sidebarService.isOpen() ? 'Collapse navigation' : 'Expand navigation'"
+          [attr.aria-expanded]="sidebarService.isOpen()"
+          aria-controls="primary-navigation"
           type="button"
         >
           <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

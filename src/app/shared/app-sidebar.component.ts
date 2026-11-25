@@ -23,9 +23,11 @@ interface NavItem {
   },
   template: `
     <aside
+      id="primary-navigation"
       class="fx-sidebar flex h-full w-[264px] flex-col border-r border-[var(--glass-border-subtle)] bg-[var(--bg-sidebar)]"
       [class.fx-sidebar--open]="sidebarService.isOpen()"
       [attr.aria-hidden]="sidebarService.isOpen() ? null : 'true'"
+      [attr.inert]="sidebarService.isOpen() ? null : ''"
     >
       <!-- Brand -->
       <div
@@ -56,7 +58,7 @@ interface NavItem {
       </div>
 
       <!-- Navigation -->
-      <nav class="fx-sidebar-nav flex-1 overflow-y-auto px-3 py-5">
+      <nav aria-label="Primary navigation" class="fx-sidebar-nav flex-1 overflow-y-auto px-3 py-5">
         <p class="fx-nav-label">Workspace</p>
         <div class="mb-6 space-y-0.5">
           @for (item of mainNavItems; track item.routerLink) {
@@ -64,6 +66,7 @@ interface NavItem {
               [routerLink]="[item.routerLink]"
               class="fx-nav-link"
               routerLinkActive="is-active"
+              ariaCurrentWhenActive="page"
               [routerLinkActiveOptions]="{ exact: item.routerLink === '/dashboard' }"
             >
               <span class="fx-nav-icon" [innerHTML]="getIconHtml(item.icon)"></span>

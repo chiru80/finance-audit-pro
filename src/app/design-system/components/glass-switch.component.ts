@@ -35,7 +35,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
       <!-- Sliding Thumb -->
       <span
-        class="glass-switch-thumb pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ease-in-out"
+        class="glass-switch-thumb pointer-events-none inline-block h-5 w-5 transform rounded-full bg-[var(--bg-secondary)] shadow-md transition-transform duration-300 ease-in-out"
         [class.translate-x-5]="checked"
         [class.translate-x-1]="!checked"
       >

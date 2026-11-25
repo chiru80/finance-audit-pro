@@ -42,7 +42,7 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [() => canAuthenticate()],
     loadComponent: () =>
-      import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      import('./dashboard/premium-dashboard.component').then((m) => m.PremiumDashboardComponent),
   },
   {
     path: 'customers',
@@ -77,8 +77,7 @@ export const routes: Routes = [
   {
     path: 'outbox',
     canActivate: [() => canAuthenticate()],
-    loadComponent: () =>
-      import('./collections/outbox.component').then((m) => m.OutboxComponent),
+    loadComponent: () => import('./collections/outbox.component').then((m) => m.OutboxComponent),
   },
   {
     path: 'ledger',
