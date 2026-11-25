@@ -114,7 +114,12 @@ export class CollectionEntryComponent implements OnInit {
       // Cache for offline use
       await this.idb.put('cache', { key: 'customers:active', value: list, ts: Date.now() });
 
-      // Check if customerId is passed via query params
+      // Check if villageId or customerId is passed via query params
+      const qVid = this._route.snapshot.queryParamMap.get('villageId');
+      if (qVid) {
+        this.selectedVillage.set(qVid);
+      }
+
       const qCid = this._route.snapshot.queryParamMap.get('customerId');
       if (qCid) {
         const match = list.find((c) => c.id === qCid);

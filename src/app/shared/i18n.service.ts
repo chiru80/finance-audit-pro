@@ -12,6 +12,7 @@ const englishTranslations: Translations = {
   // Navigation
   'nav.dashboard': 'Dashboard',
   'nav.customers': 'Customers',
+  'nav.villages': 'Villages',
   'nav.collections': 'Collections',
   'nav.ledger': 'Ledger',
   'nav.reports': 'Reports',
@@ -489,6 +490,7 @@ const teluguTranslations: Translations = {
   // Navigation
   'nav.dashboard': 'డాష్‌బోర్డ్',
   'nav.customers': 'కస్టమర్లు',
+  'nav.villages': 'గ్రామాలు',
   'nav.collections': 'కలెక్షన్లు',
   'nav.ledger': 'లెడ్జర్',
   'nav.reports': 'రిపోర్ట్స్',

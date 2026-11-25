@@ -69,6 +69,11 @@ export const routes: Routes = [
       import('./customers/customer-form.component').then((m) => m.CustomerFormComponent),
   },
   {
+    path: 'villages',
+    canActivate: [() => canAuthenticate()],
+    loadComponent: () => import('./villages/villages.component').then((m) => m.VillagesComponent),
+  },
+  {
     path: 'collections',
     canActivate: [() => canAuthenticate()],
     loadComponent: () =>
