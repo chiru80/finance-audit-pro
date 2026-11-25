@@ -19,9 +19,9 @@ jobs:
           ref: ${{ github.event.inputs.version }}
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24.x'
           cache: 'npm'
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
       - run: npm run build -- --configuration development
       - uses: amondnet/vercel-action@v25
         with:

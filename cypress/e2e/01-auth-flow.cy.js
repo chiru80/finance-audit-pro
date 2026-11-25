@@ -1,5 +1,3 @@
-const testUser = require('../fixtures/test-user.json');
-
 describe('Auth Flow', () => {
   beforeEach(() => {
     cy.visit('/');
