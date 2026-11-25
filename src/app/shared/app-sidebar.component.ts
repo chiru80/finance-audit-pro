@@ -7,6 +7,7 @@ import { filter } from 'rxjs';
 import { SidebarService } from './sidebar.service';
 import { I18nPipe } from './i18n.pipe';
 import { AuthService } from '../auth/auth.service';
+import { BrandLogoComponent } from './brand-logo.component';
 
 interface NavItem {
   labelKey: string;
@@ -17,7 +18,7 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, I18nPipe],
+  imports: [CommonModule, RouterModule, I18nPipe, BrandLogoComponent],
   host: {
     '[class.is-collapsed]': '!sidebarService.isOpen()',
   },
@@ -33,7 +34,7 @@ interface NavItem {
       <div
         class="flex h-16 flex-shrink-0 items-center gap-3 border-b border-[var(--glass-border-subtle)] px-5"
       >
-        <span class="fx-brand-mark" aria-hidden="true">FA</span>
+        <app-brand-logo [size]="38" />
         <div class="min-w-0">
           <p class="truncate text-[13px] font-bold tracking-tight text-[var(--text-primary)]">
             Finance Audit Pro
