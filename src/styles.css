@@ -9,6 +9,28 @@
   --font-mono: 'Inter', 'Noto Sans Telugu', system-ui, sans-serif;
 }
 
+/* Semantic foundations: evergreen brand, warm paper canvas, and measured status accents. */
+:root {
+  --ds-canvas: var(--bg-primary);
+  --ds-surface: var(--bg-card);
+  --ds-surface-raised: var(--bg-card-elevated);
+  --ds-ink: var(--text-primary);
+  --ds-ink-muted: var(--text-secondary);
+  --ds-ink-subtle: var(--text-muted);
+  --ds-brand: var(--primary-accent);
+  --ds-brand-hover: var(--primary-hover);
+  --ds-brand-soft: var(--color-primary-tint);
+  --ds-brand-line: var(--color-primary-border);
+  --ds-success: var(--color-success-text);
+  --ds-warning: var(--color-warning-text);
+  --ds-danger: var(--color-danger-text);
+  --ds-info: var(--color-info-text);
+  --ds-divider: var(--glass-border-subtle);
+  --ds-radius-card: 18px;
+  --ds-radius-control: 10px;
+  --ds-shadow-card: 0 8px 24px -12px rgba(27, 52, 39, 0.15);
+}
+
 /* ---------------------------------------------------------------------------
  * Finance Audit Pro - global foundation
  * Themed tokens are aliased to glass-tokens.css so there is a single source
@@ -698,9 +720,9 @@ textarea[glassInput] {
 }
 
 .fx-metric-tile {
-  border-radius: 17px;
-  background: var(--glass-surface-base);
-  box-shadow: 0 8px 22px -16px rgba(36, 35, 31, 0.24);
+  border-radius: var(--ds-radius-card, 17px);
+  background: var(--ds-surface, var(--glass-surface-base));
+  box-shadow: var(--ds-shadow-card, 0 8px 22px -16px rgba(36, 35, 31, 0.24));
   transition: border-color var(--glass-transition-fast), transform var(--glass-transition-fast), box-shadow var(--glass-transition-fast);
 }
 
