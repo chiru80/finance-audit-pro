@@ -70,7 +70,7 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "allowedHosts": ["sb-41awalmvamhg.vercel.run"]
+            "allowedHosts": ["sb-41awalmvamhg.vercel.run", "sb-232x6fhwygq.vercel.run"]
           }
         },
         "test": {
