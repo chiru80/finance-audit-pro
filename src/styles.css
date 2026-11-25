@@ -49,16 +49,16 @@
   --background-secondary: var(--surface-1);
   --background-tertiary: var(--surface-2);
 
-  --surface-0-rgb: 20, 18, 16;
-  --surface-1-rgb: 26, 23, 20;
-  --surface-2-rgb: 30, 27, 23;
-  --surface-3-rgb: 38, 34, 29;
-  --surface-4-rgb: 46, 41, 35;
-  --surface-dock-rgb: 16, 15, 13;
+  --surface-0-rgb: 17, 16, 14;
+  --surface-1-rgb: 23, 21, 18;
+  --surface-2-rgb: 27, 25, 21;
+  --surface-3-rgb: 36, 33, 27;
+  --surface-4-rgb: 43, 39, 31;
+  --surface-dock-rgb: 13, 12, 10;
 
   --border-color: var(--glass-border-subtle);
   --border-moderate: var(--glass-border-crisp);
-  --border-moderate-rgb: 74, 66, 55;
+  --border-moderate-rgb: 85, 75, 57;
 
   --font-sans: 'Plus Jakarta Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
@@ -139,9 +139,7 @@ body {
  * ------------------------------------------------------------------------ */
 .fx-canvas {
   background-color: var(--bg-primary);
-  background-image:
-    radial-gradient(ellipse 70% 40% at 12% -10%, var(--color-primary-tint) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 35% at 105% 0%, var(--color-info-tint) 0%, transparent 70%);
+  background-image: var(--luxury-gradient-canvas);
 }
 
 .fx-page {
@@ -215,16 +213,16 @@ body {
 }
 
 .fx-card {
-  background: var(--glass-surface-base);
+  background: var(--luxury-gradient-surface), var(--glass-surface-base);
   border: 1px solid var(--glass-border-subtle);
-  border-radius: 14px;
+  border-radius: 16px;
   box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
 }
 
 .fx-card-elevated {
-  background: var(--glass-surface-elevated);
+  background: var(--luxury-gradient-surface), var(--glass-surface-elevated);
   border: 1px solid var(--glass-border-crisp);
-  border-radius: 14px;
+  border-radius: 16px;
   box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
 }
 
@@ -353,12 +351,17 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
 }
 .fx-btn:active { transform: translateY(1px); }
 .fx-btn--primary {
-  background: var(--primary-accent);
+  background: var(--luxury-gradient-accent);
   color: var(--color-on-primary);
   border-color: transparent;
-  box-shadow: var(--glass-shadow-sm);
+  box-shadow: var(--glass-shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
-.fx-btn--primary:hover { background: var(--primary-hover); color: var(--color-on-primary); }
+.fx-btn--primary:hover {
+  background: var(--luxury-gradient-accent);
+  color: var(--color-on-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--glass-shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
 .fx-btn--secondary {
   background: var(--glass-surface-elevated);
   color: var(--text-primary);

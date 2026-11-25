@@ -261,12 +261,13 @@ import { I18nService } from '../shared/i18n.service';
     `
       .fx-auth-story {
         position: relative;
+        isolation: isolate;
+        overflow: hidden;
         background-color: var(--bg-sidebar);
         background-image:
-          linear-gradient(to bottom, var(--glass-border-subtle) 1px, transparent 1px),
-          linear-gradient(to right, var(--glass-border-subtle) 1px, transparent 1px);
-        background-size: 64px 64px;
-        background-position: -1px -1px;
+          radial-gradient(ellipse 78% 70% at 8% 18%, rgba(209, 170, 105, 0.13), transparent 72%),
+          radial-gradient(ellipse 55% 60% at 94% 82%, rgba(126, 132, 98, 0.08), transparent 72%),
+          linear-gradient(145deg, #12110e, var(--bg-sidebar) 62%);
       }
 
       .fx-auth-story::before {
@@ -275,6 +276,37 @@ import { I18nService } from '../shared/i18n.service';
         inset: 0;
         pointer-events: none;
         border-left: 1px solid var(--glass-border-subtle);
+        background: linear-gradient(90deg, rgba(209, 170, 105, 0.035), transparent 42%);
+      }
+
+      .fx-auth-story::after {
+        content: '';
+        position: absolute;
+        z-index: 0;
+        top: 50%;
+        right: -25%;
+        width: min(62vw, 760px);
+        aspect-ratio: 1;
+        transform: translateY(-50%);
+        border: 1px solid rgba(209, 170, 105, 0.09);
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(209, 170, 105, 0.055), transparent 68%);
+        pointer-events: none;
+      }
+
+      .fx-auth-shell > section:last-child > div > .fx-card {
+        animation: auth-card-enter 480ms var(--glass-spring-easing) both;
+      }
+
+      @keyframes auth-card-enter {
+        from { opacity: 0; transform: translate3d(0, 10px, 0); }
+        to { opacity: 1; transform: translate3d(0, 0, 0); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .fx-auth-shell > section:last-child > div > .fx-card {
+          animation: none;
+        }
       }
 
       .fx-auth-story > * {

@@ -5,46 +5,46 @@
  * Dark is the default; light is applied when <html> has no data-theme="dark"
  * (ThemeService removes the attribute for light mode).
  *
- * Design intent: a quiet private-banking editorial system. Warm ink canvas,
- * ivory text and a single aged-copper accent. Muted sage/ochre/terracotta
- * status roles. Hairline warm borders, flat surfaces, no decorative glow.
+ * Design intent: a refined private-banking interface. Obsidian ink, warm ivory,
+ * champagne-metal accents, and quiet sage status tones. Gradients and motion
+ * stay restrained so the experience feels considered, fast, and legible.
  */
 
 :root {
   /* ---------------------------------------------------------------------
    * Canvas & Surfaces (Dark) - warm ink, not blue slate
    * ------------------------------------------------------------------- */
-  --bg-primary: #141210;
-  --bg-secondary: #1a1714;
-  --bg-sidebar: #100f0d;
-  --bg-topbar: #171512;
-  --bg-card: #1e1b17;
-  --bg-card-elevated: #26221d;
-  --bg-input: #191713;
-  --border-color: #332e27;
-  --text-primary: #f5efe4;
-  --text-secondary: #c2b7a6;
-  --text-muted: #938777;
+  --bg-primary: #11100e;
+  --bg-secondary: #171512;
+  --bg-sidebar: #0d0c0a;
+  --bg-topbar: #15130f;
+  --bg-card: #1b1915;
+  --bg-card-elevated: #24211b;
+  --bg-input: #161410;
+  --border-color: #373127;
+  --text-primary: #f6f1e8;
+  --text-secondary: #c9c0b1;
+  --text-muted: #9b9181;
 
   /* ---------------------------------------------------------------------
-   * Brand & Status - one accent (aged copper), muted semantic roles
+   * Brand & Status - champagne accent, muted semantic roles
    * ------------------------------------------------------------------- */
-  --primary-accent: #c8794b;
-  --primary-hover: #dd9668;
-  --color-on-primary: #241f1a;
+  --primary-accent: #d1aa69;
+  --primary-hover: #e3c28a;
+  --color-on-primary: #211b11;
   --color-on-danger: #241f1a;
-  --color-success: #8fae8b;
-  --color-warning: #d4a23f;
-  --color-danger: #cf6b5b;
-  --color-info: #8fa9bd;
+  --color-success: #9ab295;
+  --color-warning: #d7ad5f;
+  --color-danger: #d47c6c;
+  --color-info: #9aafbd;
 
   --color-primary: var(--primary-accent);
   --color-primary-hover: var(--primary-hover);
 
   /* Tints (backgrounds), borders and foregrounds (text/icons) */
-  --color-primary-tint: rgba(200, 121, 75, 0.12);
-  --color-primary-border: rgba(200, 121, 75, 0.3);
-  --color-primary-text: #e0a078;
+  --color-primary-tint: rgba(209, 170, 105, 0.12);
+  --color-primary-border: rgba(209, 170, 105, 0.3);
+  --color-primary-text: #e5c486;
 
   --color-success-tint: rgba(143, 174, 139, 0.12);
   --color-success-border: rgba(143, 174, 139, 0.28);
@@ -75,41 +75,44 @@
   --color-neutral-light: var(--color-neutral-tint);
 
   --color-text-inverse: var(--color-on-primary);
-  --color-surface-hover: #2a251f;
-  --color-surface-active: #332d25;
-  --color-border-medium: #4a4237;
+  --color-surface-hover: #2b271f;
+  --color-surface-active: #363024;
+  --color-border-medium: #554b39;
+  --luxury-gradient-accent: linear-gradient(135deg, #e1c184 0%, #c49a55 48%, #a97d43 100%);
+  --luxury-gradient-surface: linear-gradient(145deg, rgba(255, 248, 232, 0.055), rgba(255, 248, 232, 0.012) 48%, rgba(209, 170, 105, 0.035));
+  --luxury-gradient-canvas: radial-gradient(ellipse 68% 45% at 10% -12%, rgba(170, 128, 64, 0.14), transparent 70%), radial-gradient(ellipse 48% 32% at 100% 0%, rgba(120, 126, 94, 0.08), transparent 72%);
 
   /* ---------------------------------------------------------------------
-   * Flat ink surfaces - quiet material, no frosted-glass look
+   * Warm ink surfaces with restrained gradient depth
    * ------------------------------------------------------------------- */
-  --glass-surface-base: #1e1b17;
-  --glass-surface-muted: #171512;
-  --glass-surface-elevated: #26221d;
-  --glass-surface-active: #2e2923;
-  --glass-surface-dock: #100f0d;
+  --glass-surface-base: #1b1915;
+  --glass-surface-muted: #15130f;
+  --glass-surface-elevated: #24211b;
+  --glass-surface-active: #2b271f;
+  --glass-surface-dock: #0d0c0a;
   --glass-surface-subtle: #171512;
   --glass-surface-overlay: #171512;
 
-  --glass-blur-xs: 2px;
-  --glass-blur-sm: 4px;
-  --glass-blur-md: 6px;
-  --glass-blur-lg: 10px;
-  --glass-blur-xl: 14px;
-  --glass-saturate: 100%;
-  --glass-saturate-high: 105%;
+  --glass-blur-xs: 3px;
+  --glass-blur-sm: 6px;
+  --glass-blur-md: 8px;
+  --glass-blur-lg: 12px;
+  --glass-blur-xl: 18px;
+  --glass-saturate: 112%;
+  --glass-saturate-high: 122%;
 
-  --glass-border-subtle: #332e27;
-  --glass-border-crisp: #4a4237;
-  --glass-border-strong: #c8794b;
+  --glass-border-subtle: #373127;
+  --glass-border-crisp: #554b39;
+  --glass-border-strong: #d1aa69;
 
-  /* Almost invisible warm rim; depth comes from borders, not highlights */
+  /* Delicate warm rim lighting keeps elevation quiet and tactile */
   --glass-specular-top: inset 0 1px 0 0 rgba(255, 248, 235, 0.02);
   --glass-specular-rim: inset 0 1px 0 0 rgba(255, 248, 235, 0.02);
   --glass-specular-recessed: inset 0 1px 2px 0 rgba(10, 7, 4, 0.35);
   --glass-specular-highlight: inset 0 1px 0 0 rgba(255, 248, 235, 0.03);
 
   /* ---------------------------------------------------------------------
-   * Elevation - quiet, warm shadows; no coloured halos
+   * Elevation - soft warm shadows and restrained tonal accents
    * ------------------------------------------------------------------- */
   --glass-shadow-xs: 0 1px 2px 0 rgba(10, 7, 4, 0.35);
   --glass-shadow-sm: 0 1px 3px 0 rgba(10, 7, 4, 0.4);
@@ -258,6 +261,9 @@
   --color-surface-hover: #f1ece3;
   --color-surface-active: #e8e0d3;
   --color-border-medium: #c8bdae;
+  --luxury-gradient-accent: linear-gradient(135deg, #d8b678 0%, #b88a49 52%, #9b713c 100%);
+  --luxury-gradient-surface: linear-gradient(145deg, rgba(196, 154, 85, 0.07), rgba(255, 255, 255, 0.76) 48%, rgba(196, 154, 85, 0.035));
+  --luxury-gradient-canvas: radial-gradient(ellipse 68% 45% at 10% -12%, rgba(196, 154, 85, 0.11), transparent 70%), radial-gradient(ellipse 48% 32% at 100% 0%, rgba(120, 126, 94, 0.055), transparent 72%);
 
   --glass-surface-base: #ffffff;
   --glass-surface-muted: #faf7f1;

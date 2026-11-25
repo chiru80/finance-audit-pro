@@ -25,7 +25,7 @@ import { GlassStatCardComponent } from '../design-system/components/glass-stat-c
     GlassStatCardComponent,
   ],
   template: `
-    <div class="w-full max-w-[1440px] mx-auto space-y-6">
+    <div class="fx-dashboard w-full max-w-[1440px] mx-auto space-y-6">
       <!-- Page header -->
       <div class="fx-page-head">
         <div>

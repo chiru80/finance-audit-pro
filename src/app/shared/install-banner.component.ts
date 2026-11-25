@@ -16,35 +16,64 @@ import { InstallPromptService } from '../core/install-prompt.service';
   styles: [`
     .install-banner {
       position: fixed;
-      bottom: 1rem;
+      bottom: max(1rem, env(safe-area-inset-bottom));
       left: 50%;
-      transform: translateX(-50%);
       z-index: 60;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 0.75rem;
-      padding: 0.625rem 1rem;
-      background: var(--bg-sidebar, #0f172a);
-      color: #fff;
-      border: 1px solid var(--glass-border-subtle, rgba(255,255,255,0.12));
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      font-size: 0.875rem;
+      width: min(38rem, calc(100vw - 2rem));
+      padding: 0.625rem 0.75rem 0.625rem 1rem;
+      transform: translateX(-50%);
+      border: 1px solid var(--glass-border-crisp);
+      border-radius: 14px;
+      background: var(--luxury-gradient-surface), var(--bg-sidebar);
+      color: var(--text-primary);
+      box-shadow: var(--glass-shadow-lg);
+      font-size: 0.8125rem;
+      line-height: 1.4;
+    }
+    .install-banner > span {
+      flex: 1 1 auto;
+      min-width: 0;
     }
     .install-banner button {
-      background: var(--primary-accent, #2563eb);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.375rem 0.75rem;
-      font-weight: 600;
+      flex-shrink: 0;
+      min-height: 2.5rem;
+      padding: 0.375rem 0.875rem;
+      border: 0;
+      border-radius: 9px;
+      background: var(--luxury-gradient-accent);
+      color: var(--color-on-primary);
+      font-weight: 700;
       cursor: pointer;
+      transition: transform var(--glass-transition-fast), box-shadow var(--glass-transition-fast);
+    }
+    .install-banner button:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--glass-shadow-sm);
     }
     .install-banner .dismiss {
+      min-width: 2.5rem;
+      min-height: 2.5rem;
+      padding: 0.25rem;
       background: transparent;
-      padding: 0.25rem 0.5rem;
+      color: var(--text-secondary);
       font-size: 1.25rem;
       line-height: 1;
+    }
+    @media (max-width: 480px) {
+      .install-banner {
+        gap: 0.5rem;
+        padding-inline: 0.75rem 0.5rem;
+        font-size: 0.75rem;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .install-banner button {
+        transition: none;
+      }
     }
   `],
 })
