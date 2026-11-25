@@ -113,16 +113,19 @@ export class CustomerListComponent implements OnInit {
 
   async deleteCustomer(id: string) {
     if (confirm(this._i18n.get('customers.confirm_delete'))) {
+      this.error.set(null);
       try {
         const { error } = await this._supabaseService.client
           .from('customers')
-          .update({ status: 'inactive' })
+          .delete()
           .eq('id', id);
 
         if (error) throw error;
-        this.loadCustomers();
+        const updated = this.customers().filter((c) => c.id !== id);
+        this.customers.set(updated);
+        await this.idb.put('cache', { key: 'customers:all', value: updated, ts: Date.now() });
       } catch (err) {
-        this.error.set(err instanceof Error ? err.message : 'Failed to update customer');
+        this.error.set(err instanceof Error ? err.message : 'Failed to delete customer');
       }
     }
   }

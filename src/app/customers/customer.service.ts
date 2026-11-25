@@ -185,9 +185,14 @@ export class CustomerService {
   }
 
   async deleteCustomer(id: string) {
-    // Soft-delete: preserve posted payments/history by marking the customer inactive
-    // instead of cascading deletes through payments, schedules and payment_history.
-    await this.updateCustomerStatus(id, 'inactive');
+    this.error.set(null);
+    const { error } = await this._supabaseService.client
+      .from('customers')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+    this.customers.update((list) => list.filter((c) => c.id !== id));
+    await this.loadCustomers();
   }
 
   private async getDeductionRate(): Promise<number> {
