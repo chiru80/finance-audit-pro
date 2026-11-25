@@ -49,16 +49,19 @@ export class CustomerService {
     this.loadingVillages.set(true);
     try {
       const user = this.currentUser();
-      if (!user) return;
-
-      const { data, error } = await this._supabaseService.client
+      let query = this._supabaseService.client
         .from('villages')
         .select('*')
-        .eq('profile_id', user.id)
         .eq('is_active', true)
         .order('name', { ascending: true });
 
-      if (error) throw error;
+      if (user?.id) {
+        query = query.eq('profile_id', user.id);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw this.toError(error, 'Failed to load villages');
       this.villages.set(data as Village[]);
     } catch (err) {
       console.error('Failed to load villages:', err);
@@ -120,25 +123,25 @@ export class CustomerService {
       .from('customers')
       .insert({
         profile_id: user.id,
-        name: values.name,
-        phone: values.phone,
-        email: values.email,
+        name: values.name.trim(),
+        phone: values.phone?.trim() || null,
+        email: values.email?.trim() || null,
         weekly_due_amount: paiseAmount,
         status: 'active',
         outstanding_balance: 0,
         total_paid: 0,
         total_due: 0,
         enrollment_week_start: enrollmentWeekStart,
-        enrollment_date: values.enrollment_date,
+        enrollment_date: values.enrollment_date || new Date().toISOString().split('T')[0],
         village_id: values.village_id || null,
         loan_amount: loanPaise,
         amount_given: amountGivenPaise,
-        total_weeks: values.total_weeks,
+        total_weeks: Number(values.total_weeks) || 12,
       })
       .select()
       .single();
 
-    if (customerError) throw customerError;
+    if (customerError) throw this.toError(customerError, 'Failed to save customer');
 
     this.loadCustomers();
     return customer as Customer;
@@ -157,21 +160,33 @@ export class CustomerService {
     const { error } = await this._supabaseService.client
       .from('customers')
       .update({
-        name: values.name,
-        phone: values.phone,
-        email: values.email,
+        name: values.name.trim(),
+        phone: values.phone?.trim() || null,
+        email: values.email?.trim() || null,
         weekly_due_amount: paiseAmount,
-        enrollment_date: values.enrollment_date,
+        enrollment_date: values.enrollment_date || new Date().toISOString().split('T')[0],
         village_id: values.village_id || null,
         loan_amount: loanPaise,
         amount_given: amountGivenPaise,
-        total_weeks: values.total_weeks,
+        total_weeks: Number(values.total_weeks) || 12,
       })
       .eq('id', id);
 
-    if (error) throw error;
+    if (error) throw this.toError(error, 'Failed to update customer');
 
     this.loadCustomers();
+  }
+
+  private toError(err: unknown, fallback: string): Error {
+    if (err instanceof Error) return err;
+    if (err && typeof err === 'object') {
+      const e = err as { message?: string; details?: string; hint?: string; code?: string };
+      const parts = [e.message, e.details, e.hint].filter(Boolean);
+      if (parts.length > 0) {
+        return new Error(parts.join(' — '));
+      }
+    }
+    return new Error(fallback);
   }
 
   async updateCustomerStatus(id: string, status: 'active' | 'inactive' | 'suspended') {

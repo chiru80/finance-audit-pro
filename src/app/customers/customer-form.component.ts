@@ -357,12 +357,9 @@ export class CustomerFormComponent implements OnInit {
     this.error.set(null);
 
     const formValues = this.form.value;
-    const paiseAmount = Math.round(Number(formValues.weekly_due_amount) * 100);
-    const loanPaise = Math.round(Number(formValues.loan_amount) * 100);
-    const deductionPaise = Math.round(
-      Number(formValues.loan_amount) * 100 * (this.deductionPer1000() / 1000),
-    );
-    const amountGivenPaise = loanPaise - deductionPaise;
+    const weeklyDueRupees = Number(formValues.weekly_due_amount);
+    const loanRupees = Number(formValues.loan_amount);
+    const amountGivenRupees = this.amountGivenRupees();
 
     try {
       const currentId = this.customerId();
@@ -373,10 +370,10 @@ export class CustomerFormComponent implements OnInit {
           email: formValues.email?.trim() || '',
           enrollment_date: formValues.enrollment_date,
           village_id: formValues.village_id,
-          loan_amount: loanPaise,
-          amount_given: amountGivenPaise,
-          total_weeks: formValues.total_weeks,
-          weekly_due_amount: paiseAmount,
+          loan_amount: loanRupees,
+          amount_given: amountGivenRupees,
+          total_weeks: Number(formValues.total_weeks) || 12,
+          weekly_due_amount: weeklyDueRupees,
         });
       } else {
         await this._customerService.createCustomer({
@@ -385,16 +382,20 @@ export class CustomerFormComponent implements OnInit {
           email: formValues.email?.trim() || '',
           enrollment_date: formValues.enrollment_date,
           village_id: formValues.village_id,
-          loan_amount: loanPaise,
-          amount_given: amountGivenPaise,
-          total_weeks: formValues.total_weeks,
-          weekly_due_amount: paiseAmount,
+          loan_amount: loanRupees,
+          amount_given: amountGivenRupees,
+          total_weeks: Number(formValues.total_weeks) || 12,
+          weekly_due_amount: weeklyDueRupees,
         });
       }
 
       this._router.navigate(['/customers']);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to save customer');
+      const msg =
+        err instanceof Error
+          ? err.message
+          : (err as { message?: string } | null)?.message || 'Failed to save customer';
+      this.error.set(msg);
     } finally {
       this.loading.set(false);
     }
