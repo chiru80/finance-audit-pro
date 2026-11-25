@@ -119,29 +119,27 @@ export class CustomerService {
     const deductionPaise = Math.round(loanPaise * ((await this.getDeductionRate()) / 1000));
     const amountGivenPaise = loanPaise - deductionPaise;
 
-    const { data: customer, error: customerError } = await this._supabaseService.client
-      .from('customers')
-      .insert({
-        profile_id: user.id,
-        name: values.name.trim(),
-        phone: values.phone?.trim() || null,
-        email: values.email?.trim() || null,
-        weekly_due_amount: paiseAmount,
-        status: 'active',
-        outstanding_balance: 0,
-        total_paid: 0,
-        total_due: 0,
-        enrollment_week_start: enrollmentWeekStart,
-        enrollment_date: values.enrollment_date || new Date().toISOString().split('T')[0],
-        village_id: values.village_id || null,
-        loan_amount: loanPaise,
-        amount_given: amountGivenPaise,
-        total_weeks: Number(values.total_weeks) || 12,
-      })
-      .select()
-      .single();
+    const payload: Record<string, unknown> = {
+      profile_id: user.id,
+      name: values.name.trim(),
+      phone: values.phone?.trim() || null,
+      email: values.email?.trim() || null,
+      weekly_due_amount: paiseAmount,
+      status: 'active',
+      outstanding_balance: 0,
+      total_paid: 0,
+      total_due: 0,
+      enrollment_week_start: enrollmentWeekStart,
+      enrollment_date: values.enrollment_date || new Date().toISOString().split('T')[0],
+      village_id: values.village_id || null,
+      loan_amount: loanPaise,
+      amount_given: amountGivenPaise,
+      total_weeks: Number(values.total_weeks) || 12,
+    };
 
-    if (customerError) throw this.toError(customerError, 'Failed to save customer');
+    const customer = await this.mutateWithSchemaFallback<Customer>(payload, (body) =>
+      this._supabaseService.client.from('customers').insert(body).select().single(),
+    );
 
     this.loadCustomers();
     return customer as Customer;
@@ -157,24 +155,50 @@ export class CustomerService {
     const deductionPaise = Math.round(loanPaise * ((await this.getDeductionRate()) / 1000));
     const amountGivenPaise = loanPaise - deductionPaise;
 
-    const { error } = await this._supabaseService.client
-      .from('customers')
-      .update({
-        name: values.name.trim(),
-        phone: values.phone?.trim() || null,
-        email: values.email?.trim() || null,
-        weekly_due_amount: paiseAmount,
-        enrollment_date: values.enrollment_date || new Date().toISOString().split('T')[0],
-        village_id: values.village_id || null,
-        loan_amount: loanPaise,
-        amount_given: amountGivenPaise,
-        total_weeks: Number(values.total_weeks) || 12,
-      })
-      .eq('id', id);
+    const payload: Record<string, unknown> = {
+      name: values.name.trim(),
+      phone: values.phone?.trim() || null,
+      email: values.email?.trim() || null,
+      weekly_due_amount: paiseAmount,
+      enrollment_date: values.enrollment_date || new Date().toISOString().split('T')[0],
+      village_id: values.village_id || null,
+      loan_amount: loanPaise,
+      amount_given: amountGivenPaise,
+      total_weeks: Number(values.total_weeks) || 12,
+    };
 
-    if (error) throw this.toError(error, 'Failed to update customer');
+    await this.mutateWithSchemaFallback(
+      payload,
+      (body) => this._supabaseService.client.from('customers').update(body).eq('id', id),
+      'Failed to update customer',
+    );
 
     this.loadCustomers();
+  }
+
+  private async mutateWithSchemaFallback<T>(
+    initialBody: Record<string, unknown>,
+    exec: (body: Record<string, unknown>) => PromiseLike<{ data?: unknown; error: unknown }>,
+    fallbackMessage = 'Failed to save customer',
+  ): Promise<T | undefined> {
+    const droppableColumns = new Set(['amount_given', 'total_weeks', 'loan_amount', 'village_id']);
+    const body = { ...initialBody };
+
+    for (let attempt = 0; attempt <= droppableColumns.size; attempt++) {
+      const { data, error } = await exec(body);
+      if (!error) return (data ?? undefined) as T | undefined;
+
+      const errObj = error as { code?: string; message?: string };
+      const match = errObj.message?.match(/Could not find the '([^']+)' column/);
+      if (errObj.code === 'PGRST204' && match?.[1] && droppableColumns.has(match[1])) {
+        delete body[match[1]];
+        continue;
+      }
+
+      throw this.toError(error, fallbackMessage);
+    }
+
+    throw new Error(fallbackMessage);
   }
 
   private toError(err: unknown, fallback: string): Error {
