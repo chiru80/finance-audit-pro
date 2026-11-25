@@ -1,15 +1,15 @@
 {
-  "name": "Finance Audit Pro",
-  "short_name": "FinanceAudit",
-  "description": "Audit-safe weekly collection ledger for a single owner.",
+  "name": "Obsidian Luxe — Finance Audit Pro",
+  "short_name": "Obsidian Luxe",
+  "description": "A precise, elegant workspace for customer collections, audit-ready ledgers, and reporting.",
   "lang": "en",
   "dir": "ltr",
   "display": "standalone",
   "orientation": "portrait-primary",
   "scope": "./",
   "start_url": "./",
-  "theme_color": "#0f172a",
-  "background_color": "#0f172a",
+  "theme_color": "#101116",
+  "background_color": "#101116",
   "icons": [
     {
       "src": "icons/icon-72x72.png",

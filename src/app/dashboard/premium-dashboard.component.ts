@@ -16,14 +16,21 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
   imports: [CommonModule, RouterModule, MoneyPipe, I18nPipe, GlassGoldStatCardComponent],
   template: `
     <div class="w-full max-w-[1440px] mx-auto space-y-8">
-      <!-- Hero Panel -->
-      <section class="fx-hero-panel">
+      <!-- Collection overview uses the verified rolling total from the ledger. -->
+      <section class="fx-hero-panel" aria-labelledby="dashboard-title">
         <div class="fx-hero-content">
-          <h1 class="fx-hero-title">{{ greeting() }}, {{ userName() }}</h1>
+          <p class="fx-hero-eyebrow">
+            Obsidian Luxe <span aria-hidden="true">/</span> Portfolio overview
+          </p>
+          <h1 id="dashboard-title" class="fx-hero-title">{{ greeting() }}, {{ userName() }}</h1>
           <p class="fx-hero-subtitle">
             A clear view of collections, dues, and recent activity across your portfolio.
-            <span class="fx-hero-muted">Last updated {{ todayFormatted }}</span>
           </p>
+          <div class="fx-hero-balance" aria-live="polite">
+            <span class="fx-hero-balance-label">Collections received · trailing 30 days</span>
+            <strong>{{ stats()?.monthlyCollection ?? 0 | money }}</strong>
+            <span class="fx-hero-muted">Ledger updated {{ todayFormatted }}</span>
+          </div>
         </div>
       </section>
 

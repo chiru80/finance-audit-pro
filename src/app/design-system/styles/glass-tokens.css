@@ -2,69 +2,68 @@
  * Finance Audit Pro - Premium FinTech Design Tokens
  * ---------------------------------------------------------------------------
  * Single source of truth for the visual language.
- * Dark is the default; light is applied when <html> has no data-theme="dark"
- * (ThemeService removes the attribute for light mode).
+ * System theme is used until the user chooses a preference; explicit choices
+ * are persisted by ThemeService.
  *
- * Design intent: a refined financial workspace with Apple-inspired liquid
- * glass materials: soft translucency, restrained refraction, crisp type and
- * purposeful motion, while preserving Finance Audit Pro's forest-green brand.
+ * Design intent: Obsidian Luxe — warm editorial typography, precise surfaces,
+ * and restrained champagne accents across light and dark themes.
  */
 
 :root {
   /* ---------------------------------------------------------------------
-   * Canvas & Surfaces (Dark) - warm ink, not blue slate
+   * Obsidian canvas and graphite surfaces (dark theme)
    * ------------------------------------------------------------------- */
-  --bg-primary: #101a16;
-  --bg-secondary: #14211b;
-  --bg-sidebar: rgba(13, 33, 25, 0.88);
-  --bg-topbar: rgba(18, 30, 24, 0.76);
-  --bg-card: #17271f;
-  --bg-card-elevated: #1c3026;
-  --bg-input: #14231b;
-  --border-color: #2d4437;
-  --text-primary: #f0f5ef;
-  --text-secondary: #bfd0c2;
-  --text-muted: #91a798;
+  --bg-primary: #101116;
+  --bg-secondary: #15161b;
+  --bg-sidebar: #101116;
+  --bg-topbar: rgba(16, 17, 22, 0.92);
+  --bg-card: #191a20;
+  --bg-card-elevated: #22232a;
+  --bg-input: #191a20;
+  --border-color: #303138;
+  --text-primary: #f5f1e8;
+  --text-secondary: #b4b0a6;
+  --text-muted: #8c8b87;
 
   /* ---------------------------------------------------------------------
-   * Brand & Status - one accent (aged copper), muted semantic roles
+   * Champagne brand accent and accessible financial status roles
    * ------------------------------------------------------------------- */
-  --primary-accent: #c6e58e;
-  --primary-hover: #d7f1a5;
-  --color-on-primary: #17251c;
-  --color-on-danger: #241f1a;
-  --color-success: #98c992;
-  --color-warning: #e3bd68;
-  --color-danger: #e78d7d;
-  --color-info: #8dbac8;
+  --primary-accent: #c9ae7a;
+  --primary-hover: #dfc99c;
+  --color-on-primary: #171711;
+  --color-on-danger: #ffffff;
+  --color-success: #55c49a;
+  --color-warning: #e4bd70;
+  --color-danger: #f08079;
+  --color-info: #91b4df;
 
   --color-primary: var(--primary-accent);
   --color-primary-hover: var(--primary-hover);
 
   /* Tints (backgrounds), borders and foregrounds (text/icons) */
-  --color-primary-tint: rgba(198, 229, 142, 0.12);
-  --color-primary-border: rgba(198, 229, 142, 0.28);
-  --color-primary-text: #d8eeaa;
+  --color-primary-tint: rgba(201, 174, 122, 0.12);
+  --color-primary-border: rgba(201, 174, 122, 0.28);
+  --color-primary-text: #dfc99c;
 
-  --color-success-tint: rgba(152, 201, 146, 0.12);
-  --color-success-border: rgba(152, 201, 146, 0.26);
-  --color-success-text: #b7d9b0;
+  --color-success-tint: rgba(85, 196, 154, 0.12);
+  --color-success-border: rgba(85, 196, 154, 0.28);
+  --color-success-text: #77d4ad;
 
-  --color-warning-tint: rgba(227, 189, 104, 0.12);
-  --color-warning-border: rgba(227, 189, 104, 0.26);
-  --color-warning-text: #efd08b;
+  --color-warning-tint: rgba(228, 189, 112, 0.12);
+  --color-warning-border: rgba(228, 189, 112, 0.28);
+  --color-warning-text: #e9c983;
 
-  --color-danger-tint: rgba(231, 141, 125, 0.12);
-  --color-danger-border: rgba(231, 141, 125, 0.26);
-  --color-danger-text: #f0a69a;
+  --color-danger-tint: rgba(240, 128, 121, 0.12);
+  --color-danger-border: rgba(240, 128, 121, 0.28);
+  --color-danger-text: #f39a94;
 
-  --color-info-tint: rgba(141, 186, 200, 0.12);
-  --color-info-border: rgba(141, 186, 200, 0.26);
-  --color-info-text: #b2d3dc;
+  --color-info-tint: rgba(145, 180, 223, 0.12);
+  --color-info-border: rgba(145, 180, 223, 0.28);
+  --color-info-text: #a8c6e9;
 
-  --color-neutral-tint: rgba(191, 208, 194, 0.07);
-  --color-neutral-border: rgba(191, 208, 194, 0.16);
-  --color-neutral-text: #bfd0c2;
+  --color-neutral-tint: rgba(180, 176, 166, 0.07);
+  --color-neutral-border: rgba(180, 176, 166, 0.16);
+  --color-neutral-text: #b4b0a6;
 
   /* Backwards-compatible aliases used by older templates */
   --color-primary-light: var(--color-primary-tint);
@@ -75,20 +74,20 @@
   --color-neutral-light: var(--color-neutral-tint);
 
   --color-text-inverse: var(--color-on-primary);
-  --color-surface-hover: #20342a;
-  --color-surface-active: #294034;
-  --color-border-medium: #496151;
+  --color-surface-hover: #2a2b32;
+  --color-surface-active: #303138;
+  --color-border-medium: #414249;
 
   /* ---------------------------------------------------------------------
    * Layered liquid-glass surfaces
    * ------------------------------------------------------------------- */
-  --glass-surface-base: rgba(25, 43, 34, 0.72);
-  --glass-surface-muted: rgba(20, 36, 28, 0.62);
-  --glass-surface-elevated: rgba(30, 51, 40, 0.82);
-  --glass-surface-active: rgba(36, 61, 47, 0.88);
-  --glass-surface-dock: rgba(13, 33, 25, 0.88);
-  --glass-surface-subtle: rgba(20, 36, 28, 0.56);
-  --glass-surface-overlay: rgba(20, 36, 28, 0.9);
+  --glass-surface-base: #191a20;
+  --glass-surface-muted: #22232a;
+  --glass-surface-elevated: #22232a;
+  --glass-surface-active: #2a2b32;
+  --glass-surface-dock: #101116;
+  --glass-surface-subtle: #1c1d22;
+  --glass-surface-overlay: #191a20;
 
   --glass-blur-xs: 6px;
   --glass-blur-sm: 10px;
@@ -98,9 +97,9 @@
   --glass-saturate: 145%;
   --glass-saturate-high: 165%;
 
-  --glass-border-subtle: rgba(220, 239, 224, 0.12);
-  --glass-border-crisp: rgba(220, 239, 224, 0.2);
-  --glass-border-strong: #c6e58e;
+  --glass-border-subtle: #303138;
+  --glass-border-crisp: #414249;
+  --glass-border-strong: #c9ae7a;
 
   --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.16);
   --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 0 rgba(7, 17, 12, 0.14);
@@ -140,8 +139,22 @@
   --glass-space-xl: 2rem;
   --glass-space-2xl: 3rem;
 
-  --glass-font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --glass-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --brand-obsidian: #101116;
+  --brand-graphite: #25262c;
+  --brand-charcoal: #1c1d22;
+  --brand-champagne: #c9ae7a;
+  --brand-soft-champagne: #dfcaa0;
+  --brand-ivory: #f5ead5;
+  --brand-bronze: #a78b59;
+  --brand-slate: #777a83;
+  --gradient-signature: linear-gradient(120deg, #101116 0%, #39372d 48%, #a78b59 100%);
+  --gradient-obsidian: linear-gradient(120deg, #191a20 0%, #303038 55%, #66583e 100%);
+  --gradient-ivory-gold: linear-gradient(120deg, #f5ead5 0%, #e9ddc5 55%, #c9ae7a 100%);
+  --gradient-platinum: linear-gradient(120deg, #101116 0%, #25262c 65%, #41424a 100%);
+  --glass-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --glass-font-mono: 'Inter', ui-monospace, SFMono-Regular, monospace;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --glass-text-xs: 0.75rem;
   --glass-text-sm: 0.8125rem;
@@ -206,45 +219,53 @@
  * Light theme (ThemeService removes data-theme for light)
  * --------------------------------------------------------------------- */
 :root:not([data-theme='dark']) {
-  --bg-primary: #f3f6f1;
-  --bg-secondary: #e9efe9;
-  --bg-sidebar: #143c30;
-  --bg-topbar: #f8faf7;
-  --bg-card: #fffefa;
+  --bg-primary: #f7f5f0;
+  --bg-secondary: #f0ede6;
+  --bg-sidebar: #f7f5f0;
+  --bg-topbar: rgba(247, 245, 240, 0.94);
+  --bg-card: #ffffff;
   --bg-card-elevated: #ffffff;
-  --bg-input: #f8faf7;
-  --border-color: #dce5dc;
-  --text-primary: #1b2c25;
-  --text-secondary: #52645a;
-  --text-muted: #728177;
+  --bg-input: #ffffff;
+  --border-color: #e7e1d6;
+  --text-primary: #24231f;
+  --text-secondary: #69665f;
+  --text-muted: #77746d;
 
-  --primary-accent: #17664c;
-  --primary-hover: #10523d;
-  --color-on-primary: #ffffff;
+  --brand-obsidian: #101116;
+  --brand-graphite: #25262c;
+  --brand-charcoal: #1c1d22;
+  --brand-champagne: #a78b59;
+  --brand-soft-champagne: #8d7448;
+  --brand-ivory: #f5ead5;
+  --brand-bronze: #a78b59;
+  --brand-slate: #777a83;
+  --primary-accent: #a78b59;
+  --primary-hover: #8d7448;
+  --color-on-primary: #24231f;
   --color-on-danger: #ffffff;
-  --color-success: #2d744a;
-  --color-warning: #94610b;
-  --color-danger: #a64038;
-  --color-info: #3a6879;
+  --color-success: #087750;
+  --color-warning: #895811;
+  --color-danger: #b53f3f;
+  --color-info: #456d9e;
 
-  --color-primary-tint: rgba(23, 102, 76, 0.08);
-  --color-primary-border: rgba(23, 102, 76, 0.2);
-  --color-primary-text: #155d45;
-  --color-success-tint: rgba(45, 116, 74, 0.08);
-  --color-success-border: rgba(45, 116, 74, 0.2);
-  --color-success-text: #286540;
-  --color-warning-tint: rgba(148, 97, 11, 0.08);
-  --color-warning-border: rgba(148, 97, 11, 0.2);
-  --color-warning-text: #80530a;
-  --color-danger-tint: rgba(166, 64, 56, 0.08);
-  --color-danger-border: rgba(166, 64, 56, 0.2);
-  --color-danger-text: #93352f;
-  --color-info-tint: rgba(58, 104, 121, 0.08);
-  --color-info-border: rgba(58, 104, 121, 0.2);
-  --color-info-text: #345e6e;
-  --color-neutral-tint: rgba(38, 58, 47, 0.06);
-  --color-neutral-border: rgba(38, 58, 47, 0.14);
-  --color-neutral-text: #52645a;
+  --color-primary-tint: rgba(167, 139, 89, 0.1);
+  --color-primary-border: rgba(167, 139, 89, 0.26);
+  --color-primary-text: #745d34;
+  --color-success-tint: rgba(8, 119, 80, 0.09);
+  --color-success-border: rgba(8, 119, 80, 0.22);
+  --color-success-text: #086b49;
+  --color-warning-tint: rgba(137, 88, 17, 0.09);
+  --color-warning-border: rgba(137, 88, 17, 0.22);
+  --color-warning-text: #79500f;
+  --color-danger-tint: rgba(181, 63, 63, 0.08);
+  --color-danger-border: rgba(181, 63, 63, 0.2);
+  --color-danger-text: #a23333;
+  --color-info-tint: rgba(69, 109, 158, 0.09);
+  --color-info-border: rgba(69, 109, 158, 0.2);
+  --color-info-text: #3b628f;
+  --color-neutral-tint: rgba(36, 35, 31, 0.05);
+  --color-neutral-border: rgba(36, 35, 31, 0.12);
+  --color-neutral-text: #69665f;
 
   --color-primary-light: var(--color-primary-tint);
   --color-success-light: var(--color-success-tint);
@@ -254,38 +275,38 @@
   --color-neutral-light: var(--color-neutral-tint);
 
   --color-text-inverse: #ffffff;
-  --color-surface-hover: #edf2ed;
-  --color-surface-active: #e4ece4;
-  --color-border-medium: #c5d3c7;
+  --color-surface-hover: #f0ede6;
+  --color-surface-active: #ebe7de;
+  --color-border-medium: #d9d1c3;
 
   --bg-topbar: rgba(248, 250, 247, 0.78);
-  --glass-surface-base: rgba(255, 255, 252, 0.72);
-  --glass-surface-muted: rgba(247, 250, 246, 0.68);
-  --glass-surface-elevated: rgba(255, 255, 255, 0.84);
-  --glass-surface-active: rgba(237, 242, 237, 0.9);
-  --glass-surface-dock: rgba(238, 243, 238, 0.82);
-  --glass-surface-subtle: rgba(247, 250, 246, 0.62);
-  --glass-surface-overlay: rgba(255, 255, 255, 0.92);
+  --glass-surface-base: rgba(255, 255, 255, 0.96);
+  --glass-surface-muted: #f0ede6;
+  --glass-surface-elevated: #ffffff;
+  --glass-surface-active: #ebe7de;
+  --glass-surface-dock: #f7f5f0;
+  --glass-surface-subtle: #f7f5f0;
+  --glass-surface-overlay: rgba(255, 255, 255, 0.98);
 
-  --glass-border-subtle: rgba(38, 73, 52, 0.12);
-  --glass-border-crisp: rgba(38, 73, 52, 0.2);
-  --glass-border-strong: #17664c;
+  --glass-border-subtle: #e7e1d6;
+  --glass-border-crisp: #d9d1c3;
+  --glass-border-strong: #a78b59;
 
   --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.82);
   --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.76), inset 0 -1px 0 0 rgba(25, 53, 38, 0.035);
   --glass-specular-recessed: inset 0 1px 2px 0 rgba(25, 53, 38, 0.05);
   --glass-specular-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
 
-  --glass-shadow-xs: 0 1px 2px 0 rgba(27, 52, 39, 0.04);
-  --glass-shadow-sm: 0 2px 5px 0 rgba(27, 52, 39, 0.05);
-  --glass-shadow-md: 0 8px 24px -12px rgba(27, 52, 39, 0.15);
-  --glass-shadow-lg: 0 18px 38px -20px rgba(27, 52, 39, 0.18);
-  --glass-shadow-xl: 0 28px 54px -26px rgba(27, 52, 39, 0.22);
-  --glass-shadow-glow-accent: 0 0 0 1px rgba(23, 102, 76, 0.12);
-  --glass-shadow-glow-success: 0 0 0 1px rgba(45, 116, 74, 0.12);
-  --glass-shadow-glow-warning: 0 0 0 1px rgba(148, 97, 11, 0.12);
-  --glass-shadow-glow-danger: 0 0 0 1px rgba(166, 64, 56, 0.12);
-  --glass-shadow-glow-info: 0 0 0 1px rgba(58, 104, 121, 0.12);
+  --glass-shadow-xs: 0 1px 2px 0 rgba(36, 35, 31, 0.04);
+  --glass-shadow-sm: 0 2px 5px 0 rgba(36, 35, 31, 0.06);
+  --glass-shadow-md: 0 8px 24px -12px rgba(36, 35, 31, 0.16);
+  --glass-shadow-lg: 0 18px 38px -20px rgba(36, 35, 31, 0.18);
+  --glass-shadow-xl: 0 28px 54px -26px rgba(36, 35, 31, 0.22);
+  --glass-shadow-glow-accent: 0 0 0 1px rgba(167, 139, 89, 0.14);
+  --glass-shadow-glow-success: 0 0 0 1px rgba(8, 119, 80, 0.12);
+  --glass-shadow-glow-warning: 0 0 0 1px rgba(137, 88, 17, 0.12);
+  --glass-shadow-glow-danger: 0 0 0 1px rgba(181, 63, 63, 0.12);
+  --glass-shadow-glow-info: 0 0 0 1px rgba(69, 109, 158, 0.12);
 
   --focus-ring-offset-color: #f3f6f1;
 }

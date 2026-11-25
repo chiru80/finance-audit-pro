@@ -3,77 +3,7 @@
   width: 100%;
 }
 
-.fx-hero-panel {
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-height: 192px;
-  padding: clamp(1.5rem, 3.4vw, 3rem);
-  overflow: hidden;
-  border: 1px solid rgba(213, 239, 158, 0.28);
-  border-radius: 22px;
-  background:
-    radial-gradient(ellipse 42% 120% at 88% 0%, rgba(213, 239, 158, 0.2), transparent 72%),
-    linear-gradient(115deg, rgba(20, 60, 48, 0.94), rgba(28, 88, 67, 0.76) 78%);
-  box-shadow: var(--glass-shadow-xl), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
-  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
-  animation: glassSlideUp 420ms var(--glass-spring-easing) both;
-}
 
-.fx-hero-panel::before {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: #d5ef9e;
-  content: '';
-}
-
-.fx-hero-panel::after {
-  position: absolute;
-  right: -5rem;
-  bottom: -8rem;
-  width: 19rem;
-  aspect-ratio: 1;
-  border: 1px solid rgba(213, 239, 158, 0.28);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 1.75rem rgba(213, 239, 158, 0.07),
-    0 0 0 3.5rem rgba(213, 239, 158, 0.035);
-  content: '';
-  pointer-events: none;
-}
-
-.fx-hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 54rem;
-}
-
-.fx-hero-title {
-  margin: 0;
-  color: #f4f8f1;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 3.4vw, 3rem);
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-}
-
-.fx-hero-subtitle {
-  max-width: 58ch;
-  margin: 0.75rem 0 0;
-  color: #d3e2d7;
-  font-size: 0.875rem;
-  line-height: 1.7;
-}
-
-.fx-hero-muted {
-  display: inline-block;
-  margin-left: 0.35rem;
-  color: #acc6b4;
-  font-size: 0.75rem;
-}
 
 .fx-action-bar {
   display: flex;
@@ -543,30 +473,6 @@
 }
 
 @media (max-width: 639px) {
-  .fx-hero-panel {
-    min-height: 0;
-    padding: 1.25rem;
-    border-radius: var(--glass-radius-lg);
-  }
-
-  .fx-hero-panel::after {
-    right: -9rem;
-    bottom: -10rem;
-  }
-
-  .fx-hero-title {
-    font-size: 1.5rem;
-  }
-
-  .fx-hero-subtitle {
-    font-size: 0.8125rem;
-  }
-
-  .fx-hero-muted {
-    display: block;
-    margin: 0.4rem 0 0;
-  }
-
   .fx-action-bar {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

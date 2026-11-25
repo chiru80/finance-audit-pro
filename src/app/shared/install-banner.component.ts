@@ -7,7 +7,7 @@ import { InstallPromptService } from '../core/install-prompt.service';
   template: `
     @if (svc.canInstall() && !svc.installed() && !dismissed) {
       <div class="install-banner" role="region" aria-label="Install app">
-        <span>Install Finance Audit Pro on your device for offline access.</span>
+        <span>Install Obsidian Luxe on your device for offline access.</span>
         <button type="button" (click)="svc.promptInstall()">Install</button>
         <button type="button" class="dismiss" (click)="dismissed = true" aria-label="Dismiss">
           ×

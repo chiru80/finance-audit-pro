@@ -31,16 +31,16 @@ import { I18nService } from '../shared/i18n.service';
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="1.9"
-                d="M6 3v18M6 4h12M6 11h9"
+                d="M12 4a8 8 0 100 16 8 8 0 000-16z"
               />
             </svg>
           </span>
           <div>
-            <p class="text-[13px] font-bold tracking-tight">Finance Audit Pro</p>
+            <p class="text-[13px] font-bold tracking-tight">Obsidian Luxe</p>
             <p
               class="mt-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary-text)]"
             >
-              Collections & audit
+              FINANCE · AUDIT
             </p>
           </div>
         </div>
@@ -106,11 +106,11 @@ import { I18nService } from '../shared/i18n.service';
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="1.9"
-                  d="M6 3v18M6 4h12M6 11h9"
+                  d="M12 4a8 8 0 100 16 8 8 0 000-16z"
                 />
               </svg>
             </span>
-            <p class="text-sm font-bold tracking-tight">Finance Audit Pro</p>
+            <p class="text-sm font-bold tracking-tight">Obsidian Luxe</p>
           </div>
 
           <div class="fx-card fx-auth-form-card p-6 sm:p-8 lg:p-10">
@@ -278,21 +278,21 @@ import { I18nService } from '../shared/i18n.service';
         position: relative;
         isolation: isolate;
         overflow: hidden;
-        color: #f2f7f1;
-        --text-primary: #f2f7f1;
-        --text-secondary: #c4d7c9;
-        --text-muted: #a0b9a7;
-        --color-primary-text: #d5ef9e;
-        --primary-accent: #d5ef9e;
-        --color-primary-tint: rgba(213, 239, 158, 0.12);
-        --glass-border-subtle: rgba(232, 244, 235, 0.15);
-        --glass-surface-base: rgba(232, 244, 235, 0.07);
-        background-color: #143c30;
+        color: var(--brand-ivory);
+        --text-primary: var(--brand-ivory);
+        --text-secondary: #e6dfd0;
+        --text-muted: #c4bdae;
+        --color-primary-text: var(--brand-champagne);
+        --primary-accent: var(--brand-champagne);
+        --color-primary-tint: rgba(201, 174, 122, 0.12);
+        --glass-border-subtle: rgba(245, 241, 232, 0.15);
+        --glass-surface-base: rgba(245, 241, 232, 0.07);
+        background-color: var(--brand-obsidian);
         background-image:
-          radial-gradient(ellipse 55% 48% at 92% 15%, rgba(213, 239, 158, 0.15), transparent 72%),
-          linear-gradient(rgba(236, 246, 238, 0.035) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(236, 246, 238, 0.035) 1px, transparent 1px),
-          linear-gradient(145deg, #194838, #103328 80%);
+          radial-gradient(ellipse 55% 48% at 92% 15%, rgba(201, 174, 122, 0.15), transparent 72%),
+          linear-gradient(rgba(245, 241, 232, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(245, 241, 232, 0.035) 1px, transparent 1px),
+          linear-gradient(145deg, #191a20, #101116 80%);
         background-size:
           auto,
           56px 56px,
@@ -311,11 +311,11 @@ import { I18nService } from '../shared/i18n.service';
         inset: auto -8rem -11rem auto;
         width: 23rem;
         aspect-ratio: 1;
-        border: 1px solid rgba(213, 239, 158, 0.18);
+        border: 1px solid rgba(201, 174, 122, 0.18);
         border-radius: 50%;
         box-shadow:
-          0 0 0 2rem rgba(213, 239, 158, 0.035),
-          0 0 0 4rem rgba(213, 239, 158, 0.025);
+          0 0 0 2rem rgba(201, 174, 122, 0.035),
+          0 0 0 4rem rgba(201, 174, 122, 0.025);
         pointer-events: none;
       }
 
@@ -327,7 +327,7 @@ import { I18nService } from '../shared/i18n.service';
       .fx-auth-headline {
         display: block;
         max-width: 12ch;
-        color: #f2f7f1;
+        color: var(--brand-ivory);
         font-family: var(--font-display);
         font-size: clamp(2.6rem, 5vw, 4.5rem);
         font-weight: 400;
@@ -339,9 +339,9 @@ import { I18nService } from '../shared/i18n.service';
         max-width: 34rem;
         margin-top: 2.4rem;
         padding: 1rem 1.15rem;
-        border: 1px solid rgba(232, 244, 235, 0.18);
+        border: 1px solid rgba(245, 241, 232, 0.18);
         border-radius: 16px;
-        background: rgba(232, 244, 235, 0.075);
+        background: rgba(245, 241, 232, 0.075);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
       }
 
@@ -351,8 +351,8 @@ import { I18nService } from '../shared/i18n.service';
         justify-content: space-between;
         gap: 0.75rem;
         padding-bottom: 0.75rem;
-        border-bottom: 1px solid rgba(232, 244, 235, 0.14);
-        color: #d5ef9e;
+        border-bottom: 1px solid rgba(245, 241, 232, 0.14);
+        color: var(--brand-champagne);
         font-size: 0.59rem;
         font-weight: 700;
         letter-spacing: 0.14em;
@@ -362,7 +362,7 @@ import { I18nService } from '../shared/i18n.service';
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        color: #afc6b5;
+        color: #c4bdae;
         font-size: 0.56rem;
         letter-spacing: 0.1em;
       }
@@ -371,8 +371,8 @@ import { I18nService } from '../shared/i18n.service';
         width: 0.4rem;
         height: 0.4rem;
         border-radius: 50%;
-        background: #bfe481;
-        box-shadow: 0 0 0 3px rgba(191, 228, 129, 0.12);
+        background: var(--color-success);
+        box-shadow: 0 0 0 3px rgba(85, 196, 154, 0.12);
       }
 
       .fx-ledger-preview__step {
@@ -388,9 +388,9 @@ import { I18nService } from '../shared/i18n.service';
         height: 1.8rem;
         flex: 0 0 auto;
         place-items: center;
-        border: 1px solid rgba(213, 239, 158, 0.34);
+        border: 1px solid rgba(201, 174, 122, 0.34);
         border-radius: 8px;
-        color: #d5ef9e;
+        color: var(--brand-champagne);
         font-size: 0.64rem;
         font-weight: 700;
       }
@@ -408,7 +408,7 @@ import { I18nService } from '../shared/i18n.service';
 
       .fx-ledger-preview__step small {
         margin-top: 0.12rem;
-        color: #afc6b5;
+        color: #c4bdae;
         font-size: 0.67rem;
         line-height: 1.45;
       }

@@ -33,15 +33,15 @@ interface NavItem {
       <div
         class="flex h-16 flex-shrink-0 items-center gap-3 border-b border-[var(--glass-border-subtle)] px-5"
       >
-        <span class="fx-brand-mark" aria-hidden="true">F</span>
+        <span class="fx-brand-mark" aria-hidden="true">O</span>
         <div class="min-w-0">
           <p class="truncate text-[13px] font-bold tracking-tight text-[var(--text-primary)]">
-            Finance Audit Pro
+            Obsidian Luxe
           </p>
           <p
             class="mt-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary-text)]"
           >
-            Collections & audit
+            FINANCE · AUDIT
           </p>
         </div>
       </div>
@@ -160,23 +160,7 @@ interface NavItem {
       .fx-sidebar {
         width: 264px;
         background: var(--bg-sidebar);
-        -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
-        backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
-        box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.06);
-        color: var(--text-primary);
-        --text-primary: #f2f7f1;
-        --text-secondary: #c4d7c9;
-        --text-muted: #93b09d;
-        --glass-border-subtle: rgba(232, 244, 235, 0.13);
-        --glass-border-crisp: rgba(232, 244, 235, 0.22);
-        --glass-surface-muted: rgba(232, 244, 235, 0.07);
-        --color-primary-tint: rgba(208, 237, 145, 0.14);
-        --color-primary-border: rgba(208, 237, 145, 0.24);
-        --color-primary-text: #d5ef9e;
-        --primary-accent: #d5ef9e;
-        --color-on-primary: #183b30;
-        --color-surface-hover: rgba(232, 244, 235, 0.08);
-        --color-danger-text: #f0a69a;
+        border-color: var(--glass-border-subtle);
         transition: transform var(--glass-transition-normal);
       }
 
@@ -187,10 +171,10 @@ interface NavItem {
         flex: 0 0 auto;
         align-items: center;
         justify-content: center;
-        border: 1px solid rgba(213, 239, 158, 0.45);
+        border: 1px solid var(--color-primary-border);
         border-radius: 11px;
-        background: #d5ef9e;
-        color: #173c30;
+        background: var(--gradient-ivory-gold);
+        color: var(--brand-obsidian);
         font-family: var(--font-display);
         font-size: 1.35rem;
         line-height: 1;
@@ -217,7 +201,7 @@ interface NavItem {
       .fx-sidebar .fx-nav-link.is-active {
         border-color: var(--color-primary-border);
         background: var(--color-primary-tint);
-        color: #e0f2b4;
+        color: var(--color-primary-text);
       }
 
       .fx-nav-quick {
@@ -227,10 +211,10 @@ interface NavItem {
         min-height: 2.75rem;
         margin: 0.75rem 0 1.5rem;
         padding: 0 0.8rem;
-        border: 1px solid rgba(213, 239, 158, 0.55);
+        border: 1px solid var(--color-primary-border);
         border-radius: 10px;
-        background: #d5ef9e;
-        color: #173c30;
+        background: var(--primary-accent);
+        color: var(--color-on-primary);
         font-size: 0.78rem;
         font-weight: 700;
         text-decoration: none;
@@ -240,7 +224,7 @@ interface NavItem {
       }
 
       .fx-nav-quick:hover {
-        background: #e1f4b5;
+        background: var(--primary-hover);
         transform: translateY(-1px);
       }
 

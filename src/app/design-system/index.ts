@@ -1,6 +1,5 @@
 /**
- * Finance Audit Pro — Liquid Glass Design System
- * Inspired by Glisse (0kzh/glisse)
+ * Obsidian Luxe — shared financial interface components and tokens
  */
 
 export * from './components/glass-card.component';
