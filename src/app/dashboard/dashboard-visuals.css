@@ -1,4 +1,19 @@
 .fx-hero-panel {
+  --hero-bg: linear-gradient(135deg, #fffdf9 0%, #f7f1e3 54%, #efe3c8 100%);
+  --hero-border: rgba(167, 139, 89, 0.34);
+  --hero-shadow: 0 20px 44px -26px rgba(120, 92, 42, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --hero-eyebrow: #856834;
+  --hero-title: #17171b;
+  --hero-sub: #57534e;
+  --hero-muted: #78716c;
+  --hero-pill-bg: rgba(255, 255, 255, 0.78);
+  --hero-pill-border: rgba(167, 139, 89, 0.28);
+  --hero-metric-bg: rgba(255, 255, 255, 0.72);
+  --hero-metric-hover-bg: rgba(255, 255, 255, 0.95);
+  --hero-metric-border: rgba(167, 139, 89, 0.24);
+  --hero-metric-hover-border: rgba(167, 139, 89, 0.55);
+  --hero-amount-shadow: 0 4px 18px rgba(167, 139, 89, 0.14);
+
   position: relative;
   display: flex;
   align-items: center;
@@ -6,13 +21,29 @@
   min-height: 240px;
   padding: clamp(1.75rem, 4vw, 3rem) clamp(1.25rem, 3.5vw, 2.5rem);
   overflow: hidden;
-  border: 1px solid var(--color-primary-border);
+  border: 1px solid var(--hero-border);
   border-radius: var(--glass-radius-xl);
-  background: var(--gradient-signature);
-  box-shadow:
-    var(--glass-shadow-lg),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  background: var(--hero-bg);
+  box-shadow: var(--hero-shadow);
   animation: heroPanelIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-theme='dark'] .fx-hero-panel,
+.dark .fx-hero-panel {
+  --hero-bg: var(--gradient-signature);
+  --hero-border: var(--color-primary-border);
+  --hero-shadow: var(--glass-shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  --hero-eyebrow: var(--brand-soft-champagne);
+  --hero-title: #fffaf0;
+  --hero-sub: rgba(255, 250, 240, 0.78);
+  --hero-muted: rgba(255, 250, 240, 0.65);
+  --hero-pill-bg: rgba(16, 17, 22, 0.42);
+  --hero-pill-border: rgba(223, 201, 156, 0.32);
+  --hero-metric-bg: rgba(16, 17, 22, 0.36);
+  --hero-metric-hover-bg: rgba(16, 17, 22, 0.52);
+  --hero-metric-border: rgba(255, 250, 240, 0.12);
+  --hero-metric-hover-border: rgba(223, 201, 156, 0.45);
+  --hero-amount-shadow: 0 4px 24px rgba(201, 174, 122, 0.25);
 }
 
 .fx-hero-panel::before {
@@ -22,9 +53,9 @@
   background: linear-gradient(
     115deg,
     transparent 35%,
-    rgba(255, 244, 214, 0.08) 48%,
-    rgba(201, 174, 122, 0.14) 50%,
-    rgba(255, 244, 214, 0.06) 52%,
+    rgba(255, 244, 214, 0.14) 48%,
+    rgba(201, 174, 122, 0.18) 50%,
+    rgba(255, 244, 214, 0.1) 52%,
     transparent 65%
   );
   transform: translateX(-65%) rotate(8deg);
@@ -42,8 +73,8 @@
   border-radius: 999px;
   background: radial-gradient(
     ellipse at center,
-    rgba(223, 201, 156, 0.24) 0%,
-    rgba(201, 174, 122, 0.08) 48%,
+    rgba(223, 201, 156, 0.28) 0%,
+    rgba(201, 174, 122, 0.1) 48%,
     transparent 74%
   );
   filter: blur(18px);
@@ -69,8 +100,8 @@
   gap: 0.5rem;
   padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  border: 1px solid rgba(223, 201, 156, 0.32);
-  background: rgba(16, 17, 22, 0.36);
+  border: 1px solid var(--hero-pill-border);
+  background: var(--hero-pill-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   animation: heroItemRise 460ms 60ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -80,15 +111,15 @@
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: #55c49a;
-  box-shadow: 0 0 0 0 rgba(85, 196, 154, 0.65);
+  background: #3d9a70;
+  box-shadow: 0 0 0 0 rgba(61, 154, 112, 0.65);
   animation: heroLivePulse 2.4s ease-out infinite;
 }
 
 .fx-hero-eyebrow,
 .fx-hero-balance-label {
   margin: 0;
-  color: var(--brand-soft-champagne);
+  color: var(--hero-eyebrow);
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -97,7 +128,7 @@
 
 .fx-hero-title {
   margin: 0.5rem 0 0;
-  color: #fffaf0;
+  color: var(--hero-title);
   font-family: var(--font-display);
   font-size: clamp(1.85rem, 3.4vw, 2.65rem);
   font-weight: 600;
@@ -109,7 +140,7 @@
 .fx-hero-subtitle,
 .fx-hero-muted {
   margin: 0;
-  color: rgba(255, 250, 240, 0.78);
+  color: var(--hero-sub);
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -128,19 +159,19 @@
 }
 
 .fx-hero-balance strong {
-  color: #fffaf0;
+  color: var(--hero-title);
   font-family: var(--font-display);
   font-size: clamp(2.15rem, 4.6vw, 3.25rem);
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.02em;
-  text-shadow: 0 4px 24px rgba(201, 174, 122, 0.25);
+  text-shadow: var(--hero-amount-shadow);
 }
 
 .fx-hero-muted {
   font-size: 0.75rem;
-  color: rgba(255, 250, 240, 0.65);
+  color: var(--hero-muted);
 }
 
 .fx-hero-metrics {
@@ -159,8 +190,8 @@
   gap: 0.2rem;
   padding: 0.65rem 0.9rem;
   border-radius: 12px;
-  border: 1px solid rgba(255, 250, 240, 0.12);
-  background: rgba(16, 17, 22, 0.34);
+  border: 1px solid var(--hero-metric-border);
+  background: var(--hero-metric-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition:
@@ -171,12 +202,12 @@
 
 .fx-hero-metric-pill:hover {
   transform: translateY(-2px);
-  border-color: rgba(223, 201, 156, 0.42);
-  background: rgba(16, 17, 22, 0.48);
+  border-color: var(--hero-metric-hover-border);
+  background: var(--hero-metric-hover-bg);
 }
 
 .fx-hero-metric-label {
-  color: rgba(255, 250, 240, 0.66);
+  color: var(--hero-muted);
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.11em;
@@ -184,7 +215,7 @@
 }
 
 .fx-hero-metric-value {
-  color: #fffaf0;
+  color: var(--hero-title);
   font-size: 0.95rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
