@@ -3,7 +3,6 @@ import { Injector, runInInjectionContext, signal } from '@angular/core';
 import { CustomerService } from './customer.service';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
-import { Customer } from './customer.types';
 
 describe('CustomerService', () => {
   let mockSupabaseService: any;

@@ -36,7 +36,14 @@ describe('CollectionService', () => {
   describe('recordWeeklyPayment', () => {
     it('calls record_weekly_payment RPC with paise integer and returns success', async () => {
       mockSupabaseService.client.rpc.mockResolvedValueOnce({
-        data: { success: true, payment_id: 'pay-123', total_allocated: 50000, remaining_credit: 0 },
+        data: [
+          {
+            success: true,
+            payment_id: 'pay-123',
+            error_message: null,
+            allocated_paise: 50000,
+          },
+        ],
         error: null,
       });
 
@@ -57,7 +64,33 @@ describe('CollectionService', () => {
         p_notes: 'Weekly collection',
       });
       expect(res.success).toBe(true);
+      expect(res.data).toEqual({
+        success: true,
+        payment_id: 'pay-123',
+        error_message: null,
+        allocated_paise: 50000,
+      });
       expect(service.success()).toBe('Payment recorded successfully');
+    });
+
+    it('returns allocation errors reported in the RPC result row', async () => {
+      mockSupabaseService.client.rpc.mockResolvedValueOnce({
+        data: [
+          {
+            success: false,
+            payment_id: null,
+            error_message: 'Customer not found',
+            allocated_paise: 0,
+          },
+        ],
+        error: null,
+      });
+
+      const service = createService();
+      const res = await service.recordWeeklyPayment('cust-missing', 50000, 'cash');
+
+      expect(res).toEqual({ success: false, error: 'Customer not found' });
+      expect(service.success()).toBe(null);
     });
 
     it('handles RPC error gracefully without throwing', async () => {
@@ -87,7 +120,7 @@ describe('CollectionService', () => {
       };
 
       mockSupabaseService.client.rpc.mockResolvedValueOnce({
-        data: summaryData,
+        data: [summaryData],
         error: null,
       });
 

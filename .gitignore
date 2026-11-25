@@ -64,6 +64,10 @@ skills-lock.json
 supabase/.temp/
 .vercel
 
+# Generated test artifacts
+/cypress/videos/
+/cypress/screenshots/
+
 # Temporary and scratch files
 scratch/
 shots/

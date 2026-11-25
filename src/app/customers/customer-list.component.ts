@@ -76,7 +76,10 @@ export class CustomerListComponent implements OnInit {
       this.customers.set(list);
       await this.idb.put('cache', { key: 'customers:all', value: list, ts: Date.now() });
     } catch (err) {
-      const cached = await this.idb.get<{ key: string; value: Customer[] }>('cache', 'customers:all');
+      const cached = await this.idb.get<{ key: string; value: Customer[] }>(
+        'cache',
+        'customers:all',
+      );
       if (cached?.value?.length) {
         this.customers.set(cached.value);
         this.error.set('Showing cached customers (offline).');

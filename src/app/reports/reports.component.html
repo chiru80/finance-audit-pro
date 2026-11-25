@@ -1,34 +1,50 @@
 <div class="max-w-7xl mx-auto space-y-6">
   <!-- Header & Export Actions -->
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[var(--glass-border-subtle)]">
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[var(--glass-border-subtle)]"
+  >
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.1em] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)]">Intelligence</span>
-        <span class="text-xs text-[var(--text-secondary)] font-medium">{{ 'reports.insights' | i18n }}</span>
+        <span
+          class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.1em] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)]"
+          >Intelligence</span
+        >
+        <span class="text-xs text-[var(--text-secondary)] font-medium">{{
+          'reports.insights' | i18n
+        }}</span>
       </div>
-      <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{{ 'reports.title' | i18n }}</h1>
+      <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+        {{ 'reports.title' | i18n }}
+      </h1>
       <p class="text-sm text-[var(--text-secondary)] mt-1">{{ 'reports.subtitle' | i18n }}</p>
     </div>
 
     <div class="flex items-center gap-2.5 flex-wrap">
-      <glass-button
-        variant="glass"
-        size="md"
-        (onClick)="exportPaymentsCSV()"
-      >
-        <svg class="w-4 h-4 mr-1 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z" />
+      <glass-button variant="glass" size="md" (onClick)="exportPaymentsCSV()">
+        <svg
+          class="w-4 h-4 mr-1 text-[var(--text-secondary)]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z"
+          />
         </svg>
         {{ 'reports.export_payments' | i18n }}
       </glass-button>
 
-      <glass-button
-        variant="filled"
-        size="md"
-        (onClick)="exportBalancesCSV()"
-      >
+      <glass-button variant="filled" size="md" (onClick)="exportBalancesCSV()">
         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z"
+          />
         </svg>
         {{ 'reports.export_balances' | i18n }}
       </glass-button>
@@ -36,22 +52,37 @@
   </div>
 
   <!-- WhatsApp Report Sender -->
-  <glass-card variant="elevated" customClass="p-4 space-y-4 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+  <glass-card
+    variant="elevated"
+    customClass="p-4 space-y-4 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+  >
     <div class="flex items-center gap-3 pb-3 border-b border-[var(--glass-border-subtle)]">
-      <div class="w-8 h-8 rounded-lg bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)] flex items-center justify-center font-bold">
+      <div
+        class="w-8 h-8 rounded-lg bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)] flex items-center justify-center font-bold"
+      >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+          />
         </svg>
       </div>
       <div>
-        <h2 class="text-base font-bold text-[var(--text-primary)]">{{ 'reports.whatsapp_title' | i18n }}</h2>
+        <h2 class="text-base font-bold text-[var(--text-primary)]">
+          {{ 'reports.whatsapp_title' | i18n }}
+        </h2>
         <p class="text-xs text-[var(--text-secondary)]">{{ 'reports.whatsapp_hint' | i18n }}</p>
       </div>
     </div>
 
     <div class="flex flex-col sm:flex-row gap-3 flex-wrap items-start sm:items-center">
       <div class="flex-1 min-w-[200px]">
-        <label class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">Recipient Phone (E.164)</label>
+        <label
+          class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+          >Recipient Phone (E.164)</label
+        >
         <input
           glassInput
           type="tel"
@@ -60,11 +91,16 @@
           (ngModelChange)="recipientPhone.set($event)"
           class="w-full max-w-md"
         />
-        <p class="text-xs text-[var(--text-muted)] mt-1">Enter phone with country code (e.g., +91 for India).</p>
+        <p class="text-xs text-[var(--text-muted)] mt-1">
+          Enter phone with country code (e.g., +91 for India).
+        </p>
       </div>
 
       <div class="flex-1 min-w-[180px]">
-        <label class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">Report Type</label>
+        <label
+          class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+          >Report Type</label
+        >
         <glass-dropdown
           [items]="reportTypeItems"
           [selectedValue]="null"
@@ -76,25 +112,51 @@
     </div>
 
     @if (whatsappError()) {
-      <div class="p-3 rounded-lg bg-[var(--color-danger-tint)] border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-2">
-        <svg class="w-4 h-4 text-[var(--color-danger-text)]" fill="none" stroke="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+      <div
+        class="p-3 rounded-lg bg-[var(--color-danger-tint)] border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-2"
+      >
+        <svg
+          class="w-4 h-4 text-[var(--color-danger-text)]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+            clip-rule="evenodd"
+          />
         </svg>
         <span>{{ whatsappError() }}</span>
       </div>
     }
 
     @if (whatsappSuccess()) {
-      <div class="p-3 rounded-lg bg-[var(--color-success-tint)] border border-[var(--color-success-border)] text-sm text-[var(--color-success-text)] flex items-center gap-2">
-        <svg class="w-4 h-4 text-[var(--color-success-text)]" fill="none" stroke="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l7-7z" clip-rule="evenodd" />
+      <div
+        class="p-3 rounded-lg bg-[var(--color-success-tint)] border border-[var(--color-success-border)] text-sm text-[var(--color-success-text)] flex items-center gap-2"
+      >
+        <svg
+          class="w-4 h-4 text-[var(--color-success-text)]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l7-7z"
+            clip-rule="evenodd"
+          />
         </svg>
         <span>{{ whatsappSuccess() }}</span>
       </div>
     }
 
-    <div class="p-3 rounded-lg bg-[var(--glass-surface-muted)] border border-[var(--glass-border-subtle)] text-xs text-[var(--text-secondary)] leading-relaxed">
-      <strong class="font-bold text-[var(--text-primary)] block mb-1">{{ 'reports.note' | i18n }}:</strong>
+    <div
+      class="p-3 rounded-lg bg-[var(--glass-surface-muted)] border border-[var(--glass-border-subtle)] text-xs text-[var(--text-secondary)] leading-relaxed"
+    >
+      <strong class="font-bold text-[var(--text-primary)] block mb-1"
+        >{{ 'reports.note' | i18n }}:</strong
+      >
       <ul class="list-disc pl-4 space-y-0.5">
         <li>{{ 'reports.note_1' | i18n }}</li>
         <li>{{ 'reports.note_2' | i18n }}</li>
@@ -106,14 +168,27 @@
 
   @if (loading() && !summary()) {
     <div class="flex justify-center py-16">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-[var(--glass-border-subtle)] border-t-[var(--primary-accent)]"></div>
+      <div
+        class="h-10 w-10 animate-spin rounded-full border-4 border-[var(--glass-border-subtle)] border-t-[var(--primary-accent)]"
+      ></div>
     </div>
   }
 
   @if (error()) {
-    <div aria-live="polite" class="rounded-xl bg-[var(--color-danger-tint)] p-4 border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-2 backdrop-blur-sm">
-      <svg class="h-5 w-5 text-[var(--color-danger-text)] flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+    <div
+      aria-live="polite"
+      class="rounded-xl bg-[var(--color-danger-tint)] p-4 border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-2 backdrop-blur-sm"
+    >
+      <svg
+        class="h-5 w-5 text-[var(--color-danger-text)] flex-shrink-0"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clip-rule="evenodd"
+        />
       </svg>
       <span>{{ error() }}</span>
     </div>
@@ -121,79 +196,153 @@
 
   <!-- Financial Summary Metrics (5 Tiles) -->
   <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-      <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.total_customers' | i18n }}</span>
-      <span class="text-2xl font-semibold text-[var(--text-primary)] mt-2 block">{{ summary()?.totalCustomers || 0 }}</span>
-      <span class="text-xs font-semibold text-[var(--text-muted)]">{{ 'reports.active_accounts' | i18n }}</span>
+    <div
+      class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+    >
+      <span
+        class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block"
+        >{{ 'reports.total_customers' | i18n }}</span
+      >
+      <span class="text-2xl font-semibold text-[var(--text-primary)] mt-2 block">{{
+        summary()?.totalCustomers || 0
+      }}</span>
+      <span class="text-xs font-semibold text-[var(--text-muted)]">{{
+        'reports.active_accounts' | i18n
+      }}</span>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-      <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.total_outstanding' | i18n }}</span>
-      <span class="text-2xl font-semibold font-mono text-[var(--color-danger-text)] mt-2 block">{{ formatCurrency(summary()?.totalOutstanding ?? 0) }}</span>
-      <span class="text-xs font-semibold text-[var(--color-danger-text)]">{{ 'reports.unrecovered_dues' | i18n }}</span>
+    <div
+      class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+    >
+      <span
+        class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block"
+        >{{ 'reports.total_outstanding' | i18n }}</span
+      >
+      <span class="text-2xl font-semibold font-mono text-[var(--color-danger-text)] mt-2 block">{{
+        formatCurrency(summary()?.totalOutstanding ?? 0)
+      }}</span>
+      <span class="text-xs font-semibold text-[var(--color-danger-text)]">{{
+        'reports.unrecovered_dues' | i18n
+      }}</span>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-      <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.total_lifetime_due' | i18n }}</span>
-      <span class="text-2xl font-semibold font-mono text-[var(--text-primary)] mt-2 block">{{ formatCurrency(summary()?.totalDue ?? 0) }}</span>
-      <span class="text-xs font-semibold text-[var(--text-muted)]">{{ 'reports.cumulative_scheduled' | i18n }}</span>
+    <div
+      class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+    >
+      <span
+        class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block"
+        >{{ 'reports.total_lifetime_due' | i18n }}</span
+      >
+      <span class="text-2xl font-semibold font-mono text-[var(--text-primary)] mt-2 block">{{
+        formatCurrency(summary()?.totalDue ?? 0)
+      }}</span>
+      <span class="text-xs font-semibold text-[var(--text-muted)]">{{
+        'reports.cumulative_scheduled' | i18n
+      }}</span>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-      <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.total_recovered' | i18n }}</span>
-      <span class="text-2xl font-semibold font-mono text-[var(--color-success-text)] mt-2 block">{{ formatCurrency(summary()?.totalPaid ?? 0) }}</span>
-      <span class="text-xs font-semibold text-[var(--color-success-text)]">{{ 'reports.collected_cash_upi' | i18n }}</span>
+    <div
+      class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+    >
+      <span
+        class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block"
+        >{{ 'reports.total_recovered' | i18n }}</span
+      >
+      <span class="text-2xl font-semibold font-mono text-[var(--color-success-text)] mt-2 block">{{
+        formatCurrency(summary()?.totalPaid ?? 0)
+      }}</span>
+      <span class="text-xs font-semibold text-[var(--color-success-text)]">{{
+        'reports.collected_cash_upi' | i18n
+      }}</span>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-      <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.this_week_due' | i18n }}</span>
-      <span class="text-2xl font-semibold font-mono text-[var(--color-info-text)] mt-2 block">{{ formatCurrency(summary()?.thisWeekCollectible ?? 0) }}</span>
-      <span class="text-xs font-semibold text-[var(--color-info-text)]">{{ 'reports.due_active_cycle' | i18n }}</span>
+    <div
+      class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+    >
+      <span
+        class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block"
+        >{{ 'reports.this_week_due' | i18n }}</span
+      >
+      <span class="text-2xl font-semibold font-mono text-[var(--color-info-text)] mt-2 block">{{
+        formatCurrency(summary()?.thisWeekCollectible ?? 0)
+      }}</span>
+      <span class="text-xs font-semibold text-[var(--color-info-text)]">{{
+        'reports.due_active_cycle' | i18n
+      }}</span>
     </div>
   </div>
 
   <!-- Payment Collection Log Table -->
-  <glass-card variant="elevated" customClass="overflow-hidden p-0 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
-    <div class="px-6 py-4 border-b border-[var(--glass-border-subtle)] bg-[var(--glass-surface-muted)]">
+  <glass-card
+    variant="elevated"
+    customClass="overflow-hidden p-0 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+  >
+    <div
+      class="px-6 py-4 border-b border-[var(--glass-border-subtle)] bg-[var(--glass-surface-muted)]"
+    >
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 class="text-base font-bold text-[var(--text-primary)]">Payment Collection Log</h2>
-          <p class="text-xs text-[var(--text-secondary)]">Filter transactions across customized audit periods.</p>
+          <p class="text-xs text-[var(--text-secondary)]">
+            Filter transactions across customized audit periods.
+          </p>
         </div>
 
         <!-- Filter Controls -->
         <div class="flex items-center gap-2 flex-wrap">
-          <div class="flex items-center p-1 bg-[var(--glass-surface-dock)] border border-[var(--glass-border-subtle)] rounded-xl">
+          <div
+            class="flex items-center p-1 bg-[var(--glass-surface-dock)] border border-[var(--glass-border-subtle)] rounded-xl"
+          >
             <button
               type="button"
               (click)="setDatePreset('7d')"
               [attr.aria-pressed]="activePreset() === '7d'"
-              [class]="activePreset() === '7d' ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'"
-              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
+              [class]="
+                activePreset() === '7d'
+                  ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'
+              "
+              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer"
+            >
               {{ 'reports.days_7' | i18n }}
             </button>
             <button
               type="button"
               (click)="setDatePreset('30d')"
               [attr.aria-pressed]="activePreset() === '30d'"
-              [class]="activePreset() === '30d' ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'"
-              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
+              [class]="
+                activePreset() === '30d'
+                  ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'
+              "
+              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer"
+            >
               {{ 'reports.days_30' | i18n }}
             </button>
             <button
               type="button"
               (click)="setDatePreset('this_month')"
               [attr.aria-pressed]="activePreset() === 'this_month'"
-              [class]="activePreset() === 'this_month' ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'"
-              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
+              [class]="
+                activePreset() === 'this_month'
+                  ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'
+              "
+              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer"
+            >
               {{ 'reports.this_month' | i18n }}
             </button>
             <button
               type="button"
               (click)="setDatePreset('all')"
               [attr.aria-pressed]="activePreset() === 'all'"
-              [class]="activePreset() === 'all' ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'"
-              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer">
+              [class]="
+                activePreset() === 'all'
+                  ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'
+              "
+              class="px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer"
+            >
               {{ 'reports.all_time' | i18n }}
             </button>
           </div>
@@ -216,13 +365,7 @@
               [ngModel]="endDate()"
               (ngModelChange)="endDate.set($event)"
             />
-            <glass-button
-              variant="glass"
-              size="sm"
-              (onClick)="loadReports()"
-            >
-              Apply
-            </glass-button>
+            <glass-button variant="glass" size="sm" (onClick)="loadReports()"> Apply </glass-button>
           </div>
         </div>
       </div>
@@ -230,17 +373,31 @@
 
     @if (recentPayments().length === 0) {
       <div class="py-14 text-center text-[var(--text-muted)]">
-        <svg class="w-10 h-10 mx-auto text-[var(--text-muted)] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        <svg
+          class="w-10 h-10 mx-auto text-[var(--text-muted)] mb-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+          />
         </svg>
         <p class="text-sm font-bold text-[var(--text-primary)]">No payment transactions found</p>
-        <p class="text-xs text-[var(--text-secondary)] mt-1">{{ 'reports.no_payments_hint' | i18n }}</p>
+        <p class="text-xs text-[var(--text-secondary)] mt-1">
+          {{ 'reports.no_payments_hint' | i18n }}
+        </p>
       </div>
     } @else {
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-[var(--glass-border-subtle)] text-sm">
           <thead>
-            <tr class="bg-[var(--glass-surface-dock)] text-left text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">
+            <tr
+              class="bg-[var(--glass-surface-dock)] text-left text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]"
+            >
               <th scope="col" class="px-6 py-3.5">Date</th>
               <th scope="col" class="px-6 py-3.5">Borrower</th>
               <th scope="col" class="px-6 py-3.5">Method</th>
@@ -248,18 +405,36 @@
               <th scope="col" class="px-6 py-3.5 text-right">Amount Recovered</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)]">
+          <tbody
+            class="divide-y divide-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)]"
+          >
             @for (payment of recentPayments(); track payment.id) {
               <tr class="hover:bg-[var(--glass-surface-elevated)]/70 transition-colors">
-                <td class="px-6 py-3.5 text-sm text-[var(--text-primary)] font-semibold whitespace-nowrap">{{ formatDate(payment.payment_date) }}</td>
-                <td class="px-6 py-3.5 text-sm text-[var(--text-primary)] font-bold whitespace-nowrap">{{ payment.customers?.name || 'N/A' }}</td>
+                <td
+                  class="px-6 py-3.5 text-sm text-[var(--text-primary)] font-semibold whitespace-nowrap"
+                >
+                  {{ formatDate(payment.payment_date) }}
+                </td>
+                <td
+                  class="px-6 py-3.5 text-sm text-[var(--text-primary)] font-bold whitespace-nowrap"
+                >
+                  {{ payment.customers?.name || 'N/A' }}
+                </td>
                 <td class="px-6 py-3.5 whitespace-nowrap">
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-[var(--glass-surface-elevated)] text-[var(--text-secondary)] border border-[var(--glass-border-subtle)]">
+                  <span
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-[var(--glass-surface-elevated)] text-[var(--text-secondary)] border border-[var(--glass-border-subtle)]"
+                  >
                     {{ payment.payment_method }}
                   </span>
                 </td>
-                <td class="px-6 py-3.5 text-xs text-[var(--text-secondary)]">{{ payment.reference || payment.notes || ':' }}</td>
-                <td class="px-6 py-3.5 text-right font-semibold text-[var(--color-success-text)] font-mono whitespace-nowrap text-base">{{ formatCurrency(payment.amount) }}</td>
+                <td class="px-6 py-3.5 text-xs text-[var(--text-secondary)]">
+                  {{ payment.reference || payment.notes || ':' }}
+                </td>
+                <td
+                  class="px-6 py-3.5 text-right font-semibold text-[var(--color-success-text)] font-mono whitespace-nowrap text-base"
+                >
+                  {{ formatCurrency(payment.amount) }}
+                </td>
               </tr>
             }
           </tbody>
@@ -269,22 +444,35 @@
   </glass-card>
 
   <!-- Customer Balances / Defaulters Risk Audit Table -->
-  <glass-card variant="elevated" customClass="overflow-hidden p-0 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
-    <div class="px-6 py-4 border-b border-[var(--glass-border-subtle)] bg-[var(--glass-surface-muted)]">
-      <h2 class="text-base font-bold text-[var(--text-primary)]">Highest Outstanding Balances (Risk Audit)</h2>
-      <p class="text-xs text-[var(--text-secondary)]">Borrowers ordered by total outstanding debt requiring immediate collection follow-up.</p>
+  <glass-card
+    variant="elevated"
+    customClass="overflow-hidden p-0 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+  >
+    <div
+      class="px-6 py-4 border-b border-[var(--glass-border-subtle)] bg-[var(--glass-surface-muted)]"
+    >
+      <h2 class="text-base font-bold text-[var(--text-primary)]">
+        Highest Outstanding Balances (Risk Audit)
+      </h2>
+      <p class="text-xs text-[var(--text-secondary)]">
+        Borrowers ordered by total outstanding debt requiring immediate collection follow-up.
+      </p>
     </div>
 
     @if (customerBalances().length === 0) {
       <div class="py-14 text-center text-[var(--text-muted)]">
         <p class="text-sm font-bold text-[var(--text-primary)]">No customer balance records</p>
-        <p class="text-xs text-[var(--text-secondary)] mt-1">No customer balance records are currently available.</p>
+        <p class="text-xs text-[var(--text-secondary)] mt-1">
+          No customer balance records are currently available.
+        </p>
       </div>
     } @else {
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-[var(--glass-border-subtle)] text-sm">
           <thead>
-            <tr class="bg-[var(--glass-surface-dock)] text-left text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">
+            <tr
+              class="bg-[var(--glass-surface-dock)] text-left text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]"
+            >
               <th scope="col" class="px-6 py-3.5">Borrower</th>
               <th scope="col" class="px-6 py-3.5">Phone Number</th>
               <th scope="col" class="px-6 py-3.5">Total Paid</th>
@@ -292,18 +480,34 @@
               <th scope="col" class="px-6 py-3.5 text-right">Outstanding Debt</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)]">
+          <tbody
+            class="divide-y divide-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)]"
+          >
             @for (c of customerBalances(); track c.id) {
               <tr class="hover:bg-[var(--glass-surface-elevated)]/70 transition-colors">
-                <td class="px-6 py-3.5 font-bold text-[var(--text-primary)] whitespace-nowrap">{{ c.name }}</td>
-                <td class="px-6 py-3.5 text-xs text-[var(--text-secondary)] font-medium whitespace-nowrap">{{ c.phone || ':' }}</td>
-                <td class="px-6 py-3.5 text-sm text-[var(--color-success-text)] font-mono font-bold whitespace-nowrap">{{ formatCurrency(c.total_paid) }}</td>
+                <td class="px-6 py-3.5 font-bold text-[var(--text-primary)] whitespace-nowrap">
+                  {{ c.name }}
+                </td>
+                <td
+                  class="px-6 py-3.5 text-xs text-[var(--text-secondary)] font-medium whitespace-nowrap"
+                >
+                  {{ c.phone || ':' }}
+                </td>
+                <td
+                  class="px-6 py-3.5 text-sm text-[var(--color-success-text)] font-mono font-bold whitespace-nowrap"
+                >
+                  {{ formatCurrency(c.total_paid) }}
+                </td>
                 <td class="px-6 py-3.5 whitespace-nowrap">
                   <glass-badge [status]="c.status === 'active' ? 'active' : 'neutral'">
                     {{ c.status }}
                   </glass-badge>
                 </td>
-                <td class="px-6 py-3.5 text-right font-semibold text-[var(--color-danger-text)] font-mono whitespace-nowrap text-base">{{ formatCurrency(c.outstanding_balance) }}</td>
+                <td
+                  class="px-6 py-3.5 text-right font-semibold text-[var(--color-danger-text)] font-mono whitespace-nowrap text-base"
+                >
+                  {{ formatCurrency(c.outstanding_balance) }}
+                </td>
               </tr>
             }
           </tbody>
