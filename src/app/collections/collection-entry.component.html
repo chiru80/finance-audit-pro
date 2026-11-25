@@ -85,6 +85,35 @@
 
         @if (customersLoaded()) {
           <form (ngSubmit)="collectPayment()" class="space-y-5">
+            <!-- Village Filter -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label
+                  for="villageFilter"
+                  class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)]"
+                >
+                  Filter by Village
+                </label>
+                <span class="text-[11px] font-medium text-[var(--text-muted)]">
+                  {{ filteredCustomers().length }} of {{ customers().length }} borrowers
+                </span>
+              </div>
+              <select
+                glassInput
+                id="villageFilter"
+                [value]="selectedVillage()"
+                (change)="onVillageChange($event)"
+              >
+                <option value="all">All Villages ({{ customers().length }})</option>
+                @for (village of availableVillages(); track village.id) {
+                  <option [value]="village.id">{{ village.name }}</option>
+                }
+                @if (hasUnassignedVillage()) {
+                  <option value="unassigned">No Village Assigned</option>
+                }
+              </select>
+            </div>
+
             <!-- Customer Selector -->
             <div>
               <label
@@ -102,12 +131,17 @@
                 required
               >
                 <option value="">{{ 'collections.select_borrower' | i18n }}</option>
-                @for (customer of customers(); track customer.id) {
+                @for (customer of filteredCustomers(); track customer.id) {
                   <option [value]="customer.id">
-                    {{ customer.name }} (Weekly: {{ formatCurrency(customer.weekly_due_amount) }})
+                    {{ customer.name }}@if (customer.villages?.name) { — {{ customer.villages.name }} } (Weekly: {{ formatCurrency(customer.weekly_due_amount) }})
                   </option>
                 }
               </select>
+              @if (filteredCustomers().length === 0) {
+                <p class="mt-1.5 text-xs text-[var(--text-muted)]">
+                  No active borrowers found for this village filter.
+                </p>
+              }
             </div>
 
             <!-- Collection Amount -->

@@ -14,6 +14,7 @@ export interface Customer {
   total_due: number; // in paise
   village_id: string | null;
   village_name?: string; // from join with villages table
+  villages?: { name: string } | null; // nested join from Supabase select('*, villages(name)')
   loan_amount: number; // in paise - total credit extended (before deduction)
   amount_given: number; // in paise - actual amount received after deduction (loan_amount - deduction)
   total_weeks: number;

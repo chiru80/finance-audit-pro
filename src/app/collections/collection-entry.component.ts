@@ -47,6 +47,7 @@ export class CollectionEntryComponent implements OnInit {
   loading = signal(true);
   error = signal<string | null>(null);
   customers = signal<Customer[]>([]);
+  selectedVillage = signal<string>('all');
   selectedCustomer = signal<string>('');
   selectedMethod = signal<'cash' | 'online' | 'cheque' | 'other'>('cash');
   amountInRupees = signal<number>(0);
@@ -54,6 +55,27 @@ export class CollectionEntryComponent implements OnInit {
   notes = signal<string>('');
   customersLoaded = signal(false);
   success = signal<string | null>(null);
+
+  availableVillages = computed(() => {
+    const map = new Map<string, string>();
+    for (const c of this.customers()) {
+      if (c.village_id) {
+        map.set(c.village_id, c.villages?.name || 'Unnamed Village');
+      }
+    }
+    return Array.from(map.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  });
+
+  hasUnassignedVillage = computed(() => this.customers().some((c) => !c.village_id));
+
+  filteredCustomers = computed(() => {
+    const village = this.selectedVillage();
+    if (village === 'all') return this.customers();
+    if (village === 'unassigned') return this.customers().filter((c) => !c.village_id);
+    return this.customers().filter((c) => c.village_id === village);
+  });
 
   selectedCustomerObj = computed(() => {
     const id = this.selectedCustomer();
@@ -81,7 +103,7 @@ export class CollectionEntryComponent implements OnInit {
     try {
       const { data, error } = await this._supabaseService.client
         .from('customers')
-        .select('*')
+        .select('*, villages(name)')
         .eq('status', 'active')
         .order('name', { ascending: true });
 
@@ -116,6 +138,22 @@ export class CollectionEntryComponent implements OnInit {
       }
     } finally {
       this.loading.set(false);
+    }
+  }
+
+  onVillageChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const villageId = target.value;
+    this.selectedVillage.set(villageId);
+    this.error.set(null);
+    this.success.set(null);
+
+    const currentCid = this.selectedCustomer();
+    if (currentCid && !this.filteredCustomers().some((c) => c.id === currentCid)) {
+      this.selectedCustomer.set('');
+      this.amountInRupees.set(0);
+      this.reference.set('');
+      this.notes.set('');
     }
   }
 
