@@ -1,28 +1,22 @@
 import type { OnInit, OnDestroy } from '@angular/core';
-import { Component, inject } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
+import { AuthService } from './auth.service';
+import { BrandLogoComponent } from '../shared/brand-logo.component';
 
 @Component({
   selector: 'app-oauth-callback',
   standalone: true,
+  imports: [BrandLogoComponent],
   template: `
     <div
       class="fx-canvas flex min-h-[100dvh] items-center justify-center bg-[var(--bg-primary)] px-5 py-12 text-[var(--text-primary)]"
     >
       <div class="fx-card w-full max-w-md p-8 text-center">
-        <span
-          class="fx-brand-mark mx-auto mb-5 inline-flex h-10 w-10 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
-        >
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.9"
-              d="M12 4a8 8 0 100 16 8 8 0 000-16z"
-            />
-          </svg>
-        </span>
+        <div class="mx-auto mb-5 flex justify-center">
+          <app-brand-logo [size]="44" />
+        </div>
         <div
           class="mx-auto mb-5 h-8 w-8 animate-spin rounded-full border-2 border-[var(--glass-border-crisp)] border-t-[var(--primary-accent)]"
         ></div>
@@ -36,20 +30,26 @@ import { SupabaseService } from '../supabase.service';
 })
 export class OauthCallbackComponent implements OnInit, OnDestroy {
   private readonly _supabaseService = inject(SupabaseService);
+  private readonly _authService = inject(AuthService);
   private readonly _router = inject(Router);
   private _authSubscription: { unsubscribe: () => void } | null = null;
   private _fallbackTimeout: ReturnType<typeof setTimeout> | null = null;
+  private _navigated = false;
+
+  constructor() {
+    effect(() => {
+      if (this._authService.isAuthenticated()) {
+        this.navigateToDashboard();
+      }
+    });
+  }
 
   ngOnInit() {
     this.handleAuthCallback();
   }
 
   ngOnDestroy() {
-    this.clearAuthSubscription();
-    if (this._fallbackTimeout) {
-      clearTimeout(this._fallbackTimeout);
-      this._fallbackTimeout = null;
-    }
+    this.cleanup();
   }
 
   private async handleAuthCallback() {
@@ -59,6 +59,11 @@ export class OauthCallbackComponent implements OnInit, OnDestroy {
 
     if (providerError) {
       this.redirectToLogin(providerError === 'access_denied' ? 'oauth_cancelled' : 'oauth_failed');
+      return;
+    }
+
+    if (this._authService.isAuthenticated()) {
+      this.navigateToDashboard();
       return;
     }
 
@@ -74,48 +79,68 @@ export class OauthCallbackComponent implements OnInit, OnDestroy {
         return;
       }
 
-      if (session?.user) {
-        this._router.navigate(['/dashboard']);
+      if (session?.user || this._authService.isAuthenticated()) {
+        this.navigateToDashboard();
         return;
       }
 
-      // 2. Listen for auth state change (in case Supabase JS is still parsing the URL hash)
       const {
         data: { subscription },
       } = this._supabaseService.onAuthStateChange((event, newSession) => {
         if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && newSession?.user) {
-          this.clearAuthSubscription();
-          this._router.navigate(['/dashboard']);
+          this.navigateToDashboard();
         }
       });
       this._authSubscription = subscription;
 
       this._fallbackTimeout = setTimeout(async () => {
+        if (this._navigated) return;
+        if (this._authService.isAuthenticated()) {
+          this.navigateToDashboard();
+          return;
+        }
         try {
           const retry = await this._supabaseService.getSession();
-          if (retry.data.session?.user) {
-            this._router.navigate(['/dashboard']);
+          if (retry.data.session?.user || this._authService.isAuthenticated()) {
+            this.navigateToDashboard();
           } else {
             this.redirectToLogin();
           }
-        } catch (error) {
-          console.error('OAuth session verification failed:', error);
+        } catch (err) {
+          console.error('OAuth session verification failed:', err);
           this.redirectToLogin();
         }
       }, 2500);
     } catch (error) {
       console.error('Unexpected error in OAuth callback:', error);
-      this.redirectToLogin('callback_error');
+      if (this._authService.isAuthenticated()) {
+        this.navigateToDashboard();
+      } else {
+        this.redirectToLogin('callback_error');
+      }
     }
   }
 
-  private clearAuthSubscription() {
-    this._authSubscription?.unsubscribe();
-    this._authSubscription = null;
+  private navigateToDashboard() {
+    if (this._navigated) return;
+    this._navigated = true;
+    this.cleanup();
+    this._router.navigate(['/dashboard'], { replaceUrl: true });
   }
 
   private redirectToLogin(error = 'oauth_failed') {
-    this.clearAuthSubscription();
-    this._router.navigate(['/login'], { queryParams: { error } });
+    if (this._navigated) return;
+    this._navigated = true;
+    this.cleanup();
+    this._router.navigate(['/login'], { queryParams: { error }, replaceUrl: true });
+  }
+
+  private cleanup() {
+    this._authSubscription?.unsubscribe();
+    this._authSubscription = null;
+    if (this._fallbackTimeout) {
+      clearTimeout(this._fallbackTimeout);
+      this._fallbackTimeout = null;
+    }
   }
 }
