@@ -36,7 +36,9 @@ export class OutboxService {
     this.pending.set(rows.sort((a, b) => a.createdAt - b.createdAt));
   }
 
-  async enqueue(item: Omit<PendingPayment, 'id' | 'createdAt' | 'attempts' | 'lastError' | 'status'>): Promise<void> {
+  async enqueue(
+    item: Omit<PendingPayment, 'id' | 'createdAt' | 'attempts' | 'lastError' | 'status'>,
+  ): Promise<void> {
     const row: PendingPayment = {
       ...item,
       createdAt: Date.now(),

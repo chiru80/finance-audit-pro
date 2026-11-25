@@ -3,7 +3,6 @@ import { Injector, runInInjectionContext } from '@angular/core';
 import { ReportsComponent } from './reports.component';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
-import { I18nPipe } from '../shared/i18n.pipe';
 
 describe('ReportsComponent - WhatsApp', () => {
   let mockSupabaseService: any;

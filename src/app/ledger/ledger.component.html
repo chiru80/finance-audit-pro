@@ -1,48 +1,74 @@
 <div class="max-w-7xl mx-auto space-y-6">
   <!-- Header Bar -->
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[var(--glass-border-subtle)]">
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[var(--glass-border-subtle)]"
+  >
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.1em] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)]">{{ 'ledger.audit_trail' | i18n }}</span>
-        <span class="text-xs text-[var(--text-secondary)] font-medium">{{ 'ledger.financial_records' | i18n }}</span>
+        <span
+          class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.1em] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)]"
+          >{{ 'ledger.audit_trail' | i18n }}</span
+        >
+        <span class="text-xs text-[var(--text-secondary)] font-medium">{{
+          'ledger.financial_records' | i18n
+        }}</span>
       </div>
-      <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{{ 'ledger.title' | i18n }}</h1>
+      <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+        {{ 'ledger.title' | i18n }}
+      </h1>
       <p class="text-sm text-[var(--text-secondary)] mt-1">{{ 'ledger.subtitle' | i18n }}</p>
     </div>
 
     <div class="flex items-center gap-2.5 flex-wrap">
       @if (selectedCustomer() && payments().length > 0) {
-        <glass-button
-          variant="glass"
-          size="md"
-          (onClick)="exportCustomerLedgerCSV()"
-        >
-          <svg class="h-4 w-4 mr-1 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        <glass-button variant="glass" size="md" (onClick)="exportCustomerLedgerCSV()">
+          <svg
+            class="h-4 w-4 mr-1 text-[var(--text-secondary)]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
           </svg>
           {{ 'ledger.export_csv' | i18n }}
         </glass-button>
 
-        <glass-button
-          variant="glass"
-          size="md"
-          (onClick)="printLedger()"
-        >
-          <svg class="h-4 w-4 mr-1 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        <glass-button variant="glass" size="md" (onClick)="printLedger()">
+          <svg
+            class="h-4 w-4 mr-1 text-[var(--text-secondary)]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+            />
           </svg>
           {{ 'ledger.print' | i18n }}
         </glass-button>
       }
 
-      <glass-button
-        variant="glass"
-        size="md"
-        [loading]="loading()"
-        (onClick)="loadCustomers()"
-      >
-        <svg class="h-4 w-4 mr-1.5 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      <glass-button variant="glass" size="md" [loading]="loading()" (onClick)="loadCustomers()">
+        <svg
+          class="h-4 w-4 mr-1.5 text-[var(--text-secondary)]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
         </svg>
         Refresh
       </glass-button>
@@ -51,14 +77,27 @@
 
   @if (loading() && customers().length === 0) {
     <div class="flex justify-center py-16">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-[var(--glass-border-subtle)] border-t-[var(--primary-accent)]"></div>
+      <div
+        class="h-10 w-10 animate-spin rounded-full border-4 border-[var(--glass-border-subtle)] border-t-[var(--primary-accent)]"
+      ></div>
     </div>
   }
 
   @if (error()) {
-    <div aria-live="polite" class="rounded-xl bg-[var(--color-danger-tint)] p-4 border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-2 backdrop-blur-sm">
-      <svg class="h-5 w-5 text-[var(--color-danger-text)] flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+    <div
+      aria-live="polite"
+      class="rounded-xl bg-[var(--color-danger-tint)] p-4 border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-2 backdrop-blur-sm"
+    >
+      <svg
+        class="h-5 w-5 text-[var(--color-danger-text)] flex-shrink-0"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clip-rule="evenodd"
+        />
       </svg>
       <span>{{ error() }}</span>
     </div>
@@ -66,12 +105,20 @@
 
   @if (customers().length > 0) {
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
       <!-- Customer Directory List Panel (1 Column) -->
-      <glass-card variant="elevated" customClass="p-4 space-y-3 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
-        <div class="flex items-center justify-between pb-2 border-b border-[var(--glass-border-subtle)]">
-          <h2 class="text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)]">{{ 'ledger.choose_customer' | i18n }}</h2>
-          <span class="text-xs text-[var(--text-muted)] font-medium">{{ filteredCustomers().length }} {{ 'ledger.found_count' | i18n }}</span>
+      <glass-card
+        variant="elevated"
+        customClass="p-4 space-y-3 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+      >
+        <div
+          class="flex items-center justify-between pb-2 border-b border-[var(--glass-border-subtle)]"
+        >
+          <h2 class="text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)]">
+            {{ 'ledger.choose_customer' | i18n }}
+          </h2>
+          <span class="text-xs text-[var(--text-muted)] font-medium"
+            >{{ filteredCustomers().length }} {{ 'ledger.found_count' | i18n }}</span
+          >
         </div>
 
         <!-- Filter Input -->
@@ -87,50 +134,84 @@
           />
         </div>
 
-        <div class="divide-y divide-[var(--glass-border-subtle)] max-h-[620px] overflow-y-auto space-y-1">
+        <div
+          class="divide-y divide-[var(--glass-border-subtle)] max-h-[620px] overflow-y-auto space-y-1"
+        >
           @for (c of filteredCustomers(); track c.id) {
             <button
               type="button"
               (click)="selectCustomer(c)"
-              [class]="selectedCustomer()?.id === c.id ? 'bg-[var(--glass-surface-elevated)] border-l-4 border-[var(--primary-accent)] text-[var(--text-primary)] font-bold shadow-[var(--glass-shadow-sm)]' : 'hover:bg-[var(--glass-surface-elevated)]/60 text-[var(--text-secondary)] border-l-4 border-transparent'"
-              class="w-full text-left p-3 rounded-xl flex items-center justify-between transition cursor-pointer">
+              [class]="
+                selectedCustomer()?.id === c.id
+                  ? 'bg-[var(--glass-surface-elevated)] border-l-4 border-[var(--primary-accent)] text-[var(--text-primary)] font-bold shadow-[var(--glass-shadow-sm)]'
+                  : 'hover:bg-[var(--glass-surface-elevated)]/60 text-[var(--text-secondary)] border-l-4 border-transparent'
+              "
+              class="w-full text-left p-3 rounded-xl flex items-center justify-between transition cursor-pointer"
+            >
               <div class="truncate pr-2">
                 <p class="text-sm font-bold text-[var(--text-primary)] truncate">{{ c.name }}</p>
-                <p class="text-xs text-[var(--text-muted)] mt-0.5">{{ c.phone || ('ledger.no_phone' | i18n) }}</p>
+                <p class="text-xs text-[var(--text-muted)] mt-0.5">
+                  {{ c.phone || ('ledger.no_phone' | i18n) }}
+                </p>
               </div>
               <div class="text-right flex-shrink-0">
-                <span class="text-xs font-mono font-bold" [class]="c.outstanding_balance > 0 ? 'text-[var(--color-danger-text)]' : 'text-[var(--color-success-text)]'">
+                <span
+                  class="text-xs font-mono font-bold"
+                  [class]="
+                    c.outstanding_balance > 0
+                      ? 'text-[var(--color-danger-text)]'
+                      : 'text-[var(--color-success-text)]'
+                  "
+                >
                   {{ formatCurrency(c.outstanding_balance) }}
                 </span>
-                <span class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase">Balance</span>
+                <span class="block text-[10px] font-semibold text-[var(--text-muted)] uppercase"
+                  >Balance</span
+                >
               </div>
             </button>
           }
 
           @if (filteredCustomers().length === 0) {
-            <p class="text-xs text-[var(--text-muted)] py-6 text-center">{{ 'ledger.no_match' | i18n }}</p>
+            <p class="text-xs text-[var(--text-muted)] py-6 text-center">
+              {{ 'ledger.no_match' | i18n }}
+            </p>
           }
         </div>
       </glass-card>
 
       <!-- Ledger Transactions Panel (2 Columns) -->
-      <glass-card variant="elevated" customClass="md:col-span-2 p-6 space-y-5 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+      <glass-card
+        variant="elevated"
+        customClass="md:col-span-2 p-6 space-y-5 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+      >
         @if (selectedCustomer()) {
           <!-- Active Customer Summary Header -->
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-[var(--glass-border-subtle)]">
+          <div
+            class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-[var(--glass-border-subtle)]"
+          >
             <div>
               <div class="flex items-center gap-2">
-                <h2 class="text-xl font-semibold text-[var(--text-primary)]">{{ selectedCustomer()!.name }}</h2>
+                <h2 class="text-xl font-semibold text-[var(--text-primary)]">
+                  {{ selectedCustomer()!.name }}
+                </h2>
                 <button
                   type="button"
                   (click)="clearSelection()"
-                  class="text-xs font-bold text-[var(--text-muted)] hover:text-[var(--text-secondary)] cursor-pointer ml-1">
+                  class="text-xs font-bold text-[var(--text-muted)] hover:text-[var(--text-secondary)] cursor-pointer ml-1"
+                >
                   {{ 'ledger.clear' | i18n }}
                 </button>
               </div>
               <p class="text-xs text-[var(--text-secondary)] mt-1">
-                {{ 'ledger.outstanding_balance' | i18n }}: <span class="font-bold text-[var(--color-danger-text)]">{{ formatCurrency(selectedCustomer()!.outstanding_balance) }}</span>
-                &bull; {{ 'ledger.total_lifetime_paid' | i18n }}: <span class="font-bold text-[var(--color-success-text)]">{{ formatCurrency(selectedCustomer()!.total_paid) }}</span>
+                {{ 'ledger.outstanding_balance' | i18n }}:
+                <span class="font-bold text-[var(--color-danger-text)]">{{
+                  formatCurrency(selectedCustomer()!.outstanding_balance)
+                }}</span>
+                &bull; {{ 'ledger.total_lifetime_paid' | i18n }}:
+                <span class="font-bold text-[var(--color-success-text)]">{{
+                  formatCurrency(selectedCustomer()!.total_paid)
+                }}</span>
               </p>
             </div>
 
@@ -150,31 +231,65 @@
 
           <!-- Transaction Statistics Row -->
           <div class="grid grid-cols-3 gap-3">
-            <div class="p-3 bg-[var(--glass-surface-elevated)] rounded-xl border border-[var(--glass-border-subtle)]">
-              {{ 'ledger.payments_count' | i18n }}: <span class="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ payments().length }}</span>
+            <div
+              class="p-3 bg-[var(--glass-surface-elevated)] rounded-xl border border-[var(--glass-border-subtle)]"
+            >
+              {{ 'ledger.payments_count' | i18n }}:
+              <span
+                class="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block"
+                >{{ payments().length }}</span
+              >
             </div>
-            <div class="p-3 bg-[var(--glass-surface-elevated)] rounded-xl border border-[var(--glass-border-subtle)]">
-              {{ 'ledger.sum_in_ledger' | i18n }}: <span class="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ formatCurrency(totalCustomerPayments()) }}</span>
+            <div
+              class="p-3 bg-[var(--glass-surface-elevated)] rounded-xl border border-[var(--glass-border-subtle)]"
+            >
+              {{ 'ledger.sum_in_ledger' | i18n }}:
+              <span
+                class="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block"
+                >{{ formatCurrency(totalCustomerPayments()) }}</span
+              >
             </div>
-            <div class="p-3 bg-[var(--glass-surface-elevated)] rounded-xl border border-[var(--glass-border-subtle)]">
-              {{ 'ledger.weekly_target' | i18n }}: <span class="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ formatCurrency(selectedCustomer()!.weekly_due_amount) }}</span>
+            <div
+              class="p-3 bg-[var(--glass-surface-elevated)] rounded-xl border border-[var(--glass-border-subtle)]"
+            >
+              {{ 'ledger.weekly_target' | i18n }}:
+              <span
+                class="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block"
+                >{{ formatCurrency(selectedCustomer()!.weekly_due_amount) }}</span
+              >
             </div>
           </div>
 
           <!-- Transactions Table -->
           @if (filteredPayments().length === 0) {
             <div class="text-center py-12">
-              <svg class="h-10 w-10 mx-auto text-[var(--text-muted)] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <svg
+                class="h-10 w-10 mx-auto text-[var(--text-muted)] mb-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
-              <h3 class="text-sm font-bold text-[var(--text-primary)]">{{ 'ledger.no_payments' | i18n }}</h3>
-              <p class="text-xs text-[var(--text-secondary)] mt-1">{{ 'ledger.no_payments_hint' | i18n }}</p>
+              <h3 class="text-sm font-bold text-[var(--text-primary)]">
+                {{ 'ledger.no_payments' | i18n }}
+              </h3>
+              <p class="text-xs text-[var(--text-secondary)] mt-1">
+                {{ 'ledger.no_payments_hint' | i18n }}
+              </p>
             </div>
           } @else {
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-[var(--glass-border-subtle)] text-sm">
                 <thead>
-                  <tr class="bg-[var(--glass-surface-dock)] text-left text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">
+                  <tr
+                    class="bg-[var(--glass-surface-dock)] text-left text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]"
+                  >
                     <th scope="col" class="py-3 px-4">Date</th>
                     <th scope="col" class="py-3 px-4">Method</th>
                     <th scope="col" class="py-3 px-4">Amount</th>
@@ -182,23 +297,37 @@
                     <th scope="col" class="py-3 px-4">Status</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)]">
+                <tbody
+                  class="divide-y divide-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)]"
+                >
                   @for (p of filteredPayments(); track p.id) {
                     <tr class="hover:bg-[var(--glass-surface-elevated)]/70 transition-colors">
-                      <td class="py-3 px-4 text-[var(--text-primary)] font-bold whitespace-nowrap">{{ p.payment_date | date:'mediumDate' }}</td>
+                      <td class="py-3 px-4 text-[var(--text-primary)] font-bold whitespace-nowrap">
+                        {{ p.payment_date | date: 'mediumDate' }}
+                      </td>
                       <td class="py-3 px-4 capitalize whitespace-nowrap">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-[var(--glass-surface-elevated)] text-[var(--text-secondary)] font-bold border border-[var(--glass-border-subtle)]">
+                        <span
+                          class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-[var(--glass-surface-elevated)] text-[var(--text-secondary)] font-bold border border-[var(--glass-border-subtle)]"
+                        >
                           {{ p.payment_method }}
                         </span>
                       </td>
-                      <td class="py-3 px-4 font-mono font-semibold text-[var(--color-success-text)] whitespace-nowrap">{{ formatCurrency(p.amount) }}</td>
+                      <td
+                        class="py-3 px-4 font-mono font-semibold text-[var(--color-success-text)] whitespace-nowrap"
+                      >
+                        {{ formatCurrency(p.amount) }}
+                      </td>
                       <td class="py-3 px-4 text-xs font-medium text-[var(--text-secondary)]">
                         @if (getAllocationCount(p) > 0) {
-                          <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] font-semibold border border-[var(--color-primary-border)]">
+                          <span
+                            class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] font-semibold border border-[var(--color-primary-border)]"
+                          >
                             {{ getAllocationCount(p) }} {{ 'ledger.weeks_covered' | i18n }}
                           </span>
                         } @else {
-                          <span class="text-[var(--text-muted)]">{{ 'ledger.direct_credit' | i18n }}</span>
+                          <span class="text-[var(--text-muted)]">{{
+                            'ledger.direct_credit' | i18n
+                          }}</span>
                         }
                       </td>
                       <td class="py-3 px-4 whitespace-nowrap">
@@ -206,7 +335,13 @@
                           <glass-badge status="overdue">Reversed</glass-badge>
                         } @else {
                           <glass-badge status="paid">Recorded</glass-badge>
-                          <button type="button" class="ml-2 text-xs px-2 py-1 rounded bg-red-600 text-white" (click)="reversePayment(p.id)">Reverse</button>
+                          <button
+                            type="button"
+                            class="ml-2 text-xs px-2 py-1 rounded bg-red-600 text-white"
+                            (click)="reversePayment(p.id)"
+                          >
+                            Reverse
+                          </button>
                         }
                       </td>
                     </tr>
@@ -217,13 +352,24 @@
           }
         } @else {
           <div class="text-center py-24">
-            <div class="w-16 h-16 mx-auto rounded-[14px] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center mb-3 shadow-xs">
+            <div
+              class="w-16 h-16 mx-auto rounded-[14px] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center mb-3 shadow-xs"
+            >
               <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6m8 0h6a2 2 0 002-2v-6a2 2 0 00-2-2h-6a2 2 0 00-2 2v6m8 0V10a2 2 0 00-2-2H9a2 2 0 00-2 2v8h12z" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                  d="M17 20v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6m8 0h6a2 2 0 002-2v-6a2 2 0 00-2-2h-6a2 2 0 00-2 2v6m8 0V10a2 2 0 00-2-2H9a2 2 0 00-2 2v8h12z"
+                />
               </svg>
             </div>
-            <h3 class="text-base font-bold text-[var(--text-primary)]">{{ 'ledger.select_borrower' | i18n }}</h3>
-            <p class="text-xs text-[var(--text-secondary)] mt-1 max-w-sm mx-auto">{{ 'ledger.select_borrower_hint' | i18n }}</p>
+            <h3 class="text-base font-bold text-[var(--text-primary)]">
+              {{ 'ledger.select_borrower' | i18n }}
+            </h3>
+            <p class="text-xs text-[var(--text-secondary)] mt-1 max-w-sm mx-auto">
+              {{ 'ledger.select_borrower_hint' | i18n }}
+            </p>
           </div>
         }
       </glass-card>

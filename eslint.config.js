@@ -3,7 +3,15 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 import prettierPlugin from 'eslint-plugin-prettier';
 
 export default [
-  { ignores: ['**/dist/**', '**/node_modules/**', '**/coverage/**', '**/*.config.js', '**/*.config.ts'] },
+  {
+    ignores: [
+      '**/dist/**',
+      '**/node_modules/**',
+      '**/coverage/**',
+      '**/*.config.js',
+      '**/*.config.ts',
+    ],
+  },
   {
     files: ['src/**/*.ts'],
     languageOptions: {

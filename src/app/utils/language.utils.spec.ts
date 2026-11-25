@@ -4,14 +4,8 @@ import {
   parseLanguage,
   getLanguageDisplayName,
   getLanguageDirection,
-  setLanguageOnDocument,
-  getLanguageStorageKey,
-  storeLanguage,
-  getStoredLanguage,
-  initializeLanguage,
   translate,
   createTranslateFn,
-  SupportedLanguage,
 } from './language.utils';
 
 describe('Language Utilities', () => {

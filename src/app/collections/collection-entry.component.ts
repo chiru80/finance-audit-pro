@@ -103,7 +103,10 @@ export class CollectionEntryComponent implements OnInit {
       }
     } catch (err) {
       // Fall back to cached data when offline/unreachable
-      const cached = await this.idb.get<{ key: string; value: Customer[] }>('cache', 'customers:active');
+      const cached = await this.idb.get<{ key: string; value: Customer[] }>(
+        'cache',
+        'customers:active',
+      );
       if (cached?.value?.length) {
         this.customers.set(cached.value);
         this.customersLoaded.set(true);

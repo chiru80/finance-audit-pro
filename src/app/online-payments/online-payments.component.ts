@@ -3,7 +3,6 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
-import { AuthService } from '../auth/auth.service';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';

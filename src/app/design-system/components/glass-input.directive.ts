@@ -1,4 +1,4 @@
-import { Directive, HostBinding, Input, HostListener } from '@angular/core';
+import { Directive, HostBinding, Input } from '@angular/core';
 
 /**
  * Applies the premium field treatment to inputs, selects and textareas.

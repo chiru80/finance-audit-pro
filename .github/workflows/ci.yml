@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 env:
-  NODE_VERSION: '20'
-  NPM_VERSION: '10'
+  NODE_VERSION: '24'
+  NPM_VERSION: '11'
 
 jobs:
   install:
@@ -67,7 +67,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
       - run: npm ci
-      - run: npm run build -- --configuration development
+      - run: npm run build
       - uses: actions/upload-artifact@v4
         with:
           name: dist

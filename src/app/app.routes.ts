@@ -77,8 +77,7 @@ export const routes: Routes = [
   {
     path: 'outbox',
     canActivate: [() => canAuthenticate()],
-    loadComponent: () =>
-      import('./collections/outbox.component').then((m) => m.OutboxComponent),
+    loadComponent: () => import('./collections/outbox.component').then((m) => m.OutboxComponent),
   },
   {
     path: 'ledger',

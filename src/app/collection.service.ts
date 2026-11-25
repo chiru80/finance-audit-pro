@@ -57,7 +57,8 @@ export class CollectionService {
       );
 
       if (error) throw error;
-      return data as {
+      const result = Array.isArray(data) ? data[0] : data;
+      return result as {
         success: boolean;
         outstanding_balance: number;
         total_due: number;

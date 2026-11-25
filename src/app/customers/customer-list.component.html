@@ -1,18 +1,32 @@
 <div class="max-w-7xl mx-auto space-y-6">
   <!-- Header Banner -->
-  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[var(--glass-border-subtle)]">
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-[var(--glass-border-subtle)]"
+  >
     <div>
       <div class="flex items-center gap-2 mb-1">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.1em] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)]">{{ 'customers.directory' | i18n }}</span>
-        <span class="text-xs text-[var(--text-secondary)] font-medium">{{ 'customers.portfolio' | i18n }}</span>
+        <span
+          class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.1em] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)]"
+          >{{ 'customers.directory' | i18n }}</span
+        >
+        <span class="text-xs text-[var(--text-secondary)] font-medium">{{
+          'customers.portfolio' | i18n
+        }}</span>
       </div>
-      <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{{ 'customers.title' | i18n }}</h1>
+      <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+        {{ 'customers.title' | i18n }}
+      </h1>
       <p class="text-sm text-[var(--text-secondary)] mt-1">{{ 'customers.subtitle' | i18n }}</p>
     </div>
 
     <glass-button variant="filled" size="md" (onClick)="createCustomer()">
       <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2.5"
+          d="M12 4v16m8-8H4"
+        />
       </svg>
       {{ 'customers.add_new' | i18n }}
     </glass-button>
@@ -20,73 +34,141 @@
 
   <!-- Summary Metric Strip -->
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div
+      class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+    >
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{ 'customers.total_customers' | i18n }}</span>
-        <div class="w-8 h-8 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center">
+        <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{
+          'customers.total_customers' | i18n
+        }}</span>
+        <div
+          class="w-8 h-8 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center"
+        >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+            />
           </svg>
         </div>
       </div>
       <div class="mt-2 flex items-baseline gap-2">
-        <span class="text-2xl font-semibold text-[var(--text-primary)]">{{ totalCustomers() }}</span>
+        <span class="text-2xl font-semibold text-[var(--text-primary)]">{{
+          totalCustomers()
+        }}</span>
         <span class="text-xs font-semibold text-[var(--text-muted)]">enrolled</span>
       </div>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div
+      class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+    >
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{ 'customers.active_borrowers' | i18n }}</span>
-        <div class="w-8 h-8 rounded-lg bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)] flex items-center justify-center">
+        <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{
+          'customers.active_borrowers' | i18n
+        }}</span>
+        <div
+          class="w-8 h-8 rounded-lg bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)] flex items-center justify-center"
+        >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         </div>
       </div>
       <div class="mt-2 flex items-baseline gap-2">
-        <span class="text-2xl font-semibold text-[var(--color-success-text)]">{{ activeCustomers() }}</span>
-        <span class="text-xs font-semibold text-[var(--color-success-text)]">{{ 'customers.in_good_standing' | i18n }}</span>
+        <span class="text-2xl font-semibold text-[var(--color-success-text)]">{{
+          activeCustomers()
+        }}</span>
+        <span class="text-xs font-semibold text-[var(--color-success-text)]">{{
+          'customers.in_good_standing' | i18n
+        }}</span>
       </div>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div
+      class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+    >
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{ 'customers.outstanding_dues' | i18n }}</span>
-        <div class="w-8 h-8 rounded-lg bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)] flex items-center justify-center">
+        <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{
+          'customers.outstanding_dues' | i18n
+        }}</span>
+        <div
+          class="w-8 h-8 rounded-lg bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)] flex items-center justify-center"
+        >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
           </svg>
         </div>
       </div>
       <div class="mt-2 flex items-baseline gap-2">
-        <span class="text-2xl font-semibold font-mono text-[var(--color-danger-text)]">{{ formatCurrency(totalOutstanding()) }}</span>
+        <span class="text-2xl font-semibold font-mono text-[var(--color-danger-text)]">{{
+          formatCurrency(totalOutstanding())
+        }}</span>
       </div>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div
+      class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+    >
       <div class="flex items-center justify-between">
-        <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{ 'customers.avg_weekly_due' | i18n }}</span>
-        <div class="w-8 h-8 rounded-lg bg-[var(--color-info-tint)] text-[var(--color-info-text)] border border-[var(--color-info-border)] flex items-center justify-center">
+        <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{
+          'customers.avg_weekly_due' | i18n
+        }}</span>
+        <div
+          class="w-8 h-8 rounded-lg bg-[var(--color-info-tint)] text-[var(--color-info-text)] border border-[var(--color-info-border)] flex items-center justify-center"
+        >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
           </svg>
         </div>
       </div>
       <div class="mt-2 flex items-baseline gap-2">
-        <span class="text-2xl font-semibold font-mono text-[var(--text-primary)]">{{ formatCurrency(avgWeeklyDue()) }}</span>
-        <span class="text-xs font-semibold text-[var(--text-muted)]">{{ 'customers.per_customer' | i18n }}</span>
+        <span class="text-2xl font-semibold font-mono text-[var(--text-primary)]">{{
+          formatCurrency(avgWeeklyDue())
+        }}</span>
+        <span class="text-xs font-semibold text-[var(--text-muted)]">{{
+          'customers.per_customer' | i18n
+        }}</span>
       </div>
     </div>
   </div>
 
   <!-- Search & Filter Controls -->
-  <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-[var(--glass-surface-base)] p-3 rounded-[14px] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+  <div
+    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-[var(--glass-surface-base)] p-3 rounded-[14px] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]"
+  >
     <!-- Search Input -->
     <div class="relative flex-1 max-w-md">
       <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10">
-        <svg class="h-4 w-4 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        <svg
+          class="h-4 w-4 text-[var(--text-muted)]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
         </svg>
       </div>
       <input
@@ -101,45 +183,72 @@
     </div>
 
     <!-- Status Filter Pills -->
-    <div class="flex items-center gap-1.5 p-1 bg-[var(--glass-surface-dock)] border border-[var(--glass-border-subtle)] rounded-xl self-start sm:self-auto">
+    <div
+      class="flex items-center gap-1.5 p-1 bg-[var(--glass-surface-dock)] border border-[var(--glass-border-subtle)] rounded-xl self-start sm:self-auto"
+    >
       <button
         type="button"
         (click)="statusFilter.set('all')"
         [attr.aria-pressed]="statusFilter() === 'all'"
-        [class]="statusFilter() === 'all' ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'"
-        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer">
+        [class]="
+          statusFilter() === 'all'
+            ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-primary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold'
+            : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'
+        "
+        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer"
+      >
         {{ 'customers.filter_all' | i18n }} ({{ customers().length }})
       </button>
       <button
         type="button"
         (click)="statusFilter.set('active')"
         [attr.aria-pressed]="statusFilter() === 'active'"
-        [class]="statusFilter() === 'active' ? 'bg-[var(--glass-surface-elevated)] text-[var(--color-success-text)] border border-[var(--glass-border-subtle)] shadow-xs font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'"
-        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer">
+        [class]="
+          statusFilter() === 'active'
+            ? 'bg-[var(--glass-surface-elevated)] text-[var(--color-success-text)] border border-[var(--glass-border-subtle)] shadow-xs font-bold'
+            : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'
+        "
+        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer"
+      >
         {{ 'customers.filter_active' | i18n }}
       </button>
       <button
         type="button"
         (click)="statusFilter.set('outstanding')"
         [attr.aria-pressed]="statusFilter() === 'outstanding'"
-        [class]="statusFilter() === 'outstanding' ? 'bg-[var(--glass-surface-elevated)] text-[var(--color-danger-text)] border border-[var(--glass-border-subtle)] shadow-xs font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'"
-        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer">
+        [class]="
+          statusFilter() === 'outstanding'
+            ? 'bg-[var(--glass-surface-elevated)] text-[var(--color-danger-text)] border border-[var(--glass-border-subtle)] shadow-xs font-bold'
+            : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium'
+        "
+        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer"
+      >
         {{ 'customers.filter_outstanding' | i18n }}
       </button>
       <button
         type="button"
         (click)="statusFilter.set('inactive')"
         [attr.aria-pressed]="statusFilter() === 'inactive'"
-        [class]="statusFilter() === 'inactive' ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-secondary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-medium'"
-        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer">
+        [class]="
+          statusFilter() === 'inactive'
+            ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-secondary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold'
+            : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-medium'
+        "
+        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer"
+      >
         {{ 'customers.filter_inactive' | i18n }}
       </button>
       <button
         type="button"
         (click)="statusFilter.set('suspended')"
         [attr.aria-pressed]="statusFilter() === 'suspended'"
-        [class]="statusFilter() === 'suspended' ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-secondary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-medium'"
-        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer">
+        [class]="
+          statusFilter() === 'suspended'
+            ? 'bg-[var(--glass-surface-elevated)] text-[var(--text-secondary)] border border-[var(--glass-border-subtle)] shadow-xs font-bold'
+            : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] font-medium'
+        "
+        class="px-3 py-1.5 text-xs rounded-lg transition-all cursor-pointer"
+      >
         {{ 'customers.filter_suspended' | i18n }}
       </button>
     </div>
@@ -147,27 +256,52 @@
 
   @if (loading()) {
     <div class="flex justify-center py-16">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-[var(--glass-border-subtle)] border-t-[var(--primary-accent)]"></div>
+      <div
+        class="h-10 w-10 animate-spin rounded-full border-4 border-[var(--glass-border-subtle)] border-t-[var(--primary-accent)]"
+      ></div>
     </div>
   }
 
   @if (error()) {
-    <div aria-live="polite" class="rounded-[14px] bg-[var(--color-danger-tint)] p-4 border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-3 backdrop-blur-sm">
-      <svg class="h-5 w-5 text-[var(--color-danger-text)] flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+    <div
+      aria-live="polite"
+      class="rounded-[14px] bg-[var(--color-danger-tint)] p-4 border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-3 backdrop-blur-sm"
+    >
+      <svg
+        class="h-5 w-5 text-[var(--color-danger-text)] flex-shrink-0"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clip-rule="evenodd"
+        />
       </svg>
       <span>{{ error() }}</span>
     </div>
   }
 
   @if (!loading() && getFilteredCustomers().length === 0) {
-    <glass-card variant="default" customClass="text-center py-16 px-6 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
-      <div class="inline-flex h-16 w-16 items-center justify-center rounded-[14px] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] mb-4 shadow-sm">
+    <glass-card
+      variant="default"
+      customClass="text-center py-16 px-6 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+    >
+      <div
+        class="inline-flex h-16 w-16 items-center justify-center rounded-[14px] bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] mb-4 shadow-sm"
+      >
         <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.8"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+          />
         </svg>
       </div>
-      <h3 class="text-lg font-bold text-[var(--text-primary)]">{{ 'customers.no_customers_found' | i18n }}</h3>
+      <h3 class="text-lg font-bold text-[var(--text-primary)]">
+        {{ 'customers.no_customers_found' | i18n }}
+      </h3>
       <p class="mt-1 text-sm text-[var(--text-secondary)] max-w-sm mx-auto">
         @if (searchQuery() || statusFilter() !== 'all') {
           {{ 'customers.no_match_filters' | i18n }}
@@ -177,7 +311,11 @@
       </p>
       <div class="mt-6 flex justify-center gap-3">
         @if (searchQuery() || statusFilter() !== 'all') {
-          <glass-button variant="glass" size="md" (onClick)="searchQuery.set(''); statusFilter.set('all')">
+          <glass-button
+            variant="glass"
+            size="md"
+            (onClick)="searchQuery.set(''); statusFilter.set('all')"
+          >
             {{ 'customers.try_clearing_search' | i18n }}
           </glass-button>
         }
@@ -189,36 +327,54 @@
   }
 
   @if (!loading() && getFilteredCustomers().length > 0) {
-    <glass-card variant="elevated" customClass="overflow-hidden p-0 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+    <glass-card
+      variant="elevated"
+      customClass="overflow-hidden p-0 bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+    >
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-[var(--glass-border-subtle)] text-sm">
           <thead>
-            <tr class="bg-[var(--glass-surface-dock)] text-left text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">
+            <tr
+              class="bg-[var(--glass-surface-dock)] text-left text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]"
+            >
               <th scope="col" class="px-6 py-4">{{ 'customers.borrower' | i18n }}</th>
               <th scope="col" class="px-6 py-4">{{ 'customers.contact' | i18n }}</th>
-              <th scope="col" class="px-6 py-4 hidden md:table-cell">{{ 'customers.village' | i18n }}</th>
+              <th scope="col" class="px-6 py-4 hidden md:table-cell">
+                {{ 'customers.village' | i18n }}
+              </th>
               <th scope="col" class="px-6 py-4">{{ 'customers.loan_amount_label' | i18n }}</th>
               <th scope="col" class="px-6 py-4">{{ 'customers.amount_given_label' | i18n }}</th>
               <th scope="col" class="px-6 py-4">{{ 'customers.weekly_due_label' | i18n }}</th>
               <th scope="col" class="px-6 py-4">{{ 'customers.outstanding_label' | i18n }}</th>
               <th scope="col" class="px-6 py-4">{{ 'customers.status' | i18n }}</th>
-              <th scope="col" class="px-6 py-4 text-right">{{ 'customers.quick_actions' | i18n }}</th>
+              <th scope="col" class="px-6 py-4 text-right">
+                {{ 'customers.quick_actions' | i18n }}
+              </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)]">
+          <tbody
+            class="divide-y divide-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)]"
+          >
             @for (customer of getFilteredCustomers(); track customer.id) {
               <tr class="hover:bg-[var(--glass-surface-elevated)]/70 transition-colors group">
                 <!-- Customer Name & Avatar -->
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] text-xs flex items-center justify-center shadow-xs flex-shrink-0 border border-[var(--color-primary-border)]">
+                    <div
+                      class="w-10 h-10 rounded-full bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] text-xs flex items-center justify-center shadow-xs flex-shrink-0 border border-[var(--color-primary-border)]"
+                    >
                       {{ getInitials(customer.name) }}
                     </div>
                     <div>
-                      <a [routerLink]="['/customers', customer.id]" class="font-bold text-[var(--text-primary)] hover:text-[var(--color-info-text)] transition-colors block leading-tight">
+                      <a
+                        [routerLink]="['/customers', customer.id]"
+                        class="font-bold text-[var(--text-primary)] hover:text-[var(--color-info-text)] transition-colors block leading-tight"
+                      >
                         {{ customer.name }}
                       </a>
-                      <span class="text-[11px] text-[var(--text-muted)] font-mono">ID: {{ customer.id.slice(0, 8) }}...</span>
+                      <span class="text-[11px] text-[var(--text-muted)] font-mono"
+                        >ID: {{ customer.id.slice(0, 8) }}...</span
+                      >
                     </div>
                   </div>
                 </td>
@@ -228,16 +384,30 @@
                   <div class="text-xs space-y-0.5">
                     @if (customer.phone) {
                       <div class="font-medium text-[var(--text-primary)] flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        <svg
+                          class="w-3.5 h-3.5 text-[var(--text-muted)]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                          />
                         </svg>
                         <span>{{ customer.phone }}</span>
                       </div>
                     } @else {
-                      <span class="text-xs text-[var(--text-muted)] text-xs italic">{{ 'customers.no_phone' | i18n }}</span>
+                      <span class="text-xs text-[var(--text-muted)] text-xs italic">{{
+                        'customers.no_phone' | i18n
+                      }}</span>
                     }
                     @if (customer.email) {
-                      <div class="text-[var(--text-secondary)] truncate max-w-[180px]">{{ customer.email }}</div>
+                      <div class="text-[var(--text-secondary)] truncate max-w-[180px]">
+                        {{ customer.email }}
+                      </div>
                     }
                   </div>
                 </td>
@@ -246,9 +416,24 @@
                 <td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">
                   @if (customer.village_name) {
                     <span class="text-sm text-[var(--text-primary)] flex items-center gap-1.5">
-                      <svg class="w-3.5 h-3.5 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <svg
+                        class="w-3.5 h-3.5 text-[var(--text-muted)]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
                       </svg>
                       {{ customer.village_name }}
                     </span>
@@ -284,17 +469,23 @@
                   <span class="font-mono font-bold text-[var(--text-primary)] text-base">
                     {{ formatCurrency(customer.weekly_due_amount) }}
                   </span>
-                  <span class="text-xs font-semibold text-[var(--text-muted)]">{{ 'customers.per_week' | i18n }}</span>
+                  <span class="text-xs font-semibold text-[var(--text-muted)]">{{
+                    'customers.per_week' | i18n
+                  }}</span>
                 </td>
 
                 <!-- Outstanding Debt Balance -->
                 <td class="px-6 py-4 whitespace-nowrap">
                   @if ((customer.outstanding_balance || 0) > 0) {
-                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)]">
+                    <span
+                      class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)]"
+                    >
                       {{ formatCurrency(customer.outstanding_balance) }}
                     </span>
                   } @else {
-                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)]">
+                    <span
+                      class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)]"
+                    >
                       ₹0.00 ({{ 'customers.clear' | i18n }})
                     </span>
                   }
@@ -316,7 +507,12 @@
                     [attr.title]="'customers.collect' | i18n"
                   >
                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2.5"
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
                     {{ 'customers.collect' | i18n }}
                   </button>
@@ -338,8 +534,18 @@
                     [attr.title]="'customers.view_details' | i18n"
                   >
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
                     </svg>
                   </button>
 
@@ -351,7 +557,12 @@
                     [attr.title]="'customers.edit' | i18n"
                   >
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                      />
                     </svg>
                   </button>
 
@@ -363,7 +574,12 @@
                     [attr.title]="'customers.delete' | i18n"
                   >
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
                     </svg>
                   </button>
                 </td>

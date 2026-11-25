@@ -4,7 +4,8 @@
 @variant dark (&:where([data-theme='dark'], [data-theme='dark'] *, .dark, .dark *));
 
 @theme {
-  --font-sans: 'Plus Jakarta Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans:
+    'Plus Jakarta Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -60,7 +61,8 @@
   --border-moderate: var(--glass-border-crisp);
   --border-moderate-rgb: 74, 66, 55;
 
-  --font-sans: 'Plus Jakarta Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans:
+    'Plus Jakarta Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -152,10 +154,15 @@ body {
   padding-block: 1.75rem;
 }
 @media (min-width: 768px) {
-  .fx-page { padding-inline: 2.25rem; padding-block: 2.25rem; }
+  .fx-page {
+    padding-inline: 2.25rem;
+    padding-block: 2.25rem;
+  }
 }
 @media (min-width: 1280px) {
-  .fx-page { padding-inline: 3rem; }
+  .fx-page {
+    padding-inline: 3rem;
+  }
 }
 
 .fx-page-head {
@@ -167,7 +174,11 @@ body {
   border-bottom: 1px solid var(--glass-border-subtle);
 }
 @media (min-width: 640px) {
-  .fx-page-head { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+  .fx-page-head {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
 }
 
 .fx-eyebrow {
@@ -269,11 +280,31 @@ body {
   background: var(--color-primary-tint);
   color: var(--color-primary-text);
 }
-.fx-icon-tile--success { border-color: var(--color-success-border); background: var(--color-success-tint); color: var(--color-success-text); }
-.fx-icon-tile--warning { border-color: var(--color-warning-border); background: var(--color-warning-tint); color: var(--color-warning-text); }
-.fx-icon-tile--danger  { border-color: var(--color-danger-border);  background: var(--color-danger-tint);  color: var(--color-danger-text); }
-.fx-icon-tile--info    { border-color: var(--color-info-border);    background: var(--color-info-tint);    color: var(--color-info-text); }
-.fx-icon-tile--neutral { border-color: var(--color-neutral-border); background: var(--color-neutral-tint); color: var(--color-neutral-text); }
+.fx-icon-tile--success {
+  border-color: var(--color-success-border);
+  background: var(--color-success-tint);
+  color: var(--color-success-text);
+}
+.fx-icon-tile--warning {
+  border-color: var(--color-warning-border);
+  background: var(--color-warning-tint);
+  color: var(--color-warning-text);
+}
+.fx-icon-tile--danger {
+  border-color: var(--color-danger-border);
+  background: var(--color-danger-tint);
+  color: var(--color-danger-text);
+}
+.fx-icon-tile--info {
+  border-color: var(--color-info-border);
+  background: var(--color-info-tint);
+  color: var(--color-info-text);
+}
+.fx-icon-tile--neutral {
+  border-color: var(--color-neutral-border);
+  background: var(--color-neutral-tint);
+  color: var(--color-neutral-text);
+}
 
 .fx-chip {
   display: inline-flex;
@@ -347,30 +378,45 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
   font-weight: 700;
   letter-spacing: -0.005em;
   cursor: pointer;
-  transition: background-color var(--glass-transition-fast), border-color var(--glass-transition-fast), color var(--glass-transition-fast), transform var(--glass-transition-fast);
+  transition:
+    background-color var(--glass-transition-fast),
+    border-color var(--glass-transition-fast),
+    color var(--glass-transition-fast),
+    transform var(--glass-transition-fast);
   border: 1px solid transparent;
   white-space: nowrap;
 }
-.fx-btn:active { transform: translateY(1px); }
+.fx-btn:active {
+  transform: translateY(1px);
+}
 .fx-btn--primary {
   background: var(--primary-accent);
   color: var(--color-on-primary);
   border-color: transparent;
   box-shadow: var(--glass-shadow-sm);
 }
-.fx-btn--primary:hover { background: var(--primary-hover); color: var(--color-on-primary); }
+.fx-btn--primary:hover {
+  background: var(--primary-hover);
+  color: var(--color-on-primary);
+}
 .fx-btn--secondary {
   background: var(--glass-surface-elevated);
   color: var(--text-primary);
   border-color: var(--glass-border-crisp);
 }
-.fx-btn--secondary:hover { background: var(--color-surface-hover); border-color: var(--color-border-medium); }
+.fx-btn--secondary:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-medium);
+}
 .fx-btn--quiet {
   background: transparent;
   color: var(--text-secondary);
   border-color: var(--glass-border-subtle);
 }
-.fx-btn--quiet:hover { background: var(--color-surface-hover); color: var(--text-primary); }
+.fx-btn--quiet:hover {
+  background: var(--color-surface-hover);
+  color: var(--text-primary);
+}
 
 .fx-segment {
   display: inline-flex;
@@ -393,7 +439,9 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
   white-space: nowrap;
   transition: all var(--glass-transition-fast);
 }
-.fx-segment button:hover { color: var(--text-primary); }
+.fx-segment button:hover {
+  color: var(--text-primary);
+}
 .fx-segment button.is-active {
   background: var(--glass-surface-elevated);
   color: var(--text-primary);
@@ -423,11 +471,23 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
   color: var(--text-primary);
   vertical-align: middle;
 }
-.fx-table tbody tr:last-child td { border-bottom: 0; }
-.fx-table tbody tr { transition: background-color var(--glass-transition-fast); }
-.fx-table tbody tr:hover { background: var(--color-surface-hover); }
-.fx-table .text-right, .fx-table th.text-right { text-align: right; }
-.fx-table .text-center, .fx-table th.text-center { text-align: center; }
+.fx-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.fx-table tbody tr {
+  transition: background-color var(--glass-transition-fast);
+}
+.fx-table tbody tr:hover {
+  background: var(--color-surface-hover);
+}
+.fx-table .text-right,
+.fx-table th.text-right {
+  text-align: right;
+}
+.fx-table .text-center,
+.fx-table th.text-center {
+  text-align: center;
+}
 
 .fx-progress {
   height: 4px;
@@ -452,11 +512,26 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
   padding: 3.5rem 1.5rem;
   text-align: center;
 }
-.fx-empty h3 { margin: 0; font-size: 0.9375rem; font-weight: 700; color: var(--text-primary); }
-.fx-empty p { margin: 0; font-size: 0.8125rem; color: var(--text-secondary); max-width: 32rem; }
+.fx-empty h3 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.fx-empty p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  max-width: 32rem;
+}
 
 .fx-skeleton {
-  background: linear-gradient(90deg, rgba(230,218,199,0.05) 0%, rgba(230,218,199,0.12) 50%, rgba(230,218,199,0.05) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(230, 218, 199, 0.05) 0%,
+    rgba(230, 218, 199, 0.12) 50%,
+    rgba(230, 218, 199, 0.05) 100%
+  );
   background-size: 200% 100%;
   animation: glass-shimmer 1.5s ease-in-out infinite;
   border-radius: 8px;
@@ -470,7 +545,11 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
   border-top-color: var(--primary-accent);
   animation: fx-spin 700ms linear infinite;
 }
-@keyframes fx-spin { to { transform: rotate(360deg); } }
+@keyframes fx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .fx-link {
   color: var(--color-info-text);
@@ -478,11 +557,19 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
   text-decoration: none;
   transition: color var(--glass-transition-fast);
 }
-.fx-link:hover { color: var(--primary-hover); }
+.fx-link:hover {
+  color: var(--primary-hover);
+}
 
-.fx-balance-pos { color: var(--color-success-text); }
-.fx-balance-neg { color: var(--color-danger-text); }
-.fx-balance-warn { color: var(--color-warning-text); }
+.fx-balance-pos {
+  color: var(--color-success-text);
+}
+.fx-balance-neg {
+  color: var(--color-danger-text);
+}
+.fx-balance-warn {
+  color: var(--color-warning-text);
+}
 
 .fx-mono-amount {
   font-family: var(--font-mono);
@@ -534,31 +621,73 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
 
 /* ---------- Mobile hardening ---------- */
 @media (max-width: 639px) {
-  html, body { overflow-x: hidden; }
+  html,
+  body {
+    overflow-x: hidden;
+  }
   /* Prevent iOS input zoom */
-  input, select, textarea { font-size: 16px !important; }
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
   /* Comfortable tap targets */
-  button, a, [role="button"] { min-height: 40px; }
+  button,
+  a,
+  [role='button'] {
+    min-height: 40px;
+  }
   /* Tables scroll instead of breaking layout */
-  table { display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   /* Safe-area padding for fixed bars */
-  .app-shell { padding-bottom: env(safe-area-inset-bottom); }
+  .app-shell {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 /* Safe-area insets for notched devices */
 @supports (padding: env(safe-area-inset-top)) {
-  .app-header, header.sticky { padding-top: env(safe-area-inset-top); }
+  .app-header,
+  header.sticky {
+    padding-top: env(safe-area-inset-top);
+  }
 }
 
 /* ---------- Tablet hardening (640px - 1023px) ---------- */
 @media (min-width: 640px) and (max-width: 1023px) {
-  html, body { overflow-x: hidden; }
-  input, select, textarea { font-size: 16px; }
-  button, a, [role="button"] { min-height: 44px; }
-  table { display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  html,
+  body {
+    overflow-x: hidden;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  button,
+  a,
+  [role='button'] {
+    min-height: 44px;
+  }
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   /* Slightly tighter page padding on tablet */
-  .fx-page { padding-inline: 1.5rem; padding-block: 1.5rem; }
+  .fx-page {
+    padding-inline: 1.5rem;
+    padding-block: 1.5rem;
+  }
   /* Keep cards from stretching too wide */
-  .fx-card { max-width: 100%; }
+  .fx-card {
+    max-width: 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

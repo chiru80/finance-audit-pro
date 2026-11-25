@@ -7,38 +7,71 @@
       class="text-xs font-bold text-[var(--color-info-text)] hover:text-[var(--color-info-text)] inline-flex items-center gap-1 mb-2 transition-colors cursor-pointer"
     >
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2.5"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+        />
       </svg>
       Back to Directory
     </button>
-    <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{{ isNew ? 'Onboard New Customer' : 'Edit Customer Profile' }}</h1>
+    <h1 class="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+      {{ isNew ? 'Onboard New Customer' : 'Edit Customer Profile' }}
+    </h1>
     <p class="text-sm text-[var(--text-secondary)] mt-1">
-      {{ isNew ? 'Create an active borrower record with loan details and collection schedule.' : 'Update borrower contact details, loan info, and assigned installment dues.' }}
+      {{
+        isNew
+          ? 'Create an active borrower record with loan details and collection schedule.'
+          : 'Update borrower contact details, loan info, and assigned installment dues.'
+      }}
     </p>
   </div>
 
   @if (error()) {
-    <div aria-live="polite" class="rounded-[14px] bg-[var(--color-danger-tint)] p-4 border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-3 backdrop-blur-sm">
-      <svg class="h-5 w-5 text-[var(--color-danger-text)] flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+    <div
+      aria-live="polite"
+      class="rounded-[14px] bg-[var(--color-danger-tint)] p-4 border border-[var(--color-danger-border)] text-sm text-[var(--color-danger-text)] flex items-center gap-3 backdrop-blur-sm"
+    >
+      <svg
+        class="h-5 w-5 text-[var(--color-danger-text)] flex-shrink-0"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clip-rule="evenodd"
+        />
       </svg>
       <span>{{ error() }}</span>
     </div>
   }
 
-  <glass-card variant="elevated" customClass="p-0 overflow-hidden bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]">
+  <glass-card
+    variant="elevated"
+    customClass="p-0 overflow-hidden bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] rounded-[14px] shadow-[var(--glass-shadow-sm)]"
+  >
     <form id="customerForm" [formGroup]="form" (ngSubmit)="onSubmit()" class="p-6 sm:p-8 space-y-6">
-
       <!-- Section 1: Personal Details -->
       <div>
         <div class="flex items-center gap-2 mb-4 pb-2 border-b border-[var(--glass-border-subtle)]">
-          <div class="w-6 h-6 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center font-bold text-xs">1</div>
-          <h2 class="text-sm font-bold uppercase tracking-[0.1em] text-[var(--text-primary)]">Borrower Identity & Contact</h2>
+          <div
+            class="w-6 h-6 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center font-bold text-xs"
+          >
+            1
+          </div>
+          <h2 class="text-sm font-bold uppercase tracking-[0.1em] text-[var(--text-primary)]">
+            Borrower Identity & Contact
+          </h2>
         </div>
 
         <div class="space-y-4">
           <div>
-            <label for="name" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+            <label
+              for="name"
+              class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+            >
               Full Legal Name <span class="text-[var(--color-danger-text)]">*</span>
             </label>
             <input
@@ -50,13 +83,18 @@
               [hasError]="!!(form.get('name')?.invalid && form.get('name')?.touched)"
             />
             @if (form.get('name')?.invalid && form.get('name')?.touched) {
-              <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block">Full name is required (minimum 2 letters)</span>
+              <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block"
+                >Full name is required (minimum 2 letters)</span
+              >
             }
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label for="phone" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+              <label
+                for="phone"
+                class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+              >
                 Mobile Number
               </label>
               <div class="relative">
@@ -74,13 +112,19 @@
               </div>
               @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
                 <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block">
-                  {{ form.get('phone')?.errors?.['invalidPhone'] || 'Please enter a valid 10-digit Indian phone number' }}
+                  {{
+                    form.get('phone')?.errors?.['invalidPhone'] ||
+                      'Please enter a valid 10-digit Indian phone number'
+                  }}
                 </span>
               }
             </div>
 
             <div>
-              <label for="email" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+              <label
+                for="email"
+                class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+              >
                 Email Address
               </label>
               <input
@@ -92,7 +136,9 @@
                 [hasError]="!!(form.get('email')?.invalid && form.get('email')?.touched)"
               />
               @if (form.get('email')?.invalid && form.get('email')?.touched) {
-                <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block">Please enter a valid email address</span>
+                <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block"
+                  >Please enter a valid email address</span
+                >
               }
             </div>
           </div>
@@ -102,14 +148,23 @@
       <!-- Section 2: Loan Details -->
       <div>
         <div class="flex items-center gap-2 mb-4 pb-2 border-b border-[var(--glass-border-subtle)]">
-          <div class="w-6 h-6 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center font-bold text-xs">2</div>
-          <h2 class="text-sm font-bold uppercase tracking-[0.1em] text-[var(--text-primary)]">Loan Details</h2>
+          <div
+            class="w-6 h-6 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center font-bold text-xs"
+          >
+            2
+          </div>
+          <h2 class="text-sm font-bold uppercase tracking-[0.1em] text-[var(--text-primary)]">
+            Loan Details
+          </h2>
         </div>
 
         <div class="space-y-4">
           <!-- Loan Date -->
           <div>
-            <label for="enrollment_date" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+            <label
+              for="enrollment_date"
+              class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+            >
               Loan Date <span class="text-[var(--color-danger-text)]">*</span>
             </label>
             <input
@@ -117,17 +172,24 @@
               type="date"
               id="enrollment_date"
               formControlName="enrollment_date"
-              [hasError]="!!(form.get('enrollment_date')?.invalid && form.get('enrollment_date')?.touched)"
+              [hasError]="
+                !!(form.get('enrollment_date')?.invalid && form.get('enrollment_date')?.touched)
+              "
               [max]="todayISO"
             />
             @if (form.get('enrollment_date')?.invalid && form.get('enrollment_date')?.touched) {
-              <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block">Loan date is required</span>
+              <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block"
+                >Loan date is required</span
+              >
             }
           </div>
 
           <!-- Village Dropdown -->
           <div>
-            <label for="village_id" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+            <label
+              for="village_id"
+              class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+            >
               Village <span class="text-[var(--color-danger-text)]">*</span>
             </label>
             <glass-dropdown
@@ -140,17 +202,24 @@
               (addNew)="createNewVillage($event)"
             />
             @if (form.get('village_id')?.invalid && form.get('village_id')?.touched) {
-              <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block">Please select a village</span>
+              <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block"
+                >Please select a village</span
+              >
             }
           </div>
 
           <!-- Loan Amount -->
           <div>
-            <label for="loan_amount" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+            <label
+              for="loan_amount"
+              class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+            >
               Loan Amount (₹) <span class="text-[var(--color-danger-text)]">*</span>
             </label>
             <div class="relative rounded-xl shadow-xs">
-              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10">
+              <div
+                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10"
+              >
                 <span class="text-[var(--text-muted)] text-sm font-bold">₹</span>
               </div>
               <input
@@ -163,7 +232,9 @@
                 max="10000000"
                 step="100"
                 placeholder="e.g. 50000"
-                [hasError]="!!(form.get('loan_amount')?.invalid && form.get('loan_amount')?.touched)"
+                [hasError]="
+                  !!(form.get('loan_amount')?.invalid && form.get('loan_amount')?.touched)
+                "
               />
             </div>
             <p class="text-xs text-[var(--text-muted)] mt-2">
@@ -171,16 +242,23 @@
             </p>
             @if (form.get('loan_amount')?.invalid && form.get('loan_amount')?.touched) {
               <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block">
-                {{ form.get('loan_amount')?.errors?.['minLoanAmount'] || 'Loan amount must be greater than 0' }}
+                {{
+                  form.get('loan_amount')?.errors?.['minLoanAmount'] ||
+                    'Loan amount must be greater than 0'
+                }}
               </span>
             }
           </div>
 
           <!-- Amount Given (Auto-computed with Deduction) -->
-          <div class="p-4 rounded-xl bg-[var(--glass-surface-muted)] border border-[var(--glass-border-subtle)]">
+          <div
+            class="p-4 rounded-xl bg-[var(--glass-surface-muted)] border border-[var(--glass-border-subtle)]"
+          >
             <div class="flex items-center justify-between text-sm mb-2">
               <span class="text-[var(--text-secondary)]">Amount Actually Given to Customer</span>
-              <span class="font-bold text-[var(--text-primary)] font-mono text-lg">₹{{ amountGivenFormatted() }}</span>
+              <span class="font-bold text-[var(--text-primary)] font-mono text-lg"
+                >₹{{ amountGivenFormatted() }}</span
+              >
             </div>
             <div class="flex items-center justify-between text-xs">
               <span class="text-[var(--text-muted)]">Deduction Applied</span>
@@ -189,14 +267,25 @@
               </span>
             </div>
             <p class="text-xs text-[var(--text-muted)] mt-2 leading-relaxed">
-              The customer receives <code class="font-mono text-[var(--text-primary)] bg-[var(--glass-surface-base)] px-1 rounded">amount_given = loan_amount - (loan_amount × deduction/1000)</code>
-              <span class="block mt-1">Configured in <a href="/settings" class="text-[var(--color-info-text)] hover:underline">Settings → Loan Disbursement Deduction</a></span>
+              The customer receives
+              <code
+                class="font-mono text-[var(--text-primary)] bg-[var(--glass-surface-base)] px-1 rounded"
+                >amount_given = loan_amount - (loan_amount × deduction/1000)</code
+              >
+              <span class="block mt-1"
+                >Configured in
+                <a href="/settings" class="text-[var(--color-info-text)] hover:underline"
+                  >Settings → Loan Disbursement Deduction</a
+                ></span
+              >
             </p>
           </div>
 
           <!-- Number of Weeks -->
           <div>
-            <label class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+            <label
+              class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+            >
               Loan Tenure (Weeks) <span class="text-[var(--color-danger-text)]">*</span>
             </label>
             <div class="flex items-center gap-2 flex-wrap mb-2">
@@ -204,7 +293,11 @@
                 <button
                   type="button"
                   (click)="selectWeeks(w)"
-                  [class]="form.get('total_weeks')?.value === w ? 'bg-[var(--primary-accent)] text-[var(--color-on-primary)] font-bold border-[var(--color-info-border)]' : 'bg-[var(--glass-surface-elevated)] hover:bg-[var(--color-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-[var(--glass-border-subtle)] font-medium'"
+                  [class]="
+                    form.get('total_weeks')?.value === w
+                      ? 'bg-[var(--primary-accent)] text-[var(--color-on-primary)] font-bold border-[var(--color-info-border)]'
+                      : 'bg-[var(--glass-surface-elevated)] hover:bg-[var(--color-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-[var(--glass-border-subtle)] font-medium'
+                  "
                   class="px-3 py-1.5 text-sm rounded-lg border transition-all cursor-pointer font-mono shadow-xs"
                 >
                   {{ w }}W
@@ -213,7 +306,11 @@
               <button
                 type="button"
                 (click)="toggleCustomWeeks()"
-                [class]="showCustomWeeks() ? 'bg-[var(--primary-accent)] text-[var(--color-on-primary)] font-bold border-[var(--color-info-border)]' : 'bg-[var(--glass-surface-elevated)] hover:bg-[var(--color-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-[var(--glass-border-subtle)] font-medium'"
+                [class]="
+                  showCustomWeeks()
+                    ? 'bg-[var(--primary-accent)] text-[var(--color-on-primary)] font-bold border-[var(--color-info-border)]'
+                    : 'bg-[var(--glass-surface-elevated)] hover:bg-[var(--color-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-[var(--glass-border-subtle)] font-medium'
+                "
                 class="px-3 py-1.5 text-sm rounded-lg border transition-all cursor-pointer font-medium shadow-xs"
               >
                 Custom
@@ -222,7 +319,9 @@
 
             @if (showCustomWeeks()) {
               <div class="relative rounded-xl shadow-xs">
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 z-10">
+                <div
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 z-10"
+                >
                   <span class="text-[var(--text-muted)] text-sm font-bold">weeks</span>
                 </div>
                 <input
@@ -233,17 +332,23 @@
                   min="1"
                   max="52"
                   step="1"
-                  [hasError]="!!(form.get('total_weeks')?.invalid && form.get('total_weeks')?.touched)"
+                  [hasError]="
+                    !!(form.get('total_weeks')?.invalid && form.get('total_weeks')?.touched)
+                  "
                 />
               </div>
             }
 
             <p class="text-xs text-[var(--text-muted)] mt-2">
-              Number of weekly installments. Presets: 12W (3 months), 21W (~5 months), 25W (6 months). Custom allows 1-52 weeks.
+              Number of weekly installments. Presets: 12W (3 months), 21W (~5 months), 25W (6
+              months). Custom allows 1-52 weeks.
             </p>
             @if (form.get('total_weeks')?.invalid && form.get('total_weeks')?.touched) {
               <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block">
-                {{ form.get('total_weeks')?.errors?.['invalidWeeks'] || 'Number of weeks must be between 1 and 52' }}
+                {{
+                  form.get('total_weeks')?.errors?.['invalidWeeks'] ||
+                    'Number of weeks must be between 1 and 52'
+                }}
               </span>
             }
           </div>
@@ -253,17 +358,28 @@
       <!-- Section 3: Collection Target & Dues Terms -->
       <div>
         <div class="flex items-center gap-2 mb-4 pb-2 border-b border-[var(--glass-border-subtle)]">
-          <div class="w-6 h-6 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center font-bold text-xs">3</div>
-          <h2 class="text-sm font-bold uppercase tracking-[0.1em] text-[var(--text-primary)]">Collection Target & Dues Terms</h2>
+          <div
+            class="w-6 h-6 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center font-bold text-xs"
+          >
+            3
+          </div>
+          <h2 class="text-sm font-bold uppercase tracking-[0.1em] text-[var(--text-primary)]">
+            Collection Target & Dues Terms
+          </h2>
         </div>
 
         <div class="space-y-4">
           <div>
-            <label for="weekly_due_amount" class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5">
+            <label
+              for="weekly_due_amount"
+              class="block text-xs font-bold uppercase tracking-[0.1em] text-[var(--text-secondary)] mb-1.5"
+            >
               Weekly Installment Target (₹) <span class="text-[var(--color-danger-text)]">*</span>
             </label>
             <div class="relative rounded-xl shadow-xs">
-              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10">
+              <div
+                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 z-10"
+              >
                 <span class="text-[var(--text-muted)] text-sm font-bold">₹</span>
               </div>
               <input
@@ -275,7 +391,11 @@
                 min="1"
                 max="10000"
                 step="50"
-                [hasError]="!!(form.get('weekly_due_amount')?.invalid && form.get('weekly_due_amount')?.touched)"
+                [hasError]="
+                  !!(
+                    form.get('weekly_due_amount')?.invalid && form.get('weekly_due_amount')?.touched
+                  )
+                "
               />
             </div>
 
@@ -286,7 +406,11 @@
                 <button
                   type="button"
                   (click)="setWeeklyAmount(amt)"
-                  [class]="form.get('weekly_due_amount')?.value === amt ? 'bg-[var(--primary-accent)] text-[var(--color-on-primary)] font-bold border-[var(--color-info-border)]' : 'bg-[var(--glass-surface-elevated)] hover:bg-[var(--color-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-[var(--glass-border-subtle)] font-medium'"
+                  [class]="
+                    form.get('weekly_due_amount')?.value === amt
+                      ? 'bg-[var(--primary-accent)] text-[var(--color-on-primary)] font-bold border-[var(--color-info-border)]'
+                      : 'bg-[var(--glass-surface-elevated)] hover:bg-[var(--color-surface-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-[var(--glass-border-subtle)] font-medium'
+                  "
                   class="px-2.5 py-1 text-xs rounded-lg border transition-all cursor-pointer font-mono shadow-xs"
                 >
                   ₹{{ amt }}
@@ -295,31 +419,26 @@
             </div>
 
             <p class="text-xs text-[var(--text-muted)] mt-2">
-              Amount to collect during each weekly cycle. Stored internally in exact integer paise for financial integrity.
+              Amount to collect during each weekly cycle. Stored internally in exact integer paise
+              for financial integrity.
             </p>
             @if (form.get('weekly_due_amount')?.invalid && form.get('weekly_due_amount')?.touched) {
-              <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block">Weekly due must be between ₹1 and ₹10,000</span>
+              <span class="text-xs text-[var(--color-danger-text)] font-medium mt-1 block"
+                >Weekly due must be between ₹1 and ₹10,000</span
+              >
             }
           </div>
         </div>
       </div>
 
       <!-- Action Footer -->
-      <div class="flex items-center justify-end gap-3 pt-5 border-t border-[var(--glass-border-subtle)]">
-        <glass-button
-          variant="glass"
-          size="md"
-          type="button"
-          (onClick)="cancel()"
-        >
+      <div
+        class="flex items-center justify-end gap-3 pt-5 border-t border-[var(--glass-border-subtle)]"
+      >
+        <glass-button variant="glass" size="md" type="button" (onClick)="cancel()">
           Cancel
         </glass-button>
-        <glass-button
-          variant="filled"
-          size="md"
-          type="submit"
-          [loading]="loading()"
-        >
+        <glass-button variant="filled" size="md" type="submit" [loading]="loading()">
           {{ isNew ? 'Create Customer' : 'Save Changes' }}
         </glass-button>
       </div>

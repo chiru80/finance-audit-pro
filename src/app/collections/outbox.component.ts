@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
@@ -29,7 +29,9 @@ import { formatPaiseToINR } from '../utils/currency.utils';
           </glass-button>
         </div>
         @if (!status.isOnline()) {
-          <p class="mt-2 text-xs text-amber-500">You are offline. Sync will run automatically when connected.</p>
+          <p class="mt-2 text-xs text-amber-500">
+            You are offline. Sync will run automatically when connected.
+          </p>
         }
       </glass-card>
 
@@ -57,7 +59,7 @@ import { formatPaiseToINR } from '../utils/currency.utils';
                     <td class="py-2">{{ p.customerName || p.customerId }}</td>
                     <td class="py-2">{{ format(p.amountPaise) }}</td>
                     <td class="py-2">{{ p.method }}</td>
-                    <td class="py-2">{{ p.createdAt | date:'short' }}</td>
+                    <td class="py-2">{{ p.createdAt | date: 'short' }}</td>
                     <td class="py-2">
                       @if (p.status === 'failed') {
                         <span class="text-red-500">{{ p.lastError }}</span>

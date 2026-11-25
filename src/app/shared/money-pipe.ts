@@ -47,7 +47,7 @@ export class MoneyPipe implements PipeTransform {
         currencyDisplay: display,
         ...this.parseDigitsInfo(digitsInfo),
       }).format(rupeeValue);
-    } catch (e) {
+    } catch {
       // Fallback to manual formatting
       return `₹${rupeeValue.toFixed(2)}`;
     }

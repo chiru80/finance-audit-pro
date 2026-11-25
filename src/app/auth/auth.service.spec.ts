@@ -3,21 +3,17 @@ import { Injector, runInInjectionContext } from '@angular/core';
 import { AuthService } from './auth.service';
 import { SupabaseService } from '../supabase.service';
 import type { User } from '@supabase/supabase-js';
-import { Session } from '@supabase/supabase-js';
 
 describe('AuthService', () => {
   let mockSupabaseService: any;
   let mockAuthClient: any;
-  let authStateCallback: any;
-
   beforeEach(() => {
     vi.clearAllMocks();
 
     mockAuthClient = {
-      onAuthStateChange: vi.fn((cb) => {
-        authStateCallback = cb;
-        return { data: { subscription: { unsubscribe: vi.fn() } } };
-      }),
+      onAuthStateChange: vi.fn(() => ({
+        data: { subscription: { unsubscribe: vi.fn() } },
+      })),
       signInWithPassword: vi.fn(),
       signUp: vi.fn(),
       signOut: vi.fn(),
@@ -39,10 +35,10 @@ describe('AuthService', () => {
         })),
       },
       getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),
-      signIn: vi.fn((email, password) =>
+      signIn: vi.fn((email, _password) =>
         Promise.resolve({ data: { user: { id: 'u1', email } }, error: null }),
       ),
-      signUp: vi.fn((email, password) =>
+      signUp: vi.fn((email, _password) =>
         Promise.resolve({ data: { user: { id: 'u2', email } }, error: null }),
       ),
       signOut: vi.fn(() => Promise.resolve({ error: null })),
