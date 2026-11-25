@@ -23,16 +23,28 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
           <p class="fx-dashboard-intro">Your collection portfolio, reconciled at a glance.</p>
         </div>
         <div class="fx-dashboard-actions">
-          <span class="fx-updated"><span class="fx-status-dot"></span> Updated {{ todayFormatted }}</span>
+          <span class="fx-updated"
+            ><span class="fx-status-dot"></span> Updated {{ todayFormatted }}</span
+          >
           <a [routerLink]="['/customers']" class="fx-btn fx-btn--gold">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+              />
             </svg>
             {{ 'dashboard.add_customer' | i18n }}
           </a>
           <a [routerLink]="['/collections']" class="fx-btn fx-btn--gold-outline">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v16m8-8H4" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.8"
+                d="M12 4v16m8-8H4"
+              />
             </svg>
             {{ 'dashboard.add_collection' | i18n }}
           </a>
@@ -45,10 +57,8 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
           <p class="fx-hero-eyebrow">
             Obsidian Luxe <span aria-hidden="true">/</span> Portfolio overview
           </p>
-          <h2 id="dashboard-title" class="fx-hero-title">{{ greeting() }}, {{ userName() }}</h2>
-          <p class="fx-hero-subtitle">
-            A clear view of collections, dues, and recent activity across your portfolio.
-          </p>
+          <h2 id="dashboard-title" class="fx-hero-title">Portfolio balance</h2>
+          <p class="fx-hero-subtitle">Collections received across the trailing 30 days.</p>
           <div class="fx-hero-balance" aria-live="polite">
             <span class="fx-hero-balance-label">Collections received · trailing 30 days</span>
             <strong>{{ stats()?.monthlyCollection ?? 0 | money }}</strong>
@@ -98,46 +108,80 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
             </div>
             <span class="fx-chip fx-chip--period">Current period</span>
           </div>
-        <!-- Key Figures -->
-        <div class="fx-stats-grid">
-          <fx-gold-stat-card
-            [label]="'dashboard.total_customers' | i18n"
-            [value]="stats()?.totalCustomers ?? 0"
-            [icon]="statIcons.customers"
-          />
-          <fx-gold-stat-card
-            [label]="'dashboard.collected_today' | i18n"
-            [value]="rupees(stats()?.todaysCollection)"
-            [prefix]="'₹'"
-            [icon]="statIcons.todays"
-          />
-          <fx-gold-stat-card
-            [label]="'dashboard.collected_this_week' | i18n"
-            [value]="rupees(stats()?.weeklyCollection)"
-            [prefix]="'₹'"
-            [icon]="statIcons.weekly"
-          />
-          <fx-gold-stat-card
-            [label]="'dashboard.collected_this_month' | i18n"
-            [value]="rupees(stats()?.monthlyCollection)"
-            [prefix]="'₹'"
-            [icon]="statIcons.monthly"
-          />
-          <fx-gold-stat-card
-            [label]="'dashboard.total_outstanding' | i18n"
-            [value]="rupees(stats()?.totalOutstanding)"
-            [prefix]="'₹'"
-            [icon]="statIcons.outstanding"
-            [color]="'warning'"
-          />
-          <fx-gold-stat-card
-            [label]="'dashboard.pending_payments' | i18n"
-            [value]="rupees(stats()?.pendingPayments)"
-            [prefix]="'₹'"
-            [icon]="statIcons.pending"
-            [color]="'warning'"
-          />
-        </div>
+          <!-- Key Figures -->
+          <div class="fx-stats-grid">
+            <fx-gold-stat-card
+              [label]="'dashboard.total_customers' | i18n"
+              [value]="stats()?.totalCustomers ?? 0"
+              [icon]="statIcons.customers"
+            />
+            <fx-gold-stat-card
+              [label]="'dashboard.collected_today' | i18n"
+              [value]="rupees(stats()?.todaysCollection)"
+              [prefix]="'₹'"
+              [icon]="statIcons.todays"
+            />
+            <fx-gold-stat-card
+              [label]="'dashboard.collected_this_week' | i18n"
+              [value]="rupees(stats()?.weeklyCollection)"
+              [prefix]="'₹'"
+              [icon]="statIcons.weekly"
+            />
+            <fx-gold-stat-card
+              [label]="'dashboard.collected_this_month' | i18n"
+              [value]="rupees(stats()?.monthlyCollection)"
+              [prefix]="'₹'"
+              [icon]="statIcons.monthly"
+            />
+            <fx-gold-stat-card
+              [label]="'dashboard.total_outstanding' | i18n"
+              [value]="rupees(stats()?.totalOutstanding)"
+              [prefix]="'₹'"
+              [icon]="statIcons.outstanding"
+              [color]="'warning'"
+            />
+            <fx-gold-stat-card
+              [label]="'dashboard.pending_payments' | i18n"
+              [value]="rupees(stats()?.pendingPayments)"
+              [prefix]="'₹'"
+              [icon]="statIcons.pending"
+              [color]="'warning'"
+            />
+          </div>
+        </section>
+
+        <section class="fx-card fx-trend-card" aria-labelledby="collection-trend-title">
+          <div class="fx-card-header">
+            <div>
+              <h2 id="collection-trend-title" class="fx-card-title">Confirmed collections</h2>
+              <p class="fx-card-description">
+                Paid entries by calendar month · current month to date
+              </p>
+            </div>
+            <span class="fx-chip fx-chip--period">Last 6 months</span>
+          </div>
+
+          @if (hasConfirmedCollections()) {
+            <div class="fx-chart" role="list" aria-label="Confirmed collections by month">
+              @for (bar of monthlyCollectionBars(); track bar.month) {
+                <div class="fx-chart-month" role="listitem">
+                  <div
+                    class="fx-chart-track"
+                    role="img"
+                    [attr.aria-label]="bar.label + ': ' + (bar.amount | money)"
+                    [attr.title]="bar.label + ': ' + (bar.amount | money)"
+                  >
+                    <div class="fx-chart-fill" [style.height.%]="bar.height"></div>
+                  </div>
+                  <span class="fx-chart-label">{{ bar.label }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="fx-chart-empty" role="status">
+              No paid collections have been recorded in this period.
+            </p>
+          }
         </section>
 
         <!-- Real-data insights -->
@@ -422,6 +466,23 @@ export class PremiumDashboardComponent {
     const state = this.statsState();
     return state.status === 'success' ? state.data : null;
   });
+  readonly monthlyCollectionBars = computed(() => {
+    const rows = this.stats()?.monthlyCollections ?? [];
+    const maxAmount = Math.max(0, ...rows.map((row) => row.amount));
+    const monthFormatter = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      timeZone: 'UTC',
+    });
+
+    return rows.map((row) => ({
+      ...row,
+      label: monthFormatter.format(new Date(`${row.month}-01T00:00:00.000Z`)),
+      height: maxAmount > 0 ? Math.round((row.amount / maxAmount) * 100) : 0,
+    }));
+  });
+  readonly hasConfirmedCollections = computed(() =>
+    this.monthlyCollectionBars().some((bar) => bar.amount > 0),
+  );
   readonly statsLoading = computed(() => this.statsState().status === 'loading');
   readonly statsError = computed(() => {
     const state = this.statsState();

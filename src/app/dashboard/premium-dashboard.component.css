@@ -97,33 +97,6 @@
   font-weight: 600;
 }
 
-.fx-hero-panel {
-  display: none;
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-height: 192px;
-  padding: clamp(1.5rem, 3.4vw, 3rem);
-  overflow: hidden;
-  border: 1px solid rgba(213, 239, 158, 0.28);
-  border-radius: 22px;
-  background:
-    radial-gradient(ellipse 42% 120% at 88% 0%, rgba(213, 239, 158, 0.2), transparent 72%),
-    linear-gradient(115deg, rgba(20, 60, 48, 0.94), rgba(28, 88, 67, 0.76) 78%);
-  box-shadow: var(--glass-shadow-xl), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
-  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
-  animation: glassSlideUp 420ms var(--glass-spring-easing) both;
-}
-
-
-.fx-action-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  animation: glassFadeIn 400ms 40ms var(--glass-spring-easing) both;
-}
-
 .fx-btn--gold,
 .fx-btn--gold-outline,
 .fx-btn--gold-outlined,
@@ -605,11 +578,6 @@
     border-radius: var(--glass-radius-lg);
   }
 
-  .fx-hero-panel::after {
-    right: -9rem;
-    bottom: -10rem;
-  }
-
   .fx-hero-title {
     font-size: 1.5rem;
   }
@@ -621,18 +589,6 @@
   .fx-hero-muted {
     display: block;
     margin: 0.4rem 0 0;
-  }
-
-  .fx-action-bar {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-
-  .fx-action-bar .fx-btn {
-    min-height: 2.75rem;
-    padding-inline: 0.65rem;
-    white-space: normal;
   }
 
   .fx-stats-grid {

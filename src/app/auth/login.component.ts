@@ -16,11 +16,11 @@ import { I18nService } from '../shared/i18n.service';
   imports: [FormsModule, RouterLink, GlassButtonComponent, GlassInputDirective, I18nPipe],
   template: `
     <div
-      class="fx-auth-shell min-h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(400px,.95fr)] xl:grid-cols-[minmax(0,1.1fr)_minmax(460px,.9fr)]"
+      class="fx-auth-shell min-h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(400px,.95fr)] xl:grid-cols-[minmax(0,1.1fr)_minmax(460px,.9fr)]"
     >
       <!-- Editorial panel -->
       <section
-        class="fx-auth-story hidden flex-col justify-between border-r border-[var(--glass-border-subtle)] px-7 py-8 md:flex xl:px-16 xl:py-12"
+        class="fx-auth-story hidden flex-col justify-between border-r border-[var(--glass-border-subtle)] px-7 py-8 lg:flex xl:px-16 xl:py-12"
       >
         <div class="flex items-center gap-3">
           <span
@@ -95,9 +95,9 @@ import { I18nService } from '../shared/i18n.service';
       </section>
 
       <!-- Form panel -->
-      <section class="flex items-center justify-center px-5 py-10 sm:px-8 lg:py-12">
+      <section class="flex min-h-[100dvh] items-center justify-center px-5 py-10 sm:px-8 lg:py-12">
         <div class="w-full max-w-[420px]">
-          <div class="mb-7 flex items-center gap-3 md:hidden">
+          <div class="mb-7 flex items-center gap-3 lg:hidden">
             <span
               class="inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
             >
