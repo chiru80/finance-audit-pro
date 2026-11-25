@@ -151,7 +151,22 @@ interface VillageSummary extends Village {
                     class="border-b border-[var(--glass-border-subtle)] last:border-b-0 hover:bg-[var(--color-surface-hover)] transition-colors"
                   >
                     <td class="py-3.5 px-4 font-semibold text-[var(--text-primary)]">
-                      {{ v.name }}
+                      @if (editingId() === v.id) {
+                        <form (ngSubmit)="saveEdit(v)" class="flex items-center gap-2 max-w-xs">
+                          <input
+                            glassInput
+                            type="text"
+                            [name]="'editVillageName-' + v.id"
+                            [(ngModel)]="editingName"
+                            (keydown.escape)="cancelEdit()"
+                            placeholder="Village name"
+                            class="!py-1.5 !px-2.5 text-sm"
+                            [disabled]="savingEdit()"
+                          />
+                        </form>
+                      } @else {
+                        {{ v.name }}
+                      }
                     </td>
                     <td class="py-3.5 px-4 text-[var(--text-secondary)] tabular-nums">
                       {{ v.activeCount }} active / {{ v.customerCount }} total
@@ -167,21 +182,77 @@ interface VillageSummary extends Village {
                       </glass-badge>
                     </td>
                     <td class="py-3.5 px-4 text-right">
-                      <div class="inline-flex items-center gap-2">
-                        <a
-                          [routerLink]="['/collections']"
-                          [queryParams]="{ villageId: v.id }"
-                          class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] hover:opacity-90 transition-opacity"
-                        >
-                          Collect
-                        </a>
-                        <button
-                          type="button"
-                          (click)="toggleActive(v)"
-                          class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--glass-border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--color-surface-hover)] transition-colors"
-                        >
-                          {{ v.is_active ? 'Archive' : 'Restore' }}
-                        </button>
+                      <div class="inline-flex items-center justify-end gap-2">
+                        @if (editingId() === v.id) {
+                          <button
+                            type="button"
+                            (click)="saveEdit(v)"
+                            [disabled]="savingEdit() || !editingName.trim()"
+                            class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] hover:opacity-90 disabled:opacity-50 transition-opacity"
+                          >
+                            {{ savingEdit() ? 'Saving...' : 'Save' }}
+                          </button>
+                          <button
+                            type="button"
+                            (click)="cancelEdit()"
+                            [disabled]="savingEdit()"
+                            class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--glass-border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        } @else if (confirmDeleteId() === v.id) {
+                          <button
+                            type="button"
+                            (click)="deleteVillage(v)"
+                            [disabled]="deletingId() === v.id"
+                            class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)] hover:opacity-90 disabled:opacity-50 transition-opacity"
+                          >
+                            {{
+                              deletingId() === v.id
+                                ? 'Deleting...'
+                                : v.customerCount > 0
+                                  ? 'Unassign & Delete'
+                                  : 'Confirm Delete'
+                            }}
+                          </button>
+                          <button
+                            type="button"
+                            (click)="cancelDelete()"
+                            [disabled]="deletingId() === v.id"
+                            class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--glass-border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        } @else {
+                          <a
+                            [routerLink]="['/collections']"
+                            [queryParams]="{ villageId: v.id }"
+                            class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] hover:opacity-90 transition-opacity"
+                          >
+                            Collect
+                          </a>
+                          <button
+                            type="button"
+                            (click)="startEdit(v)"
+                            class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--glass-border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            (click)="toggleActive(v)"
+                            class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--glass-border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--color-surface-hover)] transition-colors"
+                          >
+                            {{ v.is_active ? 'Archive' : 'Restore' }}
+                          </button>
+                          <button
+                            type="button"
+                            (click)="requestDelete(v)"
+                            class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--color-danger-border)] text-[var(--color-danger-text)] hover:bg-[var(--color-danger-tint)] transition-colors"
+                          >
+                            Delete
+                          </button>
+                        }
                       </div>
                     </td>
                   </tr>
@@ -202,9 +273,14 @@ export class VillagesComponent implements OnInit {
   customers = signal<Customer[]>([]);
   loading = signal(true);
   saving = signal(false);
+  savingEdit = signal(false);
+  editingId = signal<string | null>(null);
+  confirmDeleteId = signal<string | null>(null);
+  deletingId = signal<string | null>(null);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
   newVillageName = '';
+  editingName = '';
 
   villageSummaries = computed<VillageSummary[]>(() => {
     const custs = this.customers();
@@ -299,6 +375,96 @@ export class VillagesComponent implements OnInit {
       );
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Failed to update village');
+    }
+  }
+
+  startEdit(village: VillageSummary) {
+    this.confirmDeleteId.set(null);
+    this.error.set(null);
+    this.editingId.set(village.id);
+    this.editingName = village.name;
+  }
+
+  cancelEdit() {
+    this.editingId.set(null);
+    this.editingName = '';
+  }
+
+  async saveEdit(village: VillageSummary) {
+    const nextName = this.editingName.trim();
+    if (!nextName || this.savingEdit()) return;
+    if (nextName === village.name) {
+      this.cancelEdit();
+      return;
+    }
+
+    this.savingEdit.set(true);
+    this.error.set(null);
+    this.success.set(null);
+    try {
+      const { error } = await this._supabase.client
+        .from('villages')
+        .update({ name: nextName, updated_at: new Date().toISOString() })
+        .eq('id', village.id);
+      if (error) throw error;
+      this.villages.update((list) =>
+        list
+          .map((v) => (v.id === village.id ? { ...v, name: nextName } : v))
+          .sort((a, b) => a.name.localeCompare(b.name)),
+      );
+      this.cancelEdit();
+      this.success.set(`Renamed village to "${nextName}".`);
+      setTimeout(() => this.success.set(null), 3500);
+    } catch (err) {
+      this.error.set(err instanceof Error ? err.message : 'Failed to rename village');
+    } finally {
+      this.savingEdit.set(false);
+    }
+  }
+
+  requestDelete(village: VillageSummary) {
+    this.cancelEdit();
+    this.error.set(null);
+    this.confirmDeleteId.set(village.id);
+  }
+
+  cancelDelete() {
+    this.confirmDeleteId.set(null);
+  }
+
+  async deleteVillage(village: VillageSummary) {
+    if (this.deletingId()) return;
+    this.deletingId.set(village.id);
+    this.error.set(null);
+    this.success.set(null);
+    try {
+      if (village.customerCount > 0) {
+        const { error: unassignError } = await this._supabase.client
+          .from('customers')
+          .update({ village_id: null })
+          .eq('village_id', village.id);
+        if (unassignError) throw unassignError;
+      }
+
+      const { error } = await this._supabase.client
+        .from('villages')
+        .delete()
+        .eq('id', village.id);
+      if (error) throw error;
+
+      this.villages.update((list) => list.filter((v) => v.id !== village.id));
+      if (village.customerCount > 0) {
+        this.customers.update((list) =>
+          list.map((c) => (c.village_id === village.id ? { ...c, village_id: null } : c)),
+        );
+      }
+      this.confirmDeleteId.set(null);
+      this.success.set(`Deleted village "${village.name}".`);
+      setTimeout(() => this.success.set(null), 3500);
+    } catch (err) {
+      this.error.set(err instanceof Error ? err.message : 'Failed to delete village');
+    } finally {
+      this.deletingId.set(null);
     }
   }
 
