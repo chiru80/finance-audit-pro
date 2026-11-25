@@ -2,11 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { BrandLogoComponent } from '../shared/brand-logo.component';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, BrandLogoComponent],
   template: `
     <div
       class="fx-auth-shell min-h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] md:grid md:grid-cols-[minmax(400px,.95fr)_minmax(0,1.05fr)] xl:grid-cols-[minmax(460px,.9fr)_minmax(0,1.1fr)]"
@@ -15,18 +16,7 @@ import { environment } from '../../environments/environment';
       <section class="flex items-center justify-center px-5 py-10 sm:px-8 lg:py-12">
         <div class="w-full max-w-[420px]">
           <div class="mb-7 flex items-center gap-3 md:hidden">
-            <span
-              class="inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
-            >
-              <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.9"
-                  d="M12 4a8 8 0 100 16 8 8 0 000-16z"
-                />
-              </svg>
-            </span>
+            <app-brand-logo [size]="36" />
             <p class="text-sm font-bold tracking-tight">Finance Audit Pro</p>
           </div>
 
@@ -101,18 +91,7 @@ import { environment } from '../../environments/environment';
               FINANCE · AUDIT
             </p>
           </div>
-          <span
-            class="fx-brand-mark inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
-          >
-            <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.9"
-                d="M12 4a8 8 0 100 16 8 8 0 000-16z"
-              />
-            </svg>
-          </span>
+          <app-brand-logo [size]="38" />
         </div>
 
         <div class="max-w-lg">

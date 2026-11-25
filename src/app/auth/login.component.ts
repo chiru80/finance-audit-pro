@@ -9,11 +9,19 @@ import { GlassButtonComponent } from '../design-system/components/glass-button.c
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 import { I18nPipe } from '../shared/i18n.pipe';
 import { I18nService } from '../shared/i18n.service';
+import { BrandLogoComponent } from '../shared/brand-logo.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterLink, GlassButtonComponent, GlassInputDirective, I18nPipe],
+  imports: [
+    FormsModule,
+    RouterLink,
+    GlassButtonComponent,
+    GlassInputDirective,
+    I18nPipe,
+    BrandLogoComponent,
+  ],
   template: `
     <div
       class="fx-auth-shell min-h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(400px,.95fr)] xl:grid-cols-[minmax(0,1.1fr)_minmax(460px,.9fr)]"
@@ -23,18 +31,7 @@ import { I18nService } from '../shared/i18n.service';
         class="fx-auth-story hidden flex-col justify-between border-r border-[var(--glass-border-subtle)] px-7 py-8 lg:flex xl:px-16 xl:py-12"
       >
         <div class="flex items-center gap-3">
-          <span
-            class="fx-brand-mark inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
-          >
-            <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.9"
-                d="M12 4a8 8 0 100 16 8 8 0 000-16z"
-              />
-            </svg>
-          </span>
+          <app-brand-logo [size]="38" />
           <div>
             <p class="text-[13px] font-bold tracking-tight">Finance Audit Pro</p>
             <p
@@ -98,18 +95,7 @@ import { I18nService } from '../shared/i18n.service';
       <section class="flex min-h-[100dvh] items-center justify-center px-5 py-10 sm:px-8 lg:py-12">
         <div class="w-full max-w-[420px]">
           <div class="mb-7 flex items-center gap-3 lg:hidden">
-            <span
-              class="inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
-            >
-              <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.9"
-                  d="M12 4a8 8 0 100 16 8 8 0 000-16z"
-                />
-              </svg>
-            </span>
+            <app-brand-logo [size]="36" />
             <p class="text-sm font-bold tracking-tight">Finance Audit Pro</p>
           </div>
 
@@ -342,7 +328,28 @@ import { I18nService } from '../shared/i18n.service';
         border: 1px solid rgba(245, 241, 232, 0.18);
         border-radius: 16px;
         background: rgba(245, 241, 232, 0.075);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        -webkit-backdrop-filter: blur(18px) saturate(155%);
+        backdrop-filter: blur(18px) saturate(155%);
+        box-shadow:
+          0 16px 36px -18px rgba(0, 0, 0, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.09);
+      }
+
+      .fx-auth-form-card {
+        -webkit-backdrop-filter: blur(22px) saturate(170%);
+        backdrop-filter: blur(22px) saturate(170%);
+        animation: authCardIn 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      @keyframes authCardIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.99);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
       }
 
       .fx-ledger-preview__heading {
