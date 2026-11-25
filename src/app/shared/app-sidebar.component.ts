@@ -351,9 +351,9 @@ export class AppSidebarComponent {
     { labelKey: 'nav.collections', icon: 'collections', routerLink: '/collections' },
     { labelKey: 'nav.ledger', icon: 'ledger', routerLink: '/ledger' },
     { labelKey: 'nav.reports', icon: 'reports', routerLink: '/reports' },
-    { labelKey: 'nav.onlinePayments', icon: 'reports', routerLink: '/online-payments' },
-    { labelKey: 'nav.auditLog', icon: 'reports', routerLink: '/audit-log' },
-    { labelKey: 'nav.outbox', icon: 'collections', routerLink: '/outbox' },
+    { labelKey: 'nav.onlinePayments', icon: 'payments', routerLink: '/online-payments' },
+    { labelKey: 'nav.auditLog', icon: 'audit', routerLink: '/audit-log' },
+    { labelKey: 'nav.outbox', icon: 'outbox', routerLink: '/outbox' },
   ];
 
   adminNavItems: NavItem[] = [
@@ -376,6 +376,9 @@ export class AppSidebarComponent {
       collections: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />`,
       ledger: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />`,
       reports: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />`,
+      payments: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.25 8.25h19.5m-16.5 0V6A2.25 2.25 0 017.5 3.75h9A2.25 2.25 0 0118.75 6v2.25m-13.5 0v9.75A2.25 2.25 0 007.5 20.25h9a2.25 2.25 0 002.25-2.25V8.25m-12 5.25h4.5" />`,
+      audit: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z" />`,
+      outbox: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8.25l9 5.25 9-5.25M4.5 6h15A1.5 1.5 0 0121 7.5v10.125A2.625 2.625 0 0118.375 20.25H5.625A2.625 2.625 0 013 17.625V7.5A1.5 1.5 0 014.5 6z" />`,
       settings: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />`,
     };
     const icon = icons[iconName] || '';
