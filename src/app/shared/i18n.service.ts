@@ -101,8 +101,12 @@ const englishTranslations: Translations = {
   'customers.select_customer': 'Select a customer',
   'customers.in_good_standing': 'in good standing',
   'customers.total_customers': 'Total Customers',
+  'customers.active_borrowers': 'Active Borrowers',
+  'customers.outstanding_dues': 'Outstanding Dues',
+  'customers.avg_weekly_due': 'Avg Weekly Due',
+  'customers.per_customer': '/ customer',
   'customers.confirm_delete':
-    'Mark this customer as inactive? Their payment history will be preserved.',
+    'Delete this customer permanently? All their records and payment history will be removed.',
 
   // Ledger additional
   'ledger.search_placeholder': 'Search customer...',

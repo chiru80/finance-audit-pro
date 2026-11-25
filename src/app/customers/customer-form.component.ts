@@ -18,9 +18,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 
 function indianPhoneValidator(control: AbstractControl): ValidationErrors | null {
-  if (!control.value || control.value.trim() === '') return null;
-  const errors = validatePhoneNumber(control.value);
+  if (!control.value || String(control.value).trim() === '') return null;
+  const errors = validatePhoneNumber(String(control.value).trim());
   return errors.length > 0 ? { invalidPhone: errors[0] } : null;
+}
+
+function optionalEmailValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value || String(control.value).trim() === '') return null;
+  return Validators.email({ ...control, value: String(control.value).trim() } as AbstractControl);
 }
 
 function loanAmountValidator(control: AbstractControl): ValidationErrors | null {
@@ -119,7 +124,7 @@ export class CustomerFormComponent implements OnInit {
     // Section 1: Personal Details
     name: ['', [Validators.required, Validators.minLength(2)]],
     phone: ['', [indianPhoneValidator]],
-    email: ['', [Validators.email]],
+    email: ['', [optionalEmailValidator]],
 
     // Section 2: Loan Details
     enrollment_date: ['', [Validators.required]],
@@ -317,7 +322,24 @@ export class CustomerFormComponent implements OnInit {
   async onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.error.set('Please check the form for invalid inputs.');
+      const fieldLabels: Record<string, string> = {
+        name: 'Full Legal Name',
+        phone: 'Mobile Number',
+        email: 'Email Address',
+        enrollment_date: 'Loan Date',
+        village_id: 'Village',
+        loan_amount: 'Loan Amount',
+        total_weeks: 'Loan Tenure',
+        weekly_due_amount: 'Weekly Installment Target',
+      };
+      const invalidFields = Object.keys(this.form.controls)
+        .filter((key) => this.form.controls[key].invalid)
+        .map((key) => fieldLabels[key] || key);
+      this.error.set(
+        invalidFields.length
+          ? `Please check the form for invalid inputs: ${invalidFields.join(', ')}.`
+          : 'Please check the form for invalid inputs.',
+      );
       return;
     }
 

@@ -21,9 +21,9 @@
   <!-- Summary Metric Strip -->
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="fx-metric-tile p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between gap-2">
         <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{ 'customers.total_customers' | i18n }}</span>
-        <div class="w-8 h-8 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center">
+        <div class="w-8 h-8 shrink-0 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] flex items-center justify-center">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
@@ -36,9 +36,9 @@
     </div>
 
     <div class="fx-metric-tile p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between gap-2">
         <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{ 'customers.active_borrowers' | i18n }}</span>
-        <div class="w-8 h-8 rounded-lg bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)] flex items-center justify-center">
+        <div class="w-8 h-8 shrink-0 rounded-lg bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)] flex items-center justify-center">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -51,9 +51,9 @@
     </div>
 
     <div class="fx-metric-tile p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between gap-2">
         <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{ 'customers.outstanding_dues' | i18n }}</span>
-        <div class="w-8 h-8 rounded-lg bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)] flex items-center justify-center">
+        <div class="w-8 h-8 shrink-0 rounded-lg bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)] flex items-center justify-center">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
@@ -65,9 +65,9 @@
     </div>
 
     <div class="fx-metric-tile p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between gap-2">
         <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">{{ 'customers.avg_weekly_due' | i18n }}</span>
-        <div class="w-8 h-8 rounded-lg bg-[var(--color-info-tint)] text-[var(--color-info-text)] border border-[var(--color-info-border)] flex items-center justify-center">
+        <div class="w-8 h-8 shrink-0 rounded-lg bg-[var(--color-info-tint)] text-[var(--color-info-text)] border border-[var(--color-info-border)] flex items-center justify-center">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
@@ -194,22 +194,22 @@
         <table class="min-w-full divide-y divide-[var(--glass-border-subtle)] text-sm">
           <thead>
             <tr class="bg-[var(--glass-surface-dock)] text-left text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em]">
-              <th scope="col" class="px-6 py-4">{{ 'customers.borrower' | i18n }}</th>
-              <th scope="col" class="px-6 py-4">{{ 'customers.contact' | i18n }}</th>
-              <th scope="col" class="px-6 py-4 hidden md:table-cell">{{ 'customers.village' | i18n }}</th>
-              <th scope="col" class="px-6 py-4">{{ 'customers.loan_amount_label' | i18n }}</th>
-              <th scope="col" class="px-6 py-4">{{ 'customers.amount_given_label' | i18n }}</th>
-              <th scope="col" class="px-6 py-4">{{ 'customers.weekly_due_label' | i18n }}</th>
-              <th scope="col" class="px-6 py-4">{{ 'customers.outstanding_label' | i18n }}</th>
-              <th scope="col" class="px-6 py-4">{{ 'customers.status' | i18n }}</th>
-              <th scope="col" class="px-6 py-4 text-right">{{ 'customers.quick_actions' | i18n }}</th>
+              <th scope="col" class="px-4 py-3.5">{{ 'customers.borrower' | i18n }}</th>
+              <th scope="col" class="px-3.5 py-3.5">{{ 'customers.contact' | i18n }}</th>
+              <th scope="col" class="px-3.5 py-3.5 hidden md:table-cell">{{ 'customers.village' | i18n }}</th>
+              <th scope="col" class="px-3.5 py-3.5">{{ 'customers.loan_amount_label' | i18n }}</th>
+              <th scope="col" class="px-3.5 py-3.5">{{ 'customers.amount_given_label' | i18n }}</th>
+              <th scope="col" class="px-3.5 py-3.5">{{ 'customers.weekly_due_label' | i18n }}</th>
+              <th scope="col" class="px-3.5 py-3.5">{{ 'customers.outstanding_label' | i18n }}</th>
+              <th scope="col" class="px-3.5 py-3.5">{{ 'customers.status' | i18n }}</th>
+              <th scope="col" class="px-4 py-3.5 text-right">{{ 'customers.quick_actions' | i18n }}</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-[var(--glass-border-subtle)] bg-[var(--glass-surface-base)]">
             @for (customer of getFilteredCustomers(); track customer.id) {
               <tr class="hover:bg-[var(--glass-surface-elevated)]/70 transition-colors group">
                 <!-- Customer Name & Avatar -->
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-3.5 py-3.5 whitespace-nowrap">
                   <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] text-xs flex items-center justify-center shadow-xs flex-shrink-0 border border-[var(--color-primary-border)]">
                       {{ getInitials(customer.name) }}
@@ -224,7 +224,7 @@
                 </td>
 
                 <!-- Contact Info -->
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-3.5 py-3.5 whitespace-nowrap">
                   <div class="text-xs space-y-0.5">
                     @if (customer.phone) {
                       <div class="font-medium text-[var(--text-primary)] flex items-center gap-1.5">
@@ -243,7 +243,7 @@
                 </td>
 
                 <!-- Village -->
-                <td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">
+                <td class="px-3.5 py-3.5 whitespace-nowrap hidden md:table-cell">
                   @if (customer.village_name) {
                     <span class="text-sm text-[var(--text-primary)] flex items-center gap-1.5">
                       <svg class="w-3.5 h-3.5 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,7 +258,7 @@
                 </td>
 
                 <!-- Loan Amount -->
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-3.5 py-3.5 whitespace-nowrap">
                   @if ((customer.loan_amount || 0) > 0) {
                     <span class="font-mono font-semibold text-[var(--text-primary)]">
                       {{ formatCurrency(customer.loan_amount) }}
@@ -269,7 +269,7 @@
                 </td>
 
                 <!-- Amount Given (net disbursal after deduction) -->
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-3.5 py-3.5 whitespace-nowrap">
                   @if ((customer.amount_given || 0) > 0 || (customer.loan_amount || 0) > 0) {
                     <span class="font-mono font-semibold text-[var(--color-info-text)]">
                       {{ formatCurrency(customer.amount_given || 0) }}
@@ -280,7 +280,7 @@
                 </td>
 
                 <!-- Weekly Due Amount -->
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-3.5 py-3.5 whitespace-nowrap">
                   <span class="font-mono font-bold text-[var(--text-primary)] text-base">
                     {{ formatCurrency(customer.weekly_due_amount) }}
                   </span>
@@ -288,7 +288,7 @@
                 </td>
 
                 <!-- Outstanding Debt Balance -->
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-3.5 py-3.5 whitespace-nowrap">
                   @if ((customer.outstanding_balance || 0) > 0) {
                     <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)]">
                       {{ formatCurrency(customer.outstanding_balance) }}
@@ -301,14 +301,14 @@
                 </td>
 
                 <!-- Status -->
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-3.5 py-3.5 whitespace-nowrap">
                   <glass-badge [status]="customer.status === 'active' ? 'active' : 'neutral'">
                     {{ getStatusLabel(customer.status) }}
                   </glass-badge>
                 </td>
 
                 <!-- Quick Action Buttons -->
-                <td class="px-6 py-4 whitespace-nowrap text-right text-xs font-medium space-x-1.5">
+                <td class="px-3.5 py-3.5 whitespace-nowrap text-right text-xs font-medium space-x-1.5">
                   <button
                     type="button"
                     (click)="recordCollection(customer)"
