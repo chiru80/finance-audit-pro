@@ -2,15 +2,25 @@ import type { Routes } from '@angular/router';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
+import { AuthService } from './auth/auth.service';
 import { adminGuard } from './auth/auth.guard';
 
 // Guard for authentication
 const canAuthenticate = async () => {
+  const authService = inject(AuthService);
   const supabase = inject(SupabaseService);
   const router = inject(Router);
+
+  if (authService.isAuthenticated()) {
+    return true;
+  }
+
   try {
-    const session = await supabase.getSession();
-    if (session?.data?.session?.user) {
+    const session = await Promise.race([
+      supabase.getSession(),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000)),
+    ]);
+    if (session?.data?.session?.user || authService.isAuthenticated()) {
       return true;
     }
   } catch (err) {

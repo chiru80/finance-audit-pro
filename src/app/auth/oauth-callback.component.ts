@@ -121,11 +121,29 @@ export class OauthCallbackComponent implements OnInit, OnDestroy {
     }
   }
 
-  private navigateToDashboard() {
+  private async navigateToDashboard() {
     if (this._navigated) return;
     this._navigated = true;
     this.cleanup();
-    this._router.navigate(['/dashboard'], { replaceUrl: true });
+
+    const hardFallback = setTimeout(() => {
+      if (typeof window !== 'undefined' && window.location.pathname.startsWith('/auth/callback')) {
+        window.location.replace('/dashboard');
+      }
+    }, 1200);
+
+    try {
+      const ok = await this._router.navigate(['/dashboard'], { replaceUrl: true });
+      clearTimeout(hardFallback);
+      if (!ok && typeof window !== 'undefined') {
+        window.location.replace('/dashboard');
+      }
+    } catch {
+      clearTimeout(hardFallback);
+      if (typeof window !== 'undefined') {
+        window.location.replace('/dashboard');
+      }
+    }
   }
 
   private redirectToLogin(error = 'oauth_failed') {
