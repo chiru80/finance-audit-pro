@@ -116,59 +116,6 @@
   animation: glassSlideUp 420ms var(--glass-spring-easing) both;
 }
 
-.fx-hero-panel::before {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: #d5ef9e;
-  content: '';
-}
-
-.fx-hero-panel::after {
-  position: absolute;
-  right: -5rem;
-  bottom: -8rem;
-  width: 19rem;
-  aspect-ratio: 1;
-  border: 1px solid rgba(213, 239, 158, 0.28);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 1.75rem rgba(213, 239, 158, 0.07),
-    0 0 0 3.5rem rgba(213, 239, 158, 0.035);
-  content: '';
-  pointer-events: none;
-}
-
-.fx-hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 54rem;
-}
-
-.fx-hero-title {
-  margin: 0;
-  color: #f4f8f1;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 3.4vw, 3rem);
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-}
-
-.fx-hero-subtitle {
-  max-width: 58ch;
-  margin: 0.75rem 0 0;
-  color: #d3e2d7;
-  font-size: 0.875rem;
-  line-height: 1.7;
-}
-
-.fx-hero-muted {
-  display: inline-block;
-  margin-left: 0.35rem;
-  color: #acc6b4;
-  font-size: 0.75rem;
-}
 
 .fx-action-bar {
   display: flex;

@@ -12,16 +12,14 @@ export class ThemeService {
     this.initializeTheme();
   }
 
-  /**
-   * Initialize the saved theme, using the new light workspace as the default.
-   */
+  /** Use an explicit preference when present, otherwise follow the system theme. */
   private initializeTheme() {
-    const savedTheme = localStorage.getItem(this.THEME_KEY);
-    if (savedTheme === 'dark') {
-      this.setDark();
-    } else {
-      this.setLight();
-    }
+    const savedTheme = globalThis.localStorage?.getItem(this.THEME_KEY);
+    const prefersDark = globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+    this.setTheme(
+      savedTheme === 'dark' || (savedTheme !== 'light' && prefersDark) ? 'dark' : 'light',
+      false,
+    );
   }
 
   /**
@@ -59,17 +57,20 @@ export class ThemeService {
   /**
    * Apply theme by setting data attribute on html element
    */
-  private setTheme(theme: 'light' | 'dark') {
+  private setTheme(theme: 'light' | 'dark', persist = true) {
     const htmlElement = this.document.documentElement;
 
     if (theme === 'dark') {
       htmlElement.dataset['theme'] = 'dark';
       htmlElement.classList.add('dark');
-      localStorage.setItem(this.THEME_KEY, 'dark');
     } else {
       delete htmlElement.dataset['theme'];
       htmlElement.classList.remove('dark');
-      localStorage.setItem(this.THEME_KEY, 'light');
     }
+
+    if (persist) globalThis.localStorage?.setItem(this.THEME_KEY, theme);
+    this.document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', theme === 'dark' ? '#101116' : '#f7f5f0');
   }
 }

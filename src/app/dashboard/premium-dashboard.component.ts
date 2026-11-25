@@ -15,7 +15,7 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
   standalone: true,
   imports: [CommonModule, RouterModule, MoneyPipe, I18nPipe, GlassGoldStatCardComponent],
   template: `
-    <main class="fx-dashboard w-full max-w-[1440px] mx-auto space-y-6">
+    <main class="fx-dashboard w-full max-w-[1440px] mx-auto space-y-8">
       <header class="fx-dashboard-heading">
         <div>
           <span class="fx-dashboard-eyebrow">Finance operations / Overview</span>
@@ -38,6 +38,24 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
           </a>
         </div>
       </header>
+
+      <!-- Collection overview uses the verified rolling total from the ledger. -->
+      <section class="fx-hero-panel" aria-labelledby="dashboard-title">
+        <div class="fx-hero-content">
+          <p class="fx-hero-eyebrow">
+            Obsidian Luxe <span aria-hidden="true">/</span> Portfolio overview
+          </p>
+          <h2 id="dashboard-title" class="fx-hero-title">{{ greeting() }}, {{ userName() }}</h2>
+          <p class="fx-hero-subtitle">
+            A clear view of collections, dues, and recent activity across your portfolio.
+          </p>
+          <div class="fx-hero-balance" aria-live="polite">
+            <span class="fx-hero-balance-label">Collections received · trailing 30 days</span>
+            <strong>{{ stats()?.monthlyCollection ?? 0 | money }}</strong>
+            <span class="fx-hero-muted">Ledger updated {{ todayFormatted }}</span>
+          </div>
+        </div>
+      </section>
 
       @if (statsLoading()) {
         <section class="fx-card fx-loading-card" role="status" aria-live="polite">

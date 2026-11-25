@@ -4,9 +4,9 @@
 @variant dark (&:where([data-theme='dark'], [data-theme='dark'] *, .dark, .dark *));
 
 @theme {
-  --font-sans: 'DM Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'DM Serif Display', 'Noto Sans Telugu', Georgia, serif;
-  --font-mono: 'DM Sans', 'Noto Sans Telugu', system-ui, sans-serif;
+  --font-sans: 'Inter', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Cormorant Garamond', 'Noto Sans Telugu', Georgia, serif;
+  --font-mono: 'Inter', 'Noto Sans Telugu', system-ui, sans-serif;
 }
 
 /* Semantic foundations: evergreen brand, warm paper canvas, and measured status accents. */
@@ -82,8 +82,8 @@
   --border-moderate: var(--glass-border-crisp);
   --border-moderate-rgb: 73, 97, 81;
 
-  --font-sans: 'DM Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'DM Sans', 'Noto Sans Telugu', system-ui, sans-serif;
+  --font-sans: 'Inter', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Inter', 'Noto Sans Telugu', system-ui, sans-serif;
 }
 
 :root:not([data-theme='dark']) {
@@ -648,7 +648,7 @@ h1:not(.fx-hero-title) {
 
 .fx-card,
 .fx-card-elevated {
-  border-radius: 18px;
+  border-radius: 16px;
   border-color: var(--glass-border-subtle);
   box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
   -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
@@ -678,7 +678,7 @@ textarea[glassInput] {
 
 .fx-btn--primary,
 .glass-btn-root.glass-btn-filled {
-  box-shadow: 0 5px 14px -8px rgba(15, 82, 61, 0.55);
+  box-shadow: var(--glass-shadow-sm);
 }
 
 .fx-table thead th {
@@ -720,22 +720,22 @@ textarea[glassInput] {
 }
 
 .fx-metric-tile {
-  border-radius: var(--ds-radius-card);
-  background: var(--ds-surface);
-  box-shadow: var(--ds-shadow-card);
+  border-radius: var(--ds-radius-card, 17px);
+  background: var(--ds-surface, var(--glass-surface-base));
+  box-shadow: var(--ds-shadow-card, 0 8px 22px -16px rgba(36, 35, 31, 0.24));
   transition: border-color var(--glass-transition-fast), transform var(--glass-transition-fast), box-shadow var(--glass-transition-fast);
 }
 
 .fx-metric-tile:hover {
   border-color: var(--glass-border-crisp);
-  box-shadow: 0 12px 28px -18px rgba(25, 53, 38, 0.3);
+  box-shadow: 0 12px 28px -18px rgba(36, 35, 31, 0.3);
   transform: translateY(-1px);
 }
 
 .fx-auth-point {
-  border-color: rgba(236, 246, 238, 0.16) !important;
+  border-color: rgba(245, 241, 232, 0.16) !important;
   border-radius: 14px !important;
-  background: rgba(236, 246, 238, 0.07) !important;
+  background: rgba(245, 241, 232, 0.07) !important;
 }
 
 .fx-main {
@@ -744,6 +744,150 @@ textarea[glassInput] {
 
 @media (max-width: 767px) {
   .fx-auth-form-card {
-    box-shadow: 0 16px 38px -30px rgba(19, 47, 34, 0.3);
+    box-shadow: 0 16px 38px -30px rgba(36, 35, 31, 0.16);
+  }
+}
+
+.fx-hero-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 192px;
+  padding: clamp(1.5rem, 3.4vw, 3rem);
+  overflow: hidden;
+  border: 1px solid var(--color-primary-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse 42% 120% at 88% 0%, rgba(201, 174, 122, 0.16), transparent 72%),
+    var(--gradient-signature);
+  box-shadow: var(--glass-shadow-xl), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+  animation: glassSlideUp 420ms var(--glass-spring-easing) both;
+}
+
+.fx-hero-panel::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--brand-champagne);
+  content: '';
+}
+
+.fx-hero-panel::after {
+  position: absolute;
+  right: -5rem;
+  bottom: -8rem;
+  width: 19rem;
+  aspect-ratio: 1;
+  border: 1px solid rgba(201, 174, 122, 0.28);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1.75rem rgba(201, 174, 122, 0.07),
+    0 0 0 3.5rem rgba(201, 174, 122, 0.035);
+  content: '';
+  pointer-events: none;
+}
+
+.fx-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 54rem;
+}
+
+.fx-hero-eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--brand-champagne);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.fx-hero-eyebrow span {
+  padding-inline: 0.35rem;
+  opacity: 0.7;
+}
+
+.fx-hero-title {
+  margin: 0;
+  color: var(--brand-ivory);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.fx-hero-subtitle {
+  max-width: 58ch;
+  margin: 0.75rem 0 0;
+  color: #e6dfd0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.fx-hero-balance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  margin-top: 1.5rem;
+}
+
+.fx-hero-balance-label {
+  color: var(--brand-champagne);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fx-hero-balance strong {
+  color: var(--brand-ivory);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.fx-hero-muted {
+  color: #e6dfd0;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 639px) {
+  .fx-hero-panel {
+    min-height: 0;
+    padding: 1.25rem;
+    border-radius: var(--glass-radius-lg);
+  }
+
+  .fx-hero-panel::after {
+    right: -9rem;
+    bottom: -10rem;
+  }
+
+  .fx-hero-title {
+    font-size: 1.5rem;
+  }
+
+  .fx-hero-balance {
+    margin-top: 1.125rem;
+  }
+
+  .fx-hero-balance strong {
+    font-size: 2rem;
+  }
+
+  .fx-hero-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .fx-hero-muted {
+    display: block;
+    margin-top: 0.4rem;
   }
 }

@@ -1,4 +1,4 @@
-# Design System Master File — Finance Audit Pro
+# Design System Master File — Obsidian Luxe
 
 > **LOGIC:** When building a specific page, first check `design-system/pages/[page-name].md`.
 > If that file exists, its rules **override** this Master file.
@@ -9,66 +9,43 @@
 **Project:** Finance Audit Pro  
 **Updated:** 2026-11-17  
 **Category:** B2B Financial SaaS  
-**Theme:** Dark (default) — Liquid Glass / Glisse-inspired
+**Theme:** System-aware light and dark — Obsidian Luxe premium FinTech
 
 ---
 
 ## Global Rules
 
-### Color Palette (FinTech Dark Theme)
+### Color Palette (Obsidian Luxe Light and Dark Themes)
 
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary (CTA) | `#2563EB` | `--primary-accent` / `--color-primary` |
-| Primary Hover | `#3B82F6` | `--primary-hover` / `--color-primary-hover` |
-| Primary Light (tint) | `rgba(37, 99, 235, 0.15)` | `--color-primary-light` |
-| Primary Border | `rgba(37, 99, 235, 0.30)` | `--color-primary-border` |
-| Background Primary | `#0B1120` | `--bg-primary` / `--color-bg-primary` |
-| Background Secondary | `#111827` | `--bg-secondary` / `--color-bg-secondary` |
-| Background Sidebar | `#0F172A` | `--bg-sidebar` / `--color-bg-sidebar` |
-| Background Topbar | `#111827` | `--bg-topbar` / `--color-bg-topbar` |
-| Background Card | `#151F32` | `--bg-card` / `--color-bg-card` / `--glass-surface-base` |
-| Background Card Elevated | `#18243A` | `--bg-card-elevated` / `--color-bg-card-elevated` / `--glass-surface-elevated` |
-| Background Input | `#0F172A` | `--bg-input` / `--color-bg-input` |
-| Border Subtle | `#263449` | `--border-color` / `--color-border` / `--glass-border-subtle` |
-| Border Crisp | `#33435C` | `--glass-border-crisp` |
-| Border Medium | `#334460` | `--color-border-medium` |
-| Text Primary | `#F8FAFC` | `--text-primary` / `--color-text-primary` |
-| Text Secondary | `#94A3B8` | `--text-secondary` / `--color-text-secondary` |
-| Text Muted | `#64748B` | `--text-muted` / `--color-text-muted` |
-| Success | `#10B981` | `--color-success` |
-| Success Light (tint) | `rgba(16, 185, 129, 0.15)` | `--color-success-light` / `--color-success-light` |
-| Success Border | `rgba(16, 185, 129, 0.30)` | `--color-success-border` |
-| Warning | `#F59E0B` | `--color-warning` |
-| Warning Light (tint) | `rgba(245, 158, 11, 0.15)` | `--color-warning-light` / `--color-warning-light` |
-| Warning Border | `rgba(245, 158, 11, 0.30)` | `--color-warning-border` |
-| Danger | `#EF4444` | `--color-danger` |
-| Danger Light (tint) | `rgba(239, 68, 68, 0.15)` | `--color-danger-light` / `--color-danger-light` |
-| Danger Border | `rgba(239, 68, 68, 0.30)` | `--color-danger-border` |
-| Info | `#38BDF8` | `--color-info` |
-| Info Light (tint) | `rgba(56, 189, 248, 0.15)` | `--color-info-light` / `--color-info-light` |
-| Info Border | `rgba(56, 189, 248, 0.30)` | `--color-info-border` |
-| Neutral Light (tint) | `rgba(100, 116, 139, 0.15)` | `--color-neutral-light` |
-| Neutral Border | `rgba(100, 116, 139, 0.30)` | `--color-neutral-border` |
-| Surface Hover | `#1E2D47` | `--color-surface-hover` |
-| Surface Active | `#1D2B42` | `--color-surface-active` |
-| Text Inverse (on saturated) | `#FFFFFF` | `--color-text-inverse` |
-| Focus Ring | `#2563EB` | `--focus-ring-color` |
-| Focus Ring Width | `2px` | `--focus-ring-width` |
-| Focus Ring Offset | `2px` | `--focus-ring-offset` |
-| Focus Ring Offset Color | `#0B1120` | `--focus-ring-offset-color` |
+The live token source is `src/app/design-system/styles/glass-tokens.css`. Components consume semantic variables so the same UI adapts to either theme.
 
-**Color Notes:** Dark FinTech navy base (`#0B1120`), blue primary accent (`#2563EB`), semantic tints for states (success/warning/danger/info at 15% opacity with 30% borders), frosted-glass surfaces via `backdrop-filter: blur + saturate`.
+| Role | Dark | Light | CSS Variable |
+|------|------|-------|--------------|
+| Obsidian | `#101116` | `#101116` | `--brand-obsidian` |
+| Graphite | `#25262C` | `#25262C` | `--brand-graphite` |
+| Champagne | `#C9AE7A` | `#A78B59` | `--brand-champagne` / `--primary-accent` |
+| Warm ivory | `#F5EAD5` | `#F5EAD5` | `--brand-ivory` |
+| Background | `#101116` | `#F7F5F0` | `--bg-primary` |
+| Surface | `#191A20` | `#FFFFFF` | `--bg-card` / `--glass-surface-base` |
+| Secondary surface | `#22232A` | `#F0EDE6` | `--bg-card-elevated` / `--glass-surface-elevated` |
+| Primary text | `#F5F1E8` | `#24231F` | `--text-primary` |
+| Secondary text | `#B4B0A6` | `#69665F` | `--text-secondary` |
+| Muted text | `#8C8B87` | `#77746D` | `--text-muted` |
+| Success | `#55C49A` | `#087750` | `--color-success` |
+| Danger | `#F08079` | `#B53F3F` | `--color-danger` |
+| Warning | `#E4BD70` | `#895811` | `--color-warning` |
+| Information | `#91B4DF` | `#456D9E` | `--color-info` |
+| Border | `#303138` | `#E7E1D6` | `--glass-border-subtle` |
+| Focus ring | Theme accent | Theme accent | `--focus-ring-color` |
+
+**Color notes:** Keep most surfaces solid and quiet. Reserve champagne gradients for the balance/overview panel and small premium accents; positive and negative outcomes must use their semantic colors, never gold alone.
 
 ### Typography
 
-- **Heading Font:** Inter (via `var(--glass-font-sans)`)
-- **Body Font:** Inter (via `var(--glass-font-sans)`)
-- **Mono Font:** JetBrains Mono (via `var(--glass-font-mono)`)
-- **Google Fonts Import:**
-```css
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
-```
+- **Display Font:** Cormorant Garamond (`var(--font-display)`) for editorial headings and key totals.
+- **Interface Font:** Inter (`var(--font-ui)`) for navigation, tables, forms, and body copy.
+- **Numerals:** Tabular numerals for all financial amounts.
+- Load Cormorant Garamond and Inter through the existing Google Fonts link in `src/index.html`.
 
 | Token | Value | Usage |
 |-------|-------|-------|
@@ -165,7 +142,7 @@
 | `--glass-shadow-glow-info` | `0 0 24px rgba(56,189,248,0.25)` | Info states |
 | `--glass-shadow-inner` | `inset 0 2px 4px rgba(0,0,0,0.4)` | Recessed inputs |
 
-### Specular / Rim Lighting (Liquid Glass Signature)
+### Subtle Surface Finish
 
 ```css
 --glass-specular-top: inset 0 1px 0 0 rgba(255,255,255,0.08);
@@ -229,10 +206,10 @@ All components are **standalone Angular components** in `src/app/design-system/c
 
 ### 1. glass-button (`<glass-button>`)
 
-**Variants:** `filled` (vibrant primary), `glass` (dark elevated), `tinted` (subtle blue), `danger`  
+**Variants:** `filled` (champagne primary), `glass` (solid elevated surface), `tinted` (subtle champagne), `danger`
 **Sizes:** `sm` (34px), `md` (42px), `lg` (46px)  
 **States:** default, hover (`translateY(-1px)`), active (`scale(0.985)`), disabled (opacity 0.5, `not-allowed`), loading (spinner)  
-**Focus:** `focus:ring-2 focus:ring-[#2563EB]/40 focus:ring-offset-1 focus:ring-offset-[#0B1120]`  
+**Focus:** visible 2px ring using `var(--focus-ring-color)` with a 2px semantic offset
 **Specular:** 1px top highlight line (`via-white/20`)
 
 ### 2. glass-card (`<glass-card>`)
@@ -259,7 +236,7 @@ All components are **standalone Angular components** in `src/app/design-system/c
 **Backdrop:** `bg-black/75 backdrop-blur-md`  
 **Surface:** `#111827` / `border #263449` / `shadow-2xl`  
 **Animation:** `dialogPop` (200ms, scale 0.96→1, translateY 8px→0)  
-**Variants:** `primary` (blue confirm), `danger` (red confirm)  
+**Variants:** `primary` (champagne confirm), `danger` (semantic danger confirm)
 **Specular:** 1px top highlight line
 
 ### 6. glass-dropdown (`<glass-dropdown>`)
@@ -276,7 +253,7 @@ All components are **standalone Angular components** in `src/app/design-system/c
 
 ### 8. glass-progress (`<glass-progress>`)
 
-**Variants:** `default` (blue), `success`, `warning`, `danger`, `info`  
+**Variants:** `default` (theme accent), `success`, `warning`, `danger`, `info`
 **Sizes:** `sm` (4px), `md` (6px), `lg` (8px)  
 **Features:** optional label, indeterminate shimmer
 
@@ -299,7 +276,7 @@ All components are **standalone Angular components** in `src/app/design-system/c
 
 ### 12. glass-input (directive: `glassInput`)
 
-**Style:** `#0F172A` bg, `#263449` border, focus ring `#2563EB`  
+**Style:** semantic input surface, subtle theme border, theme-accent focus ring
 **Sizes:** `sm`, `md`, `lg`
 
 ### 13. glass-avatar (`<glass-avatar>`)
@@ -320,8 +297,8 @@ All components are **standalone Angular components** in `src/app/design-system/c
 
 ## Style Guidelines
 
-**Style:** Dark Liquid Glass / Glisse-inspired FinTech  
-**Keywords:** dark mode, frosted glass, refraction, specular highlights, high contrast, financial, professional, trustworthy, data-dense, responsive, accessible
+**Style:** Obsidian Luxe — refined, responsive financial interfaces with solid surfaces and selective champagne accents.
+**Keywords:** obsidian, graphite, warm ivory, champagne, editorial typography, financial precision, professional, trustworthy, accessible
 
 **Key Effects:**
 - Frosted glass surfaces via `backdrop-filter: blur + saturate`
@@ -330,7 +307,7 @@ All components are **standalone Angular components** in `src/app/design-system/c
 - Colored glow shadows for semantic states
 - Spring physics (`cubic-bezier(0.16, 1, 0.3, 1)`) for all motion
 - Reduced-motion support (transitions → 0ms)
-- Visible focus rings (2px, primary blue, offset)
+- Visible focus rings (2px, theme accent, offset)
 - 44×44px minimum touch targets (button heights: 34/42/46px)
 
 ---
@@ -347,13 +324,13 @@ All components are **standalone Angular components** in `src/app/design-system/c
 
 ## Anti-Patterns (Do NOT Use)
 
-- ❌ Light mode default (app is dark-first; no light theme tokens defined)
+- ❌ Incomplete theme support — both light and dark modes must use the same semantic token architecture
 - ❌ Playful/consumer gradients (no pink/purple AI gradients)
 - ❌ Flat, opaque cards (always use glass surface with blur + specular)
 - ❌ Emojis as icons — Use inline SVG (Lucide-style, `stroke="currentColor"`)
 - ❌ Missing `cursor:pointer` — All clickable elements must have it
 - ❌ Layout-shifting hovers — Use `transform` only, no `margin`/`width` changes
-- ❌ Low contrast text — Maintain 4.5:1 minimum (text primary `#F8FAFC` on `#0B1120` = 18.5:1)
+- ❌ Low contrast text — Maintain at least 4.5:1 for normal text in both themes
 - ❌ Instant state changes — Always use transitions (100–300ms, spring easing)
 - ❌ Invisible focus states — Focus rings mandatory (2px, offset)
 - ❌ Hardcoded colors in components — Use CSS variables / design tokens only
@@ -370,8 +347,8 @@ Before delivering any UI code, verify:
 - [ ] All icons from consistent set (Lucide-style, 24×24 viewBox)
 - [ ] `cursor-pointer` on all clickable elements
 - [ ] Hover states with smooth transitions (100–300ms, spring easing)
-- [ ] Dark mode: text contrast ≥ 4.5:1 (primary text `#F8FAFC` on `#0B1120` = 18.5:1 ✓)
-- [ ] Focus states visible for keyboard navigation (2px ring, offset, primary blue)
+- [ ] Light and dark themes: text contrast ≥ 4.5:1; check text and controls against semantic surface tokens
+- [ ] Focus states visible for keyboard navigation (2px ring, offset, theme accent)
 - [ ] `prefers-reduced-motion` respected (transitions → 0ms)
 - [ ] Responsive: 375px, 768px, 1024px, 1440px (test container queries)
 - [ ] No content hidden behind fixed navbars (topbar 64px, sidebar 280px)

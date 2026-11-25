@@ -68,11 +68,21 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
         box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
       }
 
-      :host:nth-child(2) .fx-gold-stat-root { animation-delay: 45ms; }
-      :host:nth-child(3) .fx-gold-stat-root { animation-delay: 90ms; }
-      :host:nth-child(4) .fx-gold-stat-root { animation-delay: 135ms; }
-      :host:nth-child(5) .fx-gold-stat-root { animation-delay: 180ms; }
-      :host:nth-child(6) .fx-gold-stat-root { animation-delay: 225ms; }
+      :host:nth-child(2) .fx-gold-stat-root {
+        animation-delay: 45ms;
+      }
+      :host:nth-child(3) .fx-gold-stat-root {
+        animation-delay: 90ms;
+      }
+      :host:nth-child(4) .fx-gold-stat-root {
+        animation-delay: 135ms;
+      }
+      :host:nth-child(5) .fx-gold-stat-root {
+        animation-delay: 180ms;
+      }
+      :host:nth-child(6) .fx-gold-stat-root {
+        animation-delay: 225ms;
+      }
 
       .fx-gold-accent-bar {
         position: absolute;

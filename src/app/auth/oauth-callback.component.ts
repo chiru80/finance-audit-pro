@@ -19,7 +19,7 @@ import { SupabaseService } from '../supabase.service';
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="1.9"
-              d="M4 19V9m5 10V5m5 14v-7m5 7V8"
+              d="M12 4a8 8 0 100 16 8 8 0 000-16z"
             />
           </svg>
         </span>
