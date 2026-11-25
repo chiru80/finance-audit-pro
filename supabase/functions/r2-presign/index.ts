@@ -2,7 +2,7 @@
  * Supabase Edge Function: R2 Presigned URL Generation
  *
  * Deploy:
- *   supabase functions deploy r2-presign --no-verify-jwt
+ *   supabase functions deploy r2-presign
  *
  * Required secrets (set via `supabase secrets set` or Dashboard):
  *   R2_ACCOUNT_ID
@@ -18,12 +18,19 @@
  */
 
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@aws-sdk/client-s3@3.500.0';
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, HeadObjectCommand, ListObjectsV2Command } from 'https://esm.sh/@aws-sdk/client-s3@3.500.0';
+import { createClient as createSupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  HeadObjectCommand,
+  ListObjectsV2Command,
+} from 'https://esm.sh/@aws-sdk/client-s3@3.500.0';
 import { getSignedUrl } from 'https://esm.sh/@aws-sdk/s3-request-presigner@3.500.0';
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*', // tighten to your domain in production
+  'Access-Control-Allow-Origin': 'https://weeklyfinance.online',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
@@ -43,6 +50,28 @@ function getEnv(): Env {
     if (!env[k]) throw new Error(`Missing secret: ${k}`);
   }
   return env as Env;
+}
+
+async function getUserId(req: Request): Promise<string | null> {
+  const token = req.headers.get('Authorization')?.match(/^Bearer\s+(.+)$/i)?.[1];
+  const url = Deno.env.get('SUPABASE_URL');
+  const anonKey = Deno.env.get('SUPABASE_ANON_KEY');
+  if (!token || !url || !anonKey) return null;
+
+  const supabase = createSupabaseClient(url, anonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
+  const { data, error } = await supabase.auth.getUser(token);
+  return error ? null : (data.user?.id ?? null);
+}
+
+function objectKey(userId: string, key: unknown): string | null {
+  if (typeof key !== 'string' || !key.trim() || key.includes('\\') || key.split('/').includes('..'))
+    return null;
+  const normalized = key.replace(/^\/+/, '');
+  if (!normalized || normalized.startsWith(`${userId}/`)) return normalized || null;
+  return `${userId}/${normalized}`;
 }
 
 function createR2Client(env: Env): S3Client {
@@ -77,6 +106,9 @@ serve(async (req) => {
     return error('Method not allowed', 405);
   }
 
+  const userId = await getUserId(req);
+  if (!userId) return error('Authentication required', 401);
+
   try {
     const env = getEnv();
     const client = createR2Client(env);
@@ -85,9 +117,11 @@ serve(async (req) => {
 
     switch (action) {
       case 'presign-upload': {
-        const { key, contentType, expiresIn = 3600 } = params;
-        if (!key) return error('Missing key');
-        if (!contentType) return error('Missing contentType');
+        const { key: rawKey, contentType, expiresIn = 3600 } = params;
+        const key = objectKey(userId, rawKey);
+        if (!key) return error('Invalid key');
+        if (typeof contentType !== 'string' || !contentType || contentType.length > 255)
+          return error('Invalid contentType');
 
         const cmd = new PutObjectCommand({
           Bucket: env.R2_BUCKET,
@@ -95,7 +129,9 @@ serve(async (req) => {
           ContentType: contentType,
         });
 
-        const uploadUrl = await getSignedUrl(client, cmd, { expiresIn: Math.min(expiresIn, 604800) });
+        const uploadUrl = await getSignedUrl(client, cmd, {
+          expiresIn: Math.min(expiresIn, 604800),
+        });
 
         return json({
           uploadUrl,
@@ -106,15 +142,18 @@ serve(async (req) => {
       }
 
       case 'presign-download': {
-        const { key, expiresIn = 3600 } = params;
-        if (!key) return error('Missing key');
+        const { key: rawKey, expiresIn = 3600 } = params;
+        const key = objectKey(userId, rawKey);
+        if (!key) return error('Invalid key');
 
         const cmd = new GetObjectCommand({
           Bucket: env.R2_BUCKET,
           Key: key,
         });
 
-        const downloadUrl = await getSignedUrl(client, cmd, { expiresIn: Math.min(expiresIn, 604800) });
+        const downloadUrl = await getSignedUrl(client, cmd, {
+          expiresIn: Math.min(expiresIn, 604800),
+        });
 
         return json({
           downloadUrl,
@@ -124,13 +163,11 @@ serve(async (req) => {
       }
 
       case 'head': {
-        const { key } = params;
-        if (!key) return error('Missing key');
+        const key = objectKey(userId, params.key);
+        if (!key) return error('Invalid key');
 
         try {
-          const res = await client.send(
-            new HeadObjectCommand({ Bucket: env.R2_BUCKET, Key: key }),
-          );
+          const res = await client.send(new HeadObjectCommand({ Bucket: env.R2_BUCKET, Key: key }));
           return json({
             object: {
               key,
@@ -150,11 +187,15 @@ serve(async (req) => {
 
       case 'list': {
         const { prefix = '', maxKeys = 100 } = params;
+        if (typeof prefix !== 'string' || prefix.includes('\\') || prefix.split('/').includes('..'))
+          return error('Invalid prefix');
+        const scopedPrefix = `${userId}/${prefix.replace(/^\/+/, '')}`;
+        const safeMaxKeys = Number.isInteger(maxKeys) ? Math.min(Math.max(maxKeys, 1), 1000) : 100;
         const res = await client.send(
           new ListObjectsV2Command({
             Bucket: env.R2_BUCKET,
-            Prefix: prefix,
-            MaxKeys: maxKeys,
+            Prefix: scopedPrefix,
+            MaxKeys: safeMaxKeys,
           }),
         );
 
@@ -170,12 +211,10 @@ serve(async (req) => {
       }
 
       case 'delete': {
-        const { key } = params;
-        if (!key) return error('Missing key');
+        const key = objectKey(userId, params.key);
+        if (!key) return error('Invalid key');
 
-        await client.send(
-          new DeleteObjectCommand({ Bucket: env.R2_BUCKET, Key: key }),
-        );
+        await client.send(new DeleteObjectCommand({ Bucket: env.R2_BUCKET, Key: key }));
         return json({ success: true });
       }
 

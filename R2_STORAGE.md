@@ -80,10 +80,10 @@ cp .env.example .env.local
 ### 4. Deploy the Edge Function
 
 ```bash
-supabase functions deploy r2-presign --no-verify-jwt
+supabase functions deploy r2-presign
 ```
 
-The `--no-verify-jwt` flag allows unauthenticated calls (CORS preflight). In production, you may want to add auth verification inside the function.
+JWT verification remains enabled. Every request must include a valid Supabase access token; the function restricts object keys to the authenticated user's own prefix.
 
 ### 5. Update Angular Environment
 
@@ -210,7 +210,7 @@ supabase start
 supabase secrets set --env-file .env.local R2_ACCOUNT_ID=... R2_ACCESS_KEY_ID=... R2_SECRET_ACCESS_KEY=... R2_BUCKET=...
 
 # 3. Deploy function locally
-supabase functions deploy r2-presign --no-verify-jwt --project-ref local
+supabase functions deploy r2-presign --project-ref local
 
 # 4. Test with curl
 curl -X POST http://localhost:54321/functions/v1/r2-presign \
