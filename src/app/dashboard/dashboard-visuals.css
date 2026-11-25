@@ -1,15 +1,20 @@
 .fx-hero-panel {
-  --hero-bg: linear-gradient(135deg, #fffdf9 0%, #f7f1e3 54%, #efe3c8 100%);
+  --hero-bg: linear-gradient(
+    135deg,
+    rgba(255, 253, 249, 0.78) 0%,
+    rgba(247, 241, 227, 0.72) 54%,
+    rgba(239, 227, 200, 0.66) 100%
+  );
   --hero-border: rgba(167, 139, 89, 0.34);
-  --hero-shadow: 0 20px 44px -26px rgba(120, 92, 42, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --hero-shadow: 0 20px 44px -26px rgba(120, 92, 42, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.92);
   --hero-eyebrow: #856834;
   --hero-title: #17171b;
   --hero-sub: #57534e;
   --hero-muted: #78716c;
-  --hero-pill-bg: rgba(255, 255, 255, 0.78);
+  --hero-pill-bg: rgba(255, 255, 255, 0.68);
   --hero-pill-border: rgba(167, 139, 89, 0.28);
-  --hero-metric-bg: rgba(255, 255, 255, 0.72);
-  --hero-metric-hover-bg: rgba(255, 255, 255, 0.95);
+  --hero-metric-bg: rgba(255, 255, 255, 0.62);
+  --hero-metric-hover-bg: rgba(255, 255, 255, 0.88);
   --hero-metric-border: rgba(167, 139, 89, 0.24);
   --hero-metric-hover-border: rgba(167, 139, 89, 0.55);
   --hero-amount-shadow: 0 4px 18px rgba(167, 139, 89, 0.14);
@@ -24,13 +29,20 @@
   border: 1px solid var(--hero-border);
   border-radius: var(--glass-radius-xl);
   background: var(--hero-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
   box-shadow: var(--hero-shadow);
   animation: heroPanelIn 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 [data-theme='dark'] .fx-hero-panel,
 .dark .fx-hero-panel {
-  --hero-bg: var(--gradient-signature);
+  --hero-bg: linear-gradient(
+    120deg,
+    rgba(16, 17, 22, 0.78) 0%,
+    rgba(57, 55, 45, 0.68) 48%,
+    rgba(167, 139, 89, 0.36) 100%
+  );
   --hero-border: var(--color-primary-border);
   --hero-shadow: var(--glass-shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.14);
   --hero-eyebrow: var(--brand-soft-champagne);

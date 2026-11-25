@@ -16,10 +16,10 @@
   --bg-primary: #101116;
   --bg-secondary: #15161b;
   --bg-sidebar: #101116;
-  --bg-topbar: rgba(16, 17, 22, 0.92);
-  --bg-card: #191a20;
-  --bg-card-elevated: #22232a;
-  --bg-input: #191a20;
+  --bg-topbar: rgba(16, 17, 22, 0.68);
+  --bg-card: rgba(26, 27, 35, 0.62);
+  --bg-card-elevated: rgba(35, 36, 46, 0.72);
+  --bg-input: rgba(22, 23, 30, 0.72);
   --border-color: #303138;
   --text-primary: #f5f1e8;
   --text-secondary: #b4b0a6;
@@ -79,30 +79,30 @@
   --color-border-medium: #414249;
 
   /* ---------------------------------------------------------------------
-   * Layered liquid-glass surfaces
+   * Layered liquid-glass surfaces (2026 frosted glassmorphism)
    * ------------------------------------------------------------------- */
-  --glass-surface-base: #191a20;
-  --glass-surface-muted: #22232a;
-  --glass-surface-elevated: #22232a;
-  --glass-surface-active: #2a2b32;
-  --glass-surface-dock: #101116;
-  --glass-surface-subtle: #1c1d22;
-  --glass-surface-overlay: #191a20;
+  --glass-surface-base: rgba(26, 27, 35, 0.62);
+  --glass-surface-muted: rgba(34, 35, 44, 0.5);
+  --glass-surface-elevated: rgba(35, 36, 46, 0.72);
+  --glass-surface-active: rgba(48, 49, 62, 0.78);
+  --glass-surface-dock: rgba(16, 17, 22, 0.68);
+  --glass-surface-subtle: rgba(28, 29, 36, 0.45);
+  --glass-surface-overlay: rgba(22, 23, 30, 0.84);
 
-  --glass-blur-xs: 6px;
-  --glass-blur-sm: 10px;
-  --glass-blur-md: 16px;
-  --glass-blur-lg: 22px;
-  --glass-blur-xl: 30px;
-  --glass-saturate: 145%;
-  --glass-saturate-high: 165%;
+  --glass-blur-xs: 8px;
+  --glass-blur-sm: 12px;
+  --glass-blur-md: 18px;
+  --glass-blur-lg: 24px;
+  --glass-blur-xl: 32px;
+  --glass-saturate: 155%;
+  --glass-saturate-high: 180%;
 
-  --glass-border-subtle: #303138;
-  --glass-border-crisp: #414249;
+  --glass-border-subtle: rgba(255, 250, 240, 0.1);
+  --glass-border-crisp: rgba(255, 250, 240, 0.18);
   --glass-border-strong: #c9ae7a;
 
-  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.16);
-  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 0 rgba(7, 17, 12, 0.14);
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 0 rgba(0, 0, 0, 0.24);
   --glass-specular-recessed: inset 0 1px 3px 0 rgba(7, 17, 12, 0.28);
   --glass-specular-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
 
@@ -279,21 +279,21 @@
   --color-surface-active: #ebe7de;
   --color-border-medium: #d9d1c3;
 
-  --bg-topbar: rgba(247, 245, 240, 0.94);
-  --glass-surface-base: rgba(255, 255, 255, 0.96);
-  --glass-surface-muted: #f0ede6;
-  --glass-surface-elevated: #ffffff;
-  --glass-surface-active: #ebe7de;
-  --glass-surface-dock: #f7f5f0;
-  --glass-surface-subtle: #f7f5f0;
-  --glass-surface-overlay: rgba(255, 255, 255, 0.98);
+  --bg-topbar: rgba(250, 248, 243, 0.68);
+  --glass-surface-base: rgba(255, 255, 255, 0.66);
+  --glass-surface-muted: rgba(244, 240, 232, 0.56);
+  --glass-surface-elevated: rgba(255, 255, 255, 0.76);
+  --glass-surface-active: rgba(235, 230, 220, 0.78);
+  --glass-surface-dock: rgba(250, 248, 243, 0.68);
+  --glass-surface-subtle: rgba(255, 255, 255, 0.48);
+  --glass-surface-overlay: rgba(255, 255, 255, 0.86);
 
-  --glass-border-subtle: #e7e1d6;
-  --glass-border-crisp: #d9d1c3;
+  --glass-border-subtle: rgba(167, 139, 89, 0.18);
+  --glass-border-crisp: rgba(167, 139, 89, 0.3);
   --glass-border-strong: #a78b59;
 
-  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.82);
-  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.76), inset 0 -1px 0 0 rgba(25, 53, 38, 0.035);
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.92);
+  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.88), inset 0 -1px 0 0 rgba(167, 139, 89, 0.1);
   --glass-specular-recessed: inset 0 1px 2px 0 rgba(25, 53, 38, 0.05);
   --glass-specular-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
 

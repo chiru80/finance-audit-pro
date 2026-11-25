@@ -163,8 +163,10 @@ body {
 .fx-canvas {
   background-color: var(--bg-primary);
   background-image:
-    radial-gradient(ellipse 70% 40% at 12% -10%, var(--color-primary-tint) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 35% at 105% 0%, var(--color-info-tint) 0%, transparent 70%);
+    radial-gradient(ellipse 68% 44% at 10% -8%, rgba(201, 174, 122, 0.16) 0%, transparent 68%),
+    radial-gradient(ellipse 52% 40% at 96% 4%, rgba(145, 180, 223, 0.12) 0%, transparent 68%),
+    radial-gradient(ellipse 60% 38% at 50% 105%, rgba(201, 174, 122, 0.09) 0%, transparent 72%);
+  background-attachment: fixed;
 }
 
 .fx-page {
@@ -239,15 +241,23 @@ body {
 
 .fx-card {
   background: var(--glass-surface-base);
+  -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
   border: 1px solid var(--glass-border-subtle);
-  border-radius: 14px;
+  border-radius: 16px;
   box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+  transition:
+    border-color var(--glass-transition-normal),
+    box-shadow var(--glass-transition-normal),
+    transform var(--glass-transition-normal);
 }
 
 .fx-card-elevated {
   background: var(--glass-surface-elevated);
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
   border: 1px solid var(--glass-border-crisp);
-  border-radius: 14px;
+  border-radius: 16px;
   box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
 }
 
