@@ -3,7 +3,7 @@ import type { OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { SupabaseService } from '../supabase.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';
@@ -432,6 +432,7 @@ export class LoginComponent implements OnInit {
   private readonly _authService = inject(AuthService);
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _router = inject(Router);
+  private readonly _route = inject(ActivatedRoute);
   private readonly _i18nService = inject(I18nService);
 
   email = '';
@@ -442,6 +443,15 @@ export class LoginComponent implements OnInit {
   isGoogleSubmitting = signal(false);
 
   ngOnInit() {
+    const callbackError = this._route.snapshot.queryParamMap.get('error');
+    if (callbackError === 'oauth_cancelled') {
+      this.googleSignInError.set('Google sign-in was canceled. Please try again.');
+    } else if (callbackError) {
+      this.googleSignInError.set(
+        'Google could not complete sign-in. Check that Google sign-in is enabled and this site’s callback URL is allowed in Supabase, then try again.',
+      );
+    }
+
     // If user is already authenticated, take them directly to dashboard
     if (this._authService.isAuthenticated()) {
       this._router.navigate(['/dashboard']);
