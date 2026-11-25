@@ -223,6 +223,7 @@ export const GLASS_DROPDOWN_LISTBOX_ROLE = 'listbox' as const;
         position: relative;
         display: inline-flex;
         flex-direction: column;
+        width: 100%;
       }
 
       /* Trigger Button */
@@ -295,8 +296,10 @@ export const GLASS_DROPDOWN_LISTBOX_ROLE = 'listbox' as const;
         right: 0;
         min-width: 100%;
         max-height: 300px;
-        background: var(--glass-surface-muted);
-        border: 1px solid var(--glass-border-subtle);
+        background: color-mix(in srgb, var(--bg-secondary) 96%, transparent);
+        backdrop-filter: blur(20px) saturate(160%);
+        -webkit-backdrop-filter: blur(20px) saturate(160%);
+        border: 1px solid var(--glass-border-crisp, var(--glass-border-subtle));
         border-radius: 12px;
         box-shadow: var(--glass-shadow-lg);
         z-index: 50;
