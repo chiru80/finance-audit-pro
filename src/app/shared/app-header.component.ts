@@ -81,7 +81,7 @@ import { filter } from 'rxjs';
 
         <a
           routerLink="/settings"
-          class="ml-0.5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-[var(--bg-sidebar)] text-sm font-semibold uppercase text-white ring-2 ring-[var(--bg-topbar)] shadow-[var(--glass-shadow-sm)] transition-transform hover:scale-[1.03]"
+          class="ml-0.5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-primary-border)] bg-[var(--primary-accent)] text-sm font-semibold uppercase text-[var(--color-on-primary)] ring-2 ring-[var(--bg-topbar)] shadow-[var(--glass-shadow-sm)] transition-transform hover:scale-[1.03]"
           title="Settings"
           aria-label="Settings"
         >

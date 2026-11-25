@@ -230,8 +230,11 @@ export class GlassGoldStatCardComponent {
     if (!this.icon) return '';
     const svgStr = this.icon.trim();
     if (!svgStr.startsWith('<svg')) {
+      const inner = svgStr.startsWith('<')
+        ? svgStr
+        : `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="${svgStr}" />`;
       return this.sanitizer.bypassSecurityTrustHtml(
-        `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">${svgStr}</svg>`,
+        `<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">${inner}</svg>`,
       );
     }
     return this.sanitizer.bypassSecurityTrustHtml(svgStr);
