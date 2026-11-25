@@ -1,4 +1,5 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { SupabaseService } from '../supabase.service';
@@ -15,11 +16,11 @@ import { I18nService } from '../shared/i18n.service';
   imports: [FormsModule, RouterLink, GlassButtonComponent, GlassInputDirective, I18nPipe],
   template: `
     <div
-      class="fx-auth-shell min-h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(420px,540px)]"
+      class="fx-auth-shell min-h-[100dvh] bg-[var(--bg-primary)] text-[var(--text-primary)] md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(400px,.95fr)] xl:grid-cols-[minmax(0,1.1fr)_minmax(460px,.9fr)]"
     >
       <!-- Editorial panel -->
       <section
-        class="fx-auth-story hidden flex-col justify-between border-r border-[var(--glass-border-subtle)] px-10 py-10 lg:flex xl:px-16 xl:py-12"
+        class="fx-auth-story hidden flex-col justify-between border-r border-[var(--glass-border-subtle)] px-7 py-8 md:flex xl:px-16 xl:py-12"
       >
         <div class="flex items-center gap-3">
           <span
@@ -30,7 +31,7 @@ import { I18nService } from '../shared/i18n.service';
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="1.9"
-                d="M4 19V9m5 10V5m5 14v-7m5 7V8"
+                d="M6 3v18M6 4h12M6 11h9"
               />
             </svg>
           </span>
@@ -47,29 +48,43 @@ import { I18nService } from '../shared/i18n.service';
         <div class="max-w-lg">
           <span class="fx-eyebrow">Finance operations</span>
           <p
-            class="mt-5 text-[clamp(2rem,3.4vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.045em]"
+            class="fx-auth-headline mt-5 text-[clamp(2rem,3.4vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.045em]"
           >
-            A clearer way to manage collections.
+            Clarity in every rupee.
           </p>
           <p class="mt-5 max-w-md text-sm leading-relaxed text-[var(--text-secondary)]">
             Track customer dues, record collections, and reconcile every entry with a ledger built
             for audit readiness.
           </p>
 
-          <div class="mt-10 grid gap-3 sm:grid-cols-2">
-            <div class="fx-auth-point">
-              <p class="text-xs font-semibold text-[var(--text-primary)]">Ledger-first records</p>
-              <p class="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">
-                Every collection and payment stays traceable.
-              </p>
+          <div class="fx-ledger-preview" aria-label="How the workspace works">
+            <div class="fx-ledger-preview__heading">
+              <span>YOUR COLLECTION FLOW</span>
+              <span class="fx-ledger-preview__private">
+                <i aria-hidden="true"></i>
+                PRIVATE WORKSPACE
+              </span>
             </div>
-            <div class="fx-auth-point">
-              <p class="text-xs font-semibold text-[var(--text-primary)]">
-                Real outstanding balances
-              </p>
-              <p class="mt-1 text-xs leading-relaxed text-[var(--text-muted)]">
-                Know exactly what is due and what is pending.
-              </p>
+            <div class="fx-ledger-preview__step">
+              <span class="fx-ledger-preview__number">01</span>
+              <span>
+                <strong>Keep customer records</strong>
+                <small>One clear view of every account.</small>
+              </span>
+            </div>
+            <div class="fx-ledger-preview__step">
+              <span class="fx-ledger-preview__number">02</span>
+              <span>
+                <strong>Record each collection</strong>
+                <small>Every payment stays traceable.</small>
+              </span>
+            </div>
+            <div class="fx-ledger-preview__step">
+              <span class="fx-ledger-preview__number">03</span>
+              <span>
+                <strong>Reconcile with confidence</strong>
+                <small>Review balances and audit history.</small>
+              </span>
             </div>
           </div>
         </div>
@@ -82,7 +97,7 @@ import { I18nService } from '../shared/i18n.service';
       <!-- Form panel -->
       <section class="flex items-center justify-center px-5 py-10 sm:px-8 lg:py-12">
         <div class="w-full max-w-[420px]">
-          <div class="mb-8 flex items-center gap-3 lg:hidden">
+          <div class="mb-7 flex items-center gap-3 md:hidden">
             <span
               class="inline-flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--primary-accent)] text-[var(--color-on-primary)]"
             >
@@ -91,14 +106,14 @@ import { I18nService } from '../shared/i18n.service';
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="1.9"
-                  d="M4 19V9m5 10V5m5 14v-7m5 7V8"
+                  d="M6 3v18M6 4h12M6 11h9"
                 />
               </svg>
             </span>
             <p class="text-sm font-bold tracking-tight">Finance Audit Pro</p>
           </div>
 
-          <div class="fx-card p-8 sm:p-10 shadow-[var(--glass-shadow-md)]">
+          <div class="fx-card fx-auth-form-card p-6 sm:p-8 lg:p-10">
             <div class="mb-7">
               <span class="fx-eyebrow">Sign in</span>
               <h1 class="mt-3 text-2xl font-semibold tracking-[-0.03em]">
@@ -261,25 +276,141 @@ import { I18nService } from '../shared/i18n.service';
     `
       .fx-auth-story {
         position: relative;
-        background-color: var(--bg-sidebar);
+        isolation: isolate;
+        overflow: hidden;
+        color: #f2f7f1;
+        --text-primary: #f2f7f1;
+        --text-secondary: #c4d7c9;
+        --text-muted: #a0b9a7;
+        --color-primary-text: #d5ef9e;
+        --primary-accent: #d5ef9e;
+        --color-primary-tint: rgba(213, 239, 158, 0.12);
+        --glass-border-subtle: rgba(232, 244, 235, 0.15);
+        --glass-surface-base: rgba(232, 244, 235, 0.07);
+        background-color: #143c30;
         background-image:
-          linear-gradient(to bottom, var(--glass-border-subtle) 1px, transparent 1px),
-          linear-gradient(to right, var(--glass-border-subtle) 1px, transparent 1px);
-        background-size: 64px 64px;
-        background-position: -1px -1px;
+          radial-gradient(ellipse 55% 48% at 92% 15%, rgba(213, 239, 158, 0.15), transparent 72%),
+          linear-gradient(rgba(236, 246, 238, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(236, 246, 238, 0.035) 1px, transparent 1px),
+          linear-gradient(145deg, #194838, #103328 80%);
+        background-size:
+          auto,
+          56px 56px,
+          56px 56px,
+          auto;
+        background-position:
+          center,
+          -1px -1px,
+          -1px -1px,
+          center;
       }
 
       .fx-auth-story::before {
         content: '';
         position: absolute;
-        inset: 0;
+        inset: auto -8rem -11rem auto;
+        width: 23rem;
+        aspect-ratio: 1;
+        border: 1px solid rgba(213, 239, 158, 0.18);
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 2rem rgba(213, 239, 158, 0.035),
+          0 0 0 4rem rgba(213, 239, 158, 0.025);
         pointer-events: none;
-        border-left: 1px solid var(--glass-border-subtle);
       }
 
       .fx-auth-story > * {
         position: relative;
         z-index: 1;
+      }
+
+      .fx-auth-headline {
+        display: block;
+        max-width: 12ch;
+        color: #f2f7f1;
+        font-family: var(--font-display);
+        font-size: clamp(2.6rem, 5vw, 4.5rem);
+        font-weight: 400;
+        line-height: 0.98;
+        letter-spacing: -0.045em;
+      }
+
+      .fx-ledger-preview {
+        max-width: 34rem;
+        margin-top: 2.4rem;
+        padding: 1rem 1.15rem;
+        border: 1px solid rgba(232, 244, 235, 0.18);
+        border-radius: 16px;
+        background: rgba(232, 244, 235, 0.075);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      }
+
+      .fx-ledger-preview__heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(232, 244, 235, 0.14);
+        color: #d5ef9e;
+        font-size: 0.59rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+      }
+
+      .fx-ledger-preview__private {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        color: #afc6b5;
+        font-size: 0.56rem;
+        letter-spacing: 0.1em;
+      }
+
+      .fx-ledger-preview__private i {
+        width: 0.4rem;
+        height: 0.4rem;
+        border-radius: 50%;
+        background: #bfe481;
+        box-shadow: 0 0 0 3px rgba(191, 228, 129, 0.12);
+      }
+
+      .fx-ledger-preview__step {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding-top: 0.8rem;
+      }
+
+      .fx-ledger-preview__number {
+        display: grid;
+        width: 1.8rem;
+        height: 1.8rem;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 1px solid rgba(213, 239, 158, 0.34);
+        border-radius: 8px;
+        color: #d5ef9e;
+        font-size: 0.64rem;
+        font-weight: 700;
+      }
+
+      .fx-ledger-preview__step strong,
+      .fx-ledger-preview__step small {
+        display: block;
+      }
+
+      .fx-ledger-preview__step strong {
+        color: #edf4ed;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .fx-ledger-preview__step small {
+        margin-top: 0.12rem;
+        color: #afc6b5;
+        font-size: 0.67rem;
+        line-height: 1.45;
       }
 
       .fx-auth-point {
@@ -320,14 +451,14 @@ export class LoginComponent implements OnInit {
     // If redirected to login page with token in URL hash, wait for session and navigate
     if (typeof window !== 'undefined' && window.location.hash.includes('access_token=')) {
       this.isGoogleSubmitting.set(true);
-      const { data: { subscription } } = this._supabaseService.onAuthStateChange(
-        (event, session) => {
-          if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
-            subscription.unsubscribe();
-            this._router.navigate(['/dashboard']);
-          }
-        },
-      );
+      const {
+        data: { subscription },
+      } = this._supabaseService.onAuthStateChange((event, session) => {
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
+          subscription.unsubscribe();
+          this._router.navigate(['/dashboard']);
+        }
+      });
       setTimeout(async () => {
         const { data } = await this._supabaseService.getSession();
         if (data.session?.user) {

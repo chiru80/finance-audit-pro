@@ -13,14 +13,14 @@ export class ThemeService {
   }
 
   /**
-   * Initialize theme from localStorage or default to dark
+   * Initialize the saved theme, using the new light workspace as the default.
    */
   private initializeTheme() {
     const savedTheme = localStorage.getItem(this.THEME_KEY);
-    if (savedTheme === 'light') {
-      this.setLight();
-    } else {
+    if (savedTheme === 'dark') {
       this.setDark();
+    } else {
+      this.setLight();
     }
   }
 

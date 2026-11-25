@@ -4,8 +4,9 @@
 @variant dark (&:where([data-theme='dark'], [data-theme='dark'] *, .dark, .dark *));
 
 @theme {
-  --font-sans: 'Plus Jakarta Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-sans: 'DM Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'DM Serif Display', 'Noto Sans Telugu', Georgia, serif;
+  --font-mono: 'DM Sans', 'Noto Sans Telugu', system-ui, sans-serif;
 }
 
 /* ---------------------------------------------------------------------------
@@ -48,29 +49,29 @@
   --background-secondary: var(--surface-1);
   --background-tertiary: var(--surface-2);
 
-  --surface-0-rgb: 20, 18, 16;
-  --surface-1-rgb: 26, 23, 20;
-  --surface-2-rgb: 30, 27, 23;
-  --surface-3-rgb: 38, 34, 29;
-  --surface-4-rgb: 46, 41, 35;
-  --surface-dock-rgb: 16, 15, 13;
+  --surface-0-rgb: 16, 26, 22;
+  --surface-1-rgb: 20, 33, 27;
+  --surface-2-rgb: 23, 39, 31;
+  --surface-3-rgb: 28, 48, 38;
+  --surface-4-rgb: 34, 57, 45;
+  --surface-dock-rgb: 13, 33, 25;
 
   --border-color: var(--glass-border-subtle);
   --border-moderate: var(--glass-border-crisp);
-  --border-moderate-rgb: 74, 66, 55;
+  --border-moderate-rgb: 73, 97, 81;
 
-  --font-sans: 'Plus Jakarta Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-sans: 'DM Sans', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'DM Sans', 'Noto Sans Telugu', system-ui, sans-serif;
 }
 
 :root:not([data-theme='dark']) {
-  --surface-0-rgb: 244, 240, 232;
-  --surface-1-rgb: 251, 248, 242;
-  --surface-2-rgb: 255, 255, 255;
+  --surface-0-rgb: 243, 246, 241;
+  --surface-1-rgb: 233, 239, 233;
+  --surface-2-rgb: 255, 254, 250;
   --surface-3-rgb: 255, 255, 255;
-  --surface-4-rgb: 241, 236, 227;
-  --surface-dock-rgb: 251, 248, 242;
-  --border-moderate-rgb: 200, 189, 174;
+  --surface-4-rgb: 237, 242, 237;
+  --surface-dock-rgb: 238, 243, 238;
+  --border-moderate-rgb: 197, 211, 199;
 }
 
 /* Base ------------------------------------------------------------------ */
@@ -568,5 +569,129 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Refined workspace foundation */
+body {
+  letter-spacing: -0.012em;
+}
+
+h1:not(.fx-hero-title) {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+
+.fx-canvas {
+  background-color: var(--bg-primary);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent 18rem);
+}
+
+.fx-page-head {
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+  border-color: var(--glass-border-subtle);
+}
+
+.fx-h1,
+.fx-hero-title,
+.fx-auth-story h1,
+.fx-auth-form-card h1,
+.fx-auth-form-card h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+
+.fx-h1 {
+  font-size: clamp(1.8rem, 3vw, 2.65rem);
+}
+
+.fx-card,
+.fx-card-elevated {
+  border-radius: 18px;
+  border-color: var(--glass-border-subtle);
+  box-shadow: 0 8px 24px -16px rgba(25, 53, 38, 0.18);
+}
+
+.fx-input,
+input[glassInput],
+select[glassInput],
+textarea[glassInput] {
+  border-radius: 11px;
+  border-color: var(--glass-border-crisp);
+  box-shadow: none;
+}
+
+.fx-btn {
+  border-radius: 10px;
+  letter-spacing: 0;
+}
+
+.fx-btn--primary,
+.glass-btn-root.glass-btn-filled {
+  box-shadow: 0 5px 14px -8px rgba(15, 82, 61, 0.55);
+}
+
+.fx-table thead th {
+  background: var(--glass-surface-muted);
+  letter-spacing: 0.1em;
+}
+
+.fx-table tbody tr:hover {
+  background: var(--color-surface-hover);
+}
+
+.fx-link {
+  color: var(--color-primary-text);
+}
+
+.fx-auth-shell {
+  background-color: var(--bg-primary);
+}
+
+.fx-auth-form-card {
+  border-radius: 22px;
+  border-color: var(--glass-border-subtle);
+  background: var(--bg-card);
+  box-shadow: 0 24px 60px -34px rgba(19, 47, 34, 0.3);
+}
+
+.fx-auth-form-card glass-button {
+  display: block;
+  width: 100%;
+}
+
+.fx-auth-form-card .glass-btn-root {
+  width: 100%;
+}
+
+.fx-metric-tile {
+  border-radius: 17px;
+  background: var(--glass-surface-base);
+  box-shadow: 0 8px 22px -16px rgba(25, 53, 38, 0.24);
+  transition: border-color var(--glass-transition-fast), transform var(--glass-transition-fast), box-shadow var(--glass-transition-fast);
+}
+
+.fx-metric-tile:hover {
+  border-color: var(--glass-border-crisp);
+  box-shadow: 0 12px 28px -18px rgba(25, 53, 38, 0.3);
+  transform: translateY(-1px);
+}
+
+.fx-auth-point {
+  border-color: rgba(236, 246, 238, 0.16) !important;
+  border-radius: 14px !important;
+  background: rgba(236, 246, 238, 0.07) !important;
+}
+
+.fx-main {
+  scrollbar-gutter: stable;
+}
+
+@media (max-width: 767px) {
+  .fx-auth-form-card {
+    box-shadow: 0 16px 38px -30px rgba(19, 47, 34, 0.3);
   }
 }

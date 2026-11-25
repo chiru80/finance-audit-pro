@@ -50,9 +50,9 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
         position: relative;
         overflow: hidden;
         border: 1px solid var(--glass-border-subtle);
-        border-radius: var(--glass-radius-lg);
+        border-radius: 16px;
         background: var(--glass-surface-base);
-        box-shadow: var(--glass-shadow-sm), var(--glass-specular-rim);
+        box-shadow: 0 8px 22px -16px rgba(25, 53, 38, 0.24);
         transition:
           transform var(--glass-transition-fast),
           box-shadow var(--glass-transition-fast),
@@ -69,27 +69,27 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
         position: absolute;
         top: 0;
         left: 0;
-        width: 4px;
-        height: 100%;
-        background: var(--primary-accent);
-        border-radius: 0 0 16px 16px;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-accent), transparent 76%);
+        border-radius: 16px 16px 0 0;
       }
 
       .fx-gold-stat-content {
         display: flex;
         align-items: flex-start;
-        gap: 1rem;
-        padding: 1.5rem;
+        gap: 0.875rem;
+        padding: 1.25rem;
       }
 
       .fx-gold-icon-circle {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 44px;
-        height: 44px;
+        width: 38px;
+        height: 38px;
         flex-shrink: 0;
-        border-radius: 12px;
+        border-radius: 11px;
         background: var(--gold-icon-bg, var(--color-primary-tint));
         border: 1px solid var(--gold-icon-border, var(--color-primary-border));
         color: var(--gold-icon-text, var(--color-primary-text));
@@ -144,10 +144,10 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
 
       .fx-gold-label {
         margin: 0 0 0.25rem 0;
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.6875rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
         color: var(--text-muted);
         white-space: nowrap;
         font-variant-numeric: tabular-nums;
@@ -155,10 +155,10 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
 
       .fx-gold-value {
         margin: 0;
-        font-size: 1.5rem;
-        font-weight: 700;
-        line-height: 1.1;
-        letter-spacing: -0.03em;
+        font-size: clamp(1.25rem, 1.8vw, 1.7rem);
+        font-weight: 600;
+        line-height: 1.15;
+        letter-spacing: -0.045em;
         font-variant-numeric: tabular-nums;
         color: var(--text-primary);
         word-break: break-word;

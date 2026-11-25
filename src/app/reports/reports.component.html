@@ -121,31 +121,31 @@
 
   <!-- Financial Summary Metrics (5 Tiles) -->
   <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div class="fx-metric-tile p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
       <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.total_customers' | i18n }}</span>
       <span class="text-2xl font-semibold text-[var(--text-primary)] mt-2 block">{{ summary()?.totalCustomers || 0 }}</span>
       <span class="text-xs font-semibold text-[var(--text-muted)]">{{ 'reports.active_accounts' | i18n }}</span>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div class="fx-metric-tile p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
       <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.total_outstanding' | i18n }}</span>
       <span class="text-2xl font-semibold font-mono text-[var(--color-danger-text)] mt-2 block">{{ formatCurrency(summary()?.totalOutstanding ?? 0) }}</span>
       <span class="text-xs font-semibold text-[var(--color-danger-text)]">{{ 'reports.unrecovered_dues' | i18n }}</span>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div class="fx-metric-tile p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
       <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.total_lifetime_due' | i18n }}</span>
       <span class="text-2xl font-semibold font-mono text-[var(--text-primary)] mt-2 block">{{ formatCurrency(summary()?.totalDue ?? 0) }}</span>
       <span class="text-xs font-semibold text-[var(--text-muted)]">{{ 'reports.cumulative_scheduled' | i18n }}</span>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div class="fx-metric-tile p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
       <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.total_recovered' | i18n }}</span>
       <span class="text-2xl font-semibold font-mono text-[var(--color-success-text)] mt-2 block">{{ formatCurrency(summary()?.totalPaid ?? 0) }}</span>
       <span class="text-xs font-semibold text-[var(--color-success-text)]">{{ 'reports.collected_cash_upi' | i18n }}</span>
     </div>
 
-    <div class="p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
+    <div class="fx-metric-tile p-4 rounded-[14px] bg-[var(--glass-surface-base)] border border-[var(--glass-border-subtle)] shadow-[var(--glass-shadow-sm)]">
       <span class="text-xs font-bold text-[var(--text-secondary)] uppercase tracking-[0.1em] block">{{ 'reports.this_week_due' | i18n }}</span>
       <span class="text-2xl font-semibold font-mono text-[var(--color-info-text)] mt-2 block">{{ formatCurrency(summary()?.thisWeekCollectible ?? 0) }}</span>
       <span class="text-xs font-semibold text-[var(--color-info-text)]">{{ 'reports.due_active_cycle' | i18n }}</span>
