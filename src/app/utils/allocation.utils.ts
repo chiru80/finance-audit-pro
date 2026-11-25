@@ -302,10 +302,6 @@ export function validateAllocation(
     errors.push('Allocated amount cannot exceed payment amount');
   }
 
-  // Calculated paid schedules should match schedule paid status
-  const paidFromSchedules = schedules.filter((s) => s.paid).length;
-  const allocatedToPaidSchedules = schedules.filter((s) => s.paid && s.dueAmount > 0).length;
-
   // Verify each paid schedule has an allocation
   for (const schedule of schedules) {
     if (schedule.paid && schedule.dueAmount > 0) {

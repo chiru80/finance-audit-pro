@@ -10,9 +10,10 @@
  * to keep R2 secrets off the client.
  */
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
+import { SupabaseService } from '../supabase.service';
 
 export interface R2UploadUrlResponse {
   uploadUrl: string;
@@ -44,7 +45,21 @@ export interface UploadProgress {
 @Injectable({ providedIn: 'root' })
 export class R2StorageService {
   private readonly http = inject(HttpClient);
+  private readonly supabase = inject(SupabaseService);
   private readonly baseUrl = environment.r2ApiBaseUrl;
+
+  private async getAuthHeaders(): Promise<HttpHeaders> {
+    const {
+      data: { session },
+    } = await this.supabase.getSession();
+    const token = session?.access_token;
+    if (!token) {
+      throw new Error('Authentication required for storage operations');
+    }
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  }
 
   /** Request a presigned PUT URL for uploading a file. */
   async getUploadUrl(
@@ -53,21 +68,33 @@ export class R2StorageService {
     folder?: string,
   ): Promise<R2UploadUrlResponse> {
     const key = this.buildKey(fileName, folder);
+    const headers = await this.getAuthHeaders();
     const res = await firstValueFrom(
-      this.http.post<R2UploadUrlResponse>(`${this.baseUrl}/presign-upload`, {
-        key,
-        contentType,
-      }),
+      this.http.post<R2UploadUrlResponse>(
+        `${this.baseUrl}/presign-upload`,
+        {
+          action: 'presign-upload',
+          key,
+          contentType,
+        },
+        { headers },
+      ),
     );
     return res;
   }
 
   /** Request a presigned GET URL for downloading a private file. */
   async getDownloadUrl(key: string): Promise<R2DownloadUrlResponse> {
+    const headers = await this.getAuthHeaders();
     const res = await firstValueFrom(
-      this.http.post<R2DownloadUrlResponse>(`${this.baseUrl}/presign-download`, {
-        key,
-      }),
+      this.http.post<R2DownloadUrlResponse>(
+        `${this.baseUrl}/presign-download`,
+        {
+          action: 'presign-download',
+          key,
+        },
+        { headers },
+      ),
     );
     return res;
   }
@@ -75,8 +102,13 @@ export class R2StorageService {
   /** Get metadata for an object (server-side check). */
   async getObjectInfo(key: string): Promise<R2ObjectInfo | null> {
     try {
+      const headers = await this.getAuthHeaders();
       const res = await firstValueFrom(
-        this.http.post<{ object: R2ObjectInfo | null }>(`${this.baseUrl}/head`, { key }),
+        this.http.post<{ object: R2ObjectInfo | null }>(
+          `${this.baseUrl}/head`,
+          { action: 'head', key },
+          { headers },
+        ),
       );
       return res.object;
     } catch {
@@ -86,18 +118,27 @@ export class R2StorageService {
 
   /** List objects under a prefix. */
   async listObjects(prefix: string, maxKeys = 100): Promise<R2ObjectInfo[]> {
+    const headers = await this.getAuthHeaders();
     const res = await firstValueFrom(
-      this.http.post<{ objects: R2ObjectInfo[] }>(`${this.baseUrl}/list`, {
-        prefix,
-        maxKeys,
-      }),
+      this.http.post<{ objects: R2ObjectInfo[] }>(
+        `${this.baseUrl}/list`,
+        {
+          action: 'list',
+          prefix,
+          maxKeys,
+        },
+        { headers },
+      ),
     );
     return res.objects;
   }
 
   /** Delete an object. */
   async deleteObject(key: string): Promise<void> {
-    await firstValueFrom(this.http.post(`${this.baseUrl}/delete`, { key }));
+    const headers = await this.getAuthHeaders();
+    await firstValueFrom(
+      this.http.post(`${this.baseUrl}/delete`, { action: 'delete', key }, { headers }),
+    );
   }
 
   /**

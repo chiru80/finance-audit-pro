@@ -1,4 +1,5 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { SupabaseService } from '../supabase.service';
@@ -320,14 +321,14 @@ export class LoginComponent implements OnInit {
     // If redirected to login page with token in URL hash, wait for session and navigate
     if (typeof window !== 'undefined' && window.location.hash.includes('access_token=')) {
       this.isGoogleSubmitting.set(true);
-      const { data: { subscription } } = this._supabaseService.onAuthStateChange(
-        (event, session) => {
-          if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
-            subscription.unsubscribe();
-            this._router.navigate(['/dashboard']);
-          }
-        },
-      );
+      const {
+        data: { subscription },
+      } = this._supabaseService.onAuthStateChange((event, session) => {
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
+          subscription.unsubscribe();
+          this._router.navigate(['/dashboard']);
+        }
+      });
       setTimeout(async () => {
         const { data } = await this._supabaseService.getSession();
         if (data.session?.user) {

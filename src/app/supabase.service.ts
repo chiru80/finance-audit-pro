@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import type { SupabaseClient, Session, AuthChangeEvent } from '@supabase/supabase-js';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
