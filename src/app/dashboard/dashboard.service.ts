@@ -91,7 +91,12 @@ export class DashboardService {
       Promise.all([
         this.countRows(client.from('customers').select('id', { count: 'exact', head: true })),
         this.sumColumn(
-          client.from('transactions').select('amount').eq('date', dateStr).eq('type', 'collection'),
+          client
+            .from('transactions')
+            .select('amount')
+            .eq('date', dateStr)
+            .eq('type', 'collection')
+            .eq('status', 'paid'),
           'amount',
         ),
         this.sumColumn(
@@ -99,7 +104,8 @@ export class DashboardService {
             .from('transactions')
             .select('amount')
             .gte('date', sevenDaysAgo.toISOString().split('T')[0])
-            .eq('type', 'collection'),
+            .eq('type', 'collection')
+            .eq('status', 'paid'),
           'amount',
         ),
         this.sumColumn(
@@ -107,7 +113,8 @@ export class DashboardService {
             .from('transactions')
             .select('amount')
             .gte('date', thirtyDaysAgo.toISOString().split('T')[0])
-            .eq('type', 'collection'),
+            .eq('type', 'collection')
+            .eq('status', 'paid'),
           'amount',
         ),
         this.sumColumn(
