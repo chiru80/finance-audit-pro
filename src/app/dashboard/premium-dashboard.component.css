@@ -10,13 +10,15 @@
   min-height: 192px;
   padding: clamp(1.5rem, 3.4vw, 3rem);
   overflow: hidden;
-  border: 1px solid #1d5742;
+  border: 1px solid rgba(213, 239, 158, 0.28);
   border-radius: 22px;
   background:
-    radial-gradient(ellipse 40% 110% at 88% 0%, rgba(213, 239, 158, 0.16), transparent 72%),
-    linear-gradient(115deg, #143c30, #1c5843 78%);
-  box-shadow: 0 18px 38px -24px rgba(13, 48, 34, 0.5);
-  animation: glassFadeIn 360ms var(--glass-spring-easing) both;
+    radial-gradient(ellipse 42% 120% at 88% 0%, rgba(213, 239, 158, 0.2), transparent 72%),
+    linear-gradient(115deg, rgba(20, 60, 48, 0.94), rgba(28, 88, 67, 0.76) 78%);
+  box-shadow: var(--glass-shadow-xl), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+  animation: glassSlideUp 420ms var(--glass-spring-easing) both;
 }
 
 .fx-hero-panel::before {

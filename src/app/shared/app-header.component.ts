@@ -13,7 +13,7 @@ import { filter } from 'rxjs';
   imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
   template: `
     <header
-      class="sticky top-0 z-20 flex h-[72px] flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--glass-border-subtle)] bg-[var(--bg-topbar)] px-4 sm:px-7"
+      class="fx-topbar sticky top-0 z-20 flex h-[72px] flex-shrink-0 items-center justify-between gap-4 border-b border-[var(--glass-border-subtle)] bg-[var(--bg-topbar)] px-4 sm:px-7"
     >
       <div class="flex min-w-0 items-center gap-3">
         <button

@@ -160,6 +160,9 @@ interface NavItem {
       .fx-sidebar {
         width: 264px;
         background: var(--bg-sidebar);
+        -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+        backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+        box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.06);
         color: var(--text-primary);
         --text-primary: #f2f7f1;
         --text-secondary: #c4d7c9;

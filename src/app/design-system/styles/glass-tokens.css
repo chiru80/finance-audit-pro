@@ -5,9 +5,9 @@
  * Dark is the default; light is applied when <html> has no data-theme="dark"
  * (ThemeService removes the attribute for light mode).
  *
- * Design intent: a quiet private-banking editorial system. Warm ink canvas,
- * ivory text and a single aged-copper accent. Muted sage/ochre/terracotta
- * status roles. Hairline warm borders, flat surfaces, no decorative glow.
+ * Design intent: a refined financial workspace with Apple-inspired liquid
+ * glass materials: soft translucency, restrained refraction, crisp type and
+ * purposeful motion, while preserving Finance Audit Pro's forest-green brand.
  */
 
 :root {
@@ -16,8 +16,8 @@
    * ------------------------------------------------------------------- */
   --bg-primary: #101a16;
   --bg-secondary: #14211b;
-  --bg-sidebar: #0d2119;
-  --bg-topbar: #121e18;
+  --bg-sidebar: rgba(13, 33, 25, 0.88);
+  --bg-topbar: rgba(18, 30, 24, 0.76);
   --bg-card: #17271f;
   --bg-card-elevated: #1c3026;
   --bg-input: #14231b;
@@ -80,33 +80,32 @@
   --color-border-medium: #496151;
 
   /* ---------------------------------------------------------------------
-   * Flat ink surfaces - quiet material, no frosted-glass look
+   * Layered liquid-glass surfaces
    * ------------------------------------------------------------------- */
-  --glass-surface-base: #17271f;
-  --glass-surface-muted: #14211b;
-  --glass-surface-elevated: #1c3026;
-  --glass-surface-active: #22392d;
-  --glass-surface-dock: #0d2119;
-  --glass-surface-subtle: #14211b;
-  --glass-surface-overlay: #14211b;
+  --glass-surface-base: rgba(25, 43, 34, 0.72);
+  --glass-surface-muted: rgba(20, 36, 28, 0.62);
+  --glass-surface-elevated: rgba(30, 51, 40, 0.82);
+  --glass-surface-active: rgba(36, 61, 47, 0.88);
+  --glass-surface-dock: rgba(13, 33, 25, 0.88);
+  --glass-surface-subtle: rgba(20, 36, 28, 0.56);
+  --glass-surface-overlay: rgba(20, 36, 28, 0.9);
 
-  --glass-blur-xs: 2px;
-  --glass-blur-sm: 4px;
-  --glass-blur-md: 6px;
-  --glass-blur-lg: 10px;
-  --glass-blur-xl: 14px;
-  --glass-saturate: 100%;
-  --glass-saturate-high: 105%;
+  --glass-blur-xs: 6px;
+  --glass-blur-sm: 10px;
+  --glass-blur-md: 16px;
+  --glass-blur-lg: 22px;
+  --glass-blur-xl: 30px;
+  --glass-saturate: 145%;
+  --glass-saturate-high: 165%;
 
-  --glass-border-subtle: #2d4437;
-  --glass-border-crisp: #496151;
+  --glass-border-subtle: rgba(220, 239, 224, 0.12);
+  --glass-border-crisp: rgba(220, 239, 224, 0.2);
   --glass-border-strong: #c6e58e;
 
-  /* Almost invisible warm rim; depth comes from borders, not highlights */
-  --glass-specular-top: inset 0 1px 0 0 rgba(255, 248, 235, 0.02);
-  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 248, 235, 0.02);
-  --glass-specular-recessed: inset 0 1px 2px 0 rgba(10, 7, 4, 0.35);
-  --glass-specular-highlight: inset 0 1px 0 0 rgba(255, 248, 235, 0.03);
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.16);
+  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 0 rgba(7, 17, 12, 0.14);
+  --glass-specular-recessed: inset 0 1px 3px 0 rgba(7, 17, 12, 0.28);
+  --glass-specular-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
 
   /* ---------------------------------------------------------------------
    * Elevation - quiet, warm shadows; no coloured halos
@@ -259,22 +258,23 @@
   --color-surface-active: #e4ece4;
   --color-border-medium: #c5d3c7;
 
-  --glass-surface-base: #fffefa;
-  --glass-surface-muted: #f7faf6;
-  --glass-surface-elevated: #ffffff;
-  --glass-surface-active: #edf2ed;
-  --glass-surface-dock: #eef3ee;
-  --glass-surface-subtle: #f7faf6;
-  --glass-surface-overlay: #ffffff;
+  --bg-topbar: rgba(248, 250, 247, 0.78);
+  --glass-surface-base: rgba(255, 255, 252, 0.72);
+  --glass-surface-muted: rgba(247, 250, 246, 0.68);
+  --glass-surface-elevated: rgba(255, 255, 255, 0.84);
+  --glass-surface-active: rgba(237, 242, 237, 0.9);
+  --glass-surface-dock: rgba(238, 243, 238, 0.82);
+  --glass-surface-subtle: rgba(247, 250, 246, 0.62);
+  --glass-surface-overlay: rgba(255, 255, 255, 0.92);
 
-  --glass-border-subtle: #dce5dc;
-  --glass-border-crisp: #c5d3c7;
+  --glass-border-subtle: rgba(38, 73, 52, 0.12);
+  --glass-border-crisp: rgba(38, 73, 52, 0.2);
   --glass-border-strong: #17664c;
 
-  --glass-specular-top: none;
-  --glass-specular-rim: none;
+  --glass-specular-top: inset 0 1px 0 0 rgba(255, 255, 255, 0.82);
+  --glass-specular-rim: inset 0 1px 0 0 rgba(255, 255, 255, 0.76), inset 0 -1px 0 0 rgba(25, 53, 38, 0.035);
   --glass-specular-recessed: inset 0 1px 2px 0 rgba(25, 53, 38, 0.05);
-  --glass-specular-highlight: none;
+  --glass-specular-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
 
   --glass-shadow-xs: 0 1px 2px 0 rgba(27, 52, 39, 0.04);
   --glass-shadow-sm: 0 2px 5px 0 rgba(27, 52, 39, 0.05);

@@ -351,7 +351,8 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
   border: 1px solid transparent;
   white-space: nowrap;
 }
-.fx-btn:active { transform: translateY(1px); }
+.fx-btn:hover:not(:disabled) { transform: translateY(-1px); }
+.fx-btn:active:not(:disabled) { transform: translateY(1px) scale(0.99); }
 .fx-btn--primary {
   background: var(--primary-accent);
   color: var(--color-on-primary);
@@ -491,7 +492,19 @@ input[type='date'].fx-input::-webkit-calendar-picker-indicator {
   font-weight: 700;
 }
 
-/* Glass surface fidelity guard (kept from legacy design system) */
+/* Shared liquid-glass material helpers */
+.glass-surface,
+.glass-surface-elevated,
+.glass-surface-subtle {
+  -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+}
+
+.glass-surface-overlay {
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+}
+
 .glass-surface {
   background: var(--glass-surface-base);
   border: 1px solid var(--glass-border-subtle);
@@ -585,7 +598,10 @@ h1:not(.fx-hero-title) {
 
 .fx-canvas {
   background-color: var(--bg-primary);
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent 18rem);
+  background-image:
+    radial-gradient(ellipse 58% 34% at 12% 0%, var(--color-primary-tint), transparent 72%),
+    radial-gradient(ellipse 42% 28% at 94% 4%, var(--color-info-tint), transparent 74%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 20rem);
 }
 
 .fx-page-head {
@@ -612,7 +628,16 @@ h1:not(.fx-hero-title) {
 .fx-card-elevated {
   border-radius: 18px;
   border-color: var(--glass-border-subtle);
-  box-shadow: 0 8px 24px -16px rgba(25, 53, 38, 0.18);
+  box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+  -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .fx-card,
+  .fx-card-elevated {
+    background: var(--bg-card);
+  }
 }
 
 .fx-input,
@@ -649,13 +674,18 @@ textarea[glassInput] {
 
 .fx-auth-shell {
   background-color: var(--bg-primary);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 8% 8%, color-mix(in srgb, var(--primary-accent) 13%, transparent), transparent 72%),
+    radial-gradient(ellipse 48% 44% at 92% 92%, color-mix(in srgb, var(--color-info) 9%, transparent), transparent 72%);
 }
 
 .fx-auth-form-card {
   border-radius: 22px;
-  border-color: var(--glass-border-subtle);
-  background: var(--bg-card);
-  box-shadow: 0 24px 60px -34px rgba(19, 47, 34, 0.3);
+  border-color: var(--glass-border-crisp);
+  background: var(--glass-surface-base);
+  box-shadow: var(--glass-shadow-xl), var(--glass-specular-rim);
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+  backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
 }
 
 .fx-auth-form-card glass-button {

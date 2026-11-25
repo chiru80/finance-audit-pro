@@ -35,9 +35,12 @@ import { InstallPromptService } from '../core/install-prompt.service';
         transform: translateX(-50%);
         border: 1px solid var(--glass-border-crisp);
         border-radius: var(--glass-radius-md);
-        background: var(--bg-card-elevated);
-        box-shadow: var(--glass-shadow-lg);
+        background: var(--glass-surface-elevated);
+        box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
+        -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
+        backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate-high));
         color: var(--text-primary);
+        animation: glassSlideUp 320ms var(--glass-spring-easing) both;
         font-size: 0.8125rem;
       }
 

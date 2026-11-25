@@ -52,18 +52,27 @@ export type GlassGoldStatCardColor = 'primary' | 'success' | 'warning' | 'danger
         border: 1px solid var(--glass-border-subtle);
         border-radius: 16px;
         background: var(--glass-surface-base);
-        box-shadow: 0 8px 22px -16px rgba(25, 53, 38, 0.24);
+        box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+        -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+        backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-saturate));
+        animation: glassSlideUp 420ms var(--glass-spring-easing) both;
         transition:
-          transform var(--glass-transition-fast),
-          box-shadow var(--glass-transition-fast),
-          border-color var(--glass-transition-fast);
+          transform var(--glass-transition-normal),
+          box-shadow var(--glass-transition-normal),
+          border-color var(--glass-transition-normal);
       }
 
       .fx-gold-stat-root:hover {
-        transform: translateY(-1px);
+        transform: translateY(-2px) scale(1.008);
         border-color: var(--glass-border-crisp);
-        box-shadow: var(--glass-shadow-md), var(--glass-specular-rim);
+        box-shadow: var(--glass-shadow-lg), var(--glass-specular-rim);
       }
+
+      :host:nth-child(2) .fx-gold-stat-root { animation-delay: 45ms; }
+      :host:nth-child(3) .fx-gold-stat-root { animation-delay: 90ms; }
+      :host:nth-child(4) .fx-gold-stat-root { animation-delay: 135ms; }
+      :host:nth-child(5) .fx-gold-stat-root { animation-delay: 180ms; }
+      :host:nth-child(6) .fx-gold-stat-root { animation-delay: 225ms; }
 
       .fx-gold-accent-bar {
         position: absolute;
