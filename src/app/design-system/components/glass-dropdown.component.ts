@@ -1,4 +1,4 @@
-import type { TemplateRef, AfterViewInit, OnDestroy } from '@angular/core';
+import type { TemplateRef, AfterViewInit, OnDestroy, OnChanges } from '@angular/core';
 import {
   Component,
   Input,
@@ -7,9 +7,13 @@ import {
   ContentChild,
   HostListener,
   ElementRef,
+  ChangeDetectorRef,
+  forwardRef,
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import type { ControlValueAccessor } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { SafeHtml } from '@angular/platform-browser';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -46,14 +50,14 @@ export const GLASS_DROPDOWN_LISTBOX_ROLE = 'listbox' as const;
         type="button"
         class="glass-dropdown-trigger"
         (click)="toggle()"
-        [disabled]="disabled"
+        [disabled]="isDisabled"
         [attr.aria-expanded]="open"
         [attr.aria-controls]="'glass-dropdown-listbox-' + dropdownId"
         [attr.aria-haspopup]="'listbox'"
-        [ngClass]="{ 'has-value': selectedValue !== null }"
+        [ngClass]="{ 'has-value': selectedValue !== null && selectedValue !== undefined }"
       >
         <span class="glass-dropdown-label">
-          @if (selectedValue !== null && selectedItem) {
+          @if (selectedValue !== null && selectedValue !== undefined && selectedItem) {
             {{ selectedItem.label }}
           } @else {
             <span class="placeholder">{{ placeholder }}</span>
@@ -77,7 +81,7 @@ export const GLASS_DROPDOWN_LISTBOX_ROLE = 'listbox' as const;
       </button>
 
       <!-- Dropdown Panel -->
-      @if (open && !disabled) {
+      @if (open && !isDisabled) {
         <div
           class="glass-dropdown-panel"
           [ngClass]="positionClasses"
@@ -481,8 +485,17 @@ export const GLASS_DROPDOWN_LISTBOX_ROLE = 'listbox' as const;
       }
     `,
   ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => GlassDropdownComponent),
+      multi: true,
+    },
+  ],
 })
-export class GlassDropdownComponent implements AfterViewInit, OnDestroy {
+export class GlassDropdownComponent
+  implements AfterViewInit, OnDestroy, OnChanges, ControlValueAccessor
+{
   @Input() items: GlassDropdownItem[] = [];
   @Input() placeholder = 'Select an option';
   @Input() selectedValue: any = null;
@@ -502,11 +515,20 @@ export class GlassDropdownComponent implements AfterViewInit, OnDestroy {
   selectedItem: GlassDropdownItem | null = null;
   searchQuery = '';
   private elementRef = inject(ElementRef);
+  private cdr = inject(ChangeDetectorRef);
+  private sanitizer = inject(DomSanitizer);
   private dropdownId = 'dd-' + Math.random().toString(36).substring(2, 9);
   private currentFocusedIndex = -1;
+  private formDisabled = false;
+  private onChange: (value: any) => void = () => {};
+  private onTouched: () => void = () => {};
+
+  get isDisabled(): boolean {
+    return this.disabled || this.formDisabled;
+  }
 
   get interactiveClasses(): string {
-    return this.disabled ? 'interactive-false' : 'interactive-true';
+    return this.isDisabled ? 'interactive-false' : 'interactive-true';
   }
 
   get positionClasses(): string {
@@ -524,7 +546,31 @@ export class GlassDropdownComponent implements AfterViewInit, OnDestroy {
 
   ngOnChanges() {
     this.updateSelectedItem();
-    this.filteredItems = [...this.items];
+    const lowerQuery = this.searchQuery.trim().toLowerCase();
+    this.filteredItems = lowerQuery
+      ? this.items.filter(
+          (item) => item.divider || item.label.toLowerCase().includes(lowerQuery),
+        )
+      : [...this.items];
+  }
+
+  writeValue(value: any): void {
+    this.selectedValue = value !== undefined && value !== '' ? value : null;
+    this.updateSelectedItem();
+    this.cdr.markForCheck();
+  }
+
+  registerOnChange(fn: (value: any) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.formDisabled = isDisabled;
+    this.cdr.markForCheck();
   }
 
   ngAfterViewInit(): void {
@@ -536,7 +582,7 @@ export class GlassDropdownComponent implements AfterViewInit, OnDestroy {
   }
 
   private updateSelectedItem() {
-    if (this.selectedValue !== null) {
+    if (this.selectedValue !== null && this.selectedValue !== undefined && this.selectedValue !== '') {
       this.selectedItem = this.items.find((item) => item.value === this.selectedValue) || null;
     } else {
       this.selectedItem = null;
@@ -544,34 +590,50 @@ export class GlassDropdownComponent implements AfterViewInit, OnDestroy {
   }
 
   toggle() {
-    if (this.disabled) return;
+    if (this.isDisabled) return;
     this.open = !this.open;
     if (this.open) {
+      this.searchQuery = '';
       this.filteredItems = [...this.items];
       this.currentFocusedIndex = this.selectedItem
         ? this.filteredItems.findIndex((i) => i.value === this.selectedValue)
         : 0;
       // Focus the first item after open
       setTimeout(() => {
+        const searchEl = this.elementRef.nativeElement.querySelector(
+          '.glass-dropdown-search-input',
+        ) as HTMLElement | null;
+        if (searchEl) {
+          searchEl.focus();
+          return;
+        }
         const firstItem = this.elementRef.nativeElement.querySelector('.glass-dropdown-item');
         if (firstItem) {
           firstItem.focus();
         }
       }, 0);
+    } else {
+      this.onTouched();
     }
   }
 
   close() {
-    this.open = false;
-    this.currentFocusedIndex = -1;
+    if (this.open) {
+      this.open = false;
+      this.currentFocusedIndex = -1;
+      this.onTouched();
+    }
   }
 
   selectItem(item: GlassDropdownItem) {
     if (item.disabled) return;
     this.selectedValue = item.value;
     this.selectedItem = item;
+    this.onChange(item.value);
+    this.onTouched();
     this.selectionChange.emit(item.value);
     this.close();
+    this.cdr.markForCheck();
   }
 
   focusPrevious() {
@@ -655,15 +717,14 @@ export class GlassDropdownComponent implements AfterViewInit, OnDestroy {
   }
 
   getSafeIconHtml(icon: string): SafeHtml {
-    const sanitizer = inject(DomSanitizer);
-    if (!icon) return sanitizer.bypassSecurityTrustHtml('');
+    if (!icon) return this.sanitizer.bypassSecurityTrustHtml('');
     const svgStr = icon.trim();
     if (!svgStr.startsWith('<svg')) {
-      return sanitizer.bypassSecurityTrustHtml(
+      return this.sanitizer.bypassSecurityTrustHtml(
         `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">${svgStr}</svg>`,
       );
     }
-    return sanitizer.bypassSecurityTrustHtml(svgStr);
+    return this.sanitizer.bypassSecurityTrustHtml(svgStr);
   }
 
   @HostListener('document:click', ['$event'])
