@@ -38,21 +38,31 @@ export class OauthCallbackComponent implements OnInit, OnDestroy {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _router = inject(Router);
   private _authSubscription: { unsubscribe: () => void } | null = null;
+  private _fallbackTimeout: ReturnType<typeof setTimeout> | null = null;
 
   ngOnInit() {
     this.handleAuthCallback();
   }
 
   ngOnDestroy() {
-    if (this._authSubscription) {
-      this._authSubscription.unsubscribe();
-      this._authSubscription = null;
+    this.clearAuthSubscription();
+    if (this._fallbackTimeout) {
+      clearTimeout(this._fallbackTimeout);
+      this._fallbackTimeout = null;
     }
   }
 
   private async handleAuthCallback() {
+    const callbackParams = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    const providerError = callbackParams.get('error') ?? hashParams.get('error');
+
+    if (providerError) {
+      this.redirectToLogin(providerError === 'access_denied' ? 'oauth_cancelled' : 'oauth_failed');
+      return;
+    }
+
     try {
-      // 1. Check existing session immediately
       const {
         data: { session },
         error,
@@ -60,9 +70,7 @@ export class OauthCallbackComponent implements OnInit, OnDestroy {
 
       if (error) {
         console.error('OAuth callback error:', error);
-        this._router.navigate(['/login'], {
-          queryParams: { error: 'oauth_failed' },
-        });
+        this.redirectToLogin();
         return;
       }
 
@@ -76,37 +84,38 @@ export class OauthCallbackComponent implements OnInit, OnDestroy {
         data: { subscription },
       } = this._supabaseService.onAuthStateChange((event, newSession) => {
         if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && newSession?.user) {
-          subscription.unsubscribe();
+          this.clearAuthSubscription();
           this._router.navigate(['/dashboard']);
         }
       });
       this._authSubscription = subscription;
 
-      // 3. Fallback verification with timeout
-      setTimeout(async () => {
-        const retry = await this._supabaseService.getSession();
-        if (retry.data.session?.user) {
-          if (this._authSubscription) {
-            this._authSubscription.unsubscribe();
-            this._authSubscription = null;
+      this._fallbackTimeout = setTimeout(async () => {
+        try {
+          const retry = await this._supabaseService.getSession();
+          if (retry.data.session?.user) {
+            this._router.navigate(['/dashboard']);
+          } else {
+            this.redirectToLogin();
           }
-          this._router.navigate(['/dashboard']);
-        } else {
-          // If still no session after wait, redirect to login
-          setTimeout(() => {
-            if (this._authSubscription) {
-              this._authSubscription.unsubscribe();
-              this._authSubscription = null;
-            }
-            this._router.navigate(['/login']);
-          }, 2000);
+        } catch (error) {
+          console.error('OAuth session verification failed:', error);
+          this.redirectToLogin();
         }
-      }, 500);
-    } catch (err) {
-      console.error('Unexpected error in OAuth callback:', err);
-      this._router.navigate(['/login'], {
-        queryParams: { error: 'callback_error' },
-      });
+      }, 2500);
+    } catch (error) {
+      console.error('Unexpected error in OAuth callback:', error);
+      this.redirectToLogin('callback_error');
     }
+  }
+
+  private clearAuthSubscription() {
+    this._authSubscription?.unsubscribe();
+    this._authSubscription = null;
+  }
+
+  private redirectToLogin(error = 'oauth_failed') {
+    this.clearAuthSubscription();
+    this._router.navigate(['/login'], { queryParams: { error } });
   }
 }
