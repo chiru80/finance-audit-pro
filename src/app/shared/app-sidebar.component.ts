@@ -33,10 +33,10 @@ interface NavItem {
       <div
         class="flex h-16 flex-shrink-0 items-center gap-3 border-b border-[var(--glass-border-subtle)] px-5"
       >
-        <span class="fx-brand-mark" aria-hidden="true">O</span>
+        <span class="fx-brand-mark" aria-hidden="true">W</span>
         <div class="min-w-0">
           <p class="truncate text-[13px] font-bold tracking-tight text-[var(--text-primary)]">
-            Obsidian Luxe
+            Weekly Finance
           </p>
           <p
             class="mt-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-primary-text)]"

@@ -16,7 +16,7 @@ import { LoadingService } from '../core/loading.service';
             <div class="rupee-glow"></div>
           </div>
           <div class="rupee-brand">
-            <span class="rupee-brand-name">Obsidian Luxe</span>
+            <span class="rupee-brand-name">Weekly Finance</span>
             <span class="rupee-brand-sub">Loading your workspace</span>
           </div>
           <div class="rupee-progress">
