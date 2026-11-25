@@ -15,43 +15,29 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
   standalone: true,
   imports: [CommonModule, RouterModule, MoneyPipe, I18nPipe, GlassGoldStatCardComponent],
   template: `
-    <div class="w-full max-w-[1440px] mx-auto space-y-8">
-      <!-- Hero Panel -->
-      <section class="fx-hero-panel">
-        <div class="fx-hero-content">
-          <h1 class="fx-hero-title">{{ greeting() }}, {{ userName() }}</h1>
-          <p class="fx-hero-subtitle">
-            A clear view of collections, dues, and recent activity across your portfolio.
-            <span class="fx-hero-muted">Last updated {{ todayFormatted }}</span>
-          </p>
+    <main class="fx-dashboard w-full max-w-[1440px] mx-auto space-y-6">
+      <header class="fx-dashboard-heading">
+        <div>
+          <span class="fx-dashboard-eyebrow">Finance operations / Overview</span>
+          <h1 class="fx-dashboard-title">{{ greeting() }}, {{ userName() }}</h1>
+          <p class="fx-dashboard-intro">Your collection portfolio, reconciled at a glance.</p>
         </div>
-      </section>
-
-      <!-- Quick Actions -->
-      <div class="fx-action-bar">
-        <a [routerLink]="['/customers']" class="fx-btn fx-btn--gold">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.8"
-              d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-            />
-          </svg>
-          {{ 'dashboard.add_customer' | i18n }}
-        </a>
-        <a [routerLink]="['/collections']" class="fx-btn fx-btn--gold-outline">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.8"
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          {{ 'dashboard.add_collection' | i18n }}
-        </a>
-      </div>
+        <div class="fx-dashboard-actions">
+          <span class="fx-updated"><span class="fx-status-dot"></span> Updated {{ todayFormatted }}</span>
+          <a [routerLink]="['/customers']" class="fx-btn fx-btn--gold">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+            {{ 'dashboard.add_customer' | i18n }}
+          </a>
+          <a [routerLink]="['/collections']" class="fx-btn fx-btn--gold-outline">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v16m8-8H4" />
+            </svg>
+            {{ 'dashboard.add_collection' | i18n }}
+          </a>
+        </div>
+      </header>
 
       @if (statsLoading()) {
         <section class="fx-card fx-loading-card" role="status" aria-live="polite">
@@ -86,7 +72,15 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
           </button>
         </section>
       } @else {
-        <!-- Key Figures - Gold Themed Stat Cards -->
+        <section class="fx-metrics-section" aria-label="Portfolio metrics">
+          <div class="fx-section-heading">
+            <div>
+              <h2 class="fx-section-title">Portfolio snapshot</h2>
+              <p class="fx-card-description">Key collection and receivables indicators</p>
+            </div>
+            <span class="fx-chip fx-chip--period">Current period</span>
+          </div>
+        <!-- Key Figures -->
         <div class="fx-stats-grid">
           <fx-gold-stat-card
             [label]="'dashboard.total_customers' | i18n"
@@ -126,6 +120,7 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
             [color]="'warning'"
           />
         </div>
+        </section>
 
         <!-- Real-data insights -->
         <div class="fx-grid-2cols">
@@ -378,7 +373,7 @@ import { GlassGoldStatCardComponent } from '../design-system/components/glass-go
           </div>
         </section>
       }
-    </div>
+    </main>
   `,
   styleUrls: ['./premium-dashboard.component.css'],
   animations: [],
