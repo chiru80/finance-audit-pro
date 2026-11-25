@@ -7,6 +7,11 @@ import { Observable } from 'rxjs';
  * (see currency.utils.ts). The presentation layer performs the single
  * paise -> rupee conversion via MoneyPipe / rupees().
  */
+export interface MonthlyCollection {
+  month: string;
+  amount: number;
+}
+
 export interface DashboardStats {
   totalCustomers: number;
   todaysCollection: number;
@@ -14,6 +19,28 @@ export interface DashboardStats {
   monthlyCollection: number;
   totalOutstanding: number;
   pendingPayments: number;
+  monthlyCollections: MonthlyCollection[];
+}
+
+export function aggregateMonthlyCollections(
+  rows: readonly { date: string; amount: number | string | null }[],
+  now: Date = new Date(),
+): MonthlyCollection[] {
+  const months = Array.from({ length: 6 }, (_, index) => {
+    const date = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 5 + index, 1));
+    return date.toISOString().slice(0, 7);
+  });
+  const totals = new Map(months.map((month) => [month, 0]));
+
+  for (const row of rows) {
+    const month = row.date.slice(0, 7);
+    if (!totals.has(month)) continue;
+
+    const amount = Number(row.amount);
+    if (Number.isFinite(amount)) totals.set(month, (totals.get(month) ?? 0) + amount);
+  }
+
+  return months.map((month) => ({ month, amount: totals.get(month) ?? 0 }));
 }
 
 export interface Transaction {
@@ -91,6 +118,7 @@ export class DashboardService {
           client.from('transactions').select('amount').eq('status', 'pending'),
           'amount',
         ),
+        this.getMonthlyCollections(today),
       ])
         .then(
           ([
@@ -100,6 +128,7 @@ export class DashboardService {
             monthlyCollection,
             totalOutstanding,
             pendingPayments,
+            monthlyCollections,
           ]) => {
             subscriber.next({
               status: 'success',
@@ -110,6 +139,7 @@ export class DashboardService {
                 monthlyCollection,
                 totalOutstanding,
                 pendingPayments,
+                monthlyCollections,
               },
             });
             subscriber.complete();
@@ -164,6 +194,42 @@ export class DashboardService {
         }
       })();
     });
+  }
+
+  private async getMonthlyCollections(now: Date): Promise<MonthlyCollection[]> {
+    const currentDate = now.toISOString().slice(0, 10);
+    const firstMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 5, 1))
+      .toISOString()
+      .slice(0, 10);
+    const rows: Array<{ date: string; amount: number | string | null }> = [];
+    const pageSize = 1000;
+
+    for (let from = 0; ; from += pageSize) {
+      const { data, error } = await this._supabaseService.client
+        .from('transactions')
+        .select('date, amount')
+        .eq('type', 'collection')
+        .eq('status', 'paid')
+        .gte('date', firstMonth)
+        .lte('date', currentDate)
+        .order('date', { ascending: true })
+        .order('id', { ascending: true })
+        .range(from, from + pageSize - 1);
+
+      if (error) throw new Error(error.message);
+
+      const page = (data ?? []) as Array<Record<string, unknown>>;
+      rows.push(
+        ...page.map((row) => ({
+          date: String(row['date'] ?? ''),
+          amount: (row['amount'] as number | string | null) ?? 0,
+        })),
+      );
+
+      if (page.length < pageSize) break;
+    }
+
+    return aggregateMonthlyCollections(rows, now);
   }
 
   /** A database error must not be treated as a zero/empty result. */

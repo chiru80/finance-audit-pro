@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './app/design-system/styles/glass-tokens.css';
+@import './app/dashboard/dashboard-visuals.css';
 
 @variant dark (&:where([data-theme='dark'], [data-theme='dark'] *, .dark, .dark *));
 
@@ -9,7 +10,7 @@
   --font-mono: 'Inter', 'Noto Sans Telugu', system-ui, sans-serif;
 }
 
-/* Semantic foundations: evergreen brand, warm paper canvas, and measured status accents. */
+/* Semantic foundations: obsidian surfaces, warm paper canvas, and measured status accents. */
 :root {
   --ds-canvas: var(--bg-primary);
   --ds-surface: var(--bg-card);
@@ -28,7 +29,7 @@
   --ds-divider: var(--glass-border-subtle);
   --ds-radius-card: 18px;
   --ds-radius-control: 10px;
-  --ds-shadow-card: 0 8px 24px -12px rgba(27, 52, 39, 0.15);
+  --ds-shadow-card: 0 8px 24px -12px rgba(33, 29, 23, 0.16);
 }
 
 /* ---------------------------------------------------------------------------
@@ -71,29 +72,29 @@
   --background-secondary: var(--surface-1);
   --background-tertiary: var(--surface-2);
 
-  --surface-0-rgb: 16, 26, 22;
-  --surface-1-rgb: 20, 33, 27;
-  --surface-2-rgb: 23, 39, 31;
-  --surface-3-rgb: 28, 48, 38;
-  --surface-4-rgb: 34, 57, 45;
-  --surface-dock-rgb: 13, 33, 25;
+  --surface-0-rgb: 16, 17, 22;
+  --surface-1-rgb: 21, 22, 27;
+  --surface-2-rgb: 25, 26, 32;
+  --surface-3-rgb: 34, 35, 42;
+  --surface-4-rgb: 42, 43, 50;
+  --surface-dock-rgb: 16, 17, 22;
 
   --border-color: var(--glass-border-subtle);
   --border-moderate: var(--glass-border-crisp);
-  --border-moderate-rgb: 73, 97, 81;
+  --border-moderate-rgb: 73, 69, 61;
 
   --font-sans: 'Inter', 'Noto Sans Telugu', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Inter', 'Noto Sans Telugu', system-ui, sans-serif;
 }
 
 :root:not([data-theme='dark']) {
-  --surface-0-rgb: 243, 246, 241;
-  --surface-1-rgb: 233, 239, 233;
-  --surface-2-rgb: 255, 254, 250;
+  --surface-0-rgb: 247, 245, 240;
+  --surface-1-rgb: 240, 237, 230;
+  --surface-2-rgb: 255, 255, 255;
   --surface-3-rgb: 255, 255, 255;
-  --surface-4-rgb: 237, 242, 237;
-  --surface-dock-rgb: 238, 243, 238;
-  --border-moderate-rgb: 197, 211, 199;
+  --surface-4-rgb: 240, 237, 230;
+  --surface-dock-rgb: 247, 245, 240;
+  --border-moderate-rgb: 217, 209, 195;
 }
 
 /* Base ------------------------------------------------------------------ */
