@@ -130,7 +130,7 @@ export class AppHeaderComponent {
   private router = inject(Router);
 
   currentSection = signal('Dashboard');
-  isDarkMode = signal(this.themeService.isDark());
+  isDarkMode = this.themeService.isDarkMode;
 
   readonly quickLinks: TopNavLink[] = [
     { labelKey: 'nav.dashboard', route: '/dashboard' },
@@ -167,7 +167,6 @@ export class AppHeaderComponent {
 
   toggleTheme() {
     this.themeService.toggleTheme();
-    this.isDarkMode.set(this.themeService.isDark());
   }
 
   private updateCurrentSection(url: string) {

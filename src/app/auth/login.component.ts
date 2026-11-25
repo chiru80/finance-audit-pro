@@ -260,10 +260,45 @@ import { BrandLogoComponent } from '../shared/brand-logo.component';
   `,
   styles: [
     `
+      .fx-auth-shell {
+        background-image:
+          radial-gradient(ellipse 56% 42% at 86% 12%, rgba(201, 174, 122, 0.14), transparent 68%),
+          radial-gradient(ellipse 46% 36% at 72% 94%, rgba(145, 180, 223, 0.1), transparent 70%);
+      }
+
       .fx-auth-story {
         position: relative;
         isolation: isolate;
         overflow: hidden;
+        color: #17171b;
+        --text-primary: #17171b;
+        --text-secondary: #57534e;
+        --text-muted: #78716c;
+        --color-primary-text: #856834;
+        --primary-accent: #a78b59;
+        --color-primary-tint: rgba(167, 139, 89, 0.12);
+        --glass-border-subtle: rgba(167, 139, 89, 0.22);
+        --glass-surface-base: rgba(255, 255, 255, 0.68);
+        background-color: #f3eee2;
+        background-image:
+          radial-gradient(ellipse 55% 48% at 92% 15%, rgba(167, 139, 89, 0.18), transparent 72%),
+          linear-gradient(rgba(167, 139, 89, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(167, 139, 89, 0.08) 1px, transparent 1px),
+          linear-gradient(145deg, #faf7f0, #efe7d6 85%);
+        background-size:
+          auto,
+          56px 56px,
+          56px 56px,
+          auto;
+        background-position:
+          center,
+          -1px -1px,
+          -1px -1px,
+          center;
+      }
+
+      :host-context([data-theme='dark']) .fx-auth-story,
+      :host-context(.dark) .fx-auth-story {
         color: var(--brand-ivory);
         --text-primary: var(--brand-ivory);
         --text-secondary: #e6dfd0;
@@ -279,16 +314,6 @@ import { BrandLogoComponent } from '../shared/brand-logo.component';
           linear-gradient(rgba(245, 241, 232, 0.035) 1px, transparent 1px),
           linear-gradient(90deg, rgba(245, 241, 232, 0.035) 1px, transparent 1px),
           linear-gradient(145deg, #191a20, #101116 80%);
-        background-size:
-          auto,
-          56px 56px,
-          56px 56px,
-          auto;
-        background-position:
-          center,
-          -1px -1px,
-          -1px -1px,
-          center;
       }
 
       .fx-auth-story::before {
@@ -313,7 +338,7 @@ import { BrandLogoComponent } from '../shared/brand-logo.component';
       .fx-auth-headline {
         display: block;
         max-width: 12ch;
-        color: var(--brand-ivory);
+        color: var(--text-primary);
         font-family: var(--font-display);
         font-size: clamp(2.6rem, 5vw, 4.5rem);
         font-weight: 400;
@@ -325,31 +350,21 @@ import { BrandLogoComponent } from '../shared/brand-logo.component';
         max-width: 34rem;
         margin-top: 2.4rem;
         padding: 1rem 1.15rem;
-        border: 1px solid rgba(245, 241, 232, 0.18);
+        border: 1px solid var(--glass-border-subtle);
         border-radius: 16px;
-        background: rgba(245, 241, 232, 0.075);
+        background: var(--glass-surface-base);
         -webkit-backdrop-filter: blur(18px) saturate(155%);
         backdrop-filter: blur(18px) saturate(155%);
         box-shadow:
+          0 16px 36px -18px rgba(0, 0, 0, 0.16),
+          inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      }
+
+      :host-context([data-theme='dark']) .fx-ledger-preview,
+      :host-context(.dark) .fx-ledger-preview {
+        box-shadow:
           0 16px 36px -18px rgba(0, 0, 0, 0.55),
           inset 0 1px 0 rgba(255, 255, 255, 0.09);
-      }
-
-      .fx-auth-form-card {
-        -webkit-backdrop-filter: blur(22px) saturate(170%);
-        backdrop-filter: blur(22px) saturate(170%);
-        animation: authCardIn 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
-      }
-
-      @keyframes authCardIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px) scale(0.99);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
       }
 
       .fx-ledger-preview__heading {
@@ -358,8 +373,8 @@ import { BrandLogoComponent } from '../shared/brand-logo.component';
         justify-content: space-between;
         gap: 0.75rem;
         padding-bottom: 0.75rem;
-        border-bottom: 1px solid rgba(245, 241, 232, 0.14);
-        color: var(--brand-champagne);
+        border-bottom: 1px solid var(--glass-border-subtle);
+        color: var(--color-primary-text);
         font-size: 0.59rem;
         font-weight: 700;
         letter-spacing: 0.14em;
@@ -369,7 +384,7 @@ import { BrandLogoComponent } from '../shared/brand-logo.component';
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        color: #c4bdae;
+        color: var(--text-secondary);
         font-size: 0.56rem;
         letter-spacing: 0.1em;
       }
@@ -395,9 +410,9 @@ import { BrandLogoComponent } from '../shared/brand-logo.component';
         height: 1.8rem;
         flex: 0 0 auto;
         place-items: center;
-        border: 1px solid rgba(201, 174, 122, 0.34);
+        border: 1px solid rgba(167, 139, 89, 0.34);
         border-radius: 8px;
-        color: var(--brand-champagne);
+        color: var(--color-primary-text);
         font-size: 0.64rem;
         font-weight: 700;
       }
@@ -408,14 +423,14 @@ import { BrandLogoComponent } from '../shared/brand-logo.component';
       }
 
       .fx-ledger-preview__step strong {
-        color: #edf4ed;
+        color: var(--text-primary);
         font-size: 0.75rem;
         font-weight: 600;
       }
 
       .fx-ledger-preview__step small {
         margin-top: 0.12rem;
-        color: #c4bdae;
+        color: var(--text-secondary);
         font-size: 0.67rem;
         line-height: 1.45;
       }
