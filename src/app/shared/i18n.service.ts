@@ -193,8 +193,11 @@ const englishTranslations: Translations = {
   'collections.cheque_number': 'Cheque Number',
   'collections.audit_note': 'Audit Note (Optional)',
   'collections.confirm_button': 'Confirm & Record Collection',
+  'collections.confirm_record': 'Confirm & Record Collection',
   'collections.no_borrower_selected': 'No Borrower Selected',
   'collections.no_borrower_hint':
+    'Select a customer from the dropdown to see their dues summary and payment history.',
+  'collections.select_borrower_hint':
     'Select a customer from the dropdown to see their dues summary and payment history.',
   'collections.weekly_target': 'Weekly Target:',
   'collections.current_outstanding': 'Current Outstanding:',
@@ -803,9 +806,12 @@ const teluguTranslations: Translations = {
   'collections.cheque_number': 'చెక్ నంబర్',
   'collections.clear_debt': 'అప్పు క్లియర్ చేయి',
   'collections.confirm_button': 'వసూలు నిర్ధారించి నమోదు చేయి',
+  'collections.confirm_record': 'వసూలు నిర్ధారించి నమోదు చేయి',
   'collections.cumulative_due': 'సంచిత బాకీ:',
   'collections.current_outstanding': 'ప్రస్తుత బాకీ:',
   'collections.no_borrower_hint':
+    'వారి బాకీ సారాంశం మరియు చెల్లింపు చరిత్ర చూడటానికి డ్రాప్‌డౌన్ నుండి కస్టమర్‌ను ఎంచుకోండి.',
+  'collections.select_borrower_hint':
     'వారి బాకీ సారాంశం మరియు చెల్లింపు చరిత్ర చూడటానికి డ్రాప్‌డౌన్ నుండి కస్టమర్‌ను ఎంచుకోండి.',
   'collections.no_borrower_selected': 'రుణగ్రహీత ఎంచుకోబడలేదు',
   'collections.no_phone': 'ఫోన్ లేదు',

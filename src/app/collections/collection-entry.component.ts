@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
+import { CollectionService } from '../collection.service';
 import { OfflineStatusService } from '../core/offline-status.service';
 import { OutboxService } from '../core/outbox.service';
 import { IndexedDbService } from '../core/indexed-db.service';
@@ -38,6 +39,7 @@ import { I18nPipe } from '../shared/i18n.pipe';
 export class CollectionEntryComponent implements OnInit {
   private readonly _supabaseService = inject(SupabaseService);
   private readonly _authService = inject(AuthService);
+  private readonly _collectionService = inject(CollectionService);
   private readonly _route = inject(ActivatedRoute);
   protected readonly offlineStatus = inject(OfflineStatusService);
   private readonly outbox = inject(OutboxService);
@@ -218,19 +220,23 @@ export class CollectionEntryComponent implements OnInit {
         return;
       }
 
-      const { data, error } = await this._supabaseService.client.rpc('record_weekly_payment', {
-        p_customer_id: customerId,
-        p_amount_paise: amountPaise,
-        p_method: this.selectedMethod(),
-        p_reference: this.reference() || null,
-        p_notes: this.notes() || null,
-      });
+      if (customer && (customer.total_due || 0) === 0) {
+        await this._collectionService.generateSchedulesForCustomer(
+          customerId,
+          customer.total_weeks || 12,
+        );
+      }
 
-      if (error) throw error;
+      const res = await this._collectionService.recordWeeklyPayment(
+        customerId,
+        amountPaise,
+        this.selectedMethod(),
+        this.reference() || '',
+        this.notes() || '',
+      );
 
-      const result = Array.isArray(data) ? data[0] : data;
-      if (result && result.success === false) {
-        throw new Error(result.error_message || 'Payment recording failed');
+      if (!res.success) {
+        throw new Error(res.error || 'Failed to record payment');
       }
 
       const collectedRupees = this.amountInRupees();
@@ -243,7 +249,11 @@ export class CollectionEntryComponent implements OnInit {
 
       setTimeout(() => this.success.set(null), 4000);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to record payment');
+      const msg =
+        err instanceof Error
+          ? err.message
+          : (err as { message?: string } | null)?.message || 'Failed to record payment';
+      this.error.set(msg);
     } finally {
       this.loading.set(false);
     }

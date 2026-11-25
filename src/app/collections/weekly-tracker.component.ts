@@ -85,15 +85,9 @@ export class WeeklyTrackerComponent implements OnInit {
     this.error.set(null);
 
     try {
-      const { data, error } = await this._supabaseService.client.rpc('generate_weekly_schedules', {
-        p_customer_id: cid,
-        p_weeks_count: 4,
-      });
-
-      if (error) throw error;
-      const res = Array.isArray(data) ? data[0] : data;
-      if (res && res.success === false) {
-        throw new Error(res.error_message || 'Failed to generate schedules');
+      const res = await this._collectionService.generateSchedulesForCustomer(cid, 4);
+      if (!res.success) {
+        throw new Error(res.error || 'Failed to generate schedules');
       }
 
       this.success.set('Generated weekly schedules for the next 4 weeks.');
@@ -123,18 +117,16 @@ export class WeeklyTrackerComponent implements OnInit {
       }
       const amountPaise = schedule.due_amount;
 
-      const { data, error } = await this._supabaseService.client.rpc('record_weekly_payment', {
-        p_customer_id: cid,
-        p_amount_paise: amountPaise,
-        p_method: 'cash',
-        p_reference: null,
-        p_notes: `Payment for schedule ${scheduleId}`,
-      });
+      const res = await this._collectionService.recordWeeklyPayment(
+        cid,
+        amountPaise,
+        'cash',
+        '',
+        `Payment for schedule ${scheduleId}`,
+      );
 
-      if (error) throw error;
-      const res = Array.isArray(data) ? data[0] : data;
-      if (res && res.success === false) {
-        throw new Error(res.error_message || 'Payment recording failed');
+      if (!res.success) {
+        throw new Error(res.error || 'Payment recording failed');
       }
 
       this.success.set('Collection recorded successfully');

@@ -177,7 +177,7 @@
               @if (selectedCustomerObj()) {
                 <div class="mt-2.5 flex items-center gap-2 flex-wrap">
                   <span class="text-xs font-medium text-[var(--text-muted)]"
-                    >{{ 'collections.quick_fill' | i18n }}:</span
+                    >{{ 'collections.quick_fill' | i18n }}</span
                   >
                   <button
                     type="button"
@@ -323,7 +323,7 @@
                 class="flex justify-between items-center py-1.5 border-b border-[var(--glass-border-subtle)]"
               >
                 <span class="font-medium text-[var(--text-secondary)]"
-                  >{{ 'collections.weekly_target' | i18n }}:</span
+                  >{{ 'collections.weekly_target' | i18n }}</span
                 >
                 <span class="font-mono font-bold text-[var(--text-primary)] text-sm">{{
                   formatCurrency(cust.weekly_due_amount)
@@ -333,7 +333,7 @@
                 class="flex justify-between items-center py-1.5 border-b border-[var(--glass-border-subtle)]"
               >
                 <span class="font-medium text-[var(--text-secondary)]"
-                  >{{ 'collections.current_outstanding' | i18n }}:</span
+                  >{{ 'collections.current_outstanding' | i18n }}</span
                 >
                 <span
                   class="font-mono font-semibold text-sm"
@@ -350,7 +350,7 @@
                 class="flex justify-between items-center py-1.5 border-b border-[var(--glass-border-subtle)]"
               >
                 <span class="font-medium text-[var(--text-secondary)]"
-                  >{{ 'collections.total_recovered' | i18n }}:</span
+                  >{{ 'collections.total_recovered' | i18n }}</span
                 >
                 <span class="font-mono font-bold text-[var(--color-success-text)] text-sm">{{
                   formatCurrency(cust.total_paid)
@@ -358,7 +358,7 @@
               </div>
               <div class="flex justify-between items-center py-1.5">
                 <span class="font-medium text-[var(--text-secondary)]"
-                  >{{ 'collections.cumulative_due' | i18n }}:</span
+                  >{{ 'collections.cumulative_due' | i18n }}</span
                 >
                 <span class="font-mono font-bold text-[var(--text-primary)] text-sm">{{
                   formatCurrency(cust.total_due)
@@ -371,7 +371,7 @@
                 [routerLink]="['/customers', cust.id]"
                 class="w-full inline-flex items-center justify-center py-2 px-3 text-xs font-bold text-[var(--color-info-text)] hover:text-[var(--text-primary)] bg-[var(--glass-surface-elevated)] hover:bg-[var(--color-surface-hover)] rounded-xl border border-[var(--glass-border-subtle)] transition-colors"
               >
-                {{ 'collections.view_profile' | i18n }} →
+                {{ 'collections.view_profile' | i18n }}
               </a>
             </div>
           </glass-card>
