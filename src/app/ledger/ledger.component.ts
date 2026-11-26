@@ -9,6 +9,8 @@ import { AuthService } from '../auth/auth.service';
 import type { Customer } from '../customers/customer.types';
 import { CollectionService } from '../collection.service';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { extractErrorMessage } from '../utils/error.utils';
+import { downloadCsv } from '../utils/csv.utils';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
@@ -16,6 +18,7 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
 
 export interface LedgerPayment {
   id: string;
+  original_payment_id?: string;
   payment_date: string;
   payment_method: string;
   amount: number;
@@ -56,6 +59,9 @@ export class LedgerComponent implements OnInit {
   payments = signal<LedgerPayment[]>([]);
   searchQuery = signal<string>('');
   customerSearch = signal<string>('');
+  reversingPaymentId = signal<string | null>(null);
+  reversingBusy = signal(false);
+  reversalReason = '';
 
   filteredCustomers = computed(() => {
     const list = this.customers();
@@ -110,13 +116,15 @@ export class LedgerComponent implements OnInit {
         }
       }
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load customers');
+      this.error.set(extractErrorMessage(err, 'Failed to load customers'));
     } finally {
       this.loading.set(false);
     }
   }
 
   async selectCustomer(customer: Customer) {
+    this.reversingPaymentId.set(null);
+    this.reversalReason = '';
     this.selectedCustomer.set(customer);
     await this.loadPayments(customer.id);
   }
@@ -150,6 +158,7 @@ export class LedgerComponent implements OnInit {
 
       const payments: LedgerPayment[] = rows.map((p: any) => ({
         id: p.id,
+        original_payment_id: p.original_payment_id,
         payment_date: p.payment_date,
         payment_method: p.payment_method,
         amount: p.amount,
@@ -167,7 +176,7 @@ export class LedgerComponent implements OnInit {
 
       this.payments.set(payments);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load payments');
+      this.error.set(extractErrorMessage(err, 'Failed to load payments'));
     }
   }
 
@@ -193,18 +202,7 @@ export class LedgerComponent implements OnInit {
       p.reference || p.notes || '',
     ]);
 
-    const csvContent =
-      'data:text/csv;charset=utf-8,' +
-      [headers, ...rows]
-        .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-        .join('\n');
-
-    const link = document.createElement('a');
-    link.setAttribute('href', encodeURI(csvContent));
-    link.setAttribute('download', `${cust.name.replace(/\s+/g, '_')}_ledger.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadCsv(`${cust.name.replace(/\s+/g, '_')}_ledger.csv`, [headers, ...rows]);
   }
 
   printLedger() {
@@ -215,20 +213,43 @@ export class LedgerComponent implements OnInit {
     return formatPaiseToINR(amount || 0);
   }
 
-  async reversePayment(paymentId: string) {
-    const reason = window.prompt('Reason for reversing this payment:');
+  startReverse(payment: LedgerPayment) {
+    this.error.set(null);
+    this.reversingPaymentId.set(payment.original_payment_id || payment.id);
+    this.reversalReason = '';
+  }
+
+  cancelReverse() {
+    this.reversingPaymentId.set(null);
+    this.reversalReason = '';
+  }
+
+  async confirmReverse(payment: LedgerPayment) {
+    const reason = this.reversalReason.trim();
+    if (!reason || this.reversingBusy()) return;
+    await this.reversePayment(payment.original_payment_id || payment.id, reason);
+  }
+
+  async reversePayment(paymentId: string, providedReason?: string) {
+    const reason = (providedReason ?? window.prompt('Reason for reversing this payment:') ?? '').trim();
     if (!reason) return;
+    this.reversingBusy.set(true);
+    this.error.set(null);
     try {
-      const { data, error } = await this._supabaseService.client.rpc('reverse_payment', {
-        p_payment_id: paymentId,
-        p_reason: reason,
-      });
-      if (error) throw error;
-      const res = Array.isArray(data) ? data[0] : data;
-      if (res && res.success === false) throw new Error(res.error_message || 'Reversal failed');
-      if (this.selectedCustomer()) await this.loadPayments(this.selectedCustomer()!.id);
+      const res = await this._collectionService.reversePayment(paymentId, reason);
+      if (!res.success) throw new Error(res.error || 'Reversal failed');
+      this.cancelReverse();
+      const current = this.selectedCustomer();
+      await this.loadCustomers();
+      if (current) {
+        const refreshed = this.customers().find((c) => c.id === current.id) || current;
+        this.selectedCustomer.set(refreshed);
+        await this.loadPayments(current.id);
+      }
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to reverse payment');
+      this.error.set(extractErrorMessage(err, 'Failed to reverse payment'));
+    } finally {
+      this.reversingBusy.set(false);
     }
   }
 

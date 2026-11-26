@@ -11,6 +11,7 @@ import { GlassButtonComponent } from '../design-system/components/glass-button.c
 import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { extractErrorMessage } from '../utils/error.utils';
 
 interface VillageSummary extends Village {
   customerCount: number;
@@ -322,7 +323,7 @@ export class VillagesComponent implements OnInit {
       this.villages.set((vRes.data || []) as Village[]);
       this.customers.set((cRes.data || []) as Customer[]);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load villages');
+      this.error.set(extractErrorMessage(err, 'Failed to load villages'));
     } finally {
       this.loading.set(false);
     }
@@ -355,7 +356,7 @@ export class VillagesComponent implements OnInit {
       this.success.set(`Added village "${name}".`);
       setTimeout(() => this.success.set(null), 3500);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to add village');
+      this.error.set(extractErrorMessage(err, 'Failed to add village'));
     } finally {
       this.saving.set(false);
     }
@@ -374,7 +375,7 @@ export class VillagesComponent implements OnInit {
         list.map((v) => (v.id === village.id ? { ...v, is_active: next } : v)),
       );
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to update village');
+      this.error.set(extractErrorMessage(err, 'Failed to update village'));
     }
   }
 
@@ -416,7 +417,7 @@ export class VillagesComponent implements OnInit {
       this.success.set(`Renamed village to "${nextName}".`);
       setTimeout(() => this.success.set(null), 3500);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to rename village');
+      this.error.set(extractErrorMessage(err, 'Failed to rename village'));
     } finally {
       this.savingEdit.set(false);
     }
@@ -462,7 +463,7 @@ export class VillagesComponent implements OnInit {
       this.success.set(`Deleted village "${village.name}".`);
       setTimeout(() => this.success.set(null), 3500);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to delete village');
+      this.error.set(extractErrorMessage(err, 'Failed to delete village'));
     } finally {
       this.deletingId.set(null);
     }

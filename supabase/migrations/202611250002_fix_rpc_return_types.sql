@@ -1,6 +1,7 @@
--- Finance Audit Pro - Fix PL/pgSQL RETURN QUERY type casts in RPC functions
+-- Finance Audit Pro - Fix PL/pgSQL RETURN QUERY type casts & payment reconciliation RPCs
 -- Fixes PostgreSQL 42804 ("structure of query does not match function result type")
--- caused by untyped NULL / integer 0 in RETURN QUERY SELECT statements.
+-- caused by untyped NULL / integer 0 in RETURN QUERY SELECT statements, and fixes
+-- update_online_payment_status matching op.id as well as op.payment_id.
 
 CREATE OR REPLACE FUNCTION record_weekly_payment(
     p_customer_id UUID,
@@ -193,5 +194,121 @@ BEGIN
     END LOOP;
 
     RETURN QUERY SELECT TRUE, v_created_count, NULL::TEXT;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION reverse_payment(
+    p_payment_id UUID,
+    p_reason TEXT
+)
+RETURNS TABLE(success BOOLEAN, error_message TEXT)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_profile_id UUID;
+    v_customer_id UUID;
+    v_already_reversed BOOLEAN;
+BEGIN
+    IF p_reason IS NULL OR length(trim(p_reason)) = 0 THEN
+        RETURN QUERY SELECT FALSE, 'A reversal reason is required'::TEXT;
+        RETURN;
+    END IF;
+
+    SELECT p.profile_id, p.customer_id
+    INTO v_profile_id, v_customer_id
+    FROM payments p
+    WHERE p.id = p_payment_id;
+
+    IF NOT FOUND THEN
+        RETURN QUERY SELECT FALSE, 'Payment not found'::TEXT;
+        RETURN;
+    END IF;
+
+    IF v_profile_id <> auth.uid() THEN
+        RETURN QUERY SELECT FALSE, 'Access denied'::TEXT;
+        RETURN;
+    END IF;
+
+    SELECT COALESCE(ph.reversed, FALSE) INTO v_already_reversed
+    FROM payment_history ph
+    WHERE ph.original_payment_id = p_payment_id;
+
+    IF v_already_reversed THEN
+        RETURN QUERY SELECT FALSE, 'Payment is already reversed'::TEXT;
+        RETURN;
+    END IF;
+
+    UPDATE weekly_schedules
+    SET paid = FALSE,
+        payment_id = NULL,
+        updated_at = NOW()
+    WHERE customer_id = v_customer_id
+      AND payment_id = p_payment_id
+      AND paid = TRUE;
+
+    UPDATE payment_history
+    SET reversed = TRUE,
+        reversed_reason = p_reason,
+        reversed_at = NOW()
+    WHERE original_payment_id = p_payment_id;
+
+    PERFORM log_audit_entry(
+        v_profile_id,
+        'payment_reversed',
+        'payments',
+        p_payment_id,
+        NULL,
+        jsonb_build_object('reason', p_reason, 'customer_id', v_customer_id)
+    );
+
+    RETURN QUERY SELECT TRUE, NULL::TEXT;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION update_online_payment_status(
+    p_payment_id UUID,
+    p_new_status TEXT,
+    p_paid_at TIMESTAMP WITH TIME ZONE DEFAULT NULL
+)
+RETURNS TABLE(success BOOLEAN, error_message TEXT)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_online_id UUID;
+    v_profile_id UUID;
+BEGIN
+    IF p_new_status NOT IN ('pending', 'completed', 'failed', 'refunded') THEN
+        RETURN QUERY SELECT FALSE, 'Invalid status: must be pending, completed, failed, or refunded'::TEXT;
+        RETURN;
+    END IF;
+
+    SELECT op.id, c.profile_id
+    INTO v_online_id, v_profile_id
+    FROM online_payments op
+    JOIN customers c ON op.customer_id = c.id
+    WHERE op.id = p_payment_id OR op.payment_id = p_payment_id
+    LIMIT 1;
+
+    IF NOT FOUND THEN
+        RETURN QUERY SELECT FALSE, 'Online payment record not found'::TEXT;
+        RETURN;
+    END IF;
+
+    IF v_profile_id <> auth.uid() THEN
+        RETURN QUERY SELECT FALSE, 'Access denied'::TEXT;
+        RETURN;
+    END IF;
+
+    UPDATE online_payments
+    SET status = p_new_status,
+        paid_at = COALESCE(p_paid_at, NOW()),
+        updated_at = NOW()
+    WHERE id = v_online_id;
+
+    RETURN QUERY SELECT TRUE, NULL::TEXT;
 END;
 $$;

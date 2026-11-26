@@ -201,24 +201,55 @@
                 </td>
                 <td class="px-5 py-4 text-right whitespace-nowrap space-x-2">
                   @if (!schedule.paid) {
-                    <glass-button
-                      variant="filled"
-                      size="sm"
-                      [disabled]="loading()"
-                      (onClick)="collectForWeek(schedule.id)"
-                    >
-                      {{ 'collections.collect' | i18n }}
-                    </glass-button>
-
-                    @if (!schedule.absence_recorded) {
+                    @if (markingAbsentScheduleId() === schedule.id) {
+                      <div class="inline-flex items-center gap-1.5">
+                        <input
+                          glassInput
+                          type="text"
+                          [(ngModel)]="absenceReason"
+                          (keydown.enter)="confirmMarkAbsent(schedule)"
+                          (keydown.escape)="cancelMarkAbsent()"
+                          placeholder="Absence reason..."
+                          class="!py-1 !px-2 !text-xs w-40"
+                          [disabled]="loading()"
+                        />
+                        <button
+                          type="button"
+                          [disabled]="loading() || !absenceReason.trim()"
+                          (click)="confirmMarkAbsent(schedule)"
+                          class="text-xs px-2.5 py-1 rounded-lg bg-[var(--color-primary-tint)] text-[var(--color-primary-text)] border border-[var(--color-primary-border)] font-semibold disabled:opacity-50 cursor-pointer"
+                        >
+                          Confirm
+                        </button>
+                        <button
+                          type="button"
+                          [disabled]="loading()"
+                          (click)="cancelMarkAbsent()"
+                          class="text-xs px-2 py-1 rounded-lg border border-[var(--glass-border-subtle)] text-[var(--text-secondary)] cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    } @else {
                       <glass-button
-                        variant="glass"
+                        variant="filled"
                         size="sm"
                         [disabled]="loading()"
-                        (onClick)="markAbsent(schedule)"
+                        (onClick)="collectForWeek(schedule.id)"
                       >
-                        {{ 'collections.mark_absent' | i18n }}
+                        {{ 'collections.collect' | i18n }}
                       </glass-button>
+
+                      @if (!schedule.absence_recorded) {
+                        <glass-button
+                          variant="glass"
+                          size="sm"
+                          [disabled]="loading()"
+                          (onClick)="markAbsent(schedule)"
+                        >
+                          {{ 'collections.mark_absent' | i18n }}
+                        </glass-button>
+                      }
                     }
                   } @else {
                     <span

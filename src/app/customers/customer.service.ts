@@ -2,6 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import type { Customer, CustomerFormValues, Village } from './customer.types';
+import { extractErrorMessage, toAppError } from '../utils/error.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class CustomerService {
       if (error) throw error;
       this.customers.set(data as Customer[]);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load customers');
+      this.error.set(extractErrorMessage(err, 'Failed to load customers'));
     } finally {
       this.loading.set(false);
     }
@@ -202,15 +203,7 @@ export class CustomerService {
   }
 
   private toError(err: unknown, fallback: string): Error {
-    if (err instanceof Error) return err;
-    if (err && typeof err === 'object') {
-      const e = err as { message?: string; details?: string; hint?: string; code?: string };
-      const parts = [e.message, e.details, e.hint].filter(Boolean);
-      if (parts.length > 0) {
-        return new Error(parts.join(' — '));
-      }
-    }
-    return new Error(fallback);
+    return toAppError(err, fallback);
   }
 
   async updateCustomerStatus(id: string, status: 'active' | 'inactive' | 'suspended') {

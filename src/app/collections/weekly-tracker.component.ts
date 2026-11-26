@@ -8,6 +8,7 @@ import { AuthService } from '../auth/auth.service';
 import { CollectionService } from '../collection.service';
 import type { Customer } from '../customers/customer.types';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { extractErrorMessage } from '../utils/error.utils';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
@@ -41,6 +42,8 @@ export class WeeklyTrackerComponent implements OnInit {
   customerId = signal<string | null>(null);
   schedules = signal<any[]>([]);
   selectedCustomerName = signal<string>('');
+  markingAbsentScheduleId = signal<string | null>(null);
+  absenceReason = '';
 
   ngOnInit() {
     this.loadCustomers();
@@ -57,7 +60,7 @@ export class WeeklyTrackerComponent implements OnInit {
       if (error) throw error;
       this.customers.set(data as Customer[]);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load customers');
+      this.error.set(extractErrorMessage(err, 'Failed to load customers'));
     }
   }
 
@@ -94,7 +97,7 @@ export class WeeklyTrackerComponent implements OnInit {
       setTimeout(() => this.success.set(null), 3000);
       await this.loadSchedules(cid);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to generate schedules');
+      this.error.set(extractErrorMessage(err, 'Failed to generate schedules'));
     } finally {
       this.loading.set(false);
     }
@@ -133,46 +136,52 @@ export class WeeklyTrackerComponent implements OnInit {
       setTimeout(() => this.success.set(null), 3000);
       await this.loadSchedules(cid);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to collect payment');
+      this.error.set(extractErrorMessage(err, 'Failed to collect payment'));
     } finally {
       this.loading.set(false);
     }
   }
 
-  async markAbsent(schedule: any) {
-    const cid = this.customerId();
-    if (!cid) return;
+  startMarkAbsent(schedule: any) {
+    this.error.set(null);
+    this.markingAbsentScheduleId.set(schedule.id);
+    this.absenceReason = 'Customer was unavailable';
+  }
 
-    const reason =
-      window.prompt('Enter reason for customer absence:', 'Customer was unavailable') ?? '';
-    if (!reason) return;
+  cancelMarkAbsent() {
+    this.markingAbsentScheduleId.set(null);
+    this.absenceReason = '';
+  }
+
+  async confirmMarkAbsent(schedule: any) {
+    const cid = this.customerId();
+    const reason = this.absenceReason.trim();
+    if (!cid || !reason || this.loading()) return;
 
     this.loading.set(true);
     this.error.set(null);
 
     try {
-      const { data, error } = await this._supabaseService.client.rpc('record_absence', {
-        p_customer_id: cid,
-        p_week_start: schedule.week_start_date,
-        p_reason: reason,
-      });
-
-      if (error) throw error;
-      const res = Array.isArray(data) ? data[0] : data;
-      if (res && res.success === false) {
-        throw new Error(res.error_message || 'Failed to record absence');
+      const res = await this._collectionService.recordAbsence(cid, schedule.week_start_date, reason);
+      if (!res.success) {
+        throw new Error(res.error || 'Failed to record absence');
       }
 
+      this.cancelMarkAbsent();
       // Server applies absence_requires_approval setting; owner can approve/reject
       // pending absences from the customer detail page.
       this.success.set('Absence recorded. Owner approval may be required per settings.');
       setTimeout(() => this.success.set(null), 3000);
       await this.loadSchedules(cid);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to mark absence');
+      this.error.set(extractErrorMessage(err, 'Failed to mark absence'));
     } finally {
       this.loading.set(false);
     }
+  }
+
+  async markAbsent(schedule: any) {
+    this.startMarkAbsent(schedule);
   }
 
   async loadSchedules(customerId: string) {
@@ -197,7 +206,7 @@ export class WeeklyTrackerComponent implements OnInit {
       const customer = this.customers().find((c) => c.id === customerId);
       this.selectedCustomerName.set(customer?.name || (data[0]?.customers as any)?.name || '');
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load schedules');
+      this.error.set(extractErrorMessage(err, 'Failed to load schedules'));
     } finally {
       this.loading.set(false);
     }

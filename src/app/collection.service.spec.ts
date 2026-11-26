@@ -105,6 +105,86 @@ describe('CollectionService', () => {
       expect(res.success).toBe(false);
       expect(res.error).toBe('Database RPC failure');
     });
+
+    it('falls back to direct table insert when RPC fails with 42804 return type mismatch', async () => {
+      mockSupabaseService.client.rpc.mockResolvedValueOnce({
+        data: null,
+        error: {
+          code: '42804',
+          message: 'structure of query does not match function result type',
+        },
+      });
+
+      const existingSchedules = [{ id: 'sch-1', due_amount: 50000, week_start_date: '2026-11-23' }];
+      const existingCheckChain = {
+        select: vi.fn(() => ({
+          eq: vi.fn().mockResolvedValue({ data: existingSchedules, error: null }),
+        })),
+      };
+      const unpaidQueryChain = {
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        gt: vi.fn().mockReturnThis(),
+        order: vi.fn().mockResolvedValue({ data: existingSchedules, error: null }),
+      };
+      const updateScheduleChain = {
+        update: vi.fn(() => ({
+          eq: vi.fn().mockResolvedValue({ error: null }),
+        })),
+      };
+
+      const paymentsInsertSingle = vi
+        .fn()
+        .mockResolvedValue({ data: { id: 'pay-fallback-1' }, error: null });
+      const paymentsChain = {
+        insert: vi.fn(() => ({
+          select: vi.fn(() => ({ single: paymentsInsertSingle })),
+        })),
+      };
+      const allocChain = {
+        insert: vi.fn().mockResolvedValue({ error: null }),
+      };
+
+      let weeklyScheduleCalls = 0;
+      mockSupabaseService.client.from.mockImplementation((table: string) => {
+        if (table === 'weekly_schedules') {
+          weeklyScheduleCalls++;
+          if (weeklyScheduleCalls === 1) return existingCheckChain;
+          if (weeklyScheduleCalls === 2) return unpaidQueryChain;
+          return updateScheduleChain;
+        }
+        if (table === 'payments') return paymentsChain;
+        if (table === 'payment_allocations') return allocChain;
+        return {};
+      });
+
+      const service = createService();
+      const res = await service.recordWeeklyPayment('cust-1', 50000, 'cash');
+
+      expect(res.success).toBe(true);
+      expect(paymentsChain.insert).toHaveBeenCalled();
+      expect(allocChain.insert).toHaveBeenCalledWith({
+        payment_id: 'pay-fallback-1',
+        schedule_id: 'sch-1',
+        amount: 50000,
+      });
+    });
+
+    it('calls reverse_payment RPC cleanly via reversePayment()', async () => {
+      mockSupabaseService.client.rpc.mockResolvedValueOnce({
+        data: [{ success: true, error_message: null }],
+        error: null,
+      });
+
+      const service = createService();
+      const res = await service.reversePayment('pay-orig-1', 'Duplicate entry');
+
+      expect(mockSupabaseService.client.rpc).toHaveBeenCalledWith('reverse_payment', {
+        p_payment_id: 'pay-orig-1',
+        p_reason: 'Duplicate entry',
+      });
+      expect(res.success).toBe(true);
+    });
   });
 
   describe('getCustomerPaymentSummary', () => {

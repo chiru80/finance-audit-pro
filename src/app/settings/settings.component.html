@@ -605,14 +605,14 @@
             <glass-button
               variant="filled"
               [disabled]="push.loading() || !push.supported()"
-              (click)="enablePush()"
+              (onClick)="enablePush()"
             >
               {{
                 push.loading() ? 'Enabling…' : push.subscribed() ? 'Re-subscribe' : 'Enable push'
               }}
             </glass-button>
             @if (push.subscribed()) {
-              <glass-button variant="glass" [disabled]="push.loading()" (click)="disablePush()"
+              <glass-button variant="glass" [disabled]="push.loading()" (onClick)="disablePush()"
                 >Disable</glass-button
               >
             }

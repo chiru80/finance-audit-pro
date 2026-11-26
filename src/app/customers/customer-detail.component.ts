@@ -1,12 +1,13 @@
 import type { OnInit } from '@angular/core';
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SupabaseService } from '../supabase.service';
 import { AuthService } from '../auth/auth.service';
 import type { Customer } from './customer.types';
 import { CollectionService } from '../collection.service';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { extractErrorMessage } from '../utils/error.utils';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassBadgeComponent } from '../design-system/components/glass-badge.component';
@@ -18,7 +19,6 @@ import { GlassTabsComponent } from '../design-system/components/glass-tabs.compo
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     DatePipe,
     GlassCardComponent,
     GlassButtonComponent,
@@ -62,7 +62,7 @@ export class CustomerDetailComponent implements OnInit {
       amount_given: c?.amount_given ?? 0,
       total_weeks: c?.total_weeks ?? 12,
       enrollment_date: c?.enrollment_date ?? null,
-      village_name: c?.village_name ?? null,
+      village_name: c?.village_name || c?.villages?.name || null,
     };
   });
 
@@ -89,6 +89,13 @@ export class CustomerDetailComponent implements OnInit {
     const c = this.customer();
     if (c) {
       this._router.navigate(['/collections'], { queryParams: { customerId: c.id } });
+    }
+  }
+
+  editProfile() {
+    const c = this.customer();
+    if (c) {
+      this._router.navigate(['/customers', c.id, 'edit']);
     }
   }
 
@@ -123,7 +130,7 @@ export class CustomerDetailComponent implements OnInit {
         ]);
       }
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load customer');
+      this.error.set(extractErrorMessage(err, 'Failed to load customer'));
     } finally {
       this.loading.set(false);
     }
@@ -157,18 +164,14 @@ export class CustomerDetailComponent implements OnInit {
   }
 
   async approveAbsence(absenceId: string, approve: boolean) {
+    this.error.set(null);
     try {
-      const { data, error } = await this._supabaseService.client.rpc('approve_absence', {
-        p_absence_id: absenceId,
-        p_approve: approve,
-      });
-      if (error) throw error;
-      const res = Array.isArray(data) ? data[0] : data;
-      if (res && res.success === false) throw new Error(res.error_message || 'Failed');
+      const res = await this._collectionService.approveAbsence(absenceId, approve);
+      if (!res.success) throw new Error(res.error || 'Failed to update absence');
       await this.loadAbsences(this.customer()?.id || '');
       await this.loadSchedules(this.customer()?.id || '');
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to update absence');
+      this.error.set(extractErrorMessage(err, 'Failed to update absence'));
     }
   }
 
@@ -177,6 +180,7 @@ export class CustomerDetailComponent implements OnInit {
     if (!c) return;
     const target = event.target as HTMLSelectElement;
     const status = target.value as 'active' | 'inactive' | 'suspended';
+    this.error.set(null);
     try {
       const { error } = await this._supabaseService.client
         .from('customers')
@@ -185,7 +189,7 @@ export class CustomerDetailComponent implements OnInit {
       if (error) throw error;
       this.customer.set({ ...c, status });
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to update status');
+      this.error.set(extractErrorMessage(err, 'Failed to update status'));
     }
   }
 

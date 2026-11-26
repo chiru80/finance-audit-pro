@@ -12,6 +12,8 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
 import type { GlassDropdownItem } from '../design-system/components/glass-dropdown.component';
 import { GlassDropdownComponent } from '../design-system/components/glass-dropdown.component';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { extractErrorMessage } from '../utils/error.utils';
+import { downloadCsv } from '../utils/csv.utils';
 
 @Component({
   selector: 'app-reports',
@@ -158,27 +160,10 @@ export class ReportsComponent implements OnInit {
       if (balancesError) throw new Error(balancesError.message || 'DB error');
       this.customerBalances.set(balances as any[]);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load reports');
+      this.error.set(extractErrorMessage(err, 'Failed to load reports'));
     } finally {
       this.loading.set(false);
     }
-  }
-
-  exportPaymentsCSV() {
-    const payments = this.recentPayments();
-    if (!payments.length) return;
-
-    const headers = ['Payment ID', 'Date', 'Customer', 'Amount (INR)', 'Method', 'Reference'];
-    const rows = payments.map((p) => [
-      p.id,
-      p.payment_date,
-      p.customers?.name || 'N/A',
-      ((p.amount || 0) / 100).toFixed(2),
-      p.payment_method,
-      p.reference || '',
-    ]);
-
-    this.downloadCSV('payments_report.csv', [headers, ...rows]);
   }
 
   exportBalancesCSV() {
@@ -200,30 +185,24 @@ export class ReportsComponent implements OnInit {
       c.status,
     ]);
 
-    this.downloadCSV('customer_balances_report.csv', [headers, ...rows]);
+    downloadCsv('customer_balances_report.csv', [headers, ...rows]);
   }
 
-  private downloadCSV(filename: string, rows: (string | number)[][]) {
-    const csvContent =
-      'data:text/csv;charset=utf-8,' + rows.map((row) => this.escapeCsvRow(row)).join('\n');
-    const link = document.createElement('a');
-    link.setAttribute('href', encodeURI(csvContent));
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  exportPaymentsCSV() {
+    const payments = this.recentPayments();
+    if (!payments.length) return;
 
-  private escapeCsvRow(row: (string | number)[]): string {
-    return row
-      .map((cell) => {
-        const value = String(cell ?? '');
-        if (/[",\n\r]/.test(value) || value !== value.trim()) {
-          return `"${value.replace(/"/g, '""')}"`;
-        }
-        return value;
-      })
-      .join(',');
+    const headers = ['Payment ID', 'Date', 'Customer', 'Amount (INR)', 'Method', 'Reference'];
+    const rows = payments.map((p) => [
+      p.id,
+      p.payment_date,
+      p.customers?.name || 'N/A',
+      ((p.amount || 0) / 100).toFixed(2),
+      p.payment_method,
+      p.reference || '',
+    ]);
+
+    downloadCsv('payments_report.csv', [headers, ...rows]);
   }
 
   formatCurrency(amount: number | bigint) {
@@ -269,7 +248,7 @@ export class ReportsComponent implements OnInit {
         `${reportType.charAt(0).toUpperCase() + reportType.slice(1)} report sent successfully! Message ID: ${data?.messageId || 'unknown'}`,
       );
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Failed to send report';
+      const msg = extractErrorMessage(err, 'Failed to send report');
       if (msg.includes('401') || msg.includes('Invalid API key')) {
         this.whatsappError.set('Invalid WhatsApp API key. Check Settings → WhatsApp Gateway.');
       } else if (

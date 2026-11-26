@@ -14,10 +14,11 @@
       <glass-button
         variant="glass"
         size="md"
+        [disabled]="loading() || recentPayments().length === 0"
         (onClick)="exportPaymentsCSV()"
       >
         <svg class="w-4 h-4 mr-1 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 012 2z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
         {{ 'reports.export_payments' | i18n }}
       </glass-button>
@@ -25,6 +26,7 @@
       <glass-button
         variant="filled"
         size="md"
+        [disabled]="loading() || customerBalances().length === 0"
         (onClick)="exportBalancesCSV()"
       >
         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,7 +260,7 @@
                     {{ payment.payment_method }}
                   </span>
                 </td>
-                <td class="px-6 py-3.5 text-xs text-[var(--text-secondary)]">{{ payment.reference || payment.notes || ':' }}</td>
+                <td class="px-6 py-3.5 text-xs text-[var(--text-secondary)]">{{ payment.reference || payment.notes || '—' }}</td>
                 <td class="px-6 py-3.5 text-right font-semibold text-[var(--color-success-text)] font-mono whitespace-nowrap text-base">{{ formatCurrency(payment.amount) }}</td>
               </tr>
             }
@@ -296,7 +298,7 @@
             @for (c of customerBalances(); track c.id) {
               <tr class="hover:bg-[var(--glass-surface-elevated)]/70 transition-colors">
                 <td class="px-6 py-3.5 font-bold text-[var(--text-primary)] whitespace-nowrap">{{ c.name }}</td>
-                <td class="px-6 py-3.5 text-xs text-[var(--text-secondary)] font-medium whitespace-nowrap">{{ c.phone || ':' }}</td>
+                <td class="px-6 py-3.5 text-xs text-[var(--text-secondary)] font-medium whitespace-nowrap">{{ c.phone || '—' }}</td>
                 <td class="px-6 py-3.5 text-sm text-[var(--color-success-text)] font-mono font-bold whitespace-nowrap">{{ formatCurrency(c.total_paid) }}</td>
                 <td class="px-6 py-3.5 whitespace-nowrap">
                   <glass-badge [status]="c.status === 'active' ? 'active' : 'neutral'">

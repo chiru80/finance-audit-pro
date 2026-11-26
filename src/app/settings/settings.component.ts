@@ -12,6 +12,7 @@ import { GlassInputDirective } from '../design-system/components/glass-input.dir
 import type { GlassDropdownItem } from '../design-system/components/glass-dropdown.component';
 import { GlassDropdownComponent } from '../design-system/components/glass-dropdown.component';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { extractErrorMessage } from '../utils/error.utils';
 import { I18nPipe } from '../shared/i18n.pipe';
 
 interface WhatsAppConfig {
@@ -162,7 +163,7 @@ export class SettingsComponent implements OnInit {
 
       this.weeklyDueRupees.set(Math.floor(dueAmount / 100));
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to load settings');
+      this.error.set(extractErrorMessage(err, 'Failed to load settings'));
     } finally {
       this.loading.set(false);
     }
@@ -349,7 +350,7 @@ export class SettingsComponent implements OnInit {
       if (error) throw error;
       this.showSuccess('Settings updated successfully');
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : 'Failed to update setting');
+      this.error.set(extractErrorMessage(err, 'Failed to update setting'));
     }
   }
 

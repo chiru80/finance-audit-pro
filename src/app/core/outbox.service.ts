@@ -1,5 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { SupabaseService } from '../supabase.service';
+import { CollectionService } from '../collection.service';
+import { extractErrorMessage } from '../utils/error.utils';
 import { IndexedDbService } from './indexed-db.service';
 import { OfflineStatusService } from './offline-status.service';
 
@@ -20,7 +21,7 @@ export interface PendingPayment {
 @Injectable({ providedIn: 'root' })
 export class OutboxService {
   private readonly db = inject(IndexedDbService);
-  private readonly supabase = inject(SupabaseService);
+  private readonly collectionService = inject(CollectionService);
   private readonly status = inject(OfflineStatusService);
 
   readonly pending = signal<PendingPayment[]>([]);
@@ -28,7 +29,9 @@ export class OutboxService {
 
   constructor() {
     this.refresh();
-    window.addEventListener('online', () => this.syncAll());
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', () => this.syncAll());
+    }
   }
 
   async refresh(): Promise<void> {
@@ -68,22 +71,20 @@ export class OutboxService {
         await this.db.put('outbox', { ...row, status: 'syncing' });
         await this.refresh();
         try {
-          const { data, error } = await this.supabase.client.rpc('record_weekly_payment', {
-            p_customer_id: row.customerId,
-            p_amount_paise: row.amountPaise,
-            p_method: row.method,
-            p_reference: row.reference,
-            p_notes: row.notes,
-          });
-          if (error) throw error;
-          const result = Array.isArray(data) ? data[0] : data;
-          if (result && result.success === false) {
-            throw new Error(result.error_message || 'Payment recording failed');
+          const res = await this.collectionService.recordWeeklyPayment(
+            row.customerId,
+            row.amountPaise,
+            row.method,
+            row.reference || '',
+            row.notes || '',
+          );
+          if (!res.success) {
+            throw new Error(res.error || 'Payment recording failed');
           }
           await this.db.delete('outbox', row.id);
           synced++;
         } catch (err) {
-          const msg = err instanceof Error ? err.message : 'Sync failed';
+          const msg = extractErrorMessage(err, 'Sync failed');
           await this.db.put('outbox', {
             ...row,
             attempts: row.attempts + 1,

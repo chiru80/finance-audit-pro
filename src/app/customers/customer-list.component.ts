@@ -7,6 +7,7 @@ import { SupabaseService } from '../supabase.service';
 import { IndexedDbService } from '../core/indexed-db.service';
 import type { Customer, Village } from './customer.types';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { extractErrorMessage } from '../utils/error.utils';
 import { I18nService } from '../shared/i18n.service';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
@@ -41,6 +42,8 @@ export class CustomerListComponent implements OnInit {
   villages = signal<Village[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
+  confirmDeleteId = signal<string | null>(null);
+  deletingId = signal<string | null>(null);
   searchQuery = signal<string>('');
   statusFilter = signal<'all' | 'active' | 'outstanding' | 'inactive' | 'suspended'>('all');
   villageFilter = signal<string>('all');
@@ -137,22 +140,37 @@ export class CustomerListComponent implements OnInit {
     this._router.navigate(['/ledger'], { queryParams: { customerId: customer.id } });
   }
 
+  requestDelete(id: string) {
+    this.error.set(null);
+    this.confirmDeleteId.set(id);
+  }
+
+  cancelDelete() {
+    this.confirmDeleteId.set(null);
+  }
+
+  async confirmDelete(id: string) {
+    if (this.deletingId()) return;
+    this.deletingId.set(id);
+    this.error.set(null);
+    try {
+      const { error } = await this._supabaseService.client.from('customers').delete().eq('id', id);
+
+      if (error) throw error;
+      const updated = this.customers().filter((c) => c.id !== id);
+      this.customers.set(updated);
+      this.confirmDeleteId.set(null);
+      await this.idb.put('cache', { key: 'customers:all', value: updated, ts: Date.now() });
+    } catch (err) {
+      this.error.set(extractErrorMessage(err, 'Failed to delete customer'));
+    } finally {
+      this.deletingId.set(null);
+    }
+  }
+
   async deleteCustomer(id: string) {
     if (confirm(this._i18n.get('customers.confirm_delete'))) {
-      this.error.set(null);
-      try {
-        const { error } = await this._supabaseService.client
-          .from('customers')
-          .delete()
-          .eq('id', id);
-
-        if (error) throw error;
-        const updated = this.customers().filter((c) => c.id !== id);
-        this.customers.set(updated);
-        await this.idb.put('cache', { key: 'customers:all', value: updated, ts: Date.now() });
-      } catch (err) {
-        this.error.set(err instanceof Error ? err.message : 'Failed to delete customer');
-      }
+      await this.confirmDelete(id);
     }
   }
 

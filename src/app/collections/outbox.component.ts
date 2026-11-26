@@ -31,7 +31,7 @@ import { formatPaiseToINR } from '../utils/currency.utils';
             variant="filled"
             [disabled]="outbox.syncing() || !status.isOnline() || outbox.pending().length === 0"
             [loading]="outbox.syncing()"
-            (click)="sync()"
+            (onClick)="sync()"
           >
             {{ outbox.syncing() ? 'Syncing…' : 'Sync now' }}
           </glass-button>

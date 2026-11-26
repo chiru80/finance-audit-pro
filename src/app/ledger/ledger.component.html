@@ -333,12 +333,41 @@
                       <td class="py-3 px-4 whitespace-nowrap">
                         @if (p.reversed) {
                           <glass-badge status="overdue">Reversed</glass-badge>
+                        } @else if (reversingPaymentId() === (p.original_payment_id || p.id)) {
+                          <div class="inline-flex items-center gap-1.5">
+                            <input
+                              glassInput
+                              type="text"
+                              [(ngModel)]="reversalReason"
+                              (keydown.enter)="confirmReverse(p)"
+                              (keydown.escape)="cancelReverse()"
+                              placeholder="Reversal reason..."
+                              class="!py-1 !px-2 !text-xs w-36"
+                              [disabled]="reversingBusy()"
+                            />
+                            <button
+                              type="button"
+                              [disabled]="reversingBusy() || !reversalReason.trim()"
+                              (click)="confirmReverse(p)"
+                              class="text-xs px-2 py-1 rounded bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)] font-semibold disabled:opacity-50 cursor-pointer"
+                            >
+                              {{ reversingBusy() ? '...' : 'Confirm' }}
+                            </button>
+                            <button
+                              type="button"
+                              [disabled]="reversingBusy()"
+                              (click)="cancelReverse()"
+                              class="text-xs px-2 py-1 rounded border border-[var(--glass-border-subtle)] text-[var(--text-secondary)] cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         } @else {
                           <glass-badge status="paid">Recorded</glass-badge>
                           <button
                             type="button"
-                            class="ml-2 text-xs px-2 py-1 rounded bg-red-600 text-white"
-                            (click)="reversePayment(p.id)"
+                            class="ml-2 text-xs px-2 py-1 rounded bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)] font-semibold hover:opacity-90 cursor-pointer"
+                            (click)="startReverse(p)"
                           >
                             Reverse
                           </button>

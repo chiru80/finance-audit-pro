@@ -3,6 +3,8 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../supabase.service';
+import type { Customer } from '../customers/customer.types';
+import { extractErrorMessage } from '../utils/error.utils';
 import { GlassCardComponent } from '../design-system/components/glass-card.component';
 import { GlassButtonComponent } from '../design-system/components/glass-button.component';
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';
@@ -35,9 +37,14 @@ interface OnlinePayment {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="text-xs font-bold uppercase text-[var(--text-secondary)] mb-1 block"
-              >Customer ID</label
+              >Customer</label
             >
-            <input glassInput [(ngModel)]="form.customer_id" placeholder="customer uuid" />
+            <select glassInput [(ngModel)]="form.customer_id">
+              <option value="">Select customer...</option>
+              @for (c of customers(); track c.id) {
+                <option [value]="c.id">{{ c.name }}@if (c.phone) { ({{ c.phone }}) }</option>
+              }
+            </select>
           </div>
           <div>
             <label class="text-xs font-bold uppercase text-[var(--text-secondary)] mb-1 block"
@@ -54,16 +61,22 @@ interface OnlinePayment {
             <label class="text-xs font-bold uppercase text-[var(--text-secondary)] mb-1 block"
               >Transaction ID</label
             >
-            <input glassInput [(ngModel)]="form.transaction_id" />
+            <input glassInput [(ngModel)]="form.transaction_id" placeholder="e.g. pay_N8x..." />
           </div>
           <div>
             <label class="text-xs font-bold uppercase text-[var(--text-secondary)] mb-1 block"
               >Amount (INR)</label
             >
-            <input glassInput type="number" [(ngModel)]="form.amount_rupees" />
+            <input glassInput type="number" min="1" [(ngModel)]="form.amount_rupees" />
           </div>
         </div>
-        <glass-button variant="filled" size="md" class="mt-4" (onClick)="create()"
+        <glass-button
+          variant="filled"
+          size="md"
+          class="mt-4"
+          [loading]="submitting()"
+          [disabled]="submitting()"
+          (onClick)="create()"
           >Record</glass-button
         >
         @if (error()) {
@@ -85,6 +98,7 @@ interface OnlinePayment {
             <table class="min-w-full text-sm">
               <thead>
                 <tr class="text-left text-xs uppercase text-[var(--text-secondary)]">
+                  <th class="py-2 px-3">Customer</th>
                   <th class="py-2 px-3">Gateway</th>
                   <th class="py-2 px-3">Transaction</th>
                   <th class="py-2 px-3">Amount</th>
@@ -95,20 +109,25 @@ interface OnlinePayment {
               <tbody>
                 @for (p of payments(); track p.id) {
                   <tr class="border-t border-[var(--glass-border-subtle)]">
-                    <td class="py-2 px-3">{{ p.gateway }}</td>
+                    <td class="py-2 px-3 font-medium">{{ p.customer_name || p.customer_id }}</td>
+                    <td class="py-2 px-3 capitalize">{{ p.gateway }}</td>
                     <td class="py-2 px-3 font-mono text-xs">{{ p.transaction_id }}</td>
-                    <td class="py-2 px-3">₹{{ (p.amount / 100).toFixed(2) }}</td>
-                    <td class="py-2 px-3">{{ p.status }}</td>
+                    <td class="py-2 px-3 font-mono">₹{{ (p.amount / 100).toFixed(2) }}</td>
+                    <td class="py-2 px-3 capitalize">{{ p.status }}</td>
                     <td class="py-2 px-3">
                       @if (p.status === 'pending') {
                         <button
-                          class="text-xs px-2 py-1 rounded bg-green-600 text-white mr-1"
+                          type="button"
+                          [disabled]="updatingId() === p.id"
+                          class="text-xs px-2.5 py-1 rounded bg-[var(--color-success-tint)] text-[var(--color-success-text)] border border-[var(--color-success-border)] font-semibold mr-1.5 disabled:opacity-50 cursor-pointer"
                           (click)="reconcile(p.id, 'completed')"
                         >
                           Mark paid
                         </button>
                         <button
-                          class="text-xs px-2 py-1 rounded bg-red-600 text-white"
+                          type="button"
+                          [disabled]="updatingId() === p.id"
+                          class="text-xs px-2.5 py-1 rounded bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)] font-semibold disabled:opacity-50 cursor-pointer"
                           (click)="reconcile(p.id, 'failed')"
                         >
                           Mark failed
@@ -128,8 +147,11 @@ interface OnlinePayment {
 export class OnlinePaymentsComponent implements OnInit {
   private readonly _supabase = inject(SupabaseService);
   loading = signal(true);
+  submitting = signal(false);
+  updatingId = signal<string | null>(null);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
+  customers = signal<Customer[]>([]);
   payments = signal<OnlinePayment[]>([]);
   form = { customer_id: '', gateway: 'razorpay', transaction_id: '', amount_rupees: 0 };
 
@@ -139,53 +161,102 @@ export class OnlinePaymentsComponent implements OnInit {
 
   async load() {
     this.loading.set(true);
-    const { data, error } = await this._supabase.client
-      .from('online_payments')
-      .select('*, customers(name)')
-      .order('created_at', { ascending: false });
-    if (error) this.error.set(error.message);
+    const [payRes, custRes] = await Promise.all([
+      this._supabase.client
+        .from('online_payments')
+        .select('*, customers(name)')
+        .order('created_at', { ascending: false }),
+      this._supabase.client
+        .from('customers')
+        .select('id, name, phone, status')
+        .eq('status', 'active')
+        .order('name', { ascending: true }),
+    ]);
+
+    if (payRes.error) this.error.set(extractErrorMessage(payRes.error, 'Failed to load payments'));
     else
-      this.payments.set((data || []).map((r: any) => ({ ...r, customer_name: r.customers?.name })));
+      this.payments.set(
+        (payRes.data || []).map((r: any) => ({ ...r, customer_name: r.customers?.name })),
+      );
+
+    if (!custRes.error && custRes.data) {
+      this.customers.set(custRes.data as Customer[]);
+    }
     this.loading.set(false);
   }
 
   async create() {
     this.error.set(null);
     this.success.set(null);
-    if (!this.form.customer_id || !this.form.transaction_id || !this.form.amount_rupees) {
-      this.error.set('All fields are required');
+    if (!this.form.customer_id || !this.form.transaction_id.trim() || Number(this.form.amount_rupees) <= 0) {
+      this.error.set('Customer, transaction ID, and a positive amount are required');
       return;
     }
-    const { error } = await this._supabase.client.from('online_payments').insert({
-      customer_id: this.form.customer_id,
-      gateway: this.form.gateway,
-      transaction_id: this.form.transaction_id,
-      amount: Math.round(this.form.amount_rupees * 100),
-      status: 'pending',
-    });
-    if (error) {
-      this.error.set(error.message);
-      return;
+
+    this.submitting.set(true);
+    try {
+      const { error } = await this._supabase.client.from('online_payments').insert({
+        customer_id: this.form.customer_id,
+        gateway: this.form.gateway,
+        transaction_id: this.form.transaction_id.trim(),
+        amount: Math.round(Number(this.form.amount_rupees) * 100),
+        status: 'pending',
+      });
+      if (error) {
+        this.error.set(extractErrorMessage(error, 'Failed to record online payment'));
+        return;
+      }
+      this.success.set('Recorded online payment');
+      this.form = { customer_id: '', gateway: 'razorpay', transaction_id: '', amount_rupees: 0 };
+      await this.load();
+    } finally {
+      this.submitting.set(false);
     }
-    this.success.set('Recorded');
-    this.form = { customer_id: '', gateway: 'razorpay', transaction_id: '', amount_rupees: 0 };
-    await this.load();
   }
 
   async reconcile(id: string, status: string) {
-    const { data, error } = await this._supabase.client.rpc('update_online_payment_status', {
-      p_payment_id: id,
-      p_new_status: status,
-    });
-    if (error) {
-      this.error.set(error.message);
-      return;
+    this.error.set(null);
+    this.updatingId.set(id);
+    try {
+      const { data, error } = await this._supabase.client.rpc('update_online_payment_status', {
+        p_payment_id: id,
+        p_new_status: status,
+      });
+
+      const res = Array.isArray(data) ? data[0] : data;
+      const needsFallback =
+        error?.code === '42804' ||
+        error?.code === 'PGRST202' ||
+        error?.message?.includes('does not match function result type') ||
+        res?.error_message === 'Online payment record not found';
+
+      if (needsFallback) {
+        const { error: directErr } = await this._supabase.client
+          .from('online_payments')
+          .update({
+            status,
+            paid_at: status === 'completed' ? new Date().toISOString() : null,
+          })
+          .eq('id', id);
+        if (directErr) {
+          this.error.set(extractErrorMessage(directErr, 'Failed to update status'));
+          return;
+        }
+        await this.load();
+        return;
+      }
+
+      if (error) {
+        this.error.set(extractErrorMessage(error, 'Failed to update status'));
+        return;
+      }
+      if (res && res.success === false) {
+        this.error.set(res.error_message || 'Failed to update status');
+        return;
+      }
+      await this.load();
+    } finally {
+      this.updatingId.set(null);
     }
-    const res = Array.isArray(data) ? data[0] : data;
-    if (res && res.success === false) {
-      this.error.set(res.error_message);
-      return;
-    }
-    await this.load();
   }
 }

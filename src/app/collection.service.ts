@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { AuthService } from './auth/auth.service';
+import { toAppError } from './utils/error.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -237,15 +238,7 @@ export class CollectionService {
   }
 
   private toError(err: unknown, fallback: string): Error {
-    if (err instanceof Error) return err;
-    if (err && typeof err === 'object') {
-      const e = err as { message?: string; details?: string; hint?: string };
-      const parts = [e.message, e.details, e.hint].filter(Boolean);
-      if (parts.length > 0) {
-        return new Error(parts.join(' — '));
-      }
-    }
-    return new Error(fallback);
+    return toAppError(err, fallback);
   }
 
   async getCustomerPaymentSummary(customerId: string) {
@@ -321,7 +314,14 @@ export class CollectionService {
         p_reason: reason,
       });
 
-      if (error) throw error;
+      if (error) {
+        if (this.isRpcTypeOrMissingError(error)) {
+          await this.recordAbsenceDirectFallback(customerId, weekStartDate, reason);
+          this.showSuccess('Absence recorded');
+          return { success: true, data: { success: true } };
+        }
+        throw this.toError(error, 'Failed to record absence');
+      }
       const res = Array.isArray(data) ? data[0] : data;
       if (res && res.success === false) {
         throw new Error(res.error_message || 'Failed to record absence');
@@ -330,7 +330,7 @@ export class CollectionService {
       this.showSuccess('Absence recorded');
       return { success: true, data: res };
     } catch (err) {
-      return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+      return { success: false, error: this.toError(err, 'Failed to record absence').message };
     }
   }
 
@@ -341,7 +341,14 @@ export class CollectionService {
         p_approve: approve,
       });
 
-      if (error) throw error;
+      if (error) {
+        if (this.isRpcTypeOrMissingError(error)) {
+          await this.approveAbsenceDirectFallback(absenceId, approve);
+          this.showSuccess(approve ? 'Absence approved' : 'Absence rejected');
+          return { success: true, data: { success: true } };
+        }
+        throw this.toError(error, 'Failed to update absence approval');
+      }
       const res = Array.isArray(data) ? data[0] : data;
       if (res && res.success === false) {
         throw new Error(res.error_message || 'Failed to update absence approval');
@@ -350,8 +357,101 @@ export class CollectionService {
       this.showSuccess(approve ? 'Absence approved' : 'Absence rejected');
       return { success: true, data: res };
     } catch (err) {
-      return { success: false, error: err instanceof Error ? err.message : 'Unknown error' };
+      return {
+        success: false,
+        error: this.toError(err, 'Failed to update absence approval').message,
+      };
     }
+  }
+
+  async reversePayment(paymentId: string, reason: string) {
+    try {
+      const { data, error } = await this._supabaseService.client.rpc('reverse_payment', {
+        p_payment_id: paymentId,
+        p_reason: reason,
+      });
+      if (error) throw this.toError(error, 'Failed to reverse payment');
+      const res = Array.isArray(data) ? data[0] : data;
+      if (res && res.success === false) {
+        throw new Error(res.error_message || 'Reversal failed');
+      }
+      this.showSuccess('Payment reversed');
+      return { success: true, data: res };
+    } catch (err) {
+      return { success: false, error: this.toError(err, 'Failed to reverse payment').message };
+    }
+  }
+
+  private async recordAbsenceDirectFallback(
+    customerId: string,
+    weekStartDate: string,
+    reason: string,
+  ) {
+    const client = this._supabaseService.client;
+    const start = new Date(weekStartDate);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    const weekEndIso = end.toISOString().split('T')[0];
+
+    const { data: settingsRows } = await client
+      .from('settings')
+      .select('value')
+      .eq('key', 'absence_requires_approval')
+      .maybeSingle();
+    const requiresApproval = settingsRows?.value !== 'false';
+    const absenceStatus = requiresApproval ? 'pending' : 'approved';
+    const absenceApproved = requiresApproval ? null : true;
+
+    const { error: insErr } = await client.from('absences').insert({
+      customer_id: customerId,
+      week_start_date: weekStartDate,
+      week_end_date: weekEndIso,
+      reason,
+      status: absenceStatus,
+    });
+    if (insErr) throw this.toError(insErr, 'Failed to record absence');
+
+    const { error: updErr } = await client
+      .from('weekly_schedules')
+      .update({
+        absence_recorded: true,
+        absence_approved: absenceApproved,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('customer_id', customerId)
+      .eq('week_start_date', weekStartDate);
+    if (updErr) throw this.toError(updErr, 'Failed to mark schedule absent');
+  }
+
+  private async approveAbsenceDirectFallback(absenceId: string, approve: boolean) {
+    const client = this._supabaseService.client;
+    const { data: absRow, error: fetchErr } = await client
+      .from('absences')
+      .select('id, customer_id, week_start_date')
+      .eq('id', absenceId)
+      .single();
+    if (fetchErr) throw this.toError(fetchErr, 'Absence record not found');
+
+    const nextStatus = approve ? 'approved' : 'rejected';
+    const { error: absErr } = await client
+      .from('absences')
+      .update({
+        status: nextStatus,
+        approved_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', absenceId);
+    if (absErr) throw this.toError(absErr, 'Failed to update absence');
+
+    const { error: schedErr } = await client
+      .from('weekly_schedules')
+      .update({
+        absence_approved: approve,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('customer_id', (absRow as any).customer_id)
+      .eq('week_start_date', (absRow as any).week_start_date);
+    if (schedErr) throw this.toError(schedErr, 'Failed to update weekly schedule');
   }
 
   async getCustomerAbsences(customerId: string) {

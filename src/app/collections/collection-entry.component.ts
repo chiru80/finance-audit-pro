@@ -17,6 +17,7 @@ import type { GlassTabItem } from '../design-system/components/glass-tabs.compon
 import { GlassTabsComponent } from '../design-system/components/glass-tabs.component';
 import { GlassInputDirective } from '../design-system/components/glass-input.directive';
 import { formatPaiseToINR } from '../utils/currency.utils';
+import { extractErrorMessage } from '../utils/error.utils';
 import { I18nPipe } from '../shared/i18n.pipe';
 
 @Component({
@@ -141,7 +142,7 @@ export class CollectionEntryComponent implements OnInit {
         this.customersLoaded.set(true);
         this.error.set('Showing cached customers (offline).');
       } else {
-        this.error.set(err instanceof Error ? err.message : 'Failed to load customers');
+        this.error.set(extractErrorMessage(err, 'Failed to load customers'));
       }
     } finally {
       this.loading.set(false);
@@ -249,11 +250,7 @@ export class CollectionEntryComponent implements OnInit {
 
       setTimeout(() => this.success.set(null), 4000);
     } catch (err) {
-      const msg =
-        err instanceof Error
-          ? err.message
-          : (err as { message?: string } | null)?.message || 'Failed to record payment';
-      this.error.set(msg);
+      this.error.set(extractErrorMessage(err, 'Failed to record payment'));
     } finally {
       this.loading.set(false);
     }

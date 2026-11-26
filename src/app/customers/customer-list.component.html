@@ -335,63 +335,82 @@
 
                 <!-- Quick Action Buttons -->
                 <td class="px-3.5 py-3.5 whitespace-nowrap text-right text-xs font-medium space-x-1.5">
-                  <button
-                    type="button"
-                    (click)="recordCollection(customer)"
-                    class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-[var(--color-on-primary)] bg-[var(--primary-accent)] hover:bg-[var(--primary-hover)] rounded-lg transition-colors cursor-pointer shadow-xs"
-                    [attr.title]="'customers.collect' | i18n"
-                  >
-                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
-                    </svg>
-                    {{ 'customers.collect' | i18n }}
-                  </button>
+                  @if (confirmDeleteId() === customer.id) {
+                    <button
+                      type="button"
+                      [disabled]="deletingId() === customer.id"
+                      (click)="confirmDelete(customer.id)"
+                      class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-danger-tint)] text-[var(--color-danger-text)] border border-[var(--color-danger-border)] hover:opacity-90 disabled:opacity-50 cursor-pointer"
+                    >
+                      {{ deletingId() === customer.id ? 'Deleting...' : 'Confirm Delete' }}
+                    </button>
+                    <button
+                      type="button"
+                      [disabled]="deletingId() === customer.id"
+                      (click)="cancelDelete()"
+                      class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--glass-border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--color-surface-hover)] cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  } @else {
+                    <button
+                      type="button"
+                      (click)="recordCollection(customer)"
+                      class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-[var(--color-on-primary)] bg-[var(--primary-accent)] hover:bg-[var(--primary-hover)] rounded-lg transition-colors cursor-pointer shadow-xs"
+                      [attr.title]="'customers.collect' | i18n"
+                    >
+                      <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+                      </svg>
+                      {{ 'customers.collect' | i18n }}
+                    </button>
 
-                  <button
-                    type="button"
-                    (click)="viewLedger(customer)"
-                    class="inline-flex items-center px-2.5 py-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--glass-surface-elevated)] hover:bg-[var(--color-surface-hover)] rounded-lg border border-[var(--glass-border-subtle)] transition-colors cursor-pointer"
-                    [attr.title]="'customers.view_ledger' | i18n"
-                  >
-                    {{ 'customers.view_ledger' | i18n }}
-                  </button>
+                    <button
+                      type="button"
+                      (click)="viewLedger(customer)"
+                      class="inline-flex items-center px-2.5 py-1.5 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--glass-surface-elevated)] hover:bg-[var(--color-surface-hover)] rounded-lg border border-[var(--glass-border-subtle)] transition-colors cursor-pointer"
+                      [attr.title]="'customers.view_ledger' | i18n"
+                    >
+                      {{ 'customers.view_ledger' | i18n }}
+                    </button>
 
-                  <button
-                    type="button"
-                    class="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-info-text)] rounded-lg hover:bg-[var(--glass-surface-elevated)] transition cursor-pointer"
-                    (click)="viewCustomer(customer)"
-                    [attr.aria-label]="'customers.view_details' | i18n"
-                    [attr.title]="'customers.view_details' | i18n"
-                  >
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  </button>
+                    <button
+                      type="button"
+                      class="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-info-text)] rounded-lg hover:bg-[var(--glass-surface-elevated)] transition cursor-pointer"
+                      (click)="viewCustomer(customer)"
+                      [attr.aria-label]="'customers.view_details' | i18n"
+                      [attr.title]="'customers.view_details' | i18n"
+                    >
+                      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </button>
 
-                  <button
-                    type="button"
-                    class="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-info-text)] rounded-lg hover:bg-[var(--glass-surface-elevated)] transition cursor-pointer"
-                    (click)="editCustomer(customer.id)"
-                    [attr.aria-label]="'customers.edit' | i18n"
-                    [attr.title]="'customers.edit' | i18n"
-                  >
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                  </button>
+                    <button
+                      type="button"
+                      class="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-info-text)] rounded-lg hover:bg-[var(--glass-surface-elevated)] transition cursor-pointer"
+                      (click)="editCustomer(customer.id)"
+                      [attr.aria-label]="'customers.edit' | i18n"
+                      [attr.title]="'customers.edit' | i18n"
+                    >
+                      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      </svg>
+                    </button>
 
-                  <button
-                    type="button"
-                    class="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-danger-text)] rounded-lg hover:bg-[var(--color-danger-tint)] transition cursor-pointer"
-                    (click)="deleteCustomer(customer.id)"
-                    [attr.aria-label]="'customers.delete' | i18n"
-                    [attr.title]="'customers.delete' | i18n"
-                  >
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
+                    <button
+                      type="button"
+                      class="p-1.5 text-[var(--text-muted)] hover:text-[var(--color-danger-text)] rounded-lg hover:bg-[var(--color-danger-tint)] transition cursor-pointer"
+                      (click)="requestDelete(customer.id)"
+                      [attr.aria-label]="'customers.delete' | i18n"
+                      [attr.title]="'customers.delete' | i18n"
+                    >
+                      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  }
                 </td>
               </tr>
             }
