@@ -27,7 +27,7 @@
   </div>
 
   @if (activeTab() === 'tracker') {
-    <app-weekly-tracker />
+    <app-weekly-tracker [initialCustomerId]="selectedCustomer()" />
   } @else {
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Form Card (2 Columns) -->

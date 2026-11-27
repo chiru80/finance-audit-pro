@@ -1,5 +1,5 @@
 import type { OnInit } from '@angular/core';
-import { Component, inject, signal } from '@angular/core';
+import { Component, Input, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { I18nPipe } from '../shared/i18n.pipe';
@@ -45,6 +45,13 @@ export class WeeklyTrackerComponent implements OnInit {
   markingAbsentScheduleId = signal<string | null>(null);
   absenceReason = '';
 
+  @Input() set initialCustomerId(id: string | null | undefined) {
+    if (id && id !== this.customerId()) {
+      this.customerId.set(id);
+      this.loadSchedules(id);
+    }
+  }
+
   ngOnInit() {
     this.loadCustomers();
   }
@@ -59,6 +66,13 @@ export class WeeklyTrackerComponent implements OnInit {
 
       if (error) throw error;
       this.customers.set(data as Customer[]);
+      const cid = this.customerId();
+      if (cid) {
+        const match = (data as Customer[]).find((c) => c.id === cid);
+        if (match?.name) {
+          this.selectedCustomerName.set(match.name);
+        }
+      }
     } catch (err) {
       this.error.set(extractErrorMessage(err, 'Failed to load customers'));
     }

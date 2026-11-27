@@ -83,7 +83,7 @@ BEGIN
         p_customer_id, v_profile_id, p_amount_paise, p_method, p_reference, CURRENT_DATE, p_notes, NOW()
     ) RETURNING id INTO v_payment_id;
 
-    PERFORM allocate_payment_to_schedules(p_payment_id, p_customer_id, p_amount_paise, v_direction);
+    PERFORM allocate_payment_to_schedules(v_payment_id, p_customer_id, p_amount_paise, v_direction);
 
     SELECT COALESCE(SUM(pa.amount), 0) INTO v_allocated
     FROM payment_allocations pa

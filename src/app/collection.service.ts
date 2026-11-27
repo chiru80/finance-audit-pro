@@ -92,8 +92,11 @@ export class CollectionService {
     const e = err as { code?: string; message?: string };
     return (
       e.code === '42804' ||
+      e.code === '42703' ||
       e.code === 'PGRST202' ||
-      !!e.message?.includes('does not match function result type')
+      !!e.message?.includes('does not match function result type') ||
+      !!e.message?.includes('does not exist') ||
+      !!e.message?.includes('has no field')
     );
   }
 
@@ -433,12 +436,13 @@ export class CollectionService {
     if (fetchErr) throw this.toError(fetchErr, 'Absence record not found');
 
     const nextStatus = approve ? 'approved' : 'rejected';
+    const userId = this._authService.user()?.id ?? null;
     const { error: absErr } = await client
       .from('absences')
       .update({
         status: nextStatus,
+        approved_by: userId,
         approved_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
       })
       .eq('id', absenceId);
     if (absErr) throw this.toError(absErr, 'Failed to update absence');

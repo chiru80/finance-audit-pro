@@ -170,6 +170,70 @@ describe('CollectionService', () => {
       });
     });
 
+    it('falls back to direct table insert when RPC fails with 42703 column "p_payment_id" does not exist', async () => {
+      mockSupabaseService.client.rpc.mockResolvedValueOnce({
+        data: null,
+        error: {
+          code: '42703',
+          message: 'column "p_payment_id" does not exist',
+        },
+      });
+
+      const existingSchedules = [{ id: 'sch-1', due_amount: 50000, week_start_date: '2026-11-23' }];
+      const existingCheckChain = {
+        select: vi.fn(() => ({
+          eq: vi.fn().mockResolvedValue({ data: existingSchedules, error: null }),
+        })),
+      };
+      const unpaidQueryChain = {
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        gt: vi.fn().mockReturnThis(),
+        order: vi.fn().mockResolvedValue({ data: existingSchedules, error: null }),
+      };
+      const updateScheduleChain = {
+        update: vi.fn(() => ({
+          eq: vi.fn().mockResolvedValue({ error: null }),
+        })),
+      };
+
+      const paymentsInsertSingle = vi
+        .fn()
+        .mockResolvedValue({ data: { id: 'pay-fallback-42703' }, error: null });
+      const paymentsChain = {
+        insert: vi.fn(() => ({
+          select: vi.fn(() => ({ single: paymentsInsertSingle })),
+        })),
+      };
+      const allocChain = {
+        insert: vi.fn().mockResolvedValue({ error: null }),
+      };
+
+      let weeklyScheduleCalls = 0;
+      mockSupabaseService.client.from.mockImplementation((table: string) => {
+        if (table === 'weekly_schedules') {
+          weeklyScheduleCalls++;
+          if (weeklyScheduleCalls === 1) return existingCheckChain;
+          if (weeklyScheduleCalls === 2) return unpaidQueryChain;
+          return updateScheduleChain;
+        }
+        if (table === 'payments') return paymentsChain;
+        if (table === 'payment_allocations') return allocChain;
+        return {};
+      });
+
+      const service = createService();
+      const res = await service.recordWeeklyPayment('cust-1', 50000, 'cash');
+
+      expect(res.success).toBe(true);
+      expect(paymentsChain.insert).toHaveBeenCalled();
+      expect(allocChain.insert).toHaveBeenCalledWith({
+        payment_id: 'pay-fallback-42703',
+        schedule_id: 'sch-1',
+        amount: 50000,
+      });
+    });
+
     it('calls reverse_payment RPC cleanly via reversePayment()', async () => {
       mockSupabaseService.client.rpc.mockResolvedValueOnce({
         data: [{ success: true, error_message: null }],
@@ -293,6 +357,50 @@ describe('CollectionService', () => {
       });
       expect(res.success).toBe(true);
       expect(service.success()).toBe('Absence approved');
+    });
+
+    it('falls back to direct table update without updated_at when approve_absence returns 42703', async () => {
+      mockSupabaseService.client.rpc.mockResolvedValueOnce({
+        data: null,
+        error: { code: '42703', message: 'record "new" has no field "updated_at"' },
+      });
+
+      const fetchSingle = vi.fn().mockResolvedValue({
+        data: { id: 'abs-1', customer_id: 'cust-1', week_start_date: '2026-11-09' },
+        error: null,
+      });
+      const absUpdateEq = vi.fn().mockResolvedValue({ error: null });
+      const absUpdate = vi.fn(() => ({ eq: absUpdateEq }));
+      const schedEq2 = vi.fn().mockResolvedValue({ error: null });
+      const schedEq1 = vi.fn(() => ({ eq: schedEq2 }));
+      const schedUpdate = vi.fn(() => ({ eq: schedEq1 }));
+
+      let absCalls = 0;
+      mockSupabaseService.client.from.mockImplementation((table: string) => {
+        if (table === 'absences') {
+          absCalls++;
+          if (absCalls === 1) {
+            return { select: vi.fn(() => ({ eq: vi.fn(() => ({ single: fetchSingle })) })) };
+          }
+          return { update: absUpdate };
+        }
+        if (table === 'weekly_schedules') {
+          return { update: schedUpdate };
+        }
+        return {};
+      });
+
+      const service = createService();
+      const res = await service.approveAbsence('abs-1', true);
+
+      expect(res.success).toBe(true);
+      expect(absUpdate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          status: 'approved',
+          approved_by: 'owner-uuid-1',
+        }),
+      );
+      expect((absUpdate.mock.calls[0][0] as any).updated_at).toBeUndefined();
     });
   });
 

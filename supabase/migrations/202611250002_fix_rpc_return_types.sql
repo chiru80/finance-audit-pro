@@ -80,7 +80,7 @@ BEGIN
         p_customer_id, v_profile_id, p_amount_paise, p_method, p_reference, CURRENT_DATE, p_notes, NOW()
     ) RETURNING id INTO v_payment_id;
 
-    PERFORM allocate_payment_to_schedules(p_payment_id, p_customer_id, p_amount_paise, v_direction);
+    PERFORM allocate_payment_to_schedules(v_payment_id, p_customer_id, p_amount_paise, v_direction);
 
     SELECT COALESCE(SUM(pa.amount), 0)::BIGINT INTO v_allocated
     FROM payment_allocations pa
@@ -197,6 +197,9 @@ BEGIN
 END;
 $$;
 
+-- Drop legacy 3-arg overload to avoid overload ambiguity
+DROP FUNCTION IF EXISTS public.allocate_payment_to_schedules(UUID, UUID, BIGINT);
+
 CREATE OR REPLACE FUNCTION reverse_payment(
     p_payment_id UUID,
     p_reason TEXT
@@ -210,6 +213,10 @@ DECLARE
     v_profile_id UUID;
     v_customer_id UUID;
     v_already_reversed BOOLEAN;
+    v_total_due BIGINT := 0;
+    v_total_allocated BIGINT := 0;
+    v_new_balance BIGINT := 0;
+    v_new_credit BIGINT := 0;
 BEGIN
     IF p_reason IS NULL OR length(trim(p_reason)) = 0 THEN
         RETURN QUERY SELECT FALSE, 'A reversal reason is required'::TEXT;
@@ -240,19 +247,40 @@ BEGIN
         RETURN;
     END IF;
 
-    UPDATE weekly_schedules
-    SET paid = FALSE,
-        payment_id = NULL,
-        updated_at = NOW()
-    WHERE customer_id = v_customer_id
-      AND payment_id = p_payment_id
-      AND paid = TRUE;
-
     UPDATE payment_history
     SET reversed = TRUE,
         reversed_reason = p_reason,
         reversed_at = NOW()
     WHERE original_payment_id = p_payment_id;
+
+    UPDATE weekly_schedules
+    SET paid = FALSE,
+        payment_id = NULL,
+        updated_at = NOW()
+    WHERE customer_id = v_customer_id
+      AND payment_id = p_payment_id;
+
+    SELECT COALESCE(SUM(ws.due_amount), 0)::BIGINT INTO v_total_due
+    FROM weekly_schedules ws
+    WHERE ws.customer_id = v_customer_id;
+
+    SELECT COALESCE(SUM(pa.amount), 0)::BIGINT INTO v_total_allocated
+    FROM payment_allocations pa
+    JOIN payments p ON p.id = pa.payment_id
+    LEFT JOIN payment_history ph ON ph.original_payment_id = p.id
+    WHERE p.customer_id = v_customer_id
+      AND COALESCE(ph.reversed, FALSE) = FALSE;
+
+    v_new_credit := GREATEST(0::BIGINT, v_total_allocated - v_total_due);
+    v_new_balance := GREATEST(0::BIGINT, v_total_due - v_total_allocated);
+
+    UPDATE customers c
+    SET outstanding_balance = v_new_balance,
+        total_paid = v_total_allocated,
+        total_due = v_total_due,
+        credit_balance = v_new_credit,
+        updated_at = NOW()
+    WHERE c.id = v_customer_id;
 
     PERFORM log_audit_entry(
         v_profile_id,
@@ -264,6 +292,228 @@ BEGIN
     );
 
     RETURN QUERY SELECT TRUE, NULL::TEXT;
+END;
+$$;
+
+-- Ensure absences table has updated_at column required by update_absences_updated_at trigger
+ALTER TABLE public.absences
+    ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+
+CREATE OR REPLACE FUNCTION record_absence(
+    p_customer_id UUID,
+    p_week_start DATE,
+    p_reason TEXT DEFAULT NULL
+)
+RETURNS TABLE(
+    success BOOLEAN,
+    absence_id UUID,
+    error_message TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_profile_id UUID;
+    v_customer_name TEXT;
+    v_absence_id UUID;
+    v_requires_approval BOOLEAN := TRUE;
+    v_initial_status TEXT := 'pending';
+BEGIN
+    SELECT c.profile_id, c.name
+    INTO v_profile_id, v_customer_name
+    FROM customers c
+    WHERE c.id = p_customer_id;
+
+    IF NOT FOUND THEN
+        RETURN QUERY SELECT FALSE, NULL::UUID, 'Customer not found'::TEXT;
+        RETURN;
+    END IF;
+
+    IF v_profile_id <> auth.uid() THEN
+        RETURN QUERY SELECT FALSE, NULL::UUID, 'Access denied'::TEXT;
+        RETURN;
+    END IF;
+
+    SELECT COALESCE((SELECT value FROM settings WHERE key = 'absence_requires_approval'), 'true') = 'true'
+    INTO v_requires_approval;
+
+    IF NOT v_requires_approval THEN
+        v_initial_status := 'approved';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM absences
+        WHERE customer_id = p_customer_id
+          AND week_start_date = p_week_start
+          AND status IN ('pending', 'approved')
+    ) THEN
+        RETURN QUERY SELECT FALSE, NULL::UUID, 'Absence already recorded for this week'::TEXT;
+        RETURN;
+    END IF;
+
+    INSERT INTO absences (
+        customer_id, week_start_date, week_end_date, reason, status, approved_by, approved_at
+    ) VALUES (
+        p_customer_id,
+        p_week_start,
+        p_week_start + INTERVAL '6 days',
+        p_reason,
+        v_initial_status,
+        CASE WHEN v_initial_status = 'approved' THEN auth.uid() ELSE NULL END,
+        CASE WHEN v_initial_status = 'approved' THEN NOW() ELSE NULL END
+    )
+    ON CONFLICT (customer_id, week_start_date) DO UPDATE SET
+        reason = EXCLUDED.reason,
+        status = EXCLUDED.status,
+        approved_by = EXCLUDED.approved_by,
+        approved_at = EXCLUDED.approved_at,
+        updated_at = NOW()
+    RETURNING id INTO v_absence_id;
+
+    UPDATE weekly_schedules
+    SET absence_recorded = TRUE,
+        absence_approved = CASE WHEN v_initial_status = 'approved' THEN TRUE ELSE NULL END,
+        updated_at = NOW()
+    WHERE customer_id = p_customer_id
+      AND week_start_date = p_week_start;
+
+    PERFORM log_audit_entry(
+        v_profile_id,
+        'absence_recorded',
+        'absences',
+        v_absence_id,
+        NULL,
+        jsonb_build_object(
+            'customer_id', p_customer_id,
+            'customer_name', v_customer_name,
+            'week_start', p_week_start,
+            'reason', p_reason,
+            'status', v_initial_status
+        )
+    );
+
+    RETURN QUERY SELECT TRUE, v_absence_id, NULL::TEXT;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION approve_absence(
+    p_absence_id UUID,
+    p_approve BOOLEAN
+)
+RETURNS TABLE(
+    success BOOLEAN,
+    absence_id UUID,
+    error_message TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_profile_id UUID;
+    v_customer_id UUID;
+    v_customer_name TEXT;
+    v_current_status TEXT;
+    v_week_start DATE;
+BEGIN
+    SELECT a.customer_id, a.status, a.week_start_date, c.profile_id, c.name
+    INTO v_customer_id, v_current_status, v_week_start, v_profile_id, v_customer_name
+    FROM absences a
+    JOIN customers c ON a.customer_id = c.id
+    WHERE a.id = p_absence_id;
+
+    IF NOT FOUND THEN
+        RETURN QUERY SELECT FALSE, NULL::UUID, 'Absence record not found'::TEXT;
+        RETURN;
+    END IF;
+
+    IF v_profile_id <> auth.uid() THEN
+        RETURN QUERY SELECT FALSE, NULL::UUID, 'Access denied'::TEXT;
+        RETURN;
+    END IF;
+
+    IF v_current_status = 'pending' THEN
+        UPDATE absences
+        SET status = CASE WHEN p_approve THEN 'approved' ELSE 'rejected' END,
+            approved_by = auth.uid(),
+            approved_at = NOW(),
+            updated_at = NOW()
+        WHERE id = p_absence_id;
+
+        UPDATE weekly_schedules
+        SET absence_approved = p_approve,
+            absence_recorded = TRUE,
+            updated_at = NOW()
+        WHERE customer_id = v_customer_id
+          AND week_start_date = v_week_start;
+
+        PERFORM log_audit_entry(
+            v_profile_id,
+            CASE WHEN p_approve THEN 'absence_approved' ELSE 'absence_rejected' END,
+            'absences',
+            p_absence_id,
+            NULL,
+            jsonb_build_object(
+                'customer_id', v_customer_id,
+                'customer_name', v_customer_name,
+                'status', v_current_status,
+                'new_status', CASE WHEN p_approve THEN 'approved' ELSE 'rejected' END
+            )
+        );
+
+        RETURN QUERY SELECT TRUE, p_absence_id, NULL::TEXT;
+    ELSE
+        RETURN QUERY SELECT FALSE, NULL::UUID, 'Absence is not in pending status'::TEXT;
+    END IF;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION get_customer_payment_summary(
+    p_customer_id UUID
+)
+RETURNS TABLE(
+    success BOOLEAN,
+    outstanding_balance BIGINT,
+    total_due BIGINT,
+    total_paid BIGINT,
+    next_due_date DATE,
+    next_due_amount BIGINT,
+    error_message TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_profile_id UUID;
+BEGIN
+    SELECT profile_id
+    INTO v_profile_id
+    FROM customers
+    WHERE id = p_customer_id;
+
+    IF NOT FOUND THEN
+        RETURN QUERY SELECT FALSE, 0::BIGINT, 0::BIGINT, 0::BIGINT, NULL::DATE, NULL::BIGINT, 'Customer not found'::TEXT;
+        RETURN;
+    END IF;
+
+    IF v_profile_id <> auth.uid() THEN
+        RETURN QUERY SELECT FALSE, 0::BIGINT, 0::BIGINT, 0::BIGINT, NULL::DATE, NULL::BIGINT, 'Access denied'::TEXT;
+        RETURN;
+    END IF;
+
+    RETURN QUERY
+    SELECT
+        TRUE,
+        COALESCE(c.outstanding_balance, 0::BIGINT),
+        COALESCE(c.total_due, 0::BIGINT),
+        COALESCE(c.total_paid, 0::BIGINT),
+        (SELECT MIN(ws.due_date) FROM weekly_schedules ws WHERE ws.customer_id = p_customer_id AND ws.paid = FALSE AND ws.due_amount > 0),
+        (SELECT ws.due_amount FROM weekly_schedules ws WHERE ws.customer_id = p_customer_id AND ws.paid = FALSE AND ws.due_amount > 0 ORDER BY ws.due_date ASC LIMIT 1),
+        NULL::TEXT
+    FROM customers c
+    WHERE c.id = p_customer_id;
 END;
 $$;
 
